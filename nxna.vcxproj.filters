@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{8c332723-67df-4ae1-8544-fc5a119e6a8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>{e82a515e-6bbd-4fce-bcc4-518ed8e4ed93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{a5621fd6-3254-4b03-be62-6257088b94a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\OpenGl">
+      <UniqueIdentifier>{40774b51-ba58-43e6-9c57-02f886524d59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{6cd3edd7-1d14-40fc-a93b-41972ac510e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{bbde82bd-4ccc-4a81-a18f-cdca92e6a1bf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graphics\GraphicsDevice.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="NxnaConfig.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Nxna.h" />
+    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Graphics\BasicEffect.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BlendState.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DualTextureEffect.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Effect.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DepthStencilState.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Exception.h" />
+    <ClInclude Include="Content\ContentManager.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\FileStream.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\IndexBuffer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\SpriteBatch.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\SpriteEffect.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\SpriteFont.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\SpriteSheet.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Texture2D.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\VertexBuffer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\VertexDeclaration.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\XnbReader.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Mouse.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GlIndexBuffer.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GlslBasicEffect.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GlslDualTextureEffect.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GlslEffect.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GlslSpriteEffect.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GlTexture2D.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GlVertexBuffer.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\OpenGLDevice.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Input\Buttons.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Keys.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Keyboard.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\GamePad.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="IGraphicsDeviceManager.h" />
+    <ClInclude Include="GameTime.h" />
+    <ClInclude Include="Audio\SoundEffect.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioEmitter.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioListener.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\AlphaTestEffect.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGl\GlslAlphaTestEffect.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\RasterizerState.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\OpenGL.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\SamplerState.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioManager.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Clock.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\PlatformDefs.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\OpenGlWindow.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Input.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelper.h" />
+    <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="Vector4.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Matrix.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Content\ContentManager.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\FileStream.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\GraphicsDevice.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\SpriteBatch.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\SpriteFont.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\SpriteSheet.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture2D.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\VertexBuffer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\XnbReader.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\Mouse.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GlIndexBuffer.cpp">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GlslBasicEffect.cpp">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GlslDualTextureEffect.cpp">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GlslEffect.cpp">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GlslSpriteEffect.cpp">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GlTexture2D.cpp">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GlVertexBuffer.cpp">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\OpenGlDevice.cpp">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Effect.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\Keyboard.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\GamePad.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Graphics\OpenGl\GlslAlphaTestEffect.cpp">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BlendState.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DepthStencilState.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\RasterizerState.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\SoundEffect.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\AudioManager.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="IGraphicsDeviceManager.cpp" />
+    <ClCompile Include="Platform\Clock.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\NaClMain.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\OpenGlWindow.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Input.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="MathHelper.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Vector4.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+  </ItemGroup>
+</Project>
