@@ -1,0 +1,140 @@
+#include "OpenGL.h"
+#include "GlTexture2D.h"
+#include "OpenGLDevice.h"
+#include "../SamplerState.h"
+
+namespace Nxna
+{
+namespace Graphics
+{
+namespace OpenGl
+{
+	GlTexture2D::GlTexture2D(GraphicsDevice* device, int width, int height, SurfaceFormat format)
+		: Texture2D(device)
+	{
+		m_width = width;
+		m_height = height;
+		m_format = format;
+		m_hasMipmaps = false;
+
+		glGenTextures(1, &m_glTex);
+		glBindTexture(GL_TEXTURE_2D, m_glTex);
+
+		SetSamplerState(&m_samplerState);
+
+		GlException::ThrowIfError();
+	}
+
+	void GlTexture2D::SetData(int level, byte* pixels, int length)
+	{
+		int mipWidth = m_width >> level;
+		int mipHeight = m_height >> level;
+
+		glBindTexture(GL_TEXTURE_2D, m_glTex);
+
+		if (m_format == SurfaceFormat_Dxt3)
+		{
+#ifndef GL_COMPRESSED_RGBA_S3TC_DXT3_EXT
+#define GL_COMPRESSED_RGBA_S3TC_DXT3_EXT 0x83F2
+#endif
+			glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, mipWidth, mipHeight, 0, length, pixels);
+		}
+		else if (m_format == SurfaceFormat_Pvrtc4)
+		{
+#ifndef GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG
+#define GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG 0x8C02
+#endif
+			glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, mipWidth, mipHeight, 0, length, pixels);
+		}
+		else
+		{
+			glTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, mipWidth, mipHeight, 0,
+				GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+		}
+
+		if (level > 0 && m_hasMipmaps == false)
+		{
+			m_hasMipmaps = true;
+
+			// reapply the sampler state to turn on mipmapping
+			SetSamplerState(&m_samplerState);
+		}
+
+		GlException::ThrowIfError();
+	}
+
+	void GlTexture2D::SetSamplerState(const SamplerState* state)
+	{
+		glBindTexture(GL_TEXTURE_2D, m_glTex);
+
+		int minFilter, magFilter;
+		if (state->Filter == TextureFilter_Linear)
+		{
+			minFilter = (m_hasMipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+			magFilter = GL_LINEAR;
+		}
+		else if (state->Filter == TextureFilter_Point)
+		{
+			minFilter = (m_hasMipmaps ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST);
+			magFilter = GL_NEAREST;
+		}
+		else if (state->Filter == TextureFilter_LinearMipPoint)
+		{
+			// TODO: what should we do if they want a mipmap filter but the texture isn't mipmapped?
+			minFilter = GL_LINEAR_MIPMAP_NEAREST;
+			magFilter = GL_LINEAR;
+		}
+		else if (state->Filter == TextureFilter_PointMipLinear)
+		{
+			minFilter = GL_NEAREST_MIPMAP_LINEAR;
+			magFilter = GL_NEAREST;
+		}
+		else if (state->Filter == TextureFilter_MinLinearMagPointMipLinear)
+		{
+			minFilter = GL_LINEAR_MIPMAP_LINEAR;
+			magFilter = GL_NEAREST;
+		}
+		else if (state->Filter == TextureFilter_MinLinearMagPointMipPoint)
+		{
+			minFilter = GL_LINEAR_MIPMAP_NEAREST;
+			magFilter = GL_NEAREST;
+		}
+		else if (state->Filter == TextureFilter_MinPointMagLinearMipLinear)
+		{
+			minFilter = GL_NEAREST_MIPMAP_LINEAR;
+			magFilter = GL_LINEAR;
+		}
+		else if (state->Filter == TextureFilter_MinPointMagLinearMipPoint)
+		{
+			minFilter = GL_NEAREST_MIPMAP_NEAREST;
+			magFilter = GL_LINEAR;
+		}
+
+		int wrapS = convertAddressMode(state->AddressU);
+		int wrapT = convertAddressMode(state->AddressV);
+		int wrapR = convertAddressMode(state->AddressW);
+		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
+#ifndef USING_OPENGLES
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, wrapR);
+#endif
+
+		m_samplerState = *state;
+	}
+
+	int GlTexture2D::convertAddressMode(TextureAddressMode mode)
+	{
+		if (mode == TextureAddressMode_Wrap)
+			return GL_REPEAT;
+		if (mode == TextureAddressMode_Clamp)
+			return GL_CLAMP_TO_EDGE;
+		
+		return GL_MIRRORED_REPEAT;
+	}
+
+}
+}
+}

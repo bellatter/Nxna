@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7E803E80-802E-4C5E-9A6C-D54BDA7F5563}</ProjectGuid>
+    <RootNamespace>nxna</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\lib\SDL_13\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..\lib\Glew\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <TreatSpecificWarningsAsErrors>4244;4715;4150;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
+      <PreprocessorDefinitions>DISABLE_OPENAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Audio\AudioEmitter.h" />
+    <ClInclude Include="Audio\AudioListener.h" />
+    <ClInclude Include="Audio\AudioManager.h" />
+    <ClInclude Include="Audio\SoundEffect.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Content\ContentManager.h" />
+    <ClInclude Include="Content\FileStream.h" />
+    <ClInclude Include="Content\XnbReader.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameTime.h" />
+    <ClInclude Include="Graphics\AlphaTestEffect.h" />
+    <ClInclude Include="Graphics\BasicEffect.h" />
+    <ClInclude Include="Graphics\BlendState.h" />
+    <ClInclude Include="Graphics\DepthStencilState.h" />
+    <ClInclude Include="Graphics\DualTextureEffect.h" />
+    <ClInclude Include="Graphics\Effect.h" />
+    <ClInclude Include="Graphics\GraphicsDevice.h" />
+    <ClInclude Include="Graphics\IndexBuffer.h" />
+    <ClInclude Include="Graphics\OpenGL\GlIndexBuffer.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslAlphaTestEffect.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslBasicEffect.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslDualTextureEffect.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslEffect.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslSpriteEffect.h" />
+    <ClInclude Include="Graphics\OpenGL\GlTexture2D.h" />
+    <ClInclude Include="Graphics\OpenGL\GlVertexBuffer.h" />
+    <ClInclude Include="Graphics\OpenGL\OpenGL.h" />
+    <ClInclude Include="Graphics\OpenGL\OpenGLDevice.h" />
+    <ClInclude Include="Graphics\RasterizerState.h" />
+    <ClInclude Include="Graphics\SamplerState.h" />
+    <ClInclude Include="Graphics\SpriteBatch.h" />
+    <ClInclude Include="Graphics\SpriteEffect.h" />
+    <ClInclude Include="Graphics\SpriteFont.h" />
+    <ClInclude Include="Graphics\SpriteSheet.h" />
+    <ClInclude Include="Graphics\Texture2D.h" />
+    <ClInclude Include="Graphics\VertexBuffer.h" />
+    <ClInclude Include="Graphics\VertexDeclaration.h" />
+    <ClInclude Include="IGraphicsDeviceManager.h" />
+    <ClInclude Include="Input\Buttons.h" />
+    <ClInclude Include="Input\GamePad.h" />
+    <ClInclude Include="Input\Keyboard.h" />
+    <ClInclude Include="Input\Keys.h" />
+    <ClInclude Include="Input\Mouse.h" />
+    <ClInclude Include="MathHelper.h" />
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Nxna.h" />
+    <ClInclude Include="NxnaConfig.h" />
+    <ClInclude Include="Platform\Clock.h" />
+    <ClInclude Include="Platform\Input.h" />
+    <ClInclude Include="Platform\OpenGlWindow.h" />
+    <ClInclude Include="Platform\PlatformDefs.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Vector4.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Audio\AudioManager.cpp" />
+    <ClCompile Include="Audio\SoundEffect.cpp" />
+    <ClCompile Include="Content\ContentManager.cpp" />
+    <ClCompile Include="Content\FileStream.cpp" />
+    <ClCompile Include="Content\XnbReader.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Graphics\BlendState.cpp" />
+    <ClCompile Include="Graphics\DepthStencilState.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslAlphaTestEffect.cpp" />
+    <ClCompile Include="Graphics\RasterizerState.cpp" />
+    <ClCompile Include="IGraphicsDeviceManager.cpp" />
+    <ClCompile Include="Input\GamePad.cpp" />
+    <ClCompile Include="Input\Keyboard.cpp" />
+    <ClCompile Include="MathHelper.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Platform\Clock.cpp" />
+    <ClCompile Include="Platform\Input.cpp" />
+    <ClCompile Include="Platform\NaClMain.cpp" />
+    <ClCompile Include="Platform\OpenGlWindow.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Vector4.cpp" />
+    <ClInclude Include="Exception.h" />
+    <ClCompile Include="Graphics\Effect.cpp" />
+    <ClCompile Include="Graphics\GraphicsDevice.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlIndexBuffer.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslBasicEffect.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslDualTextureEffect.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslEffect.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslSpriteEffect.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlTexture2D.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlVertexBuffer.cpp" />
+    <ClCompile Include="Graphics\OpenGL\OpenGlDevice.cpp" />
+    <ClCompile Include="Graphics\SpriteBatch.cpp" />
+    <ClCompile Include="Graphics\SpriteFont.cpp" />
+    <ClCompile Include="Graphics\SpriteSheet.cpp" />
+    <ClCompile Include="Graphics\Texture2D.cpp" />
+    <ClCompile Include="Graphics\VertexBuffer.cpp" />
+    <ClCompile Include="Input\Mouse.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

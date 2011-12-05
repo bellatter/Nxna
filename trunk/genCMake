@@ -1,0 +1,26 @@
+echo 'cmake_minimum_required(VERSION 2.8)'
+echo 'project (nxna)'
+
+echo 'set(SOURCES'
+
+grep "<ClCompile Include=" nxna.vcxproj | sed 's/\\/\//g' | awk '{printf substr($2, 10, length($2) - 10); printf "\n"  }'
+echo ')'
+
+
+echo 'include_directories('
+echo '${CMAKE_CURRENT_SOURCE_DIR}/../lib/Glew/include'
+echo ')'
+
+
+echo 'add_definitions('
+echo -Dnullptr=0
+echo ')'
+
+echo 'add_library('
+echo nxna STATIC
+echo '${SOURCES}'
+echo ')'
+
+echo 'target_link_libraries('
+echo nxna
+echo ')'
