@@ -1,0 +1,38 @@
+echo 'UNAME := $(shell uname)'
+
+echo COMPILER = g++
+echo LINKER = g++
+
+echo 'ifeq ($(UNAME), Darwin)'
+echo SDLMAIN_OBJECT = SDLMain.o
+echo SDL_COMPILER_FLAGS = -I../lib/SDL/include
+echo 'LINKER_FLAGS=  -framework SDL -framework Cocoa -framework OpenGL  -L../lib/Glew/bin/OSX -lGLEW -lnxna'
+echo else
+echo 'LINKER_FLAGS= -L../lib/SDL_13/build/.libs -L../nxna/build/x64 -lnxna -lSDL -lGL -lGLEW'
+echo SDLMAIN_OBJECT =
+echo SDL_COMPILER_FLAGS = -I../lib/SDL_13/include
+echo endif
+
+echo 'COMPILER_FLAGS =-g -msse -Dnullptr=NULL -Doverride= $(SDL_COMPILER_FLAGS)'
+echo EXECUTABLE = NxnaHelloWorld
+
+echo -n 'SOURCES='
+grep "<ClCompile Include=" NxnaHelloWorld.vcxproj | sed 's/\\/\//g' | awk '{printf substr($2, 10, length($2) - 10); printf " "  }'
+
+echo
+echo 'OBJECTS = $(SOURCES:.cpp=.o) $(SDLMAIN_OBJECT)'
+
+echo '$(EXECUTABLE): $(OBJECTS)'
+echo 'ifeq ($(UNAME), Darwin)'
+echo '	$(COMPILER) $(COMPILER_FLAGS) -c SDLMain.m -o SDLMain.o'
+echo 'endif'
+echo '	$(LINKER) $(OBJECTS) -o $@ $(LINKER_FLAGS)'
+	
+echo '.cpp.o:'
+echo '	$(COMPILER) $(COMPILER_FLAGS) -c $< -o $@'
+
+echo '.m.o:'
+echo '	$(COMPILER) $(COMPILER_FLAGS) -c $< -o $@'
+
+echo 'clean:'
+echo '	rm $(OBJECTS)'

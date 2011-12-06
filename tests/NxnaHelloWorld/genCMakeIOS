@@ -1,0 +1,50 @@
+echo 'cmake_minimum_required(VERSION 2.8)'
+echo 'project (NxnaHelloWorld)'
+
+echo 'set(SOURCES'
+
+grep "<ClCompile Include=" NxnaHelloWorld.vcxproj | sed 's/\\/\//g' | awk '{printf substr($2, 10, length($2) - 10); printf "\n"  }'
+echo ')'
+
+
+echo 'set(FRAMEWORKS'
+echo Foundation
+echo AudioToolbox
+echo CoreGraphics
+echo QuartzCore
+echo UIKit
+echo OpenGLES
+echo OpenAL
+echo ')'
+
+echo 'set(CMAKE_OSX_SYSROOT iphonesimulator5.0)'
+echo 'set(CMAKE_OSX_ARCHITECTURES "$(ARCHS_STANDARD_32_BIT)")'
+echo 'set(MACOSX_BUNDLE_GUI_IDENTIFIER "FWP.\${PROJECT_IDENTIFIER:identifier}")'
+echo 'foreach(FW ${FRAMEWORKS})'
+echo 'set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework ${FW}")'
+echo 'endforeach()'
+
+echo 'include_directories('
+echo '${CMAKE_CURRENT_SOURCE_DIR}/../lib/SDL_13/include'
+echo ')'
+
+echo 'link_directories('
+echo '${CMAKE_CURRENT_SOURCE_DIR}/../nxna'
+echo '${CMAKE_CURRENT_SOURCE_DIR}/../lib/SDL_13/local_ios_sim'
+echo ')'
+
+echo 'add_definitions('
+echo -Dnullptr=0
+echo ')'
+
+echo 'add_executable('
+echo NxnaHelloWorld
+echo MACOSX_BUNDLE
+echo '${SOURCES}'
+echo ')'
+
+echo 'target_link_libraries('
+echo NxnaHelloWorld
+echo nxna
+echo SDL
+echo ')'
