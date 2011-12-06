@@ -2,6 +2,7 @@
 #define GRAPHICS_SPRITEFONT_H
 
 #include <map>
+#include "../NxnaConfig.h"
 #include "../Vector2.h"
 #include "../Content/ContentManager.h"
 

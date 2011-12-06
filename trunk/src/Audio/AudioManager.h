@@ -1,6 +1,8 @@
 #ifndef NXNA_AUDIO_AUDIOMANAGER_H
 #define NXNA_AUDIO_AUDIOMANAGER_H
 
+#include "../NxnaConfig.h"
+
 namespace Nxna
 {
 namespace Audio
