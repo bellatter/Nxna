@@ -7,7 +7,7 @@
 #include <ppapi/cpp/module.h>
 
 
-int main(int argc, char* argv[]);
+int NxnaMain(int argc, char* argv[]);
 
 pp::Instance* g_Instance = nullptr;
 
@@ -15,7 +15,7 @@ class NxnaNaClInstance : public pp::Instance {
  public:
   explicit NxnaNaClInstance(PP_Instance instance) : pp::Instance(instance)
   {
-	  main(0, NULL);
+	  NxnaMain(0, NULL);
   }
   virtual ~NxnaNaClInstance() {}
 
