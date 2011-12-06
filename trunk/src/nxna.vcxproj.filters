@@ -268,7 +268,7 @@
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="SdlMain.cpp">
+    <ClCompile Include="Platform\SdlMain.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
   </ItemGroup>
