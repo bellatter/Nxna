@@ -1,0 +1,29 @@
+echo 'TOOLS_ROOT = ${NACL_SDK_ROOT}/pepper_15/toolchain/linux_x86/bin'
+echo 'INCLUDES = ${NACL_SDK_ROOT}/pepper_15/toolchain/linux_x86/x86_64-nacl/include'
+
+echo 'COMPILER = $(TOOLS_ROOT)/i686-nacl-g++'
+echo 'LINKER = $(TOOLS_ROOT)/i686-nacl-g++'
+
+echo 'LINKER_FLAGS= -L../nxna/build/nacl/x64 -lppruntime -lppapi_cpp -lplatform -lppapi_gles2 -lnxna'
+
+
+echo 'COMPILER_FLAGS =-g -msse -Dnullptr=NULL -Doverride='
+echo EXECUTABLE = NxnaHelloWorld
+
+echo -n 'SOURCES='
+grep "<ClCompile Include=" NxnaHelloWorld.vcxproj | sed 's/\\/\//g' | awk '{printf substr($2, 10, length($2) - 10); printf " "  }'
+
+echo
+echo 'OBJECTS = $(SOURCES:.cpp=.o)'
+
+echo '$(EXECUTABLE)_x86_64.nexe: $(OBJECTS)'
+echo '	$(LINKER) $(OBJECTS) -o $@ $(LINKER_FLAGS)'
+	
+echo '.cpp.o:'
+echo '	$(COMPILER) $(COMPILER_FLAGS) -c $< -o $@'
+
+echo '.m.o:'
+echo '	$(COMPILER) $(COMPILER_FLAGS) -c $< -o $@'
+
+echo 'clean:'
+echo '	rm $(OBJECTS)'

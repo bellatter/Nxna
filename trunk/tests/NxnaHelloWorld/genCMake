@@ -1,0 +1,52 @@
+echo 'cmake_minimum_required(VERSION 2.8)'
+echo 'project (NxnaHelloWorld)'
+
+echo 'set(SOURCES'
+
+grep "<ClCompile Include=" NxnaHelloWorld.vcxproj | sed 's/\\/\//g' | awk '{printf substr($2, 10, length($2) - 10); printf "\n"  }'
+echo ')'
+
+
+echo 'set(FRAMEWORKS'
+echo Foundation
+echo Carbon
+echo Cocoa
+echo OpenGL
+echo CoreAudio
+echo AudioToolbox
+echo AudioUnit
+echo ForceFeedback
+echo IOKit
+echo ')'
+
+echo 'foreach(FW ${FRAMEWORKS})'
+echo 'set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework ${FW}")'
+echo 'endforeach()'
+
+echo 'include_directories('
+echo '${CMAKE_CURRENT_SOURCE_DIR}/../lib/SDL_13/include'
+echo ')'
+
+echo 'link_directories('
+echo '${CMAKE_CURRENT_SOURCE_DIR}/../nxna'
+echo '${CMAKE_CURRENT_SOURCE_DIR}/../lib/SDL_13/local_osx/lib'
+echo '${CMAKE_CURRENT_SOURCE_DIR}/../lib/Glew/bin/OSX'
+echo ')'
+
+echo 'add_definitions('
+echo -Dnullptr=0
+echo ')'
+
+echo 'add_executable('
+echo NxnaHelloWorld
+echo MACOSX_BUNDLE
+echo '${SOURCES}'
+echo ')'
+
+echo 'target_link_libraries('
+echo NxnaHelloWorld
+echo nxna
+echo SDL
+echo GLEW
+echo iconv
+echo ')'
