@@ -1,6 +1,7 @@
 #include "PlatformDefs.h"
 #include "OpenGlWindow.h"
 #include "../Graphics/OpenGL/OpenGLDevice.h"
+#include "../Exception.h"
 
 #ifdef NXNA_PLATFORM_NACL
 #include <ppapi/cpp/instance.h>
@@ -123,6 +124,9 @@ namespace Platform
         
 		m_window = SDL_CreateWindow("CNK", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
 			PreferredBackBufferWidth(), PreferredBackBufferHeight(), flags);
+
+		if (m_window == nullptr)
+			throw Exception(SDL_GetError());
         
         SDL_GetWindowSize((SDL_Window*)m_window, &width, &height);
         

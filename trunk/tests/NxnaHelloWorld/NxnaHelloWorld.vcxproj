@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\lib\SDL_13\include;../../src;$(IncludePath)</IncludePath>
+    <IncludePath>../../src;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\lib\OpenAL\libs\Win32\;..\..\lib\SDL_13\VisualC\SDL\Win32\Debug\;..\..\lib\SDL_13\VisualC\SDLMain\Win32\Debug\;..\..\lib\Glew\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
