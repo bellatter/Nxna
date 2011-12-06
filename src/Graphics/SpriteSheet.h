@@ -2,6 +2,7 @@
 #define GRAPHICS_SPRITESHEET_H
 
 #include <vector>
+#include "../NxnaConfig.h"
 #include "../Content/ContentManager.h"
 #include "../Rectangle.h"
 

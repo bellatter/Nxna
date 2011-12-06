@@ -4,6 +4,7 @@
 #include <typeinfo>
 #include <map>
 #include <string>
+#include "../NxnaConfig.h"
 #include "XnbReader.h"
 #include "../Exception.h"
 

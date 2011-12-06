@@ -1,6 +1,7 @@
 #ifndef NXNA_PLATFORM_OPENGLWINDOW_H
 #define NXNA_PLATFORM_OPENGLWINDOW_H
 
+#include "../NxnaConfig.h"
 #include "../IGraphicsDeviceManager.h"
 
 namespace Nxna

@@ -1,6 +1,7 @@
 #ifndef GRAPHICS_GLINDEXBUFFER_H
 #define GRAPHICS_GLINDEXBUFFER_H
 
+#include "../../NxnaConfig.h"
 #include "../IndexBuffer.h"
 
 namespace Nxna
