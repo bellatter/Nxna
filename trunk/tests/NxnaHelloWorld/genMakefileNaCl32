@@ -1,13 +1,13 @@
 echo 'TOOLS_ROOT = ${NACL_SDK_ROOT}/pepper_15/toolchain/linux_x86_newlib/bin'
-echo 'INCLUDES = ${NACL_SDK_ROOT}/pepper_15/toolchain/linux_x86_newlib/nacl64/include'
+echo 'INCLUDES = ${NACL_SDK_ROOT}/pepper_15/toolchain/linux_x86_newlib/x86_64-nacl/include'
 
-echo 'COMPILER = $(TOOLS_ROOT)/x86_64-nacl-g++'
-echo 'LINKER = $(TOOLS_ROOT)/x86_64-nacl-g++'
+echo 'COMPILER = $(TOOLS_ROOT)/i686-nacl-g++'
+echo 'LINKER = $(TOOLS_ROOT)/i686-nacl-g++'
 
-echo 'LINKER_FLAGS=-melf64_nacl -m64 -L../../src/build/nacl/x64  -lnxna -lppapi -lppapi_cpp -lplatform  -lppruntime  -lppapi_gles2'
+echo 'LINKER_FLAGS=-melf_nacl -m32 -L../../src/build/nacl/x86 -lnxna  -lppapi -lppapi_cpp -lplatform -lppruntime -lppapi_gles2 '
 
 
-echo 'COMPILER_FLAGS = -m64 -g -msse -Dnullptr=NULL -Doverride=  -I../../src'
+echo 'COMPILER_FLAGS = -m32 -g -msse -Dnullptr=NULL -Doverride= -I../../src'
 echo EXECUTABLE = NxnaHelloWorld
 
 echo -n 'SOURCES='
@@ -16,7 +16,7 @@ grep "<ClCompile Include=" NxnaHelloWorld.vcxproj | sed 's/\\/\//g' | awk '{prin
 echo
 echo 'OBJECTS = $(SOURCES:.cpp=.o)'
 
-echo '$(EXECUTABLE)_x86_64.nexe: $(OBJECTS)'
+echo '$(EXECUTABLE)_x86_32.nexe: $(OBJECTS)'
 echo '	$(LINKER) $(OBJECTS) -o $@ $(LINKER_FLAGS)'
 	
 echo '.cpp.o:'

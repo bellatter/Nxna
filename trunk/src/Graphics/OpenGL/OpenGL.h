@@ -1,7 +1,7 @@
 #ifndef NXNA_GRAPHICS_OPENGL_OPENGL_H
 #define NXNA_GRAPHICS_OPENGL_OPENGL_H
 
-#include "../../Platform/PlatformDefs.h"
+#include "../../NxnaConfig.h"
 
 #ifdef USING_OPENGLES
 #ifdef NXNA_PLATFORM_NACL

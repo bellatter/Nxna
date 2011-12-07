@@ -1,3 +1,4 @@
+#include <cassert>
 #include "PlatformDefs.h"
 #include "OpenGlWindow.h"
 #include "../Graphics/OpenGL/OpenGLDevice.h"
@@ -7,6 +8,7 @@
 #include <ppapi/cpp/instance.h>
 #include <ppapi/cpp/graphics_3d_client.h>
 #include <ppapi/cpp/graphics_3d.h>
+#include <ppapi/gles2/gl2ext_ppapi.h>
 
 extern pp::Instance* g_Instance;
 #else
@@ -20,6 +22,10 @@ namespace Platform
 #ifdef NXNA_PLATFORM_NACL
 	class OpenGlContext : public pp::Graphics3DClient
 	{
+		pp::Graphics3D m_context;
+
+	public:
+
 		explicit OpenGlContext(pp::Instance* instance, int width, int height)
 			: pp::Graphics3DClient(instance)
 		{
@@ -35,15 +41,20 @@ namespace Platform
 				PP_GRAPHICS3DATTRIB_NONE
 			};
 
-			context_ = pp::Graphics3D(*intance, pp::Graphics3D, attribs);
+			m_context = pp::Graphics3D(*instance, pp::Graphics3D(), attribs);
 
-			instance->BindGraphics(context_);
+			instance->BindGraphics(m_context);
 		}
 
 		virtual ~OpenGlContext()
 		{
 			glSetCurrentContextPPAPI(0);
 		}
+
+		virtual void Graphics3DContextLost()
+		{
+    			assert(!"Unexpectedly lost graphics context");
+  		}
 	};
 
 #endif
@@ -140,7 +151,7 @@ namespace Platform
 
 		m_device->SetViewport(Nxna::Graphics::Viewport(0, 0, PreferredBackBufferWidth(), PreferredBackBufferHeight()));
 #else
-		OpenGlContext* context = new OpenGlContext(g_Instance);
+		OpenGlContext* context = new OpenGlContext(g_Instance, width, height);
 #endif
 	}
 }
