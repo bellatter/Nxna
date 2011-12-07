@@ -1,12 +1,12 @@
 echo 'TOOLS_ROOT = ${NACL_SDK_ROOT}/pepper_15/toolchain/linux_x86_newlib/bin'
-echo 'INCLUDES = ${NACL_SDK_ROOT}/pepper_15/toolchain/linux_x86_newlib/nacl64/include'
+echo 'INCLUDES = ${NACL_SDK_ROOT}/pepper_15/toolchain/linux_x86_newlib/x86_64-nacl/include'
 
-echo 'COMPILER = $(TOOLS_ROOT)/x86_64-nacl-g++'
-echo 'LINKER = $(TOOLS_ROOT)/x86_64-nacl-ar'
-echo 'COMPILER_FLAGS = -m64 -g -msse -Dnullptr=0 -Doverride= -DDISABLE_OPENAL -I../lib/Glew/include -I$(INCLUDES)'
+echo 'COMPILER = $(TOOLS_ROOT)/i686-nacl-g++'
+echo 'LINKER = $(TOOLS_ROOT)/i686-nacl-ar'
+echo 'COMPILER_FLAGS = -g -msse -m32 -Dnullptr=0 -Doverride= -DDISABLE_OPENAL -I../lib/Glew/include -I$(INCLUDES)'
 echo LINKER_FLAGS = cq
 echo EXECUTABLE = libnxna.a
-echo OUTPUTDIR = build/nacl/x64/
+echo OUTPUTDIR = build/nacl/x86/
 
 echo -n SOURCES=
 grep "<ClCompile Include=" nxna.vcxproj | sed 's/\\/\//g' | awk '{printf substr($2, 10, length($2) - 10); printf " "  }'

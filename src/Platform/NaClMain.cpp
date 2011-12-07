@@ -1,5 +1,5 @@
 #include <cassert>
-#include "PlatformDefs.h"
+#include "../NxnaConfig.h"
 
 #ifdef NXNA_PLATFORM_NACL
 

@@ -1,5 +1,5 @@
 #include "Clock.h"
-#include "PlatformDefs.h"
+#include "../NxnaConfig.h"
 #ifdef NXNA_PLATFORM_NACL
 #include <sys/time.h>
 #else
