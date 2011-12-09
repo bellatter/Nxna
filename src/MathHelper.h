@@ -6,7 +6,7 @@
 namespace Nxna
 {
 	// This imitates the System.Math class
-	class Math2
+	class Math
 	{
 	public:
 		static float Round(float n)
@@ -55,7 +55,7 @@ namespace Nxna
 		static float WrapAngle(float angle)
 		{
 			const float divisor = Pi * 2.0f;
-			angle = angle - (divisor * Math2::Round(angle / divisor));
+			angle = angle - (divisor * Math::Round(angle / divisor));
 
 			if (angle <= -Pi)
 				angle += divisor;
