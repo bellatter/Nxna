@@ -27,6 +27,11 @@ namespace Nxna
 			return Vector3(X * s, Y * s, Z * s);
 		}
 
+		Vector3 operator *(const Vector3& v) const
+		{
+			return Vector3(X * v.X, Y * v.Y, Z * v.Z);
+		}
+
 		Vector3 operator -(const Vector3& v) const
 		{
 			return Vector3(X - v.X, Y - v.Y, Z - v.Z);
@@ -87,8 +92,9 @@ namespace Nxna
 		static Vector3 GetUp() { return Vector3(0, 1.0f, 0); }
 		static Vector3 GetForward() { return Vector3(0, 0, -1.0f); }
 
-
+		static void Dot(const Vector3& v1, const Vector3& v2, float& result);
 		static void Cross(const Vector3& v1, const Vector3& v2, Vector3& result);
+		static Vector3 Normalize(const Vector3& v);
 		static void Normalize(const Vector3& v, Vector3& result);
 		static void Transform(const Vector3& v, const Matrix& matrix, Vector3& result);
 		static void Transform(const Vector3& v, const Nxna::Quaternion& quat, Vector3& result);

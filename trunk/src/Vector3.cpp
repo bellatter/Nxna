@@ -13,11 +13,28 @@ namespace Nxna
 		Z /= len;
 	}
 
+	void Vector3::Dot(const Vector3& v1, const Vector3& v2, float& result)
+	{
+		result = v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z;
+	}
+
 	void Vector3::Cross(const Vector3& v1, const Vector3& v2, Vector3& result)
 	{
 		result.X = v1.Y * v2.Z - v1.Z * v2.Y;
 		result.Y = v1.Z * v2.X - v1.X * v2.Z;
 		result.Z = v1.X * v2.Y - v1.Y * v2.X;
+	}
+
+	Vector3 Vector3::Normalize(const Vector3& v)
+	{
+		float len = v.Length();
+
+		Vector3 result;
+		result.X = v.X / len;
+		result.Y = v.Y / len;
+		result.Z = v.Z / len;
+
+		return result;
 	}
 
 	 void Vector3::Normalize(const Vector3& v, Vector3& result)
