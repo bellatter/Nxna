@@ -12,8 +12,7 @@ namespace Graphics
 {
 namespace OpenGl
 {
-	char* GlslEffect::m_attribNameBuffer = nullptr;
-	int GlslEffect::m_attribNameBufferLength = 0;
+	char GlslEffect::m_attribNameBuffer[];
 	int GlslEffect::m_boundProgramIndex = -1;
 
 	GlslEffect::GlslEffect(OpenGlDevice* device, const char* source)
@@ -363,21 +362,11 @@ namespace OpenGl
 		int numAttributes;
 		glGetProgramiv(program.Program, GL_ACTIVE_ATTRIBUTES, &numAttributes);
 
-		int attribMaxLength;
-		glGetProgramiv(program.Program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &attribMaxLength);
-
-		if (attribMaxLength > m_attribNameBufferLength)
-		{
-			delete[] m_attribNameBuffer;
-			m_attribNameBuffer = new char[attribMaxLength + 1];
-			m_attribNameBufferLength = attribMaxLength;
-		}
-
 		for (int i = 0; i < numAttributes; i++)
 		{
 			int length, size;
 			GLenum type;
-			glGetActiveAttrib(program.Program, i, attribMaxLength, &length, &size, &type, m_attribNameBuffer);
+			glGetActiveAttrib(program.Program, i, MAX_ATTRIB_SIZE, &length, &size, &type, m_attribNameBuffer);
 
 			for (int j = 0; j < m_attributes.size(); j++)
 			{
