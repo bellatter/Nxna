@@ -564,6 +564,7 @@ namespace Graphics
 
 	void SpriteBatch::Internal_Shutdown()
 	{
+		if (m_workingVerts != nullptr) delete[] m_workingVerts;
 		if (m_declaration != nullptr) delete m_declaration;
 		if (m_indexBuffer != nullptr) delete m_indexBuffer;
 		if (m_vertexBuffer != nullptr) delete m_vertexBuffer;

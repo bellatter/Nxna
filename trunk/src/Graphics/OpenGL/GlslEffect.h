@@ -69,8 +69,9 @@ namespace OpenGl
 		std::vector<EffectParameter*> m_parameterList;
 		std::vector<EffectParameter*> m_textureParams;
 		std::vector<ParamCache> m_cache;
-		static char* m_attribNameBuffer;
-		static int m_attribNameBufferLength;
+
+		static const int MAX_ATTRIB_SIZE = 256;
+		static char m_attribNameBuffer[MAX_ATTRIB_SIZE];
 		static int m_boundProgramIndex;
 
 	public:
