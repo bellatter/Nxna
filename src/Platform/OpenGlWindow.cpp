@@ -95,6 +95,7 @@ namespace Platform
 	void OpenGlWindow::DestroyWindow()
 	{
 #ifndef NXNA_PLATFORM_NACL
+		SDL_GL_DeleteContext((SDL_GLContext)m_glContext);
 		SDL_DestroyWindow((SDL_Window*)m_window);
 		SDL_Quit();
 #endif
@@ -144,7 +145,7 @@ namespace Platform
         PreferredBackBufferWidth(width);
         PreferredBackBufferHeight(height);
         
-		SDL_GLContext context = SDL_GL_CreateContext((SDL_Window*)m_window);
+		m_glContext = SDL_GL_CreateContext((SDL_Window*)m_window);
 
 		static_cast<Nxna::Graphics::OpenGl::OpenGlDevice*>(m_device)->OnContextCreated();
 		static_cast<Nxna::Graphics::OpenGl::OpenGlDevice*>(m_device)->UpdateScreenSize(PreferredBackBufferWidth(), PreferredBackBufferHeight());

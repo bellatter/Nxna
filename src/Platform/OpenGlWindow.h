@@ -11,6 +11,7 @@ namespace Platform
 	class OpenGlWindow : public Nxna::GraphicsDeviceManager
 	{
 		void* m_window;
+		void* m_glContext;
 
 	public:
 		OpenGlWindow(Nxna::Game* game);
