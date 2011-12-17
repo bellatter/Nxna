@@ -73,9 +73,9 @@ namespace Audio
 		// but it may be possible to fake it...
 
 		// update the listener
-		Math::Vector3 position = listener->GetPosition();
-		Math::Vector3 forward = listener->GetForward();
-		Math::Vector3 up = listener->GetUp();
+		Vector3 position = listener->GetPosition();
+		Vector3 forward = listener->GetForward();
+		Vector3 up = listener->GetUp();
 
 		alListener3f(AL_POSITION, position.X, position.Y, position.Z);
 
