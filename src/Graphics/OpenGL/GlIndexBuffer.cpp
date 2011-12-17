@@ -19,6 +19,8 @@ namespace OpenGl
 
 	GlIndexBuffer::~GlIndexBuffer()
 	{
+		glDeleteBuffers(1, &m_buffer);
+		
 #ifndef NDEBUG
 		delete[] m_indices;
 #endif
