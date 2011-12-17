@@ -253,7 +253,13 @@ namespace OpenGl
 		if (elementSize == IndexElementSize_ThirtyTwoBits)
 			size = GL_UNSIGNED_INT;
 
-		glDrawElements(GL_TRIANGLES, primitiveCount * 3, size, (void*)(startIndex * (int)elementSize));
+		GLenum glPrimitiveType;
+		if (primitiveType == PrimitiveType_TriangleStrip)
+			glPrimitiveType = GL_TRIANGLE_STRIP;
+		else
+			glPrimitiveType = GL_TRIANGLES;
+
+		glDrawElements(glPrimitiveType, primitiveCount * 3, size, (void*)(startIndex * (int)elementSize));
 
 		GlException::ThrowIfError();
 	}
@@ -281,7 +287,13 @@ namespace OpenGl
 		m_declaration = vertexDeclaration;
 		setupVertexBufferPointers(data);
 
-		glDrawElements(GL_TRIANGLES, primitiveCount * 3, GL_UNSIGNED_SHORT, indices);
+		GLenum glPrimitiveType;
+		if (primitiveType == PrimitiveType_TriangleStrip)
+			glPrimitiveType = GL_TRIANGLE_STRIP;
+		else
+			glPrimitiveType = GL_TRIANGLES;
+
+		glDrawElements(glPrimitiveType, primitiveCount * 3, GL_UNSIGNED_SHORT, indices);
         
         GlException::ThrowIfError();  
 	}
@@ -374,7 +386,7 @@ namespace OpenGl
 		}
 	}
 
-	AlphaTestEffect* OpenGlDevice::CreateAlphaTextEffect()
+	AlphaTestEffect* OpenGlDevice::CreateAlphaTestEffect()
 	{
 		try
 		{

@@ -44,7 +44,8 @@ namespace Graphics
 
 	enum PrimitiveType
 	{
-		PrimitiveType_TriangleList
+		PrimitiveType_TriangleList,
+		PrimitiveType_TriangleStrip
 	};
 
 	enum ClearOptions
@@ -103,7 +104,7 @@ namespace Graphics
 		virtual BasicEffect* CreateBasicEffect() = 0;
 		virtual SpriteEffect* CreateSpriteEffect() = 0;
 		virtual DualTextureEffect* CreateDualTextureEffect() = 0;
-		virtual AlphaTestEffect* CreateAlphaTextEffect() = 0;
+		virtual AlphaTestEffect* CreateAlphaTestEffect() = 0;
 		virtual VertexBuffer* CreateVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) = 0;
 		virtual DynamicVertexBuffer* CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) = 0;
 		virtual IndexBuffer* CreateIndexBuffer(IndexElementSize elementSize) = 0;

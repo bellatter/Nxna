@@ -117,10 +117,4 @@ void Game1::Draw(const Nxna::GameTime& time)
 	sb->End();
 }
 
-void Game1::HandleEvents()
-{
-	Nxna::Platform::Input::Refresh();
 
-	if (Nxna::Platform::Input::WasQuitReceived())
-		Exit();
-}

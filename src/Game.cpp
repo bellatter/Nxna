@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Platform/Input.h"
 #include "Content/ContentManager.h"
 #include "IGraphicsDeviceManager.h"
 #include "Graphics/GraphicsDevice.h"
@@ -46,7 +47,7 @@ namespace Nxna
 
 		while(m_exitRequested == false)
 		{
-			HandleEvents();
+			handleEvents();
 			updateTime();
 		
 			bool needToDraw = false;
@@ -109,6 +110,14 @@ namespace Nxna
 	void Game::Exit()
 	{
 		m_exitRequested = true;
+	}
+
+	void Game::handleEvents()
+	{
+		Nxna::Platform::Input::Refresh();
+
+		if (Nxna::Platform::Input::WasQuitReceived())
+			Exit();
 	}
 
 	void Game::updateTime()
