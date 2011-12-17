@@ -16,8 +16,6 @@ protected:
 	virtual void LoadContent() override;
 	virtual void Update(const Nxna::GameTime& time) override;
 	virtual void Draw(const Nxna::GameTime& time) override;
-
-	virtual void HandleEvents() override;
 };
 
 #endif // GAME1_H

@@ -1,5 +1,5 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef NXNA_GAME_H
+#define NXNA_GAME_H
 
 #include "GameTime.h"
 
@@ -60,12 +60,10 @@ namespace Nxna
 		virtual void Draw(const Nxna::GameTime& time) { }
 		virtual void UnloadContent() { }
 
-		virtual void HandleEvents() = 0;
-
 	private:
-
+		void handleEvents();
 		void updateTime();
 	};
 }
 
-#endif // GAME_H
+#endif // NXNA_GAME_H

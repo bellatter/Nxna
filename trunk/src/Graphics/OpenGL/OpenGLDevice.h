@@ -62,7 +62,7 @@ namespace OpenGl
 		virtual BasicEffect* CreateBasicEffect() override;
 		virtual SpriteEffect* CreateSpriteEffect() override;
 		virtual DualTextureEffect* CreateDualTextureEffect() override;
-		virtual AlphaTestEffect* CreateAlphaTextEffect() override;
+		virtual AlphaTestEffect* CreateAlphaTestEffect() override;
 		virtual VertexBuffer* CreateVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) override;
 		virtual DynamicVertexBuffer* CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) override;
 		virtual IndexBuffer* CreateIndexBuffer(IndexElementSize elementSize) override;
