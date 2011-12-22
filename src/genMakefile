@@ -19,5 +19,5 @@ echo .cpp.o:
 echo '	$(COMPILER) $(COMPILER_FLAGS) -c $< -o $@'
 	
 echo clean:
-echo '	rm $(OBJECTS)'
-echo '	rm $(OUTPUTDIR)$(EXECUTABLE)'
+echo '	rm -f $(OBJECTS)'
+echo '	rm -f $(OUTPUTDIR)$(EXECUTABLE)'
