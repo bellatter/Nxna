@@ -19,4 +19,4 @@ echo .cpp.o:
 echo '	$(COMPILER) $(COMPILER_FLAGS) -c $< -o $@'
 	
 echo clean:
-echo '	rm $(OBJECTS)'
+echo '	rm -f $(OBJECTS)'
