@@ -103,6 +103,11 @@ namespace Nxna
 
 		float X, Y;
 
+		static void Dot(const Vector2& v1, const Vector2& v2, float& result)
+		{
+			result = v1.X * v2.X + v1.Y * v2.Y;
+		}
+
 		static float Dot(const Vector2& v1, const Vector2& v2)
 		{
 			return v1.X * v2.X + v1.Y * v2.Y;
