@@ -1,7 +1,7 @@
 echo 'TARGETSDK = /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk'
 echo 'COMPILER =xcrun -sdk $(TARGETSDK) g++'
 echo LINKER = ar
-echo 'COMPILER_FLAGS = -g -m32 -isysroot $(TARGETSDK) -Dnullptr=NULL -Doverride='
+echo 'COMPILER_FLAGS = -g -m32 -isysroot $(TARGETSDK) -Dnullptr=NULL -Doverride= -I../lib/SDL_13/include'
 echo LINKER_FLAGS = cq
 echo EXECUTABLE = libnxna.a
 
