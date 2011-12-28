@@ -1,6 +1,7 @@
 #include <cassert>
 #include "OpenGL.h"
 #include "../VertexDeclaration.h"
+#include "../GraphicsDeviceCapabilities.h"
 #include "OpenGLDevice.h"
 #include "GlslBasicEffect.h"
 #include "GlslSpriteEffect.h"
@@ -22,6 +23,7 @@ namespace OpenGl
 		m_vertexPointersNeedSetup = true;
 		m_declaration = nullptr;
 		m_effect = nullptr;
+		m_caps = new GraphicsDeviceCapabilities();
 	}
 
 	void OpenGlDevice::OnContextCreated()
@@ -36,6 +38,12 @@ namespace OpenGl
 		//	glGenVertexArrays(1, &vao);
 		//	glBindVertexArray(vao);
 		}
+
+		if (GLEW_EXT_texture_compression_s3tc)
+		{
+			m_caps->SupportsS3tcTextureCompression = true;
+		}
+
 #endif
 
 		glEnable(GL_BLEND);
@@ -298,7 +306,7 @@ namespace OpenGl
         GlException::ThrowIfError();  
 	}
 
-	void OpenGlDevice::DrawUserPrimitives(PrimitiveType primitiveType, float* data, int primitiveCount, const VertexDeclaration* vertexDeclaration) {}
+	void OpenGlDevice::DrawUserPrimitives(PrimitiveType primitiveType, void* data, int primitiveCount, const VertexDeclaration* vertexDeclaration) {}
 
 	void OpenGlDevice::SetVertexBuffer(const VertexBuffer* vertexBuffer)
 	{

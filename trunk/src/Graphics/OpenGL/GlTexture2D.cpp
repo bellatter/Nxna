@@ -2,6 +2,7 @@
 #include "GlTexture2D.h"
 #include "OpenGLDevice.h"
 #include "../SamplerState.h"
+#include "../GraphicsDeviceCapabilities.h"
 
 namespace Nxna
 {
@@ -37,7 +38,16 @@ namespace OpenGl
 #ifndef GL_COMPRESSED_RGBA_S3TC_DXT3_EXT
 #define GL_COMPRESSED_RGBA_S3TC_DXT3_EXT 0x83F2
 #endif
-			glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, mipWidth, mipHeight, 0, length, pixels);
+			if (m_device->GetCaps()->SupportsS3tcTextureCompression == false)
+			{
+				byte* converted = DecompressDxtc(pixels, mipWidth, mipHeight, length);
+				glTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, mipWidth, mipHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, converted);
+				delete[] converted;
+			}
+			else
+			{
+				glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, mipWidth, mipHeight, 0, length, pixels);
+			}
 		}
 		else if (m_format == SurfaceFormat_Pvrtc4)
 		{
