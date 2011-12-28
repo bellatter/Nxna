@@ -63,6 +63,14 @@ namespace Nxna
 			return *this;
 		}
 
+		Vector2 operator -=(const Vector2& v)
+		{
+			X -= v.X;
+			Y -= v.Y;
+
+			return *this;
+		}
+
 		Vector2 operator /=(float n)
 		{
 			X /= n;
