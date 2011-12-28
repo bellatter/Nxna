@@ -63,6 +63,7 @@ namespace Graphics
 	class SpriteEffect;
 	class DualTextureEffect;
 	class AlphaTestEffect;
+	struct GraphicsDeviceCapabilities;
 	class IVertexBufferPimpl;
 	class IDynamicVertexBufferPimpl;
 
@@ -70,10 +71,10 @@ namespace Graphics
 	{
 	protected:
 		static GraphicsDevice* m_instance;
+		GraphicsDeviceCapabilities* m_caps;
 
 	public:
-
-		virtual ~GraphicsDevice() { }
+		virtual ~GraphicsDevice();
 
 		virtual CullMode GetRasterizerState() = 0;
 		virtual void SetRasterizerState(const RasterizerState* state) = 0;
@@ -92,7 +93,7 @@ namespace Graphics
 		virtual void DrawPrimitives(PrimitiveType primitiveType, int startVertex, int primitiveCount) = 0;
 		virtual void DrawUserIndexedPrimitives(PrimitiveType primitiveType, void* data, int numVertices, int* indices, int primitiveCount, const VertexDeclaration* vertexDeclaration) = 0;
 		virtual void DrawUserIndexedPrimitives(PrimitiveType primitiveType, void* data, int numVertices, short* indices, int primitiveCount, const VertexDeclaration* vertexDeclaration) = 0;
-		virtual void DrawUserPrimitives(PrimitiveType primitiveType, float* data, int primitiveCount, const VertexDeclaration* vertexDeclaration) = 0;
+		virtual void DrawUserPrimitives(PrimitiveType primitiveType, void* data, int primitiveCount, const VertexDeclaration* vertexDeclaration) = 0;
 
 		virtual void SetVertexBuffer(const VertexBuffer* vertexBuffer) = 0;
 		virtual void SetBlendState(const BlendState* blendState) = 0;
@@ -108,6 +109,8 @@ namespace Graphics
 		virtual VertexBuffer* CreateVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) = 0;
 		virtual DynamicVertexBuffer* CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) = 0;
 		virtual IndexBuffer* CreateIndexBuffer(IndexElementSize elementSize) = 0;
+
+		GraphicsDeviceCapabilities* GetCaps() { return m_caps; }
 
 		static GraphicsDevice* GetDevice() { return m_instance; }
 	};

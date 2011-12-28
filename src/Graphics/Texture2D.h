@@ -63,6 +63,9 @@ namespace Graphics
 		static Texture2D* LoadFrom(Content::FileStream* stream);
 		static Texture2D* LoadFrom(Content::XnbReader* stream);
 
+	protected:
+		static byte* DecompressDxtc(const byte* pixels, int width, int height, int size);
+
 	private:
 		static byte* convert(byte* pixels, int length, int format);
 		static void convert565(unsigned short pixel, byte* r, byte* g, byte* b);

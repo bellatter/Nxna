@@ -1,4 +1,5 @@
 #include "GraphicsDevice.h"
+#include "GraphicsDeviceCapabilities.h"
 #include "../Matrix.h"
 #include "../Vector4.h"
 
@@ -32,5 +33,10 @@ namespace Graphics
 	}
 
 	GraphicsDevice* GraphicsDevice::m_instance = nullptr;
+
+	GraphicsDevice::~GraphicsDevice()
+	{
+		delete m_caps;
+	}
 }
 }

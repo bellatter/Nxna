@@ -50,7 +50,7 @@ namespace OpenGl
 		virtual void DrawPrimitives(PrimitiveType primitiveType, int startVertex, int primitiveCount) override;
 		virtual void DrawUserIndexedPrimitives(PrimitiveType primitiveType, void* data, int numVertices, int* indices, int primitiveCount, const VertexDeclaration* vertexDeclaration) override;
 		virtual void DrawUserIndexedPrimitives(PrimitiveType primitiveType, void* data, int numVertices, short* indices, int primitiveCount, const VertexDeclaration* vertexDeclaration) override;
-		virtual void DrawUserPrimitives(PrimitiveType primitiveType, float* data, int primitiveCount, const VertexDeclaration* vertexDeclaration) override;
+		virtual void DrawUserPrimitives(PrimitiveType primitiveType, void* data, int primitiveCount, const VertexDeclaration* vertexDeclaration) override;
 
 		virtual void SetVertexBuffer(const VertexBuffer* vertexBuffer) override;
 		virtual void SetBlendState(const BlendState* blendState) override;
