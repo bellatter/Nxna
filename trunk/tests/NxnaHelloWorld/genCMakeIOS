@@ -25,12 +25,12 @@ echo 'set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework ${FW}")'
 echo 'endforeach()'
 
 echo 'include_directories('
-echo '${CMAKE_CURRENT_SOURCE_DIR}/../lib/SDL_13/include'
+echo '${CMAKE_CURRENT_SOURCE_DIR}/../../src'
 echo ')'
 
 echo 'link_directories('
-echo '${CMAKE_CURRENT_SOURCE_DIR}/../nxna'
-echo '${CMAKE_CURRENT_SOURCE_DIR}/../lib/SDL_13/local_ios_sim'
+echo '${CMAKE_CURRENT_SOURCE_DIR}/../../src/build/iOSSim'
+echo '${CMAKE_CURRENT_SOURCE_DIR}/../../lib/SDL_13/local_ios_sim'
 echo ')'
 
 echo 'add_definitions('
