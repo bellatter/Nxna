@@ -54,6 +54,26 @@ namespace Graphics
 		int MaxAnisotropy;
 		int MaxMipLevel;
 		float MipMapLevelOfDetailBias;
+
+		static const SamplerState* GetLinearClamp()
+		{
+			if (m_isInitialized == false)
+				init();
+
+			return &m_linearClamp;
+		}
+
+		static const SamplerState* GetLinearWrap()
+		{
+			if (m_isInitialized == false)
+				init();
+
+			return &m_linearWrap;
+		}
+
+	private:
+		static bool m_isInitialized;
+		static void init();
 	};
 }
 }
