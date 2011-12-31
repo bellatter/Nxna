@@ -1,6 +1,8 @@
 #ifndef NXNA_GRAPHICS_SAMPLERSTATE_H
 #define NXNA_GRAPHICS_SAMPLERSTATE_H
 
+#include "../NxnaConfig.h"
+
 namespace Nxna
 {
 namespace Graphics
