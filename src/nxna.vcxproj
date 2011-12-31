@@ -48,7 +48,7 @@
       <Optimization>Disabled</Optimization>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <TreatSpecificWarningsAsErrors>4244;4715;4150;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
-      <PreprocessorDefinitions>DISABLE_OPENAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -85,6 +85,7 @@
     <ClInclude Include="Graphics\DualTextureEffect.h" />
     <ClInclude Include="Graphics\Effect.h" />
     <ClInclude Include="Graphics\GraphicsDevice.h" />
+    <ClInclude Include="Graphics\GraphicsDeviceCapabilities.h" />
     <ClInclude Include="Graphics\IndexBuffer.h" />
     <ClInclude Include="Graphics\OpenGL\GlIndexBuffer.h" />
     <ClInclude Include="Graphics\OpenGL\GlslAlphaTestEffect.h" />
@@ -137,6 +138,7 @@
     <ClCompile Include="Graphics\DepthStencilState.cpp" />
     <ClCompile Include="Graphics\OpenGL\GlslAlphaTestEffect.cpp" />
     <ClCompile Include="Graphics\RasterizerState.cpp" />
+    <ClCompile Include="Graphics\SamplerState.cpp" />
     <ClCompile Include="IGraphicsDeviceManager.cpp" />
     <ClCompile Include="Input\GamePad.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
