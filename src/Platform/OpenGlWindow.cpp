@@ -130,7 +130,7 @@ namespace Platform
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
         
         int flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
-#ifdef EMBEDDED
+#ifdef NXNA_PLATFORM_APPLE_IOS
         flags |= SDL_WINDOW_BORDERLESS;
 #endif
         

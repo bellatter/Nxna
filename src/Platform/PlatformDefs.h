@@ -16,7 +16,7 @@
 #if TARGET_OS_IPHONE == 0
 #define NXNA_PLATFORM_APPLE_OSX
 #else
-#define NXNA_PLATFORM_APPLE_IPHONE
+#define NXNA_PLATFORM_APPLE_IOS
 #endif
 
 // assume linux
