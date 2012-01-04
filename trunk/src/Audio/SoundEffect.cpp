@@ -165,16 +165,23 @@ namespace Audio
 
 	bool SoundEffect::Play()
 	{
+		return Play(1.0f, 0, 0);
+	}
+
+	bool SoundEffect::Play(float volume, float pitch, float pan)
+	{
 #ifndef DISABLE_OPENAL
 		AudioSource source = AudioManager::GetFreeSource(false);
 
 		alSourcei(source, AL_SOURCE_RELATIVE, 1);
 		alSourcei(source, AL_LOOPING, 0);
 		alSourcei(source, AL_BUFFER, m_alBuffer);
+		alSourcef(source, AL_GAIN, volume);
+		
+		// TODO: what about "pitch" and "pan"?
 
 		alSourcePlay(source);
 #endif
-
 		return true;
 	}
 
