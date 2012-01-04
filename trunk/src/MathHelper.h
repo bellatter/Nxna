@@ -24,6 +24,7 @@ namespace Nxna
 	{
 	public:
 
+		static const float E;
 		static const float Pi;
 		static const float TwoPi;
 		static const float PiOver2;
