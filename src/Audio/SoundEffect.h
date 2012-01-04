@@ -31,6 +31,10 @@ namespace Audio
 		void Stop();
 		void Pause();
 
+		bool IsLooped();
+		void IsLooped(bool looped);
+		float Volume();
+		void Volume(float volume);
 		SoundState GetState();
 
 		void Apply3D(const AudioListener* listener, const AudioEmitter* emitter);

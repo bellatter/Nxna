@@ -24,6 +24,7 @@ namespace Content
 
 		void Advance(int bytes);
 
+		int Position();
 		int Length();
 		bool Eof();
 

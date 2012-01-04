@@ -69,6 +69,11 @@ namespace Content
 		m_bytesRead += bytes;
 	}
 
+	int FileStream::Position()
+	{
+		return (int)ftell((FILE*)m_fp);
+	}
+
 	int FileStream::Length()
 	{
 		long current = ftell((FILE*)m_fp);

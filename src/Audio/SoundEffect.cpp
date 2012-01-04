@@ -52,6 +52,46 @@ namespace Audio
 #endif
 	}
 
+	bool SoundEffectInstance::IsLooped()
+	{
+#ifndef DISABLE_OPENAL
+		int state;
+		alGetSourcei(m_source, AL_LOOPING, &state);
+		if (state == 0)
+			return false;
+
+		return true;
+#else
+		return false;
+#endif
+	}
+	
+	void SoundEffectInstance::IsLooped(bool looped)
+	{
+#ifndef DISABLE_OPENAL
+		alSourcei(m_source, AL_LOOPING, looped ? 1 : 0);
+#endif
+	}
+
+	float SoundEffectInstance::Volume()
+	{
+#ifndef DISABLE_OPENAL
+		float gain;
+		alGetSourcef(m_source, AL_GAIN, &gain);
+
+		return gain;
+#else
+		return 0;
+#endif
+	}
+
+	void SoundEffectInstance::Volume(float volume)
+	{
+#ifndef DISABLE_OPENAL
+		alSourcef(m_source, AL_GAIN, volume);
+#endif
+	}
+
 	SoundState SoundEffectInstance::GetState()
 	{
 #ifndef DISABLE_OPENAL
