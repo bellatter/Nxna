@@ -24,6 +24,9 @@ namespace Content
 
 		void Advance(int bytes);
 
+		int Length();
+		bool Eof();
+
 	private:
 		void swapLE(void* data, int length);
 	};

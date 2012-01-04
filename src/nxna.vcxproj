@@ -68,6 +68,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Audio\ADPCM\ADPCMDecoder.h" />
     <ClInclude Include="Audio\AudioEmitter.h" />
     <ClInclude Include="Audio\AudioListener.h" />
     <ClInclude Include="Audio\AudioManager.h" />
@@ -128,6 +129,7 @@
     <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Audio\ADPCM\ADPCMDecoder.cpp" />
     <ClCompile Include="Audio\AudioManager.cpp" />
     <ClCompile Include="Audio\SoundEffect.cpp" />
     <ClCompile Include="Content\ContentManager.cpp" />

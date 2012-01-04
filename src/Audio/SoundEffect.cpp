@@ -10,6 +10,7 @@
 #include "AudioManager.h"
 #include "AudioListener.h"
 #include "AudioEmitter.h"
+#include "ADPCM/ADPCMDecoder.h"
 #include "../Content/ContentManager.h"
 #include "../Content/FileStream.h"
 
@@ -103,7 +104,21 @@ namespace Audio
 		short Size;
 	};
 
+	struct ADPCMCoefficient
+	{
+		int Coefficient1;
+		int Coefficient2;
+	};
+
+	struct WAVEFORMATADPCM
+	{
+		WAVEFORMATEX wf;
+		short SamplesPerBlock;
+		short NumCoefficients;
+	};
+
 	const int WAVE_FORMAT_PCM = 1;
+	const int WAVE_FORMAT_ADPCM = 2;
 
 	byte* SoundEffect::m_workingData = nullptr;
 	int SoundEffect::m_workingDataLength = 0;
@@ -132,27 +147,74 @@ namespace Audio
 	{
 #ifndef DISABLE_OPENAL
 		int formatSize = stream->ReadInt32();
-		if (formatSize != 18)
+		if (formatSize < 18)
 			throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
 
 		WAVEFORMATEX format;
-		stream->Read((byte*)&format, formatSize);
+		stream->Read((byte*)&format, 18);
 
-		if (format.FormatTag != WAVE_FORMAT_PCM ||
-			(format.Channels != 1 && format.Channels != 2) ||
-			(format.BitsPerSample != 8 && format.BitsPerSample != 16) ||
-			(format.SamplesPerSec != 22050 && format.SamplesPerSec != 44100))
-			throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
-
-		int dataSize = stream->ReadInt32();
-		if (m_workingDataLength < dataSize)
+		int samplesPerBlock;
+		if (format.FormatTag == WAVE_FORMAT_ADPCM)
 		{
-			delete[] m_workingData;
-			m_workingData = new byte[dataSize * 2];
-			m_workingDataLength = dataSize * 2;
+			WAVEFORMATADPCM format2;
+			stream->Read((byte*)(&format2.SamplesPerBlock), 4);
+			format2.wf = format;
+
+			// skip the coefficients
+			stream->Advance(7 * 4);
+
+			samplesPerBlock = format2.SamplesPerBlock;
 		}
 
-		stream->Read(m_workingData, dataSize);
+		// validate the format of the sound
+		if (format.FormatTag != WAVE_FORMAT_PCM && format.FormatTag != WAVE_FORMAT_ADPCM)
+			throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
+
+		if (format.Channels != 1 && format.Channels != 2)
+			throw Nxna::Content::ContentException("Only mono and stereo sound effects are supported.");
+
+		if (format.FormatTag == WAVE_FORMAT_PCM)
+		{
+			if ((format.BitsPerSample != 8 && format.BitsPerSample != 16) ||
+				(format.SamplesPerSec != 22050 && format.SamplesPerSec != 44100))
+				throw Nxna::Content::ContentException("Sound Effect is not in a supported format.");
+		}
+		else
+		{
+			if (format.BitsPerSample != 4)
+				throw Nxna::Content::ContentException("Sound Effect is not in a supported format.");
+		}
+
+		int dataSize = stream->ReadInt32();
+
+		if (format.FormatTag == WAVE_FORMAT_ADPCM)
+		{
+			AdpcmDecoder decoder;
+			decoder.Decode(stream, format.Channels == 2, format.BitsPerSample, format.BlockAlign, samplesPerBlock);
+
+			byte* output;
+			decoder.GetOutput(&output, &dataSize);
+
+			if (dataSize > m_workingDataLength)
+			{
+				delete[] m_workingData;
+				m_workingData = new byte[dataSize * 2];
+				m_workingDataLength = dataSize * 2;
+			}
+
+			memcpy(m_workingData, output, dataSize);
+		}
+		else
+		{
+			//dataSize = stream->ReadInt32();
+			if (m_workingDataLength < dataSize)
+			{
+				delete[] m_workingData;
+				m_workingData = new byte[dataSize * 2];
+				m_workingDataLength = dataSize * 2;
+			}
+			stream->Read(m_workingData, dataSize);
+		}
 
 		SoundEffect* effect = new SoundEffect();
 		alGenBuffers(1, &effect->m_alBuffer);
