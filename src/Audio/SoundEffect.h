@@ -58,6 +58,7 @@ namespace Audio
 		float GetDuration() { return m_duration; }
 
 		bool Play();
+		bool Play(float volume, float pitch, float pan);
 		SoundEffectInstance* CreateInstance();
 
 		static SoundEffect* LoadFrom(Content::FileStream* stream);
