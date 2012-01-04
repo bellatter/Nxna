@@ -160,13 +160,15 @@ namespace Audio
 		if (stereo)
 		{
 			int bytesRead = 0;
-			while(data->Eof() == false)
+			while(data->Length() - data->Position() >= blockSize)
 			{
 				bytesRead += decodeStereoBlock(&info, data, blockSize, output);
 
 				copyToWorkingMemory(output, outputSize);
 			}
 		}
+
+		delete[] output;
 	}
 
 	void AdpcmDecoder::copyToWorkingMemory(byte* data, int size)
