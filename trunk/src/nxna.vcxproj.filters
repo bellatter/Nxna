@@ -19,6 +19,9 @@
     <Filter Include="Platform">
       <UniqueIdentifier>{bbde82bd-4ccc-4a81-a18f-cdca92e6a1bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio\ADPCM">
+      <UniqueIdentifier>{2b6bfe57-7fa3-49b7-a5d5-c6b106d7b7b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\GraphicsDevice.h">
@@ -165,12 +168,11 @@
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Matrix.h" />
-    <ClInclude Include="Graphics\VertexPositionTexture.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="GameComponent.h" />
     <ClInclude Include="Graphics\GraphicsDeviceCapabilities.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\ADPCM\ADPCMDecoder.h">
+      <Filter>Audio\ADPCM</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -278,9 +280,11 @@
     <ClCompile Include="Platform\SdlMain.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
-    <ClCompile Include="GameComponent.cpp" />
     <ClCompile Include="Graphics\SamplerState.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\ADPCM\ADPCMDecoder.cpp">
+      <Filter>Audio\ADPCM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

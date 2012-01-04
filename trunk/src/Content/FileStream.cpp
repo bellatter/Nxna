@@ -69,6 +69,21 @@ namespace Content
 		m_bytesRead += bytes;
 	}
 
+	int FileStream::Length()
+	{
+		long current = ftell((FILE*)m_fp);
+		fseek((FILE*)m_fp, 0, SEEK_END);
+		int size = (int)ftell((FILE*)m_fp);
+		fseek((FILE*)m_fp, current, SEEK_SET);
+
+		return size;
+	}
+
+	bool FileStream::Eof()
+	{
+		return m_bytesRead >= Length(); 
+	}
+
 	void FileStream::swapLE(void* data, int length)
 	{
 		// nothing... for now...
