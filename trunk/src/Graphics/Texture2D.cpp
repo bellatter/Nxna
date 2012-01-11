@@ -33,11 +33,13 @@ namespace Graphics
         
         const int FormatColor = 0;
 		const int FormatBGR565 = 1;
+		const int FormatDXT1 = 4;
 		const int FormatDXT3 = 5;
+		const int FormatDXT5 = 6;
 		const int FormatPVRTC4 = 100; // this is not supported by XNA! this is own own extension!
 
 		int format = stream->ReadInt32();
-		if (format != FormatColor && format != FormatBGR565 && format != FormatDXT3 && format != FormatPVRTC4)
+		if (format != FormatColor && format != FormatBGR565 && format != FormatDXT1 && format != FormatDXT3 && format != FormatPVRTC4)
 			throw Content::ContentException("Unsupported texture format");
 
 		int width = stream->ReadInt32();
@@ -45,7 +47,9 @@ namespace Graphics
 		int mipCount = stream->ReadInt32();
         
         Texture2D* texture;
-		if (format == FormatDXT3)
+		if (format == FormatDXT1)
+			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat_Dxt1);
+		else if (format == FormatDXT3)
 			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat_Dxt3);
 		else if (format == FormatPVRTC4)
 			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat_Pvrtc4);

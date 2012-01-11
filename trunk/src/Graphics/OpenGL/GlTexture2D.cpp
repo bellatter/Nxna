@@ -33,11 +33,16 @@ namespace OpenGl
 
 		glBindTexture(GL_TEXTURE_2D, m_glTex);
 
-		if (m_format == SurfaceFormat_Dxt3)
+		if (m_format == SurfaceFormat_Dxt1 || m_format == SurfaceFormat_Dxt3)
 		{
+#ifndef GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
+#define GL_COMPRESSED_RGBA_S3TC_DXT1_EXT 0x83F1
+#endif
+
 #ifndef GL_COMPRESSED_RGBA_S3TC_DXT3_EXT
 #define GL_COMPRESSED_RGBA_S3TC_DXT3_EXT 0x83F2
 #endif
+
 			if (m_device->GetCaps()->SupportsS3tcTextureCompression == false)
 			{
 				byte* converted = DecompressDxtc(pixels, mipWidth, mipHeight, length);
@@ -46,7 +51,10 @@ namespace OpenGl
 			}
 			else
 			{
-				glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, mipWidth, mipHeight, 0, length, pixels);
+				if (m_format == SurfaceFormat_Dxt1)
+					glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, mipWidth, mipHeight, 0, length, pixels);
+				else
+					glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, mipWidth, mipHeight, 0, length, pixels);
 			}
 		}
 		else if (m_format == SurfaceFormat_Pvrtc4)

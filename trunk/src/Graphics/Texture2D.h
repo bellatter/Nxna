@@ -16,7 +16,9 @@ namespace Graphics
 	enum SurfaceFormat
 	{
 		SurfaceFormat_Color,
+		SurfaceFormat_Dxt1,
 		SurfaceFormat_Dxt3,
+		SurfaceFormat_Dxt5,
 
 		// the following are not supported by XNA. These are our own
 		// extensions so that iOS devices can have compressed textures too.
