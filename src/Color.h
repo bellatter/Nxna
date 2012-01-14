@@ -42,6 +42,8 @@ struct Color
 	static Color GetBlack() { return Color(0, 0, 0); }
 	static Color GetGray() { return Color(128, 128, 128); }
 	static Color GetCornflowerBlue() { return Color(100, 149, 237); }
+	static Color GetGoldenrod() { return Color(218, 165, 32); }
+	static Color GetRed() { return Color(255, 0, 0); }
 };
 
 static bool operator==(const Color& c1, const Color& c2)

@@ -12,7 +12,9 @@ namespace Graphics
 		VEF_Single = 1,
 		VEF_Vector2,
 		VEF_Vector3,
-		VEF_Vector4
+		VEF_Vector4,
+
+		VEF_Color
 	};
 
 	enum VertexElementUsage
@@ -44,8 +46,13 @@ namespace Graphics
 			m_numElements = numElements;
 			memcpy(m_elements, elements, sizeof(VertexElement) * numElements);
 
-			m_stride = elements[numElements - 1].Offset +
-				(int)elements[numElements - 1].ElementFormat * sizeof(float);
+			int sizeOfFinalElement = 0;
+			if (elements[numElements - 1].ElementFormat == VEF_Color)
+				sizeOfFinalElement = 4;
+			else
+				sizeOfFinalElement = (int)elements[numElements - 1].ElementFormat * sizeof(float);
+
+			m_stride = elements[numElements - 1].Offset + sizeOfFinalElement;
 		}
 
 		int GetStride() const { return m_stride; }

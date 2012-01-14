@@ -456,7 +456,26 @@ namespace OpenGl
 				continue;
 
 			glEnableVertexAttribArray(attrib->GlHandle);
-			glVertexAttribPointer(attrib->GlHandle, (int)m_declaration->GetElements()[i].ElementFormat, GL_FLOAT, 0, 
+
+			int sizeOfElement = 0;
+			GLenum type;
+			GLboolean normalize;
+
+			VertexElementFormat format = m_declaration->GetElements()[i].ElementFormat;
+			if (format == VEF_Color)
+			{
+				sizeOfElement = 4;
+				type = GL_UNSIGNED_BYTE;
+				normalize = GL_TRUE;
+			}
+			else
+			{
+				sizeOfElement = (int)format;
+				type = GL_FLOAT;
+				normalize = GL_FALSE;
+			}
+
+			glVertexAttribPointer(attrib->GlHandle, sizeOfElement, type, normalize, 
 				m_declaration->GetStride(), (byte*)verts + m_declaration->GetElements()[i].Offset);
 		}
 
