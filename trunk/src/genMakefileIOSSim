@@ -13,7 +13,7 @@ echo
 echo 'OBJECTS = $(SOURCES:.cpp=.o)'
 
 echo '$(EXECUTABLE): $(OBJECTS)'
-echo '	rm -f $(EXECUTABLE)'
+echo '	rm -f $(OUTPUTDIR)$(EXECUTABLE)'
 echo '	$(LINKER) $(LINKER_FLAGS) $(OUTPUTDIR)$@ $(OBJECTS)'
 	
 echo .cpp.o:

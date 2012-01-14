@@ -1,9 +1,10 @@
 echo 'TARGETSDK = /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk'
 echo 'COMPILER =xcrun -sdk $(TARGETSDK) g++'
 echo LINKER = ar
-echo 'COMPILER_FLAGS = -g -arch armv7 -isysroot $(TARGETSDK) -Dnullptr=NULL -Doverride= -DUSING_OPENGLES'
+echo 'COMPILER_FLAGS = -g -arch armv7 -isysroot $(TARGETSDK) -Doverride= -I../lib/SDL_13/include'
 echo LINKER_FLAGS = cq
 echo EXECUTABLE = libnxna.a
+echo OUTPUTDIR = build/iOS/
 
 echo -n SOURCES=
 grep "<ClCompile Include=" nxna.vcxproj | sed 's/\\/\//g' | awk '{printf substr($2, 10, length($2) - 10); printf " "  }'
@@ -12,11 +13,12 @@ echo
 echo 'OBJECTS = $(SOURCES:.cpp=.o)'
 
 echo '$(EXECUTABLE): $(OBJECTS)'
-echo '	rm $(EXECUTABLE)'
-echo '	$(LINKER) $(LINKER_FLAGS) $@ $(OBJECTS)'
+echo '	rm -f $(OUTPUTDIR)$(EXECUTABLE)'
+echo '	$(LINKER) $(LINKER_FLAGS) $(OUTPUTDIR)$@ $(OBJECTS)'
 	
 echo .cpp.o:
 echo '	$(COMPILER) $(COMPILER_FLAGS) -c $< -o $@'
 	
 echo clean:
 echo '	rm -f $(OBJECTS)'
+echo '	rm -f $(OUTPUTDIR)$(EXECUTABLE)'
