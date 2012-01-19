@@ -98,6 +98,8 @@ namespace Nxna
 		UnloadContent();
 		m_content->Unload(); // maybe the user already did this, but we'll make sure.
 
+		OnExiting();
+
 		Graphics::SpriteBatch::Internal_Shutdown();
 
 		Audio::AudioManager::Shutdown();

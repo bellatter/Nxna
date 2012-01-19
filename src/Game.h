@@ -59,6 +59,7 @@ namespace Nxna
 		virtual void Update(const Nxna::GameTime& time) { }
 		virtual void Draw(const Nxna::GameTime& time) { }
 		virtual void UnloadContent() { }
+		virtual void OnExiting() { }
 
 	private:
 		void handleEvents();
