@@ -10,6 +10,7 @@
 #include "IndexBuffer.h"
 #include "Texture2D.h"
 #include "../Vector3.h"
+#include "../Rectangle.h"
 
 namespace Nxna
 {
@@ -38,6 +39,11 @@ namespace Graphics
 			const Nxna::Matrix& projection, 
 			const Nxna::Matrix& view, 
 			const Nxna::Matrix& world);
+
+		Rectangle GetBounds()
+		{
+			return Rectangle(X, Y, Width, Height);
+		}
 
 		int X, Y, Width, Height;
 	};

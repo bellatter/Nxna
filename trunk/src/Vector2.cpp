@@ -4,6 +4,7 @@
 namespace Nxna
 {
 	Vector2 Vector2::UnitX(1.0f, 0);
+	Vector2 Vector2::UnitY(0, 1.0f);
 
 	Vector2 Vector2::Normalize(const Vector2& v)
 	{

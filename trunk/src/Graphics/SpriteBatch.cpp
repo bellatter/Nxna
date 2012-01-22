@@ -7,6 +7,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "VertexDeclaration.h"
+#include "../MathHelper.h"
 
 namespace Nxna
 {
@@ -336,7 +337,7 @@ namespace Graphics
 
 			Draw(spriteFont->m_texture, position, &glyph, color, rotation, Vector2(0,0), scale, effects, layerDepth); 
 
-			cursor.X += kerning.Y + kerning.Z;
+			cursor.X += (kerning.Y + kerning.Z) * scale;
 
 			//Rectangle glyph = spriteFont->m_glyphs[
 		}
@@ -376,7 +377,7 @@ namespace Graphics
 		else if (m_workingVertsSize < numSprites * stride * vertsPerSprite)
 		{
 			delete[] m_workingVerts;
-			m_workingVertsSize *= 2;
+			m_workingVertsSize = Math::Max(m_workingVertsSize * 2, numSprites * stride * vertsPerSprite);
 			m_workingVerts = new float[m_workingVertsSize];
 		}
 

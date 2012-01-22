@@ -18,6 +18,11 @@ namespace Nxna
 		{
 			return (int)(n + 0.5f);
 		}
+
+		static int Max(int a, int b)
+		{
+			return (a > b ? a : b);
+		}
 	};
 
 	class MathHelper

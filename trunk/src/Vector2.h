@@ -126,6 +126,7 @@ namespace Nxna
 		static float Distance(const Vector2& v1, const Vector2& v2);
 		static float DistanceSquared(const Vector2& v1, const Vector2& v2);
 		static Vector2 UnitX;
+		static Vector2 UnitY;
 	};
 }
 
