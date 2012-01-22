@@ -67,9 +67,9 @@ namespace Graphics
 
 			size.X += kerning.Y + kerning.Z;
 
-			if (size.Y < glyph.Height)
+			if (size.Y < cropping.Height)
 			{
-				size.Y = (float)glyph.Height;
+				size.Y = (float)cropping.Height;
 			}
 		}
 
