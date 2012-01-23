@@ -48,6 +48,8 @@ namespace Graphics
 		Nxna::Vector2 MeasureString(const char* text);
 		Nxna::Vector2 MeasureString(const wchar_t* text);
 
+		int GetLineSpacing() { return m_lineHeight; }
+
 		static SpriteFont* LoadFrom(Content::XnbReader* stream);
 
 	protected:
