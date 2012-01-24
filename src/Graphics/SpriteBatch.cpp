@@ -296,15 +296,15 @@ namespace Graphics
 
 			spriteFont->GetCharacterInfo(c, &glyph, &cropping, &kerning);
 
+			cursor.X += kerning.X * scale;
+
 			Vector2 position = cursor;
 			position.X += cropping.X * scale;
 			position.Y += cropping.Y * scale;
 
 			Draw(spriteFont->m_texture, position, &glyph, color, rotation, Vector2(0,0), scale, effects, layerDepth); 
 
-			cursor.X += kerning.Y + kerning.Z;
-
-			//Rectangle glyph = spriteFont->m_glyphs[
+			cursor.X += (kerning.Y + kerning.Z) * scale;
 		}
 	}
 
@@ -323,6 +323,7 @@ namespace Graphics
 		Vector2 cursor(position.X, position.Y);
 
 		int len = wcslen(text);
+		bool ignoreSpacing = true; 
 		for (int i = 0; i < len; i++)
 		{
 			wchar_t c = text[i];
@@ -330,6 +331,11 @@ namespace Graphics
 			Vector3 kerning;
 
 			spriteFont->GetCharacterInfo(c, &glyph, &cropping, &kerning);
+
+			if (!ignoreSpacing)
+				cursor.X += spriteFont->GetSpacing() * scale;
+
+			cursor.X += kerning.X * scale;
 
 			Vector2 position = cursor;
 			position.X += cropping.X * scale;
@@ -339,7 +345,7 @@ namespace Graphics
 
 			cursor.X += (kerning.Y + kerning.Z) * scale;
 
-			//Rectangle glyph = spriteFont->m_glyphs[
+			ignoreSpacing = false;
 		}
 	}
 
