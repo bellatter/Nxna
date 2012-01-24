@@ -41,6 +41,8 @@ namespace Graphics
 
 			GetCharacterInfo(text[i], &glyph, &cropping, &kerning);
 
+			size.X += kerning.X;
+
 			size.X += kerning.Y + kerning.Z;
 
 			if (size.Y < glyph.Height)
@@ -65,6 +67,7 @@ namespace Graphics
 
 			GetCharacterInfo(text[i], &glyph, &cropping, &kerning);
 
+			size.X += kerning.X;
 			size.X += kerning.Y + kerning.Z;
 
 			if (size.Y < cropping.Height)
