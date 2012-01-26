@@ -174,6 +174,7 @@ namespace Audio
 		AudioSource source = AudioManager::GetFreeSource(false);
 
 		alSourcei(source, AL_SOURCE_RELATIVE, 1);
+		alSource3f(source, AL_POSITION, 0, 0, 0);
 		alSourcei(source, AL_LOOPING, 0);
 		alSourcei(source, AL_BUFFER, m_alBuffer);
 		alSourcef(source, AL_GAIN, volume);

@@ -66,6 +66,7 @@ namespace Audio
 
 	void AudioManager::ReleaseSource(AudioSource source)
 	{
+#ifndef DISABLE_OPENAL
 		for (int i = 0; i < MAX_SOURCES; i++)
 		{
 			if (m_sources[i].Source == source)
@@ -74,6 +75,7 @@ namespace Audio
 				return;
 			}
 		}
+#endif
 	}
 }
 }
