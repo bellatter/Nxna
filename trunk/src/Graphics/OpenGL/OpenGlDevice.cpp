@@ -41,7 +41,7 @@ namespace OpenGl
 
 		if (GLEW_EXT_texture_compression_s3tc)
 		{
-			m_caps->SupportsS3tcTextureCompression = true;
+			//m_caps->SupportsS3tcTextureCompression = true;
 		}
 
 #endif
