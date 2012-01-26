@@ -45,7 +45,11 @@ namespace OpenGl
 
 			if (m_device->GetCaps()->SupportsS3tcTextureCompression == false)
 			{
-				byte* converted = DecompressDxtc(pixels, mipWidth, mipHeight, length);
+				byte* converted;
+				if (m_format == SurfaceFormat_Dxt1)
+					converted = DecompressDxtc1(pixels, mipWidth, mipHeight, length);
+				else
+					converted = DecompressDxtc3(pixels, mipWidth, mipHeight, length); 
 				glTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, mipWidth, mipHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, converted);
 				delete[] converted;
 			}
