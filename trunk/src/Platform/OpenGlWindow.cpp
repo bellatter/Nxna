@@ -101,16 +101,47 @@ namespace Platform
 #endif
 	}
 
+#ifdef NXNA_PLATFORM_APPLE_IOS
+	bool g_isRetinaDisplay = false;
+#endif
+
 	void OpenGlWindow::SetScreenSize(int width, int height, bool fullscreen)
 	{
 #ifndef NXNA_PLATFORM_NACL
+		
+		SDL_Init(SDL_INIT_VIDEO);
+        SDL_SetHint( "SDL_HINT_ORIENTATIONS", "LandscapeLeft LandscapeRight" );
+		
+				
+#ifdef NXNA_PLATFORM_APPLE_IOS
+		if (fullscreen)
+		{
+			// figure out what the "fullscreen" resolution is
+			SDL_DisplayMode bestMode;
+			bestMode.w = bestMode.h = 0;
+			int modes = SDL_GetNumDisplayModes(0);
+			for (int i = 0; i < modes; i++)
+			{
+				SDL_DisplayMode mode;
+				SDL_GetDisplayMode(0, i, &mode);
+				
+				if (mode.w > bestMode.w && mode.h > bestMode.h)
+					bestMode = mode;
+			}
+			
+			width = bestMode.w;
+			height = bestMode.h;
+
+			if (width == 960 || height == 960)
+				g_isRetinaDisplay = true;
+		}
+#endif
+		
+		
         PreferredBackBufferWidth(width);
 		PreferredBackBufferHeight(height);
 
 		int bitsPerPixel = 32;
-
-		SDL_Init(SDL_INIT_VIDEO);
-        SDL_SetHint( "SDL_HINT_ORIENTATIONS", "LandscapeLeft LandscapeRight" );
 
 		if (bitsPerPixel == 16)
 		{
@@ -133,6 +164,8 @@ namespace Platform
 #ifdef NXNA_PLATFORM_APPLE_IOS
         flags |= SDL_WINDOW_BORDERLESS;
 #endif
+		if (fullscreen)
+			flags |= SDL_FULLSCREEN;
         
 		m_window = SDL_CreateWindow("CNK", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
 			PreferredBackBufferWidth(), PreferredBackBufferHeight(), flags);
@@ -140,10 +173,12 @@ namespace Platform
 		if (m_window == nullptr)
 			throw Exception(SDL_GetError());
         
+#ifndef NXNA_PLATFORM_APPLE_IOS
         SDL_GetWindowSize((SDL_Window*)m_window, &width, &height);
         
         PreferredBackBufferWidth(width);
         PreferredBackBufferHeight(height);
+#endif
         
 		m_glContext = SDL_GL_CreateContext((SDL_Window*)m_window);
 
