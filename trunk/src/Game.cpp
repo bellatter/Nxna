@@ -107,6 +107,10 @@ namespace Nxna
 
 		if (m_graphicsDeviceManager != nullptr)
 			m_graphicsDeviceManager->DestroyWindow();
+
+#ifdef NXNA_PLATFORM_APPLE_IOS
+		exit(0);
+#endif
 	}
 
 	void Game::Exit()
