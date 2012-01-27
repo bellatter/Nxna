@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2011 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2012 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -82,8 +82,8 @@ typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC) (Display * dpy,
                                                         *attrib_list);
 #endif
 
-#define OPENGL_REQUIRS_DLOPEN
-#if defined(OPENGL_REQUIRS_DLOPEN) && defined(SDL_LOADSO_DLOPEN)
+#define OPENGL_REQUIRES_DLOPEN
+#if defined(OPENGL_REQUIRES_DLOPEN) && defined(SDL_LOADSO_DLOPEN)
 #include <dlfcn.h>
 #define GL_LoadObject(X)	dlopen(X, (RTLD_NOW|RTLD_GLOBAL))
 #define GL_LoadFunction		dlsym
@@ -109,8 +109,11 @@ X11_GL_LoadLibrary(_THIS, const char *path)
     if (path == NULL) {
         path = DEFAULT_OPENGL;
     }
-    _this->gl_config.dll_handle = SDL_LoadObject(path);
+    _this->gl_config.dll_handle = GL_LoadObject(path);
     if (!_this->gl_config.dll_handle) {
+#if defined(OPENGL_REQUIRES_DLOPEN) && defined(SDL_LOADSO_DLOPEN)
+        SDL_SetError("Failed loading %s: %s", path, dlerror());
+#endif
         return -1;
     }
     SDL_strlcpy(_this->gl_config.driver_path, path,
@@ -187,8 +190,10 @@ X11_GL_UnloadLibrary(_THIS)
 #endif
 
     /* Free OpenGL memory */
-    SDL_free(_this->gl_data);
-    _this->gl_data = NULL;
+    if (_this->gl_data) {
+        SDL_free(_this->gl_data);
+        _this->gl_data = NULL;
+    }
 }
 
 static SDL_bool
@@ -395,6 +400,11 @@ X11_GL_GetVisual(_THIS, Display * display, int screen)
     int attribs[max_attrs];
     const int i = X11_GL_GetAttributes(_this,display,screen,attribs,max_attrs);
     SDL_assert(i <= max_attrs);
+
+    if (!_this->gl_data) {
+        /* The OpenGL library wasn't loaded, SDL_GetError() should have info */
+        return NULL;
+    }
 
     vinfo = _this->gl_data->glXChooseVisual(display, screen, attribs);
     if (!vinfo) {

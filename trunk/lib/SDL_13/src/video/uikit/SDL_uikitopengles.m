@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2011 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2012 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -115,6 +115,9 @@ SDL_GLContext UIKit_GL_CreateContext(_THIS, SDL_Window * window)
                                     depthBits: _this->gl_config.depth_size
                                     stencilBits: _this->gl_config.stencil_size
                                     majorVersion: _this->gl_config.major_version];
+    if (!view) {
+        return NULL;
+    }
 
     data->view = view;
     view->viewcontroller = data->viewcontroller;

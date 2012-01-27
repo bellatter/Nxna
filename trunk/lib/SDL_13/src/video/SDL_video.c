@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2011 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2012 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -189,6 +189,9 @@ ShouldUseTextureFramebuffer()
         }
         return hasAcceleratedOpenGL;
     }
+#elif SDL_VIDEO_OPENGL_ES || SDL_VIDEO_OPENGL_ES2
+    /* Let's be optimistic about this! */
+    return SDL_TRUE;
 #else
     return SDL_FALSE;
 #endif
@@ -239,6 +242,7 @@ SDL_CreateWindowTexture(_THIS, SDL_Window * window, Uint32 * format, void ** pix
             }
         }
         if (!renderer) {
+            SDL_SetError("No hardware accelerated renderers available");
             return -1;
         }
 
@@ -1137,7 +1141,7 @@ SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags)
     }
 
     /* Some platforms have OpenGL enabled by default */
-#if (SDL_VIDEO_OPENGL && __MACOSX__) || SDL_VIDEO_OPENGL_ES || SDL_VIDEO_OPENGL_ES2
+#if (SDL_VIDEO_OPENGL && __MACOSX__) || __IPHONEOS__ || __ANDROID__
     flags |= SDL_WINDOW_OPENGL;
 #endif
     if (flags & SDL_WINDOW_OPENGL) {
@@ -1928,15 +1932,23 @@ SDL_DestroyWindow(SDL_Window * window)
 
     CHECK_WINDOW_MAGIC(window, );
 
+    /* Restore video mode, etc. */
+    SDL_HideWindow(window);
+
+    /* Make sure this window no longer has focus */
+    if (SDL_GetKeyboardFocus() == window) {
+        SDL_SetKeyboardFocus(NULL);
+    }
+    if (SDL_GetMouseFocus() == window) {
+        SDL_SetMouseFocus(NULL);
+    }
+
     /* make no context current if this is the current context window. */
     if (window->flags & SDL_WINDOW_OPENGL) {
         if (_this->current_glwin == window) {
             SDL_GL_MakeCurrent(NULL, NULL);
         }
     }
-
-    /* Restore video mode, etc. */
-    SDL_HideWindow(window);
 
     if (window->surface) {
         window->surface->flags &= ~SDL_DONTFREE;

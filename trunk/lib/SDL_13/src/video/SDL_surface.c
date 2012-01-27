@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2011 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2012 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -494,7 +494,9 @@ SDL_LowerBlit(SDL_Surface * src, SDL_Rect * srcrect,
     /* Check to make sure the blit mapping is valid */
     if ((src->map->dst != dst) ||
         (dst->format->palette &&
-         src->map->palette_version != dst->format->palette->version)) {
+         src->map->dst_palette_version != dst->format->palette->version) ||
+        (src->format->palette &&
+         src->map->src_palette_version != src->format->palette->version)) {
         if (SDL_MapSurface(src, dst) < 0) {
             return (-1);
         }
