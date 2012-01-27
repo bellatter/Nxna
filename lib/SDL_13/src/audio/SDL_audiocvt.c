@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2011 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2012 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -295,8 +295,9 @@ SDL_ConvertStereo(SDL_AudioCVT * cvt, SDL_AudioFormat format)
     { \
         const type *src = (const type *) (cvt->buf + cvt->len_cvt); \
         type *dst = (type *) (cvt->buf + cvt->len_cvt * 2); \
-        for (i = cvt->len_cvt / 2; i; --i, --src) { \
+        for (i = cvt->len_cvt / sizeof(type); i; --i) { \
             const type val = *src; \
+            src -= 1; \
             dst -= 2; \
             dst[0] = dst[1] = val; \
         } \

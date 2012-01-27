@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2011 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2012 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -35,6 +35,8 @@
 #include "SDL_video.h"
 #include "SDL_endian.h"
 #include "SDL_pixels_c.h"
+
+#define SAVE_32BIT_BMP
 
 /* Compression encodings for BMP files */
 #ifndef BI_RGB

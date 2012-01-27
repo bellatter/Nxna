@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2011 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2012 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -39,7 +39,7 @@ extern "C" {
 #define LOGE(...) do {} while (false)
 
 
-/* Impelemented in audio/android/SDL_androidaudio.c */
+/* Implemented in audio/android/SDL_androidaudio.c */
 extern void Android_RunAudioThread();
 } // C
 
@@ -70,7 +70,7 @@ static jmethodID midAudioQuit;
 
 // Accelerometer data storage
 static float fLastAccelerometer[3];
-
+static bool bHasNewData;
 
 /*******************************************************************************
                  Functions called by JNI
@@ -96,7 +96,7 @@ extern "C" void SDL_Android_Init(JNIEnv* env, jclass cls)
     __android_log_print(ANDROID_LOG_INFO, "SDL", "SDL_Android_Init()");
 
     mEnv = env;
-    mActivityClass = cls;
+    mActivityClass = (jclass)env->NewGlobalRef(cls);
 
     midCreateGLContext = mEnv->GetStaticMethodID(mActivityClass,
                                 "createGLContext","(II)Z");
@@ -110,6 +110,8 @@ extern "C" void SDL_Android_Init(JNIEnv* env, jclass cls)
                                 "audioWriteByteBuffer", "([B)V");
     midAudioQuit = mEnv->GetStaticMethodID(mActivityClass,
                                 "audioQuit", "()V");
+
+    bHasNewData = false;
 
     if(!midCreateGLContext || !midFlipBuffers || !midAudioInit ||
        !midAudioWriteShortBuffer || !midAudioWriteByteBuffer || !midAudioQuit) {
@@ -156,7 +158,8 @@ extern "C" void Java_org_libsdl_app_SDLActivity_onNativeAccel(
 {
     fLastAccelerometer[0] = x;
     fLastAccelerometer[1] = y;
-    fLastAccelerometer[2] = z;   
+    fLastAccelerometer[2] = z;
+    bHasNewData = true;
 }
 
 // Quit
@@ -165,6 +168,26 @@ extern "C" void Java_org_libsdl_app_SDLActivity_nativeQuit(
 {    
     // Inject a SDL_QUIT event
     SDL_SendQuit();
+}
+
+// Pause
+extern "C" void Java_org_libsdl_app_SDLActivity_nativePause(
+                                    JNIEnv* env, jclass cls)
+{
+    if (Android_Window) {
+        SDL_SendWindowEvent(Android_Window, SDL_WINDOWEVENT_FOCUS_LOST, 0, 0);
+        SDL_SendWindowEvent(Android_Window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
+    }
+}
+
+// Resume
+extern "C" void Java_org_libsdl_app_SDLActivity_nativeResume(
+                                    JNIEnv* env, jclass cls)
+{
+    if (Android_Window) {
+        SDL_SendWindowEvent(Android_Window, SDL_WINDOWEVENT_FOCUS_GAINED, 0, 0);
+        SDL_SendWindowEvent(Android_Window, SDL_WINDOWEVENT_RESTORED, 0, 0);
+    }
 }
 
 extern "C" void Java_org_libsdl_app_SDLActivity_nativeRunAudioThread(
@@ -204,12 +227,20 @@ extern "C" void Android_JNI_SetActivityTitle(const char *title)
     }
 }
 
-extern "C" void Android_JNI_GetAccelerometerValues(float values[3])
+extern "C" SDL_bool Android_JNI_GetAccelerometerValues(float values[3])
 {
     int i;
-    for (i = 0; i < 3; ++i) {
-        values[i] = fLastAccelerometer[i];
+    SDL_bool retval = SDL_FALSE;
+
+    if (bHasNewData) {
+        for (i = 0; i < 3; ++i) {
+            values[i] = fLastAccelerometer[i];
+        }
+        bHasNewData = false;
+        retval = SDL_TRUE;
     }
+
+    return retval;
 }
 
 //

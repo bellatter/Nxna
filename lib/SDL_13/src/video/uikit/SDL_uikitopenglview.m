@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2011 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2012 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -75,12 +75,13 @@
         }
         if (!context || ![EAGLContext setCurrentContext:context]) {
             [self release];
+            SDL_SetError("OpenGL ES %d not supported", majorVersion);
             return nil;
         }
 
         // !!! FIXME: use the screen this is on!
         /* Use the main screen scale (for retina display support) */
-        if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+        if ([self respondsToSelector:@selector(contentScaleFactor)])
             self.contentScaleFactor = [UIScreen mainScreen].scale;
 
         /* create the buffers */
