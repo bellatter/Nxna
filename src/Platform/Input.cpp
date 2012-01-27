@@ -26,6 +26,10 @@ namespace Platform
 	}
 #endif
 
+#ifdef NXNA_PLATFORM_APPLE_IOS
+	extern bool g_isRetinaDisplay;
+#endif
+
 	void Input::Refresh()
 	{
 #ifndef NXNA_PLATFORM_NACL
@@ -43,6 +47,11 @@ namespace Platform
 				m_quitReceived = true;
 				break;
 			case SDL_MOUSEMOTION:
+#ifdef NXNA_PLATFORM_APPLE_IOS
+				if (g_isRetinaDisplay)
+					Nxna::Input::Mouse::InjectMouseMove(e.motion.x * 2, e.motion.y * 2);
+				else
+#endif
 				Nxna::Input::Mouse::InjectMouseMove(e.motion.x, e.motion.y);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
