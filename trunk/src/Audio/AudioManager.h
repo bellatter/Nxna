@@ -30,6 +30,9 @@ namespace Audio
 
 		static AudioSource GetFreeSource(bool reserve);
 		static void ReleaseSource(AudioSource source);
+
+		static void SetDistanceScale(float scale);
+		static void SetMasterVolume(float volume);
 	};
 }
 }

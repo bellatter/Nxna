@@ -61,6 +61,9 @@ namespace Audio
 		bool Play(float volume, float pitch, float pan);
 		SoundEffectInstance* CreateInstance();
 
+		static void SetDistanceScale(float scale);
+		static void SetMasterVolume(float volume);
+
 		static SoundEffect* LoadFrom(Content::FileStream* stream);
 	};
 
