@@ -77,5 +77,22 @@ namespace Audio
 		}
 #endif
 	}
+
+	void AudioManager::SetDistanceScale(float scale)
+	{
+#ifndef DISABLE_OPENAL
+		for (int i = 0; i < MAX_SOURCES; i++)
+		{
+			alSourcef(m_sources[i].Source, AL_REFERENCE_DISTANCE, scale);
+		}
+#endif
+	}
+
+	void AudioManager::SetMasterVolume(float volume)
+	{
+#ifndef DISABLE_OPENAL
+		alListenerf(AL_GAIN, volume);
+#endif
+	}
 }
 }

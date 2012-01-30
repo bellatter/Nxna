@@ -191,6 +191,16 @@ namespace Audio
 		return new SoundEffectInstance(this);
 	}
 
+	void SoundEffect::SetDistanceScale(float scale)
+	{
+		AudioManager::SetDistanceScale(scale);
+	}
+
+	void SoundEffect::SetMasterVolume(float volume)
+	{
+		AudioManager::SetMasterVolume(volume);
+	}
+
 	SoundEffect* SoundEffect::LoadFrom(Content::FileStream* stream)
 	{
 #ifndef DISABLE_OPENAL
