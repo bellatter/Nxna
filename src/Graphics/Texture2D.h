@@ -3,6 +3,7 @@
 
 #include "../NxnaConfig.h"
 #include "../Content/ContentManager.h"
+#include "../Rectangle.h"
 
 namespace Nxna
 {
@@ -51,6 +52,7 @@ namespace Graphics
 
 		int GetWidth() { return m_width; }
 		int GetHeight() { return m_height; }
+		Rectangle GetBounds() { return Rectangle(0, 0, m_width, m_height); }
 
 		virtual void SetData(byte* pixels, int length)
 		{
