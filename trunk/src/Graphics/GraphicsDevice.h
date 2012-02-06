@@ -35,6 +35,12 @@ namespace Graphics
 		}
 
 		float GetAspectRatio() const { return Width / (float)Height; }
+
+		Nxna::Vector3 Project(const Nxna::Vector3& source,
+			const Nxna::Matrix& project,
+			const Nxna::Matrix& view,
+			const Nxna::Matrix& world);
+
 		Nxna::Vector3 Unproject(const Nxna::Vector3& source, 
 			const Nxna::Matrix& projection, 
 			const Nxna::Matrix& view, 
