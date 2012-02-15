@@ -40,7 +40,7 @@
     <IncludePath>..\lib\SDL_13\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\lib\Glew\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\lib\SDL_13\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,6 +113,7 @@
     <ClInclude Include="Input\Keyboard.h" />
     <ClInclude Include="Input\Keys.h" />
     <ClInclude Include="Input\Mouse.h" />
+    <ClInclude Include="Input\Touch\TouchPanel.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Nxna.h" />
@@ -144,6 +145,7 @@
     <ClCompile Include="IGraphicsDeviceManager.cpp" />
     <ClCompile Include="Input\GamePad.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
+    <ClCompile Include="Input\Touch\TouchPanel.cpp" />
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Platform\Clock.cpp" />

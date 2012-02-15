@@ -36,4 +36,9 @@ namespace Nxna
 	{
 		return (v1.X - v2.X) * (v1.X - v2.X) + (v1.Y - v2.Y) * (v1.Y - v2.Y);
 	}
+
+	void Vector2::DistanceSquared(const Vector2& v1, const Vector2& v2, float& result)
+	{
+		result = (v1.X - v2.X) * (v1.X - v2.X) + (v1.Y - v2.Y) * (v1.Y - v2.Y);
+	}
 }

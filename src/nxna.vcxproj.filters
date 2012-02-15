@@ -22,6 +22,9 @@
     <Filter Include="Audio\ADPCM">
       <UniqueIdentifier>{2b6bfe57-7fa3-49b7-a5d5-c6b106d7b7b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input\Touch">
+      <UniqueIdentifier>{0fcbfb97-7b63-44c3-8c29-854cb66314e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\GraphicsDevice.h">
@@ -174,6 +177,9 @@
     <ClInclude Include="Audio\ADPCM\ADPCMDecoder.h">
       <Filter>Audio\ADPCM</Filter>
     </ClInclude>
+    <ClInclude Include="Input\Touch\TouchPanel.h">
+      <Filter>Input\Touch</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -285,6 +291,9 @@
     </ClCompile>
     <ClCompile Include="Audio\ADPCM\ADPCMDecoder.cpp">
       <Filter>Audio\ADPCM</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\Touch\TouchPanel.cpp">
+      <Filter>Input\Touch</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
