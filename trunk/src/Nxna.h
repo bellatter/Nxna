@@ -38,6 +38,7 @@ namespace Nxna
 #include "Input/GamePad.h"
 #include "Input/Buttons.h"
 #include "Input/Keys.h"
+#include "Input/Touch/TouchPanel.h"
 #include "Content/ContentManager.h"
 
 #include "Audio/SoundEffect.h"

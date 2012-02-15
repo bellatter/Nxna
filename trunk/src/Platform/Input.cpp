@@ -5,6 +5,7 @@
 #include <ppapi/cpp/input_event.h>
 #include <ppapi/cpp/point.h>
 #endif
+#include "../Input/Touch/TouchPanel.h"
 
 namespace Nxna
 {
@@ -34,6 +35,7 @@ namespace Platform
 	{
 #ifndef NXNA_PLATFORM_NACL
 
+		Nxna::Input::Touch::TouchPanel::Refresh();
 		m_keyboard = Nxna::Input::Keyboard::GetState();
 		m_mouse = Nxna::Input::Mouse::GetState();
 
@@ -65,6 +67,15 @@ namespace Platform
 				break;
 			case SDL_KEYUP:
 				Nxna::Input::Keyboard::InjectKeyUp(convertSDLK(e.key.keysym.sym));
+				break;
+			case SDL_FINGERDOWN:
+				Nxna::Input::Touch::TouchPanel::InjectFingerDown(e.tfinger.fingerId, e.tfinger.x, e.tfinger.y);
+				break;
+			case SDL_FINGERUP:
+				Nxna::Input::Touch::TouchPanel::InjectFingerUp(e.tfinger.fingerId, e.tfinger.x, e.tfinger.y);
+				break;
+			case SDL_FINGERMOTION:
+				Nxna::Input::Touch::TouchPanel::InjectFingerMove(e.tfinger.fingerId, e.tfinger.x, e.tfinger.y);
 				break;
 			}
 		}

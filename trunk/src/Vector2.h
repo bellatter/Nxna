@@ -125,6 +125,7 @@ namespace Nxna
 		static void Transform(const Vector2& v, const Matrix& m, Vector2& result);
 		static float Distance(const Vector2& v1, const Vector2& v2);
 		static float DistanceSquared(const Vector2& v1, const Vector2& v2);
+		static void Vector2::DistanceSquared(const Vector2& v1, const Vector2& v2, float& result);
 		static Vector2 UnitX;
 		static Vector2 UnitY;
 	};
