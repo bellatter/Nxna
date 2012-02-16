@@ -23,6 +23,21 @@ namespace Nxna
 		{
 			return (a > b ? a : b);
 		}
+
+		static float Max(float a, float b)
+		{
+			return (a > b ? a : b);
+		}
+
+		static int Min(int a, int b)
+		{
+			return (a < b ? a : b);
+		}
+
+		static float Min(float a, float b)
+		{
+			return (a < b ? a : b);
+		}
 	};
 
 	class MathHelper
