@@ -31,6 +31,8 @@ namespace Platform
 	extern bool g_isRetinaDisplay;
 #endif
 
+	float touchPanelXRes = 0, touchPanelYRes = 0;
+
 	void Input::Refresh()
 	{
 #ifndef NXNA_PLATFORM_NACL
@@ -69,13 +71,27 @@ namespace Platform
 				Nxna::Input::Keyboard::InjectKeyUp(convertSDLK(e.key.keysym.sym));
 				break;
 			case SDL_FINGERDOWN:
-				Nxna::Input::Touch::TouchPanel::InjectFingerDown(e.tfinger.fingerId, e.tfinger.x, e.tfinger.y);
+				if (touchPanelXRes == 0)
+				{
+					SDL_Touch* t = SDL_GetTouch(e.tfinger.touchId);
+					touchPanelXRes = (float)t->xres;
+					touchPanelYRes = (float)t->yres;
+				}
+				Nxna::Input::Touch::TouchPanel::InjectFingerDown(e.tfinger.fingerId, e.tfinger.x / touchPanelXRes, e.tfinger.y / touchPanelYRes);
 				break;
 			case SDL_FINGERUP:
-				Nxna::Input::Touch::TouchPanel::InjectFingerUp(e.tfinger.fingerId, e.tfinger.x, e.tfinger.y);
+				if (touchPanelXRes != 0)
+					Nxna::Input::Touch::TouchPanel::InjectFingerUp(e.tfinger.fingerId, e.tfinger.x / touchPanelXRes, e.tfinger.y / touchPanelYRes);
 				break;
 			case SDL_FINGERMOTION:
-				Nxna::Input::Touch::TouchPanel::InjectFingerMove(e.tfinger.fingerId, e.tfinger.x, e.tfinger.y);
+
+				if (touchPanelXRes == 0)
+				{
+					SDL_Touch* t = SDL_GetTouch(e.tfinger.touchId);
+					touchPanelXRes = (float)t->xres;
+					touchPanelYRes = (float)t->yres;
+				}
+				Nxna::Input::Touch::TouchPanel::InjectFingerMove(e.tfinger.fingerId, e.tfinger.x / touchPanelXRes, e.tfinger.y / touchPanelYRes);
 				break;
 			}
 		}

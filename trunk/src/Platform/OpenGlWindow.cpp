@@ -2,6 +2,7 @@
 #include "PlatformDefs.h"
 #include "OpenGlWindow.h"
 #include "../Graphics/OpenGL/OpenGLDevice.h"
+#include "../Input/Touch/TouchPanel.h"
 #include "../Exception.h"
 
 #ifdef NXNA_PLATFORM_NACL
@@ -190,6 +191,10 @@ namespace Platform
 #else
 		OpenGlContext* context = new OpenGlContext(g_Instance, width, height);
 #endif
+
+		// tell the touch panel the display size
+		Input::Touch::TouchPanel::SetDisplayWidth(width);
+		Input::Touch::TouchPanel::SetDisplayHeight(height);
 	}
 }
 }
