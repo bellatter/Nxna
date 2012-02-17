@@ -172,6 +172,7 @@ namespace Audio
 	{
 #ifndef DISABLE_OPENAL
 		AudioSource source = AudioManager::GetFreeSource(false);
+		if (source == -1) return false;
 
 		alSourcei(source, AL_SOURCE_RELATIVE, 1);
 		alSource3f(source, AL_POSITION, 0, 0, 0);
