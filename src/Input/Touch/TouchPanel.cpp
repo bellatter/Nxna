@@ -7,6 +7,7 @@ namespace Input
 namespace Touch
 {
 	std::vector<TouchLocation> TouchPanel::m_touches;
+	int TouchPanel::m_width, TouchPanel::m_height;
 
 	std::vector<TouchLocation> TouchPanel::GetState()
 	{
@@ -22,29 +23,29 @@ namespace Touch
 			state.push_back(m_touches[i]);
 	}
 
-	void TouchPanel::InjectFingerDown(int64_t id, int x, int y)
+	void TouchPanel::InjectFingerDown(int64_t id, float x, float y)
 	{
 		static int idTracker = 0;
 
 		TouchLocation t;
 		t.Id = idTracker++;
 		t._internalID = id;
-		t.Position.X = (float)x;
-		t.Position.Y = (float)y;
+		t.Position.X = x * m_width;
+		t.Position.Y = y * m_height;
 		t.State = TouchLocationState_Pressed;
 
 		m_touches.push_back(t);
 	}
 
-	void TouchPanel::InjectFingerMove(int64_t id, int x, int y)
+	void TouchPanel::InjectFingerMove(int64_t id, float x, float y)
 	{
 		// find the existing touch
 		for (int i = 0; i < m_touches.size(); i++)
 		{
 			if (m_touches[i]._internalID == id)
 			{
-				m_touches[i].Position.X = (float)x;
-				m_touches[i].Position.Y = (float)y;
+				m_touches[i].Position.X = x * m_width;
+				m_touches[i].Position.Y = y * m_height;
 				m_touches[i].State = TouchLocationState_Moved;
 
 				break;
@@ -52,15 +53,15 @@ namespace Touch
 		}
 	}
 
-	void TouchPanel::InjectFingerUp(int64_t id, int x, int y)
+	void TouchPanel::InjectFingerUp(int64_t id, float x, float y)
 	{
 		// find the existing touch
 		for (int i = 0; i < m_touches.size(); i++)
 		{
 			if (m_touches[i]._internalID == id)
 			{
-				m_touches[i].Position.X = (float)x;
-				m_touches[i].Position.Y = (float)y;
+				m_touches[i].Position.X = x * m_width;
+				m_touches[i].Position.Y = y * m_height;
 				m_touches[i].State = TouchLocationState_Released;
 
 				break;
