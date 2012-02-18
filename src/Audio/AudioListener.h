@@ -14,6 +14,12 @@ namespace Audio
 		Vector3 m_up;
 
 	public:
+
+		AudioListener()
+		{
+			m_up = Vector3::GetUp();
+		}
+
 		Vector3 GetPosition() const { return m_position; }
 		void SetPosition(const Vector3& position) { m_position = position; }
 

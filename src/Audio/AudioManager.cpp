@@ -29,7 +29,7 @@ namespace Audio
 		for (int i = 0; i < MAX_SOURCES; i++)
 		{
 			alGenSources(1, &m_sources[i].Source);
-			m_sources[i].Reserved = false;
+			m_sources[i].Owner = nullptr;
 		}
 #endif
 	}
@@ -43,20 +43,17 @@ namespace Audio
 #endif
 	}
 
-	AudioSource AudioManager::GetFreeSource(bool reserve)
+	AudioSource AudioManager::GetFreeSource(void* owner)
 	{
 #ifndef DISABLE_OPENAL
 		for (int i = 0; i < MAX_SOURCES; i++)
 		{
-			if (m_sources[i].Reserved == false)
+			int state;
+			alGetSourcei(m_sources[i].Source, AL_SOURCE_STATE, &state);
+			if (state == AL_STOPPED || state == AL_INITIAL)
 			{
-				int state;
-				alGetSourcei(m_sources[i].Source, AL_SOURCE_STATE, &state);
-				if (state == AL_STOPPED || state == AL_INITIAL)
-				{
-					m_sources[i].Reserved = reserve;
-					return m_sources[i].Source;
-				}
+				m_sources[i].Owner = owner;
+				return m_sources[i].Source;
 			}
 		}
 #endif
@@ -71,11 +68,26 @@ namespace Audio
 		{
 			if (m_sources[i].Source == source)
 			{
-				m_sources[i].Reserved = false;
+				m_sources[i].Owner = nullptr;
 				return;
 			}
 		}
 #endif
+	}
+
+	bool AudioManager::IsSourceOwner(AudioSource source, void* owner)
+	{
+#ifndef DISABLE_OPENAL
+		for (int i = 0; i < MAX_SOURCES; i++)
+		{
+			if (m_sources[i].Source == source)
+			{
+				return m_sources[i].Owner == owner;
+			}
+		}
+#endif
+
+		return false;
 	}
 
 	void AudioManager::SetDistanceScale(float scale)
