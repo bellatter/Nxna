@@ -2,7 +2,7 @@
 #define NXNA_INPUT_TOUCH_TOUCHPANEL_H
 
 #include <vector>
-#include <cstdint>
+#include <stdint.h>
 #include "../../Vector2.h"
 
 namespace Nxna
