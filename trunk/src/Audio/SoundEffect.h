@@ -3,6 +3,7 @@
 
 #include "../NxnaConfig.h"
 #include "../Content/ContentManager.h"
+#include "../Vector3.h"
 
 namespace Nxna
 {
@@ -23,6 +24,11 @@ namespace Audio
 	{
 		friend class SoundEffect;
 		unsigned int m_source;
+		unsigned int m_buffer;
+		bool m_isLooped;
+		float m_gain;
+		Vector3 m_cachedPosition;
+		bool m_positioned;
 
 	public:
 		~SoundEffectInstance();
@@ -41,6 +47,7 @@ namespace Audio
 
 	private:
 		SoundEffectInstance(SoundEffect* effect);
+		bool isSourceValid();
 	};
 
 	class SoundEffect

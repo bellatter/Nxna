@@ -19,7 +19,7 @@ namespace Audio
 		struct SourceInfo
 		{
 			AudioSource Source;
-			bool Reserved;
+			void* Owner;
 		};
 
 		static SourceInfo m_sources[MAX_SOURCES];
@@ -28,8 +28,9 @@ namespace Audio
 		static void Init();
 		static void Shutdown();
 
-		static AudioSource GetFreeSource(bool reserve);
+		static AudioSource GetFreeSource(void* owner);
 		static void ReleaseSource(AudioSource source);
+		static bool IsSourceOwner(AudioSource source, void* owner);
 
 		static void SetDistanceScale(float scale);
 		static void SetMasterVolume(float volume);

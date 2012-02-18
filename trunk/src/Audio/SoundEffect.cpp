@@ -22,86 +22,113 @@ namespace Audio
 	{
 		assert(effect != nullptr);
 
+		m_isLooped = false;
+		m_source = -1;
+		m_gain = 1.0f;
+		m_positioned = false;
+
 #ifndef DISABLE_OPENAL
-		m_source = AudioManager::GetFreeSource(true);
+		m_buffer = effect->m_alBuffer;
+
+		/*m_source = AudioManager::GetFreeSource(true);
 
 		alSourcei(m_source, AL_BUFFER, effect->m_alBuffer);
 		alSourcei(m_source, AL_SOURCE_RELATIVE, 1);
 		alSourcei(m_source, AL_LOOPING, 0);
 		alSource3f(m_source, AL_POSITION, 0, 20, 0);
-		alSourcef(m_source, AL_GAIN, 1.0f);
+		alSourcef(m_source, AL_GAIN, m_gain);*/
 #endif
 	}
 
 	SoundEffectInstance::~SoundEffectInstance()
 	{
-		AudioManager::ReleaseSource(m_source);
+		if (isSourceValid())
+			AudioManager::ReleaseSource(m_source);
 	}
 
 	void SoundEffectInstance::Play()
 	{
 #ifndef DISABLE_OPENAL
+		if (isSourceValid() == false)
+		{
+			m_source = AudioManager::GetFreeSource(this);
+			if (m_source == -1) return;
+
+			alSourcei(m_source, AL_BUFFER, m_buffer);
+			alSourcei(m_source, AL_LOOPING, m_isLooped ? AL_TRUE : AL_FALSE);
+			alSourcef(m_source, AL_GAIN, m_gain);
+
+			if (m_positioned)
+			{
+				alSourcei(m_source, AL_SOURCE_RELATIVE, 0);
+				alSource3f(m_source, AL_POSITION, m_cachedPosition.X, m_cachedPosition.Y, m_cachedPosition.Z);
+			}
+			else
+			{
+				alSourcei(m_source, AL_SOURCE_RELATIVE, 1);
+				alSource3f(m_source, AL_POSITION, 0, 20, 0);
+			}
+		}
+		
 		alSourcePlay(m_source);
 #endif
 	}
 
 	void SoundEffectInstance::Stop()
 	{
+		if (isSourceValid() == false) return;
+
 #ifndef DISABLE_OPENAL
 		alSourceStop(m_source);
 #endif
+
+		AudioManager::ReleaseSource(m_source);
+		m_source = -1;
 	}
 
 	bool SoundEffectInstance::IsLooped()
 	{
-#ifndef DISABLE_OPENAL
-		int state;
-		alGetSourcei(m_source, AL_LOOPING, &state);
-		if (state == 0)
-			return false;
-
-		return true;
-#else
-		return false;
-#endif
+		return m_isLooped;
 	}
 	
 	void SoundEffectInstance::IsLooped(bool looped)
 	{
+		m_isLooped = looped;
+
 #ifndef DISABLE_OPENAL
-		alSourcei(m_source, AL_LOOPING, looped ? 1 : 0);
+		if (isSourceValid())
+			alSourcei(m_source, AL_LOOPING, looped ? 1 : 0);
 #endif
 	}
 
 	float SoundEffectInstance::Volume()
 	{
-#ifndef DISABLE_OPENAL
-		float gain;
-		alGetSourcef(m_source, AL_GAIN, &gain);
-
-		return gain;
-#else
-		return 0;
-#endif
+		return m_gain;
 	}
 
 	void SoundEffectInstance::Volume(float volume)
 	{
+		m_gain = volume;
+
 #ifndef DISABLE_OPENAL
-		alSourcef(m_source, AL_GAIN, volume);
+		if (isSourceValid())
+			alSourcef(m_source, AL_GAIN, m_gain);
 #endif
 	}
 
 	SoundState SoundEffectInstance::GetState()
 	{
 #ifndef DISABLE_OPENAL
-		int state;
-		alGetSourcei(m_source, AL_SOURCE_STATE, &state);
+		if (isSourceValid())
+		{
+			int state;
+			alGetSourcei(m_source, AL_SOURCE_STATE, &state);
 
-		if (state == AL_PLAYING)
-			return SoundState_Playing;
-		if (state == AL_PAUSED)
-			return SoundState_Paused;
+			if (state == AL_PLAYING)
+				return SoundState_Playing;
+			if (state == AL_PAUSED)
+				return SoundState_Paused;
+		}
 #endif
 
 		return SoundState_Stopped;
@@ -127,9 +154,22 @@ namespace Audio
 		alListenerfv(AL_ORIENTATION, forwardAndUp);
 
 		// update the source
-		alSourcei(m_source, AL_SOURCE_RELATIVE, 0);
-		alSource3f(m_source, AL_POSITION, emitter->GetPosition().X, emitter->GetPosition().Y, emitter->GetPosition().Z);
+		if (isSourceValid())
+		{
+			alSourcei(m_source, AL_SOURCE_RELATIVE, 0);
+			alSource3f(m_source, AL_POSITION, emitter->GetPosition().X, emitter->GetPosition().Y, emitter->GetPosition().Z);
+		}
+		else
+		{
+			m_positioned = true;
+			m_cachedPosition = emitter->GetPosition();
+		}
 #endif
+	}
+
+	bool SoundEffectInstance::isSourceValid()
+	{
+		return m_source != -1 && AudioManager::IsSourceOwner(m_source, this);
 	}
 
 
@@ -171,7 +211,7 @@ namespace Audio
 	bool SoundEffect::Play(float volume, float pitch, float pan)
 	{
 #ifndef DISABLE_OPENAL
-		AudioSource source = AudioManager::GetFreeSource(false);
+		AudioSource source = AudioManager::GetFreeSource(nullptr);
 		if (source == -1) return false;
 
 		alSourcei(source, AL_SOURCE_RELATIVE, 1);
