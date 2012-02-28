@@ -30,7 +30,13 @@ namespace Touch
 
 	class TouchPanel
 	{
-		static std::vector<TouchLocation> m_touches;
+		struct InternalTouchLocation
+		{
+			TouchLocation Current;
+			TouchLocation Previous;
+		};
+
+		static std::vector<InternalTouchLocation> m_touches;
 		static int m_width, m_height;
 
 	public:

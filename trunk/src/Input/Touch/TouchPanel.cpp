@@ -6,12 +6,15 @@ namespace Input
 {
 namespace Touch
 {
-	std::vector<TouchLocation> TouchPanel::m_touches;
+	std::vector<TouchPanel::InternalTouchLocation> TouchPanel::m_touches;
 	int TouchPanel::m_width, TouchPanel::m_height;
 
 	std::vector<TouchLocation> TouchPanel::GetState()
 	{
-		return m_touches;
+		std::vector<TouchLocation> touches;
+		GetState(touches);
+
+		return touches;
 	}
 
 	void TouchPanel::GetState(std::vector<TouchLocation>& state)
@@ -20,19 +23,45 @@ namespace Touch
 		state.reserve(m_touches.size());
 
 		for (int i = 0; i < m_touches.size(); i++)
-			state.push_back(m_touches[i]);
+		{
+			// ignore released touch points that have already been read
+			if (m_touches[i].Current.State == TouchLocationState_Released &&
+				m_touches[i].Previous.State == TouchLocationState_Released)
+				continue;
+
+			state.push_back(m_touches[i].Current);
+
+			if (m_touches[i].Current.State == TouchLocationState_Pressed)
+			{
+				// convert read Pressed touchpoints to Moved
+				m_touches[i].Current.State = TouchLocationState_Moved;
+				m_touches[i].Previous.State = TouchLocationState_Pressed;
+			}
+			else if (m_touches[i].Current.State == TouchLocationState_Released)
+			{
+				m_touches[i].Previous.State = TouchLocationState_Released;
+			}
+		}
+
+		// remove all the released fingers
+		for (int i = m_touches.size() - 1; i >= 0; i--)
+		{
+			if (m_touches[i].Current.State == TouchLocationState_Released)
+				m_touches.erase(m_touches.begin() + i);
+		}
 	}
 
 	void TouchPanel::InjectFingerDown(int64_t id, float x, float y)
 	{
 		static int idTracker = 0;
 
-		TouchLocation t;
-		t.Id = idTracker++;
-		t._internalID = id;
-		t.Position.X = x * m_width;
-		t.Position.Y = y * m_height;
-		t.State = TouchLocationState_Pressed;
+		InternalTouchLocation t;
+		t.Current.Id = idTracker++;
+		t.Current._internalID = id;
+		t.Current.Position.X = x * m_width;
+		t.Current.Position.Y = y * m_height;
+		t.Current.State = TouchLocationState_Pressed;
+		t.Previous.State = TouchLocationState_Invalid;
 
 		m_touches.push_back(t);
 	}
@@ -42,11 +71,13 @@ namespace Touch
 		// find the existing touch
 		for (int i = 0; i < m_touches.size(); i++)
 		{
-			if (m_touches[i]._internalID == id)
+			if (m_touches[i].Current._internalID == id)
 			{
-				m_touches[i].Position.X = x * m_width;
-				m_touches[i].Position.Y = y * m_height;
-				m_touches[i].State = TouchLocationState_Moved;
+				m_touches[i].Current.Position.X = x * m_width;
+				m_touches[i].Current.Position.Y = y * m_height;
+
+				if (m_touches[i].Current.State != TouchLocationState_Invalid)
+					m_touches[i].Current.State = TouchLocationState_Moved;
 
 				break;
 			}
@@ -58,11 +89,11 @@ namespace Touch
 		// find the existing touch
 		for (int i = 0; i < m_touches.size(); i++)
 		{
-			if (m_touches[i]._internalID == id)
+			if (m_touches[i].Current._internalID == id)
 			{
-				m_touches[i].Position.X = x * m_width;
-				m_touches[i].Position.Y = y * m_height;
-				m_touches[i].State = TouchLocationState_Released;
+				m_touches[i].Current.Position.X = x * m_width;
+				m_touches[i].Current.Position.Y = y * m_height;
+				m_touches[i].Current.State = TouchLocationState_Released;
 
 				break;
 			}
@@ -71,12 +102,6 @@ namespace Touch
 
 	void TouchPanel::Refresh()
 	{
-		// remove all the released fingers
-		for (int i = m_touches.size() - 1; i >= 0; i--)
-		{
-			if (m_touches[i].State == TouchLocationState_Released)
-				m_touches.erase(m_touches.begin() + i);
-		}
 	}
 }
 }
