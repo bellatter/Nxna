@@ -167,7 +167,7 @@ namespace Platform
         flags |= SDL_WINDOW_BORDERLESS;
 #endif
 		if (fullscreen)
-			flags |= SDL_FULLSCREEN;
+			flags |= SDL_WINDOW_FULLSCREEN;
         
 		m_window = SDL_CreateWindow("CNK", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
 			PreferredBackBufferWidth(), PreferredBackBufferHeight(), flags);

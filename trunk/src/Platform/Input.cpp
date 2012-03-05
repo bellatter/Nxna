@@ -16,7 +16,7 @@ namespace Platform
 	bool Input::m_quitReceived = false;
 
 #ifndef NXNA_PLATFORM_NACL
-	Nxna::Input::Keys convertSDLK(SDLKey sdlk)
+	Nxna::Input::Keys convertSDLK(SDL_Keycode sdlk)
 	{
 		if (sdlk == SDLK_BACKSPACE)
 			return Nxna::Input::Keys_Back;

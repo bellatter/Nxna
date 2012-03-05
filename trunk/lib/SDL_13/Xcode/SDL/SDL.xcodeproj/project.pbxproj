@@ -62,8 +62,8 @@
 		006E94A8119511A1001DE610 /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = 006E94A1119511A1001DE610 /* sample.wav */; };
 		006E94A9119511A1001DE610 /* utf8.txt in Resources */ = {isa = PBXBuildFile; fileRef = 006E94A2119511A1001DE610 /* utf8.txt */; };
 		006E94BC11951217001DE610 /* read in Copy rwops */ = {isa = PBXBuildFile; fileRef = 00D8DA121195093100638393 /* read */; };
-		006E94EF11951255001DE610 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BECDF66C0761BA81005FE872 /* SDL.framework */; };
-		006E94F01195125B001DE610 /* SDL.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = BECDF66C0761BA81005FE872 /* SDL.framework */; };
+		006E94EF11951255001DE610 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BECDF66C0761BA81005FE872 /* SDL2.framework */; };
+		006E94F01195125B001DE610 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = BECDF66C0761BA81005FE872 /* SDL2.framework */; };
 		007317A20858DECD00B2BC32 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0073179B0858DECD00B2BC32 /* AudioToolbox.framework */; };
 		007317A30858DECD00B2BC32 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0073179C0858DECD00B2BC32 /* AudioUnit.framework */; };
 		007317A40858DECD00B2BC32 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0073179D0858DECD00B2BC32 /* Cocoa.framework */; };
@@ -80,7 +80,6 @@
 		00A6EBDA1078D569001EEA06 /* SDL_revision.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A6EBD91078D569001EEA06 /* SDL_revision.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		00A6EBDB1078D569001EEA06 /* SDL_revision.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A6EBD91078D569001EEA06 /* SDL_revision.h */; };
 		00CFA682106B44CE00758660 /* SDL_atomic.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA67A106B44CE00758660 /* SDL_atomic.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		00CFA683106B44CE00758660 /* SDL_compat.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA67B106B44CE00758660 /* SDL_compat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		00CFA684106B44CE00758660 /* SDL_haptic.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA67C106B44CE00758660 /* SDL_haptic.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		00CFA685106B44CE00758660 /* SDL_pixels.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA67D106B44CE00758660 /* SDL_pixels.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		00CFA686106B44CE00758660 /* SDL_power.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA67E106B44CE00758660 /* SDL_power.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -88,7 +87,6 @@
 		00CFA688106B44CE00758660 /* SDL_scancode.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA680106B44CE00758660 /* SDL_scancode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		00CFA689106B44CE00758660 /* SDL_surface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA681106B44CE00758660 /* SDL_surface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		00CFA68A106B44CE00758660 /* SDL_atomic.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA67A106B44CE00758660 /* SDL_atomic.h */; };
-		00CFA68B106B44CE00758660 /* SDL_compat.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA67B106B44CE00758660 /* SDL_compat.h */; };
 		00CFA68C106B44CE00758660 /* SDL_haptic.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA67C106B44CE00758660 /* SDL_haptic.h */; };
 		00CFA68D106B44CE00758660 /* SDL_pixels.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA67D106B44CE00758660 /* SDL_pixels.h */; };
 		00CFA68E106B44CE00758660 /* SDL_power.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CFA67E106B44CE00758660 /* SDL_power.h */; };
@@ -207,7 +205,6 @@
 		04BD009612E6671800899322 /* SDL_power.c in Sources */ = {isa = PBXBuildFile; fileRef = 04BDFE4E12E6671700899322 /* SDL_power.c */; };
 		04BD009B12E6671800899322 /* SDL_assert_c.h in Headers */ = {isa = PBXBuildFile; fileRef = 04BDFE5512E6671700899322 /* SDL_assert_c.h */; };
 		04BD009C12E6671800899322 /* SDL_assert.c in Sources */ = {isa = PBXBuildFile; fileRef = 04BDFE5612E6671700899322 /* SDL_assert.c */; };
-		04BD009D12E6671800899322 /* SDL_compat.c in Sources */ = {isa = PBXBuildFile; fileRef = 04BDFE5712E6671700899322 /* SDL_compat.c */; };
 		04BD009E12E6671800899322 /* SDL_error_c.h in Headers */ = {isa = PBXBuildFile; fileRef = 04BDFE5812E6671700899322 /* SDL_error_c.h */; };
 		04BD009F12E6671800899322 /* SDL_error.c in Sources */ = {isa = PBXBuildFile; fileRef = 04BDFE5912E6671700899322 /* SDL_error.c */; };
 		04BD00A012E6671800899322 /* SDL_fatal.c in Sources */ = {isa = PBXBuildFile; fileRef = 04BDFE5A12E6671700899322 /* SDL_fatal.c */; };
@@ -364,7 +361,6 @@
 		04BD02B012E6671800899322 /* SDL_power.c in Sources */ = {isa = PBXBuildFile; fileRef = 04BDFE4E12E6671700899322 /* SDL_power.c */; };
 		04BD02B512E6671800899322 /* SDL_assert_c.h in Headers */ = {isa = PBXBuildFile; fileRef = 04BDFE5512E6671700899322 /* SDL_assert_c.h */; };
 		04BD02B612E6671800899322 /* SDL_assert.c in Sources */ = {isa = PBXBuildFile; fileRef = 04BDFE5612E6671700899322 /* SDL_assert.c */; };
-		04BD02B712E6671800899322 /* SDL_compat.c in Sources */ = {isa = PBXBuildFile; fileRef = 04BDFE5712E6671700899322 /* SDL_compat.c */; };
 		04BD02B812E6671800899322 /* SDL_error_c.h in Headers */ = {isa = PBXBuildFile; fileRef = 04BDFE5812E6671700899322 /* SDL_error_c.h */; };
 		04BD02B912E6671800899322 /* SDL_error.c in Sources */ = {isa = PBXBuildFile; fileRef = 04BDFE5912E6671700899322 /* SDL_error.c */; };
 		04BD02BA12E6671800899322 /* SDL_fatal.c in Sources */ = {isa = PBXBuildFile; fileRef = 04BDFE5A12E6671700899322 /* SDL_fatal.c */; };
@@ -536,7 +532,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				006E94F01195125B001DE610 /* SDL.framework in Copy Frameworks */,
+				006E94F01195125B001DE610 /* SDL2.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -578,7 +574,6 @@
 		00A6EBD91078D569001EEA06 /* SDL_revision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_revision.h; path = ../../include/SDL_revision.h; sourceTree = SOURCE_ROOT; };
 		00AE6E1E08B958CC00255E2F /* ReadMeDevLite.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = ReadMeDevLite.txt; sourceTree = "<group>"; };
 		00CFA67A106B44CE00758660 /* SDL_atomic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_atomic.h; path = ../../include/SDL_atomic.h; sourceTree = SOURCE_ROOT; };
-		00CFA67B106B44CE00758660 /* SDL_compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_compat.h; path = ../../include/SDL_compat.h; sourceTree = SOURCE_ROOT; };
 		00CFA67C106B44CE00758660 /* SDL_haptic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_haptic.h; path = ../../include/SDL_haptic.h; sourceTree = SOURCE_ROOT; };
 		00CFA67D106B44CE00758660 /* SDL_pixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_pixels.h; path = ../../include/SDL_pixels.h; sourceTree = SOURCE_ROOT; };
 		00CFA67E106B44CE00758660 /* SDL_power.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_power.h; path = ../../include/SDL_power.h; sourceTree = SOURCE_ROOT; };
@@ -695,7 +690,6 @@
 		04BDFE4E12E6671700899322 /* SDL_power.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_power.c; sourceTree = "<group>"; };
 		04BDFE5512E6671700899322 /* SDL_assert_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_assert_c.h; path = ../../src/SDL_assert_c.h; sourceTree = SOURCE_ROOT; };
 		04BDFE5612E6671700899322 /* SDL_assert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SDL_assert.c; path = ../../src/SDL_assert.c; sourceTree = SOURCE_ROOT; };
-		04BDFE5712E6671700899322 /* SDL_compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SDL_compat.c; path = ../../src/SDL_compat.c; sourceTree = SOURCE_ROOT; };
 		04BDFE5812E6671700899322 /* SDL_error_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_error_c.h; path = ../../src/SDL_error_c.h; sourceTree = SOURCE_ROOT; };
 		04BDFE5912E6671700899322 /* SDL_error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SDL_error.c; path = ../../src/SDL_error.c; sourceTree = SOURCE_ROOT; };
 		04BDFE5A12E6671700899322 /* SDL_fatal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SDL_fatal.c; path = ../../src/SDL_fatal.c; sourceTree = SOURCE_ROOT; };
@@ -840,8 +834,8 @@
 		B2CF8DC405C444E400E5DC7F /* SDL_cpuinfo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDL_cpuinfo.h; path = ../../include/SDL_cpuinfo.h; sourceTree = SOURCE_ROOT; };
 		B2CF8DC705C4450500E5DC7F /* SDL_name.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SDL_name.h; path = ../../include/SDL_name.h; sourceTree = SOURCE_ROOT; };
 		BECDF66B0761BA81005FE872 /* Info-Framework.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Framework.plist"; sourceTree = "<group>"; };
-		BECDF66C0761BA81005FE872 /* SDL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BECDF6B30761BA81005FE872 /* libSDL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDL.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BECDF66C0761BA81005FE872 /* SDL2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDL2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BECDF6B30761BA81005FE872 /* libSDL2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDL2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECDF6BE0761BA81005FE872 /* Standard DMG */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Standard DMG"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECDF6C30761BA81005FE872 /* Developer Extras Package */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Developer Extras Package"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F59C70FF00D5CB5801000001 /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
@@ -860,7 +854,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				006E94EF11951255001DE610 /* SDL.framework in Frameworks */,
+				006E94EF11951255001DE610 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1018,7 +1012,6 @@
 				0C5AF5E801191D2B7F000001 /* SDL_audio.h */,
 				0469A10912EE4BF100B846D6 /* SDL_blendmode.h */,
 				044E5F8411E6051C0076F181 /* SDL_clipboard.h */,
-				00CFA67B106B44CE00758660 /* SDL_compat.h */,
 				00162D3709BD1FA90037C8D0 /* SDL_config.h */,
 				00162D3409BD1FA90037C8D0 /* SDL_config_macosx.h */,
 				0C5AF5EB01191D2B7F000001 /* SDL_copying.h */,
@@ -1067,8 +1060,8 @@
 			isa = PBXGroup;
 			children = (
 				089C1665FE841158C02AAC07 /* Resources */,
-				BECDF66C0761BA81005FE872 /* SDL.framework */,
-				BECDF6B30761BA81005FE872 /* libSDL.a */,
+				BECDF66C0761BA81005FE872 /* SDL2.framework */,
+				BECDF6B30761BA81005FE872 /* libSDL2.a */,
 				BECDF6BE0761BA81005FE872 /* Standard DMG */,
 				BECDF6C30761BA81005FE872 /* Developer Extras Package */,
 				00D8D9EF1195090700638393 /* testsdl.app */,
@@ -1531,7 +1524,6 @@
 				04BDFEA712E6671800899322 /* video */,
 				04BDFE5512E6671700899322 /* SDL_assert_c.h */,
 				04BDFE5612E6671700899322 /* SDL_assert.c */,
-				04BDFE5712E6671700899322 /* SDL_compat.c */,
 				04BDFE5812E6671700899322 /* SDL_error_c.h */,
 				04BDFE5912E6671700899322 /* SDL_error.c */,
 				04BDFE5A12E6671700899322 /* SDL_fatal.c */,
@@ -1629,7 +1621,6 @@
 				00162DC809BD222F0037C8D0 /* SDL_video.h in Headers */,
 				00162DC909BD222F0037C8D0 /* SDL.h in Headers */,
 				00CFA682106B44CE00758660 /* SDL_atomic.h in Headers */,
-				00CFA683106B44CE00758660 /* SDL_compat.h in Headers */,
 				00CFA684106B44CE00758660 /* SDL_haptic.h in Headers */,
 				00CFA685106B44CE00758660 /* SDL_pixels.h in Headers */,
 				00CFA686106B44CE00758660 /* SDL_power.h in Headers */,
@@ -1745,7 +1736,6 @@
 				00162D4A09BD1FA90037C8D0 /* SDL_platform.h in Headers */,
 				00162D4B09BD1FA90037C8D0 /* SDL_stdinc.h in Headers */,
 				00CFA68A106B44CE00758660 /* SDL_atomic.h in Headers */,
-				00CFA68B106B44CE00758660 /* SDL_compat.h in Headers */,
 				00CFA68C106B44CE00758660 /* SDL_haptic.h in Headers */,
 				00CFA68D106B44CE00758660 /* SDL_pixels.h in Headers */,
 				00CFA68E106B44CE00758660 /* SDL_power.h in Headers */,
@@ -1886,7 +1876,7 @@
 			name = Framework;
 			productInstallPath = "@executable_path/../Frameworks";
 			productName = SDL;
-			productReference = BECDF66C0761BA81005FE872 /* SDL.framework */;
+			productReference = BECDF66C0761BA81005FE872 /* SDL2.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		BECDF66D0761BA81005FE872 /* Static Library */ = {
@@ -1906,7 +1896,7 @@
 			name = "Static Library";
 			productInstallPath = /usr/local/lib;
 			productName = "Static Library";
-			productReference = BECDF6B30761BA81005FE872 /* libSDL.a */;
+			productReference = BECDF6B30761BA81005FE872 /* libSDL2.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		BECDF6BB0761BA81005FE872 /* Standard DMG */ = {
@@ -2030,7 +2020,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# clean up the framework, remove headers, extra files\nmkdir -p build/dmg-tmp\nmkdir -p build/dmg-tmp/devel-lite\n/Developer/Tools/CpMac -r $TARGET_BUILD_DIR/SDL.framework build/dmg-tmp/\n\n# strip moved to Xcode native mechanism\n# strip -x build/dmg-tmp/SDL.framework/SDL\n\ncp pkg-support/resources/License.rtf build/dmg-tmp\ncp pkg-support/resources/ReadMe.txt build/dmg-tmp\ncp pkg-support/resources/ReadMeDevLite.txt build/dmg-tmp/devel-lite\ncp pkg-support/resources/UniversalBinaryNotes.rtf build/dmg-tmp\n\n# remove the .DS_Store files if any (we may want to provide one in the future for fancy .dmgs)\nfind build/dmg-tmp -name .DS_Store -exec rm -f \"{}\" \\;\nfind -d build/dmg-tmp -type d -name .svn -exec rm -rf \"{}\" \\;\n\n# for fancy .dmg\nmkdir -p build/dmg-tmp/.logo\ncp pkg-support/resources/SDL_DS_Store build/dmg-tmp/.DS_Store\ncp pkg-support/sdl_logo.pdf build/dmg-tmp/.logo\n\n# create the dmg\nhdiutil create -ov -fs HFS+ -volname SDL -srcfolder build/dmg-tmp build/SDL.dmg\n\n# clean up\nrm -rf build/dmg-tmp\n\n# compress it???\n#(cd build; gnutar -zcvf SDL.dmg.tar.gz SDL.dmg)";
+			shellScript = "# clean up the framework, remove headers, extra files\nmkdir -p build/dmg-tmp\nmkdir -p build/dmg-tmp/devel-lite\n/Developer/Tools/CpMac -r $TARGET_BUILD_DIR/SDL2.framework build/dmg-tmp/\n\ncp pkg-support/resources/License.txt build/dmg-tmp\ncp pkg-support/resources/ReadMe.txt build/dmg-tmp\ncp pkg-support/resources/ReadMeDevLite.txt build/dmg-tmp/devel-lite\n\n# remove the .DS_Store files if any (we may want to provide one in the future for fancy .dmgs)\nfind build/dmg-tmp -name .DS_Store -exec rm -f \"{}\" \\;\n\n# for fancy .dmg\nmkdir -p build/dmg-tmp/.logo\ncp pkg-support/resources/SDL_DS_Store build/dmg-tmp/.DS_Store\ncp pkg-support/sdl_logo.pdf build/dmg-tmp/.logo\n\n# create the dmg\nhdiutil create -ov -fs HFS+ -volname SDL2 -srcfolder build/dmg-tmp build/SDL2.dmg\n\n# clean up\nrm -rf build/dmg-tmp";
 		};
 		BECDF6C20761BA81005FE872 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2096,7 +2086,6 @@
 				04BD009412E6671800899322 /* SDL_syspower.c in Sources */,
 				04BD009612E6671800899322 /* SDL_power.c in Sources */,
 				04BD009C12E6671800899322 /* SDL_assert.c in Sources */,
-				04BD009D12E6671800899322 /* SDL_compat.c in Sources */,
 				04BD009F12E6671800899322 /* SDL_error.c in Sources */,
 				04BD00A012E6671800899322 /* SDL_fatal.c in Sources */,
 				04BD00A212E6671800899322 /* SDL.c in Sources */,
@@ -2209,7 +2198,6 @@
 				04BD02AE12E6671800899322 /* SDL_syspower.c in Sources */,
 				04BD02B012E6671800899322 /* SDL_power.c in Sources */,
 				04BD02B612E6671800899322 /* SDL_assert.c in Sources */,
-				04BD02B712E6671800899322 /* SDL_compat.c in Sources */,
 				04BD02B912E6671800899322 /* SDL_error.c in Sources */,
 				04BD02BA12E6671800899322 /* SDL_fatal.c in Sources */,
 				04BD02BC12E6671800899322 /* SDL.c in Sources */,
@@ -2347,12 +2335,12 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = B;
+				FRAMEWORK_VERSION = A;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				INFOPLIST_FILE = "Info-Framework.plist";
 				INSTALL_PATH = "@rpath";
 				OTHER_LDFLAGS = "-liconv";
-				PRODUCT_NAME = SDL;
+				PRODUCT_NAME = SDL2;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
@@ -2369,7 +2357,7 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
-				PRODUCT_NAME = SDL;
+				PRODUCT_NAME = SDL2;
 			};
 			name = Release;
 		};
@@ -2409,12 +2397,12 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = B;
+				FRAMEWORK_VERSION = A;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
 				INFOPLIST_FILE = "Info-Framework.plist";
 				INSTALL_PATH = "@rpath";
 				OTHER_LDFLAGS = "-liconv";
-				PRODUCT_NAME = SDL;
+				PRODUCT_NAME = SDL2;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -2431,7 +2419,7 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				HEADER_SEARCH_PATHS = /usr/X11R6/include;
-				PRODUCT_NAME = SDL;
+				PRODUCT_NAME = SDL2;
 			};
 			name = Debug;
 		};
