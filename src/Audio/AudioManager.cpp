@@ -31,6 +31,8 @@ namespace Audio
 			alGenSources(1, &m_sources[i].Source);
 			m_sources[i].Owner = nullptr;
 		}
+
+		alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 #endif
 	}
 
