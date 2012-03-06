@@ -161,9 +161,6 @@
     <ClInclude Include="Platform\PlatformDefs.h">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="Platform\OpenGlWindow.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Vector4.h" />
@@ -182,6 +179,12 @@
     </ClInclude>
     <ClInclude Include="Platform\SDL\SDLGame.h">
       <Filter>Platform\SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\SDL\SDLOpenGlWindow.h">
+      <Filter>Platform\SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\iOS\IOSOpenGlWindow.h">
+      <Filter>Platform\iOS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -271,9 +274,6 @@
     <ClCompile Include="Platform\NaClMain.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
-    <ClCompile Include="Platform\OpenGlWindow.cpp">
-      <Filter>Platform</Filter>
-    </ClCompile>
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Vector4.cpp" />
@@ -294,6 +294,12 @@
     </ClCompile>
     <ClCompile Include="Platform\SDL\SDLGame.cpp">
       <Filter>Platform\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\SDL\SDLOpenGlWindow.cpp">
+      <Filter>Platform\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\iOS\IOSOpenGlWindow.cpp">
+      <Filter>Platform\iOS</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
