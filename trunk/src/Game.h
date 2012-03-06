@@ -18,9 +18,32 @@ namespace Nxna
 	class IGraphicsDeviceManager;
 	class GraphicsDeviceManager;
 
+	namespace Platform
+	{
+#if defined NXNA_PLATFORM_APPLE_IOS
+	namespace iOS
+	{
+		class IOSGame;
+	}
+#else
+	namespace SDL
+	{
+		class SDLGame;
+	}
+#endif
+	}
+
 	class Game
 	{
 		friend class GraphicsDeviceManager;
+
+#if defined NXNA_PLATFORM_APPLE_IOS
+		friend class Platform::iOS::IOSGame;
+		Platform::iOS::IOSGame* m_pimpl;
+#else
+		friend class Platform::SDL::SDLGame;
+		Platform::SDL::SDLGame* m_pimpl;
+#endif
 
 		float m_targetElapsedTime;
 		bool m_exitRequested;
@@ -60,10 +83,6 @@ namespace Nxna
 		virtual void Draw(const Nxna::GameTime& time) { }
 		virtual void UnloadContent() { }
 		virtual void OnExiting() { }
-
-	private:
-		void handleEvents();
-		void updateTime();
 	};
 }
 

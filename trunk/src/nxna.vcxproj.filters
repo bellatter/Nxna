@@ -25,6 +25,12 @@
     <Filter Include="Input\Touch">
       <UniqueIdentifier>{0fcbfb97-7b63-44c3-8c29-854cb66314e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\SDL">
+      <UniqueIdentifier>{503e6849-aab4-43d9-bdff-b9ff38fa8b12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\iOS">
+      <UniqueIdentifier>{02b412f4-8f5b-49d5-ab46-dd0acf29ae5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\GraphicsDevice.h">
@@ -152,16 +158,10 @@
     <ClInclude Include="Audio\AudioManager.h">
       <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Platform\Clock.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="Platform\PlatformDefs.h">
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="Platform\OpenGlWindow.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Input.h">
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="MathHelper.h" />
@@ -179,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="Input\Touch\TouchPanel.h">
       <Filter>Input\Touch</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\SDL\SDLGame.h">
+      <Filter>Platform\SDL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -265,16 +268,10 @@
       <Filter>Audio</Filter>
     </ClCompile>
     <ClCompile Include="IGraphicsDeviceManager.cpp" />
-    <ClCompile Include="Platform\Clock.cpp">
-      <Filter>Platform</Filter>
-    </ClCompile>
     <ClCompile Include="Platform\NaClMain.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
     <ClCompile Include="Platform\OpenGlWindow.cpp">
-      <Filter>Platform</Filter>
-    </ClCompile>
-    <ClCompile Include="Platform\Input.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
     <ClCompile Include="MathHelper.cpp" />
@@ -294,6 +291,9 @@
     </ClCompile>
     <ClCompile Include="Input\Touch\TouchPanel.cpp">
       <Filter>Input\Touch</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\SDL\SDLGame.cpp">
+      <Filter>Platform\SDL</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

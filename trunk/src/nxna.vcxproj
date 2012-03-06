@@ -118,10 +118,9 @@
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Nxna.h" />
     <ClInclude Include="NxnaConfig.h" />
-    <ClInclude Include="Platform\Clock.h" />
-    <ClInclude Include="Platform\Input.h" />
     <ClInclude Include="Platform\OpenGlWindow.h" />
     <ClInclude Include="Platform\PlatformDefs.h" />
+    <ClInclude Include="Platform\SDL\SDLGame.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Rectangle.h" />
@@ -148,11 +147,10 @@
     <ClCompile Include="Input\Touch\TouchPanel.cpp" />
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="Platform\Clock.cpp" />
-    <ClCompile Include="Platform\Input.cpp" />
     <ClCompile Include="Platform\NaClMain.cpp" />
     <ClCompile Include="Platform\OpenGlWindow.cpp" />
     <ClCompile Include="Platform\SdlMain.cpp" />
+    <ClCompile Include="Platform\SDL\SDLGame.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
