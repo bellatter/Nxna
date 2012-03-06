@@ -1,20 +1,19 @@
-#ifndef NXNA_PLATFORM_OPENGLWINDOW_H
-#define NXNA_PLATFORM_OPENGLWINDOW_H
+#ifndef NXNA_PLATFORM_IOS_IOSOPENGLWINDOW_H
+#define NXNA_PLATFORM_IOS_IOSOPENGLWINDOW_H
 
-#include "../NxnaConfig.h"
-#include "../IGraphicsDeviceManager.h"
+#include "../../NxnaConfig.h"
+#include "../../IGraphicsDeviceManager.h"
 
 namespace Nxna
 {
 namespace Platform
 {
-	class OpenGlWindow : public Nxna::GraphicsDeviceManager
+namespace iOS
+{
+	class IOSOpenGlWindow : public Nxna::GraphicsDeviceManager
 	{
-		void* m_window;
-		void* m_glContext;
-
 	public:
-		OpenGlWindow(Nxna::Game* game);
+		IOSOpenGlWindow(Nxna::Game* game);
 		virtual Nxna::Graphics::GraphicsDevice* CreateDevice() override;
 		virtual void BeginDraw() override;
 		virtual void EndDraw() override;
@@ -26,5 +25,6 @@ namespace Platform
 	};
 }
 }
+}
 
-#endif // NXNA_PLATFORM_OPENGLWINDOW_H
+#endif // NXNA_PLATFORM_IOS_IOSOPENGLWINDOW_H
