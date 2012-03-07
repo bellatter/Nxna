@@ -1,5 +1,12 @@
 #include "IOSGame.h"
+#include "IOSGame_c.h"
 #include "../../Nxna.h"
+#include "../../Audio/AudioManager.h"
+
+extern "C"
+{
+int NxnaMainIOS(int argc, char *argv[]);
+}
 
 namespace Nxna
 {
@@ -17,9 +24,10 @@ namespace iOS
 		g_instance = this;
 	}
 
-	void IOSGame::InitMeFirst()
+	void IOSGame::InitMeFirst(int argc, char** argv)
 	{
-		// TODO: start up the app. This will begin the game loop.
+		// start up the app. This will begin the game loop.
+		NxnaMainIOS(argc, argv);
 	}
 
 	void IOSGame::Init()
@@ -47,7 +55,7 @@ namespace iOS
 		time.TotalGameTime = m_currentTime;
 		time.ElapsedGameTime = elapsedTime;
 
-		//m_game->Update(time);
+		m_game->Update(time);
 	}
 
 	void IOSGame::Draw(float elapsedTime)
@@ -56,7 +64,12 @@ namespace iOS
 		time.TotalGameTime = m_currentTime;
 		time.ElapsedGameTime = elapsedTime;
 
-		//m_game->Draw(time);
+		m_game->Draw(time);
+	}
+	
+	void IOSGame::Exit()
+	{
+		// TODO
 	}
 }
 }
@@ -79,12 +92,13 @@ void IOSGame_Draw(float elapsedTime)
 
 void IOSGame_TouchDown(float x, float y)
 {
-	Nxna::Input::Mouse::InjectMouseButton(0, true);
+	Nxna::Input::Mouse::InjectMouseMove((int)x, (int)y);
+	Nxna::Input::Mouse::InjectMouseButton(1, true);
 }
 
 void IOSGame_TouchUp(float x, float y)
 {
-	Nxna::Input::Mouse::InjectMouseButton(0, false);
+	Nxna::Input::Mouse::InjectMouseButton(1, false);
 }
 
 void IOSGame_TouchMoved(float x, float y)

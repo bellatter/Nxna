@@ -1,4 +1,5 @@
 #include "IOSOpenGlWindow.h"
+#include "IOSGame_c.h"
 #include "../../Graphics/OpenGL/OpenGLDevice.h"
 #include "../../Input/Touch/TouchPanel.h"
 
@@ -43,6 +44,12 @@ namespace iOS
 
 	void IOSOpenGlWindow::SetScreenSize(int width, int height, bool fullscreen)
 	{
+		IOSGame_GetScreenSize(&width, &height);
+		
+		static_cast<Nxna::Graphics::OpenGl::OpenGlDevice*>(m_device)->OnContextCreated();
+		static_cast<Nxna::Graphics::OpenGl::OpenGlDevice*>(m_device)->UpdateScreenSize(width, height);
+		
+		m_device->SetViewport(Nxna::Graphics::Viewport(0, 0, width, height));
 	}
 }
 }

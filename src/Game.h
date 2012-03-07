@@ -2,6 +2,7 @@
 #define NXNA_GAME_H
 
 #include "GameTime.h"
+#include "Platform/PlatformDefs.h"
 
 namespace Nxna
 {
@@ -68,6 +69,7 @@ namespace Nxna
 		void SetTargetElapsedTime(float targetElapsedTime) { m_targetElapsedTime = targetElapsedTime; }
 
 		void Run();
+		void Run(int argc, char** argv);
 		void Exit();
 
 	protected:
