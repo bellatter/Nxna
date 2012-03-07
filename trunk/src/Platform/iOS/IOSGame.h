@@ -17,10 +17,11 @@ namespace iOS
 	public:
 		IOSGame(Game* game);
 
-		void InitMeFirst();
+		void InitMeFirst(int argc, char** argv);
 		void Init();
 		void Update(float elapsedTime);
 		void Draw(float elapsedTime);
+		void Exit();
 	};
 }
 }

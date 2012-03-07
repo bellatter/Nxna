@@ -25,7 +25,7 @@ namespace Nxna
 		m_content = new Nxna::Content::ContentManager();
 
 #if defined NXNA_PLATFORM_APPLE_IOS
-		m_pimpl = new Platform::iOS::IOSGame();
+		m_pimpl = new Platform::iOS::IOSGame(this);
 #else
 		m_pimpl = new Platform::SDL::SDLGame(this);
 #endif
@@ -39,9 +39,15 @@ namespace Nxna
 
 	void Game::Run()
 	{
+		char* argv[] = {"\0"};
+		Run(0, argv);
+	}
+	
+	void Game::Run(int argc, char** argv)
+	{
 
 #if defined NXNA_PLATFORM_APPLE_IOS
-		m_pimpl->InitMeFirst();
+		m_pimpl->InitMeFirst(argc, argv);
 #else
 		m_pimpl->Init();
 		m_pimpl->Run();
