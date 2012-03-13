@@ -20,6 +20,8 @@ namespace iOS
 	{
 		m_game = game;
 		m_currentTime = 0;
+		m_lastElapsedTime = 0;
+		m_active = true;
 
 		g_instance = this;
 	}
@@ -49,6 +51,7 @@ namespace iOS
 
 	void IOSGame::Update(float elapsedTime)
 	{
+		m_lastElapsedTime = elapsedTime;
 		m_currentTime += elapsedTime;
 
 		GameTime time;
@@ -71,9 +74,34 @@ namespace iOS
 	{
 		// TODO
 	}
+	
+	void IOSGame::IsActive(bool active)
+	{
+		m_active = active;
+		
+		if (active)
+			m_game->OnActivated();
+		else
+			m_game->OnDeactivated();
+		
+		// force a call to update so the game has a chance to pause
+		if (active == false)
+		{
+			m_currentTime += m_lastElapsedTime;
+			
+			GameTime time;
+			time.TotalGameTime = m_currentTime;
+			time.ElapsedGameTime = m_lastElapsedTime;
+			
+			m_game->Update(time);
+		}
+	}
 }
 }
 }
+
+extern "C"
+{
 
 void IOSGame_Init()
 {
@@ -90,6 +118,11 @@ void IOSGame_Draw(float elapsedTime)
 	Nxna::Platform::iOS::g_instance->Draw(elapsedTime);
 }
 
+void IOSGame_IsActive(bool active)
+{
+	Nxna::Platform::iOS::g_instance->IsActive(active);
+}
+
 void IOSGame_TouchDown(float x, float y)
 {
 	Nxna::Input::Mouse::InjectMouseMove((int)x, (int)y);
@@ -104,4 +137,6 @@ void IOSGame_TouchUp(float x, float y)
 void IOSGame_TouchMoved(float x, float y)
 {
 	Nxna::Input::Mouse::InjectMouseMove((int)x, (int)y);
+}
+	
 }

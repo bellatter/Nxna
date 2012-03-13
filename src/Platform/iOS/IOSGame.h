@@ -11,7 +11,9 @@ namespace iOS
 {
 	class IOSGame
 	{
+		float m_lastElapsedTime;
 		float m_currentTime;
+		bool m_active;
 		Game* m_game;
 
 	public:
@@ -22,6 +24,9 @@ namespace iOS
 		void Update(float elapsedTime);
 		void Draw(float elapsedTime);
 		void Exit();
+		
+		bool IsActive() { return m_active; }
+		void IsActive(bool active);
 	};
 }
 }
