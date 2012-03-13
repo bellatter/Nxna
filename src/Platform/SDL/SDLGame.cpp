@@ -11,6 +11,7 @@ namespace SDL
 	SDLGame::SDLGame(Game* game)
 	{
 		m_game = game;
+		m_active = true;
 		m_quitReceived = false;
 		m_targetElapsedTime = 1.0f / 60.0f;
 		m_isFixedTimeStep = true;
@@ -92,6 +93,16 @@ namespace SDL
 	void SDLGame::Exit()
 	{
 		m_quitReceived = true;
+	}
+
+	void SDLGame::IsActive(bool active)
+	{
+		m_active = active;
+		
+		if (active)
+			m_game->OnActivated();
+		else
+			m_game->OnDeactivated();
 	}
 
 	Nxna::Input::Keys convertSDLK(SDL_Keycode sdlk)

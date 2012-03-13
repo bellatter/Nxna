@@ -11,6 +11,7 @@ namespace SDL
 {
 	class SDLGame
 	{
+		bool m_active;
 		bool m_quitReceived;
 		GameTime m_gameTime;
 		GameTime m_realTime;
@@ -23,6 +24,9 @@ namespace SDL
 		void Init();
 		void Run();
 		void Exit();
+
+		bool IsActive() { return m_active; }
+		void IsActive(bool active);
 
 	private:
 		void handleEvents();
