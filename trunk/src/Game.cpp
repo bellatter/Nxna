@@ -75,4 +75,9 @@ namespace Nxna
 	{
 		m_pimpl->Exit();
 	}
+	
+	bool Game::IsActive()
+	{
+		return m_pimpl->IsActive();
+	}
 }

@@ -71,6 +71,8 @@ namespace Nxna
 		void Run();
 		void Run(int argc, char** argv);
 		void Exit();
+		
+		bool IsActive();
 
 	protected:
 
@@ -85,6 +87,9 @@ namespace Nxna
 		virtual void Draw(const Nxna::GameTime& time) { }
 		virtual void UnloadContent() { }
 		virtual void OnExiting() { }
+		
+		virtual void OnActivated() { }
+		virtual void OnDeactivated() { }
 	};
 }
 

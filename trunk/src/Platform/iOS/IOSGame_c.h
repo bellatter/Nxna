@@ -15,6 +15,7 @@ void IOSGame_Draw(float elapsedTime);
 void IOSGame_TouchDown(float x, float y);
 void IOSGame_TouchUp(float x, float y);
 void IOSGame_TouchMoved(float x, float y);
+void IOSGame_IsActive(bool active);
 	
 void IOSGame_GetScreenSize(int* width, int* height);
 
