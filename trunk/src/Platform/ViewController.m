@@ -6,9 +6,12 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+#import <GameKit/GameKit.h>
 #import "ViewController.h"
 #import "GameCenterManager.h"
 #import "iOS/IOSGame_c.h"
+
+ViewController* g_instance;
 
 @interface ViewController () {
    
@@ -36,9 +39,12 @@
 extern GameCenterManager* g_gcm;
 float touchPointScale = 0;
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+	
+	g_instance = self;
     
     self.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease];
 	
@@ -171,5 +177,43 @@ float timeRemainder = 0;
 	}
 }
 
+-(void)showLeaderboard: (NSString*)category: (int)scope
+{
+	GKLeaderboardViewController* leaderboardController = [[GKLeaderboardViewController alloc] init];
+	if (leaderboardController != NULL)
+	{
+		leaderboardController.category = category;
+		leaderboardController.timeScope = scope;
+		leaderboardController.leaderboardDelegate = self;
+		[self presentModalViewController: leaderboardController animated:YES];
+	}
+}
+
+-(void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController*) viewController
+{
+	[self dismissModalViewControllerAnimated: YES];
+	[viewController release];
+}
+
+-(void)showAchievements
+{
+	GKAchievementViewController* achievements = [[GKAchievementViewController alloc] init];
+	if (achievements != NULL)
+	{
+		achievements.achievementDelegate = self;
+		[self presentModalViewController: achievements animated: YES];
+	}
+}
+
+-(void)achievementViewControllerDidFinish:(GKAchievementViewController *)viewController
+{
+	[self dismissModalViewControllerAnimated: YES];
+	[viewController release];
+}
+
++(ViewController*)getInstance
+{
+	return g_instance;
+}
 
 @end

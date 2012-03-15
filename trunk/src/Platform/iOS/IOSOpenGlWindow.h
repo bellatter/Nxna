@@ -10,6 +10,13 @@ namespace Platform
 {
 namespace iOS
 {
+	enum LeaderboardTimeScope
+	{
+		LeaderboardTimeScope_Today,
+		LeaderboardTimeScope_Week,
+		LeaderboardTimeScope_AllTime
+	};
+	
 	class IOSOpenGlWindow : public Nxna::GraphicsDeviceManager
 	{
 	public:
@@ -22,6 +29,9 @@ namespace iOS
 		virtual void DestroyWindow() override;
 
 		virtual void SetScreenSize(int width, int height, bool fullscreen) override;
+		
+		void ShowLeaderboard(const char* category, LeaderboardTimeScope scope);
+		void ShowAchievements();
 	};
 }
 }

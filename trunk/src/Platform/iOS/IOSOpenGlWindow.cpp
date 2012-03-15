@@ -51,6 +51,16 @@ namespace iOS
 		
 		m_device->SetViewport(Nxna::Graphics::Viewport(0, 0, width, height));
 	}
+	
+	void IOSOpenGlWindow::ShowLeaderboard(const char* category, LeaderboardTimeScope scope)
+	{
+		IOSGame_ShowLeaderboard(category, (int)scope);
+	}
+	
+	void IOSOpenGlWindow::ShowAchievements()
+	{
+		IOSGame_ShowAchievements();
+	}
 }
 }
 }

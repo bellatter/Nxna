@@ -64,6 +64,9 @@ namespace Nxna
 
 		Nxna::Content::ContentManager* GetContent() { return m_content; }
 		Nxna::Graphics::GraphicsDevice* GetGraphicsDevice() { return m_device; }
+		
+		// TODO: This doesn't exist in XNA. This should be GetWindow().
+		GraphicsDeviceManager* GetGraphicsDeviceManager() { return m_graphicsDeviceManager; }
 
 		float GetTargetElapsedTime() { return m_targetElapsedTime; }
 		void SetTargetElapsedTime(float targetElapsedTime) { m_targetElapsedTime = targetElapsedTime; }
