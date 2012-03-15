@@ -18,6 +18,9 @@ void IOSGame_TouchMoved(float x, float y);
 void IOSGame_IsActive(bool active);
 	
 void IOSGame_GetScreenSize(int* width, int* height);
+	
+void IOSGame_ShowLeaderboard(const char* category, int scope);
+void IOSGame_ShowAchievements();
 
 #ifdef __cplusplus
 }
