@@ -71,8 +71,6 @@
 		A288094E1512E6F8005D983A /* PlatformDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = A28809471512E6F8005D983A /* PlatformDefs.h */; };
 		A288094F1512E6F8005D983A /* ViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A28809481512E6F8005D983A /* ViewController.h */; };
 		A28809501512E6F8005D983A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A28809491512E6F8005D983A /* ViewController.m */; };
-		A288095B1512E726005D983A /* GameCenterManager_c.h in Headers */ = {isa = PBXBuildFile; fileRef = A28809511512E726005D983A /* GameCenterManager_c.h */; };
-		A288095C1512E726005D983A /* GameCenterManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A28809521512E726005D983A /* GameCenterManager.mm */; };
 		A288095D1512E726005D983A /* IOSGame_c.h in Headers */ = {isa = PBXBuildFile; fileRef = A28809531512E726005D983A /* IOSGame_c.h */; };
 		A288095E1512E726005D983A /* IOSGame_c.mm in Sources */ = {isa = PBXBuildFile; fileRef = A28809541512E726005D983A /* IOSGame_c.mm */; };
 		A288095F1512E726005D983A /* IOSGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809551512E726005D983A /* IOSGame.cpp */; };
@@ -184,8 +182,6 @@
 		A28809471512E6F8005D983A /* PlatformDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlatformDefs.h; path = Platform/PlatformDefs.h; sourceTree = SOURCE_ROOT; };
 		A28809481512E6F8005D983A /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = Platform/ViewController.h; sourceTree = SOURCE_ROOT; };
 		A28809491512E6F8005D983A /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = Platform/ViewController.m; sourceTree = SOURCE_ROOT; };
-		A28809511512E726005D983A /* GameCenterManager_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameCenterManager_c.h; path = Platform/iOS/GameCenterManager_c.h; sourceTree = SOURCE_ROOT; };
-		A28809521512E726005D983A /* GameCenterManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GameCenterManager.mm; path = Platform/iOS/GameCenterManager.mm; sourceTree = SOURCE_ROOT; };
 		A28809531512E726005D983A /* IOSGame_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSGame_c.h; path = Platform/iOS/IOSGame_c.h; sourceTree = SOURCE_ROOT; };
 		A28809541512E726005D983A /* IOSGame_c.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSGame_c.mm; path = Platform/iOS/IOSGame_c.mm; sourceTree = SOURCE_ROOT; };
 		A28809551512E726005D983A /* IOSGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IOSGame.cpp; path = Platform/iOS/IOSGame.cpp; sourceTree = SOURCE_ROOT; };
@@ -453,8 +449,6 @@
 		A2D5B39C150698EA001A6A13 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				A28809511512E726005D983A /* GameCenterManager_c.h */,
-				A28809521512E726005D983A /* GameCenterManager.mm */,
 				A28809531512E726005D983A /* IOSGame_c.h */,
 				A28809541512E726005D983A /* IOSGame_c.mm */,
 				A28809551512E726005D983A /* IOSGame.cpp */,
@@ -512,7 +506,6 @@
 				A288094A1512E6F8005D983A /* AppDelegate.h in Headers */,
 				A288094E1512E6F8005D983A /* PlatformDefs.h in Headers */,
 				A288094F1512E6F8005D983A /* ViewController.h in Headers */,
-				A288095B1512E726005D983A /* GameCenterManager_c.h in Headers */,
 				A288095D1512E726005D983A /* IOSGame_c.h in Headers */,
 				A28809601512E726005D983A /* IOSGame.h in Headers */,
 				A28809621512E726005D983A /* IOSOpenGlWindow.h in Headers */,
@@ -614,7 +607,6 @@
 				A288094C1512E6F8005D983A /* main.m in Sources */,
 				A288094D1512E6F8005D983A /* NaClMain.cpp in Sources */,
 				A28809501512E6F8005D983A /* ViewController.m in Sources */,
-				A288095C1512E726005D983A /* GameCenterManager.mm in Sources */,
 				A288095E1512E726005D983A /* IOSGame_c.mm in Sources */,
 				A288095F1512E726005D983A /* IOSGame.cpp in Sources */,
 				A28809611512E726005D983A /* IOSOpenGlWindow.cpp in Sources */,
