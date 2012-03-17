@@ -86,6 +86,15 @@ namespace Audio
 		m_source = -1;
 	}
 
+	void SoundEffectInstance::Pause()
+	{
+		if (isSourceValid() == false) return;
+
+#ifndef DISABLE_OPENAL
+		alSourcePause(m_source);
+#endif
+	}
+
 	bool SoundEffectInstance::IsLooped()
 	{
 		return m_isLooped;
