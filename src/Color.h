@@ -29,13 +29,39 @@ struct Color
 
 	Color operator *(float s)
 	{
-		Color r;
-		r.R = (byte)(R * s);
-		r.G = (byte)(G * s);
-		r.B = (byte)(B * s);
-		r.A = (byte)(A * s);
+		float r = R * s;
+		float g = G * s;
+		float b = B * s;
+		float a = A * s;
 
-		return r;
+		// clamp
+		if (r > 255.0f)
+			r = 255.0f;
+		else if (r < 0)
+			r = 0;
+
+		if (g > 255.0f)
+			g = 255.0f;
+		else if (g < 0)
+			g = 0;
+
+		if (b > 255.0f)
+			b = 255.0f;
+		else if (b < 0)
+			b = 0;
+
+		if (a > 255.0f)
+			a = 255.0f;
+		else if (a < 0)
+			a = 0;
+
+		Color c;
+		c.R = (byte)r;
+		c.G = (byte)g;
+		c.B = (byte)b;
+		c.A = (byte)a;
+
+		return c;
 	}
 
 	static Color GetWhite() { return Color(255, 255, 255); }
