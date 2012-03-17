@@ -14,6 +14,12 @@ namespace Nxna
 			X = 0; Y = 0;
 		}
 
+		Vector2(float v)
+		{
+			X = v;
+			Y = v;
+		}
+
 		Vector2(float x, float y)
 		{
 			this->X = x;
