@@ -55,7 +55,7 @@ float touchPointScale = 0;
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
-	//view.drawableStencilFormat = GLKViewDrawableStencilFormat8;
+	view.drawableStencilFormat = GLKViewDrawableStencilFormat8;
 	self.preferredFramesPerSecond = 60;
     
     [self setupGL];
