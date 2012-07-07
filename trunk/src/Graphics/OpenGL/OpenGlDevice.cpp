@@ -421,6 +421,13 @@ namespace OpenGl
 		return new GlIndexBuffer(elementSize);
 	}
 
+	void OpenGlDevice::GetBackBufferData(void* data)
+	{
+		glReadBuffer(GL_FRONT);
+ 
+		glReadPixels(0, 0, m_screenWidth, m_screenHeight, GL_RGB, GL_UNSIGNED_BYTE, data);
+	}
+
 	void OpenGlDevice::setClearColor(const Color& c)
 	{
 		m_clearColor = c;

@@ -122,6 +122,8 @@ namespace Graphics
 		virtual DynamicVertexBuffer* CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) = 0;
 		virtual IndexBuffer* CreateIndexBuffer(IndexElementSize elementSize) = 0;
 
+		virtual void GetBackBufferData(void* data) = 0;
+
 		GraphicsDeviceCapabilities* GetCaps() { return m_caps; }
 
 		static GraphicsDevice* GetDevice() { return m_instance; }
