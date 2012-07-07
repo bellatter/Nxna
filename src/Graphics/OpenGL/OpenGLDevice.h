@@ -67,6 +67,8 @@ namespace OpenGl
 		virtual DynamicVertexBuffer* CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) override;
 		virtual IndexBuffer* CreateIndexBuffer(IndexElementSize elementSize) override;
 
+		virtual void GetBackBufferData(void* data) override;
+
 		void SetCurrentEffect(GlslEffect* effect) { m_effect = effect; }
 
 		int GetVersion() { return m_version; }

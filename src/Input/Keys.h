@@ -10,7 +10,8 @@ namespace Input
 		Keys_None,
 		Keys_Back,
 		Keys_Tab,
-		Keys_Enter
+		Keys_Enter,
+		Keys_OemTilde
 	};
 }
 }
