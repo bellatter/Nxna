@@ -428,6 +428,16 @@ namespace OpenGl
 		glReadPixels(0, 0, m_screenWidth, m_screenHeight, GL_RGB, GL_UNSIGNED_BYTE, data);
 	}
 
+	const char* OpenGlDevice::GetVendor()
+	{
+		return (char*)glGetString(GL_VENDOR);
+	}
+
+	const char* OpenGlDevice::GetRenderer()
+	{
+		return (char*)glGetString(GL_RENDERER);
+	}
+
 	void OpenGlDevice::setClearColor(const Color& c)
 	{
 		m_clearColor = c;
