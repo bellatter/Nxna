@@ -44,6 +44,12 @@ namespace OpenGl
 			//m_caps->SupportsS3tcTextureCompression = true;
 		}
 
+		// does the GPU offer Hi-Def level support for non-power-of-2 textures?
+		if (GLEW_ARB_texture_non_power_of_two)
+		{
+			m_caps->SupportsFullNonPowerOfTwoTextures = true;
+		}
+
 #endif
 
 		glEnable(GL_BLEND);
@@ -51,7 +57,7 @@ namespace OpenGl
 		setClearColor(Color::GetCornflowerBlue());
 		setClearDepth(1.0f);
 
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 
 #ifndef USING_OPENGLES
         const GLubyte* version = glGetString(GL_VERSION);
@@ -173,7 +179,7 @@ namespace OpenGl
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glDepthMask((GLboolean)mask);
 
-        GlException::ThrowIfError(); 
+        GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
 	void OpenGlDevice::Clear(ClearOptions options, const Color& c, float depth, int stencil)
@@ -234,7 +240,7 @@ namespace OpenGl
 
 		glViewport(viewport.X, y, viewport.Width, viewport.Height);
         
-        GlException::ThrowIfError(); 
+        GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
 	void OpenGlDevice::DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount)
@@ -269,7 +275,7 @@ namespace OpenGl
 
 		glDrawElements(glPrimitiveType, primitiveCount * 3, size, (void*)(startIndex * (int)elementSize));
 
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
 	void OpenGlDevice::DrawPrimitives(PrimitiveType primitiveType, int startVertex, int primitiveCount) {}
@@ -288,7 +294,7 @@ namespace OpenGl
         
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 
 		m_indices = nullptr;
 		m_vertices = nullptr;
@@ -303,7 +309,7 @@ namespace OpenGl
 
 		glDrawElements(glPrimitiveType, primitiveCount * 3, GL_UNSIGNED_SHORT, indices);
         
-        GlException::ThrowIfError();  
+        GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
 	void OpenGlDevice::DrawUserPrimitives(PrimitiveType primitiveType, void* data, int primitiveCount, const VertexDeclaration* vertexDeclaration) {}
@@ -329,7 +335,7 @@ namespace OpenGl
 	void OpenGlDevice::SetBlendState(const BlendState* blendState)
 	{
 		assert(blendState != nullptr);
-        GlException::ThrowIfError(); 
+        GlException::ThrowIfError(__FILE__, __LINE__); 
         
 		int colorSrc = convertBlendMode(blendState->ColorSourceBlend);
         int colorDest = convertBlendMode(blendState->ColorDestinationBlend);
@@ -338,12 +344,12 @@ namespace OpenGl
 
         glBlendFuncSeparate(colorSrc, colorDest, alphaSrc, alphaDest);
         
-        GlException::ThrowIfError();
+        GlException::ThrowIfError(__FILE__, __LINE__);
         
         glBlendEquationSeparate(convertBlendFunc(blendState->ColorBlendFunction),
             convertBlendFunc(blendState->AlphaBlendFunction));
 
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
 	void OpenGlDevice::Present() {}
@@ -498,7 +504,7 @@ namespace OpenGl
 
 		m_vertexPointersNeedSetup = false;
 
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
 	int OpenGlDevice::convertCompareFunction(CompareFunction func)
@@ -629,11 +635,11 @@ namespace OpenGl
             return GL_MAX;
 	}
 
-	void GlException::ThrowIfError()
+	void GlException::ThrowIfError(const char* file, int line)
 	{
 		int err = glGetError();
 		if (err != 0)
-			throw GlException();
+			throw GlException(err);
 	}
 }
 }

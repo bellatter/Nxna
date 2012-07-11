@@ -101,7 +101,19 @@ namespace OpenGl
 			: GraphicsException("GlException")
 		{ }
 
-		static void ThrowIfError();
+		GlException(int glError)
+			: GraphicsException("GlException")
+		{
+			m_message = "GlException: err " + glError;
+		}
+
+		GlException(int glError, const char* file, int line)
+			: GraphicsException("GlException")
+		{
+			m_message = "GlException: err " + glError + std::string(" at ") + std::string(file);
+		}
+
+		static void ThrowIfError(const char* filename, int line);
 	};
 }
 }

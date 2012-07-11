@@ -23,7 +23,7 @@ namespace OpenGl
 
 		SetSamplerState(&m_samplerState);
 
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
 	void GlTexture2D::SetData(int level, byte* pixels, int length)
@@ -82,7 +82,7 @@ namespace OpenGl
 			SetSamplerState(&m_samplerState);
 		}
 
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
 	void GlTexture2D::SetSamplerState(const SamplerState* state)
