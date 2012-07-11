@@ -137,6 +137,11 @@ namespace Graphics
 			: Exception(message)
 		{
 		}
+
+		GraphicsException(const std::string& message, const char* file, int line)
+			: Exception(message, file, line)
+		{
+		}
 	};
 }
 }

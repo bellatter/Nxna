@@ -18,7 +18,7 @@ namespace OpenGl
 
 		glGenBuffers(1, &m_buffer);
 
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
 	void GlVertexBuffer::SetData(void* data, int vertexCount)
@@ -30,15 +30,15 @@ namespace OpenGl
 		glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
 		glBufferData(GL_ARRAY_BUFFER, numBytes, data, GL_STATIC_DRAW);
 
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
 	void GlVertexBuffer::Bind() const
 	{
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 		glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
 
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
 	GlDynamicVertexBuffer::GlDynamicVertexBuffer(OpenGlDevice* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)
@@ -55,7 +55,7 @@ namespace OpenGl
 		glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
 		glBufferData(GL_ARRAY_BUFFER, numBytes, data, GL_STATIC_DRAW);
 
-		GlException::ThrowIfError();
+		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 }
 }
