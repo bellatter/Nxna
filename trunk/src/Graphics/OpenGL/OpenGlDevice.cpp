@@ -61,13 +61,25 @@ namespace OpenGl
 
 #ifndef USING_OPENGLES
         const GLubyte* version = glGetString(GL_VERSION);
-		const GLubyte* glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
-        
 		m_version = (version[0] - '0') * 100 + (version[2] - '0') * 10;
-		m_glslVersion = (glslVersion[0] - '0') * 100 + (glslVersion[2] - '0') * 10;
+
+		const GLubyte* glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+		if (glslVersion == nullptr)
+		{
+			m_caps->SupportsShaders = false;
+			m_glslVersion = 0;
+		}
+		else
+		{
+			m_caps->SupportsShaders = true;
+			m_glslVersion = (glslVersion[0] - '0') * 100 + (glslVersion[2] - '0') * 10;
+		}
 #else
         m_version = 200;
         m_glslVersion = 100;
+
+		m_caps->SupportsShaders = true;
 #endif
 	}
 
