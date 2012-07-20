@@ -1,3 +1,4 @@
+#include <cassert>
 #include "SDLOpenGlWindow.h"
 #include "../../Graphics/OpenGL/OpenGLDevice.h"
 #include "../../Input/Touch/TouchPanel.h"
@@ -48,6 +49,8 @@ namespace SDL
 
 	void SDLOpenGlWindow::SetScreenSize(int width, int height, bool fullscreen)
 	{
+		assert(m_device != nullptr);
+
 		SDL_Init(SDL_INIT_VIDEO);
         SDL_SetHint( "SDL_HINT_ORIENTATIONS", "LandscapeLeft LandscapeRight" );
 
