@@ -16,4 +16,14 @@ typedef unsigned char byte;
 #define override
 #endif
 
+// create some macros to disable constant warnings about "override" keyword
+#ifdef _MSC_VER
+#define NXNA_DISABLE_OVERRIDE_WARNING __pragma(warning(push)) \
+__pragma(warning(disable:4481))
+#define NXNA_ENABLE_OVERRIDE_WARNING __pragma(warning(pop))
+#else
+#define NXNA_DISABLE_OVERRIDE_WARNING
+#define NXNA_ENABLE_OVERRIDE_WARNING
+#endif
+
 #endif // NXNACONFIG_H

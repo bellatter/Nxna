@@ -68,7 +68,6 @@ namespace OpenGl
 		std::vector<GlslAttribute> m_attributes;
 		std::vector<EffectParameter*> m_parameterList;
 		std::vector<EffectParameter*> m_textureParams;
-		std::vector<ParamCache> m_cache;
 
 		static const int MAX_ATTRIB_SIZE = 256;
 		static char m_attribNameBuffer[MAX_ATTRIB_SIZE];
@@ -109,12 +108,7 @@ namespace OpenGl
 		void ProcessSource(const char* source, std::string& vertexResult, std::string& fragResult);
 		void CreateProgram(const std::string& vertexSource, const std::string& fragSource, const char* defines);
 
-		virtual EffectParameter* AddParameter(EffectParameterType type, void* handle, const char* name) override;
-
-		virtual void SetParameter(EffectParameter* param, Texture2D* texture) override;
-		virtual void SetParameter(EffectParameter* param, const Vector4& value) override;
-		virtual void SetParameter(EffectParameter* param, float matrix4x4[]) override;
-		virtual void SetParameter(EffectParameter* param, const Matrix& matrix) override;
+		EffectParameter* AddParameter(EffectParameterType type, int numElements, void* handle, const char* name);
 
 		void ApplyProgram(int programIndex);
 

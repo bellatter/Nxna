@@ -99,9 +99,9 @@ namespace OpenGl
 		m_programs.push_back(program);
 	}
 
-	EffectParameter* GlslEffect::AddParameter(EffectParameterType type, void* handle, const char* name)
+	EffectParameter* GlslEffect::AddParameter(EffectParameterType type, int numElements, void* handle, const char* name)
 	{
-		EffectParameter* param = new EffectParameter(this, type, handle, name);
+		EffectParameter* param = new EffectParameter(this, type, numElements, nullptr, name);
 
 		m_parameters.insert(ParamMap::value_type(param->Name.c_str(), param));
 
@@ -110,7 +110,7 @@ namespace OpenGl
 		return param;
 	}
 
-	void GlslEffect::SetParameter(EffectParameter* param, Texture2D* texture)
+	/*void GlslEffect::SetParameter(EffectParameter* param, Texture2D* texture)
 	{
 		GlTexture2D* glTexture = static_cast<GlTexture2D*>(texture);
 
@@ -163,7 +163,7 @@ namespace OpenGl
 		cache.CachedValueType = CacheType_Float;
 		cache.CachedValueSize = 16;
 		memcpy(&cache.CachedValue, matrix.C, sizeof(float) * 16);
-	}
+	}*/
 
 	void GlslEffect::Apply()
 	{
@@ -187,34 +187,45 @@ namespace OpenGl
 		for (std::vector<GlslUniform>::iterator itr = m_programs[programIndex].Uniforms.begin();
 			itr != m_programs[programIndex].Uniforms.end(); itr++)
 		{
-			int index = (int)reinterpret_cast<intptr_t>((*itr).Param->GetHandle());
+			EffectParameterType type = (*itr).Param->GetType();
+			int numElements = (*itr).Param->GetNumElements();
 
-			ParamCache& cache = m_cache[index];
+			if (type == EffectParameterType_Int32)
+			{
+				glUniform1iv((*itr).Uniform, numElements, GetRawValue((*itr).Param));
+			}
+			else if (type == EffectParameterType_Single)
+			{
+				if (numElements == 1)
+					glUniform1fv((*itr).Uniform, 1, (float*)GetRawValue((*itr).Param));
+				else if (numElements == 2)
+					glUniform2fv((*itr).Uniform, 1, (float*)GetRawValue((*itr).Param));
+				else if (numElements == 3)
+					glUniform3fv((*itr).Uniform, 1, (float*)GetRawValue((*itr).Param));
+				else if (numElements == 4)
+					glUniform4fv((*itr).Uniform, 1, (float*)GetRawValue((*itr).Param));
+				else if (numElements == 16)
+					glUniformMatrix4fv((*itr).Uniform, 1, GL_FALSE, (float*)GetRawValue((*itr).Param));
+			}
+			else if (type == EffectParameterType_Texture2D)
+			{
+				// look for the index of the texture
+				int texindex = 0;
+				for (int i = 0; i < m_textureParams.size(); i++)
+				{
+					if (m_textureParams[i] == (*itr).Param)
+					{
+						texindex = i;
+						break;
+					}
+				}
 
-			if (cache.CachedValueType == CacheType_Int)
-			{
-				if (cache.CachedValueSize == 1)
-					glUniform1iv((*itr).Uniform, 1, cache.CachedValue);
-				else if (cache.CachedValueSize == 2)
-					glUniform2iv((*itr).Uniform, 1, cache.CachedValue);
-				else if (cache.CachedValueSize == 3)
-					glUniform3iv((*itr).Uniform, 1, cache.CachedValue);
-				else if (cache.CachedValueSize == 4)
-					glUniform4iv((*itr).Uniform, 1, cache.CachedValue);
+				glActiveTexture(GL_TEXTURE0 + texindex);
+				glBindTexture(GL_TEXTURE_2D, static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D())->GetGlTexture());
+				glUniform1iv((*itr).Uniform, 1, &texindex);
 			}
-			else
-			{
-				if (cache.CachedValueSize == 1)
-					glUniform1fv((*itr).Uniform, 1, (float*)cache.CachedValue);
-				if (cache.CachedValueSize == 2)
-					glUniform2fv((*itr).Uniform, 1, (float*)cache.CachedValue);
-				if (cache.CachedValueSize == 3)
-					glUniform3fv((*itr).Uniform, 1, (float*)cache.CachedValue);
-				if (cache.CachedValueSize == 4)
-					glUniform4fv((*itr).Uniform, 1, (float*)cache.CachedValue);
-				if (cache.CachedValueSize == 16)
-					glUniformMatrix4fv((*itr).Uniform, 1, 0, (float*)cache.CachedValue);
-			}
+
+			GlException::ThrowIfError(__FILE__, __LINE__);
 		}
 	}
 
@@ -313,7 +324,7 @@ namespace OpenGl
 					pType = EffectParameterType_Bool;
 				else if (type == GL_INT || type == GL_INT_VEC2 || type == GL_INT_VEC3 || type == GL_INT_VEC4)
 					pType = EffectParameterType_Int32;
-				else if (type == GL_FLOAT || type == GL_FLOAT_VEC2 || type == GL_FLOAT_VEC3 || type == GL_FLOAT_VEC4)
+				else if (type == GL_FLOAT || type == GL_FLOAT_VEC2 || type == GL_FLOAT_VEC3 || type == GL_FLOAT_VEC4 || type == GL_FLOAT_MAT4)
 					pType = EffectParameterType_Single;
 #ifndef USING_OPENGLES
 				else if (type == GL_SAMPLER_1D)
@@ -331,10 +342,29 @@ namespace OpenGl
 					pType = EffectParameterType_Void;
 				// what about EffectParameterType_String? does GLSL even support that?
 
-				// add the parameter, with the handle being the index of this parameter
-				param = this->AddParameter(pType, (void*)m_cache.size(), nameBuffer);
+				int numElements = 1;
+				if (type == GL_BOOL ||
+					type == GL_INT ||
+					type == GL_FLOAT ||
+					type == GL_SAMPLER_1D || type == GL_SAMPLER_2D || type == GL_SAMPLER_3D || type == GL_SAMPLER_CUBE)
+					numElements = 1;
+				else if (type == GL_BOOL_VEC2 ||
+					type == GL_INT_VEC2 ||
+					type == GL_FLOAT_VEC2)
+					numElements = 2;
+				else if (type == GL_BOOL_VEC3 ||
+					type == GL_INT_VEC3 ||
+					type == GL_FLOAT_VEC3)
+					numElements = 3;
+				else if (type == GL_BOOL_VEC4 ||
+					type == GL_INT_VEC4 ||
+					type == GL_FLOAT_VEC4)
+					numElements = 4;
+				else if (type == GL_FLOAT_MAT4)
+					numElements = 16;
 
-				m_cache.push_back(ParamCache());
+				// add the parameter, with the handle being the index of this parameter
+				param = this->AddParameter(pType, numElements, nullptr, nameBuffer);
 
 				// if this is a texture param then add it to the list of
 				// texture parameters

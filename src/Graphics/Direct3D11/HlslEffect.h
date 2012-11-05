@@ -15,15 +15,6 @@ namespace Direct3D11
 {
 	class Direct3D11Device;
 
-	struct GlslAttribute
-	{
-		std::string Name;
-		int Handle;
-		int GlHandle;
-		int Index;
-		Nxna::Graphics::VertexElementUsage Usage;
-	};
-
 	class HlslEffect : virtual public Effect
 	{
 		struct GlslUniform
@@ -64,7 +55,6 @@ namespace Direct3D11
 		ParamMap m_parameters;
 
 		std::vector<HlslPermutation> m_permutations;
-		std::vector<GlslAttribute> m_attributes;
 		std::vector<EffectParameter*> m_parameterList;
 		std::vector<EffectParameter*> m_textureParams;
 		std::vector<ParamCache> m_cache;
@@ -78,8 +68,6 @@ namespace Direct3D11
 		virtual ~HlslEffect();
 
 		void AddPermutation(const byte* vertexBytecode, int vertexBytecodeLength, const byte* pixelBytecode, int pixelBytecodeLength);
-
-		virtual EffectParameter* AddParameter(EffectParameterType type, void* handle, const char* name) override { return nullptr; };
 
 		virtual void Apply() override { }
 
@@ -104,14 +92,7 @@ namespace Direct3D11
 			return m_parameterList.size();
 		}
 
-		const GlslAttribute* GetAttribute(VertexElementUsage usage, int index);
-
 	protected:
-
-		virtual void SetParameter(EffectParameter* param, Texture2D* texture) override { }
-		virtual void SetParameter(EffectParameter* param, const Vector4& value) override { }
-		virtual void SetParameter(EffectParameter* param, float matrix4x4[]) override { }
-		virtual void SetParameter(EffectParameter* param, const Matrix& matrix) override { }
 
 		void ApplyProgram(int programIndex);
 

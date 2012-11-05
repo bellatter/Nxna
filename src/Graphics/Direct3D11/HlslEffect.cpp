@@ -1,6 +1,7 @@
 #include "HlslEffect.h"
 #include "Direct3D11Device.h"
 #include "d3d11.h"
+#include "D3D11Shader.h"
 
 namespace Nxna
 {
