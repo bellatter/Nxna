@@ -209,20 +209,23 @@ namespace OpenGl
 			}
 			else if (type == EffectParameterType_Texture2D)
 			{
-				// look for the index of the texture
-				int texindex = 0;
-				for (int i = 0; i < m_textureParams.size(); i++)
+				if ((*itr).Param->GetValueTexture2D() != nullptr)
 				{
-					if (m_textureParams[i] == (*itr).Param)
+					// look for the index of the texture
+					int texindex = 0;
+					for (int i = 0; i < m_textureParams.size(); i++)
 					{
-						texindex = i;
-						break;
+						if (m_textureParams[i] == (*itr).Param)
+						{
+							texindex = i;
+							break;
+						}
 					}
-				}
 
-				glActiveTexture(GL_TEXTURE0 + texindex);
-				glBindTexture(GL_TEXTURE_2D, static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D())->GetGlTexture());
-				glUniform1iv((*itr).Uniform, 1, &texindex);
+					glActiveTexture(GL_TEXTURE0 + texindex);
+					glBindTexture(GL_TEXTURE_2D, static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D())->GetGlTexture());
+					glUniform1iv((*itr).Uniform, 1, &texindex);
+				}
 			}
 
 			GlException::ThrowIfError(__FILE__, __LINE__);
