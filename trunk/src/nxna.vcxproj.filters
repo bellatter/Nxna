@@ -186,6 +186,9 @@
     <ClInclude Include="Platform\iOS\IOSOpenGlWindow.h">
       <Filter>Platform\iOS</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\Windows\WindowsCommon.h" />
+    <ClInclude Include="platform\windows\windowsgame.h" />
+    <ClInclude Include="platform\windows\windowsopenglwindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -301,5 +304,8 @@
     <ClCompile Include="Platform\iOS\IOSOpenGlWindow.cpp">
       <Filter>Platform\iOS</Filter>
     </ClCompile>
+    <ClCompile Include="Platform\Windows\WindowsCommon.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsGame.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsOpenGlWindow.cpp" />
   </ItemGroup>
 </Project>
