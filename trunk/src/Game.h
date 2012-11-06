@@ -21,28 +21,33 @@ namespace Nxna
 
 	namespace Platform
 	{
-#if defined NXNA_PLATFORM_APPLE_IOS
 	namespace iOS
 	{
 		class IOSGame;
 	}
-#else
+	namespace Windows
+	{
+		class WindowsGame;
+	}
 	namespace SDL
 	{
 		class SDLGame;
 	}
-#endif
 	}
 
 	class Game
 	{
 		friend class GraphicsDeviceManager;
+		friend class Platform::iOS::IOSGame;
+		friend class Platform::Windows::WindowsGame;
+		friend class Platform::SDL::SDLGame;
 
 #if defined NXNA_PLATFORM_APPLE_IOS
-		friend class Platform::iOS::IOSGame;
 		Platform::iOS::IOSGame* m_pimpl;
+#elif defined NXNA_PLATFORM_WIN32
+		Platform::Windows::WindowsGame* m_pimpl;
+		//Platform::SDL::SDLGame* m_pimpl;
 #else
-		friend class Platform::SDL::SDLGame;
 		Platform::SDL::SDLGame* m_pimpl;
 #endif
 
