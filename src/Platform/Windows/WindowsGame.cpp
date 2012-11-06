@@ -144,7 +144,7 @@ namespace Windows
 	struct WinEvent
 	{
 		WinEventType Type;
-		int ParamA, ParamB;
+		int ParamA, ParamB, ParamC;
 	};
 	
 	const int MAX_EVENTS = 128;
@@ -244,6 +244,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 			e.Type = Nxna::Platform::Windows::MouseMotion;
 			e.ParamA = LOWORD(lparam);
 			e.ParamB = HIWORD(lparam);
+			Nxna::Platform::Windows::addEvent(e);
+
+			return 0;
+		}
+		case WM_LBUTTONDOWN:
+		{
+			Nxna::Platform::Windows::WinEvent e;
+			e.Type = Nxna::Platform::Windows::MouseButtonDown;
+			e.ParamA = 1;
+			e.ParamB = LOWORD(lparam);
+			e.ParamC = HIWORD(lparam);
+			Nxna::Platform::Windows::addEvent(e);
+
+			return 0;
+		}
+		case WM_LBUTTONUP:
+		{
+			Nxna::Platform::Windows::WinEvent e;
+			e.Type = Nxna::Platform::Windows::MouseButtonUp;
+			e.ParamA = 1;
+			e.ParamB = LOWORD(lparam);
+			e.ParamC = HIWORD(lparam);
 			Nxna::Platform::Windows::addEvent(e);
 
 			return 0;

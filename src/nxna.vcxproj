@@ -122,6 +122,9 @@
     <ClInclude Include="Platform\PlatformDefs.h" />
     <ClInclude Include="Platform\SDL\SDLGame.h" />
     <ClInclude Include="Platform\SDL\SDLOpenGlWindow.h" />
+    <ClInclude Include="Platform\Windows\WindowsCommon.h" />
+    <ClInclude Include="platform\windows\windowsgame.h" />
+    <ClInclude Include="platform\windows\windowsopenglwindow.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Rectangle.h" />
@@ -153,6 +156,9 @@
     <ClCompile Include="Platform\SdlMain.cpp" />
     <ClCompile Include="Platform\SDL\SDLGame.cpp" />
     <ClCompile Include="Platform\SDL\SDLOpenGlWindow.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsCommon.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsGame.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsOpenGlWindow.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
