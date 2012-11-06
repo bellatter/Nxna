@@ -11,6 +11,7 @@ namespace Platform
 namespace Windows
 {
 	LARGE_INTEGER timerFrequency;
+	LARGE_INTEGER timeAtStart;
 
 	WindowsGame::WindowsGame(Game* game)
 	{
@@ -19,6 +20,8 @@ namespace Windows
 		m_quitReceived = false;
 		m_targetElapsedTime = 1.0f / 60.0f;
 		m_isFixedTimeStep = true;
+
+		QueryPerformanceCounter(&timeAtStart);
 	}
 
 	void WindowsGame::Init()
@@ -216,10 +219,11 @@ namespace Windows
 		LARGE_INTEGER currentTime;
 		QueryPerformanceCounter(&currentTime);
 
-		float time = (float)((double)currentTime.QuadPart / timerFrequency.QuadPart);
+		double time = (double)(currentTime.QuadPart - timeAtStart.QuadPart) / (double)timerFrequency.QuadPart;
 
-		m_realTime.ElapsedGameTime = time - m_realTime.TotalGameTime;
-		m_realTime.TotalGameTime = time;
+		m_realTime.ElapsedGameTime = (float)(time - m_preciseRealTime);
+		m_realTime.TotalGameTime = (float)time;
+		m_preciseRealTime = time;
 	}
 }
 }

@@ -15,6 +15,7 @@ namespace Windows
 		bool m_quitReceived;
 		GameTime m_gameTime;
 		GameTime m_realTime;
+		double m_preciseRealTime;
 		bool m_isFixedTimeStep;
 		float m_targetElapsedTime;
 		Game* m_game;
