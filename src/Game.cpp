@@ -8,6 +8,9 @@
 
 #if defined NXNA_PLATFORM_APPLE_IOS
 #include "Platform/iOS/IOSGame.h"
+#elif defined NXNA_PLATFORM_WIN32
+#include "Platform/Windows/WindowsGame.h"
+#include "Platform/SDL/SDLGame.h"
 #else
 #include "Platform/SDL/SDLGame.h"
 #endif
@@ -26,6 +29,9 @@ namespace Nxna
 
 #if defined NXNA_PLATFORM_APPLE_IOS
 		m_pimpl = new Platform::iOS::IOSGame(this);
+#elif defined NXNA_PLATFORM_WIN32
+		m_pimpl = new Platform::Windows::WindowsGame(this);
+		//m_pimpl = new Platform::SDL::SDLGame(this);
 #else
 		m_pimpl = new Platform::SDL::SDLGame(this);
 #endif

@@ -1,11 +1,15 @@
 #include <iostream>
 #include "Graphics/OpenGL/OpenGLDevice.h"
 #include "Platform/SDL/SDLOpenGlWindow.h"
+#include "Platform/Windows/WindowsDirect3D11Window.h"
+#include "Platform/Windows/WindowsOpenGlWindow.h"
 #include "Game1.h"
 
 Game1::Game1()
 {
-	m_graphics = new Nxna::Platform::SDL::SDLOpenGlWindow(this);
+	//m_graphics = new Nxna::Platform::SDL::SDLOpenGlWindow(this);
+	m_graphics = new Nxna::Platform::Windows::WindowsOpenGlWindow(this);
+	//m_graphics = new Nxna::Platform::Windows::WindowsDirect3D11Window(this);
 }
 
 Nxna::Vector2 pos;
