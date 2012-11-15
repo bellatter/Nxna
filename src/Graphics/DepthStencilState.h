@@ -33,7 +33,7 @@ namespace Graphics
 
 	class DepthStencilState
 	{
-		friend GraphicsDevice;
+		friend class GraphicsDevice;
 
 		static DepthStencilState m_default;
 		static DepthStencilState m_depthRead;

@@ -20,7 +20,7 @@ namespace Direct3D11
 
 	class HlslEffect : virtual public Effect
 	{
-		friend Direct3D11Device;
+		friend class Direct3D11Device;
 
 		struct GlslUniform
 		{
