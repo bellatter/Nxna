@@ -54,7 +54,7 @@ namespace Windows
 		}
 
 		DWORD exStyle = WS_EX_APPWINDOW | (fullscreen ? WS_EX_WINDOWEDGE : 0);
-		DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN | (fullscreen ? WS_POPUP : WS_OVERLAPPEDWINDOW);
+		DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN | (fullscreen ? WS_POPUP : (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX));
 
 		RECT windowRect;
 		windowRect.left = 0;
