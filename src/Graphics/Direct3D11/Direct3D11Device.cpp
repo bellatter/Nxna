@@ -3,6 +3,7 @@
 #include "D3D11VertexBuffer.h"
 #include "D3D11IndexBuffer.h"
 #include "HlslSpriteEffect.h"
+#include "D3D11Utils.h"
 #include "../GraphicsDeviceCapabilities.h"
 #include "../../Utils.h"
 #include <d3dcommon.h>
@@ -217,16 +218,29 @@ namespace Direct3D11
 
 	void Direct3D11Device::Clear(const Color& c)
 	{
-		float color[4];
-		color[0] = c.R / 255.0f;
-		color[1] = c.G / 255.0f;
-		color[2] = c.B / 255.0f;
-		color[3] = c.A / 255.0f;
-
-		m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
+		Clear((ClearOptions)(ClearOptions_Target | ClearOptions_DepthBuffer | ClearOptions_Stencil), c, 1.0f, 0);
 	}
 
-	void Direct3D11Device::Clear(ClearOptions options, const Color& c, float depth, int stencil) { }
+	void Direct3D11Device::Clear(ClearOptions options, const Color& c, float depth, int stencil)
+	{
+		if ((options & ClearOptions_Target) == ClearOptions_Target)
+		{
+			float color[4];
+			color[0] = c.R / 255.0f;
+			color[1] = c.G / 255.0f;
+			color[2] = c.B / 255.0f;
+			color[3] = c.A / 255.0f;
+
+			m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
+		}
+
+		int flags = 0;
+		if ((options & ClearOptions_DepthBuffer) == ClearOptions_DepthBuffer)
+			flags |= D3D11_CLEAR_DEPTH;
+		if ((options & ClearOptions_Stencil) == ClearOptions_Stencil)
+			flags |= D3D11_CLEAR_STENCIL;
+		m_deviceContext->ClearDepthStencilView(m_depthStencilView, flags, depth, (byte)stencil);
+	}
 
 	Viewport Direct3D11Device::GetViewport()
 	{
@@ -360,8 +374,20 @@ namespace Direct3D11
 				// this is the first time this blend state has been used, so we need to create a new D3D blend state object
 				D3D11_BLEND_DESC blendState;
 				ZeroMemory(&blendState, sizeof(D3D11_BLEND_DESC));
-				blendState.RenderTarget[0].BlendEnable = false;
+				blendState.RenderTarget[0].BlendEnable = m_blendState.ColorSourceBlend != Blend_One ||
+					m_blendState.AlphaSourceBlend != Blend_One ||
+					m_blendState.ColorDestinationBlend != Blend_Zero ||
+					m_blendState.AlphaDestinationBlend != Blend_Zero;
 				blendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+				blendState.RenderTarget[0].SrcBlend = D3D11Utils::ConvertBlendMode(m_blendState.ColorSourceBlend);
+				blendState.RenderTarget[0].DestBlend = D3D11Utils::ConvertBlendMode(m_blendState.ColorDestinationBlend);
+				blendState.RenderTarget[0].SrcBlendAlpha = D3D11Utils::ConvertBlendMode(m_blendState.AlphaSourceBlend);
+				blendState.RenderTarget[0].DestBlendAlpha = D3D11Utils::ConvertBlendMode(m_blendState.AlphaDestinationBlend);
+
+				blendState.RenderTarget[0].BlendOp = D3D11Utils::ConvertBlendFunc(m_blendState.ColorBlendFunction);
+				blendState.RenderTarget[0].BlendOpAlpha = D3D11Utils::ConvertBlendFunc(m_blendState.AlphaBlendFunction);
+
 				if (FAILED(m_device->CreateBlendState(&blendState, (ID3D11BlendState**)internalHandle)))
 					throw GraphicsException("Unable to create D3D11 blend state", __FILE__, __LINE__);
 			}

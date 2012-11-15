@@ -16,7 +16,6 @@ namespace Direct3D11
 	{
 		void* m_d3d11Device;
 		void* m_indexBuffer;
-		IndexElementSize m_elementSize;
 
 	public:
 		D3D11IndexBuffer(void* d3d11Device, IndexElementSize elementSize);
