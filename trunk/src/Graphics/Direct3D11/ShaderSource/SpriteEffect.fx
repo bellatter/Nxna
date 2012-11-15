@@ -30,6 +30,6 @@ void SpriteVertexShader(inout float4 color    : COLOR0,
 float4 SpritePixelShader(float4 color    : COLOR0,
                         float2 texCoord : TEXCOORD0) : SV_Target0
 {
-	return float4(1.0, 0, 0, 1.0);
+	return color;
    //return Diffuse.Sample(DiffuseSampler, texCoord) * color + float4(1.0, 0, 0, 1.0);
 }

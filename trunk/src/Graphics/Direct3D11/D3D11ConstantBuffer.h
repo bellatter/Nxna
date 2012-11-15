@@ -26,6 +26,8 @@ namespace Direct3D11
 		int* m_parameterIndices;
 		int* m_parameterOffsets;
 		int m_numParameters;
+		int m_sizeInBytes;
+
 
 	public:
 		D3D11ConstantBuffer(Direct3D11Device* device, bool vertex, int sizeInBytes,

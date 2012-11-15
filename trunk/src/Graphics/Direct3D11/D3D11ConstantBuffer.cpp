@@ -17,15 +17,16 @@ namespace Direct3D11
 
 		D3D11_BUFFER_DESC desc;
 		desc.ByteWidth = sizeInBytes;
-		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.Usage = D3D11_USAGE_DYNAMIC;
 		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		desc.CPUAccessFlags = 0;
+		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		desc.MiscFlags = 0;
 		desc.StructureByteStride = 0;
 
 		if (FAILED(static_cast<ID3D11Device*>(device->GetDevice())->CreateBuffer(&desc, nullptr, &m_buffer)))
 			throw GraphicsException("Unable to create constant buffer", __FILE__, __LINE__);
 
+		m_sizeInBytes = sizeInBytes;
 		m_workingBuffer = new byte[sizeInBytes];
 		m_parameterIndices = new int[numParameters];
 		m_parameterOffsets = new int[numParameters];
@@ -56,7 +57,15 @@ namespace Direct3D11
 	void D3D11ConstantBuffer::Apply(int slot)
 	{
 		ID3D11DeviceContext* context = static_cast<ID3D11DeviceContext*>(m_device->GetDeviceContext());
-		context->UpdateSubresource(m_buffer, 0, nullptr, m_workingBuffer, 0, 0);
+		//context->UpdateSubresource(m_buffer, 0, nullptr, m_workingBuffer, 0, 0);
+
+		D3D11_MAPPED_SUBRESOURCE r;
+		if (FAILED(context->Map(m_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &r)))
+			throw GraphicsException("Unable to lock constant buffer", __FILE__, __LINE__);
+
+		memcpy(r.pData, m_workingBuffer, m_sizeInBytes);
+
+		context->Unmap(m_buffer, 0);
 
 		if (m_vertex)
 			context->VSSetConstantBuffers(slot, 1, &m_buffer);

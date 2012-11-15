@@ -87,6 +87,7 @@
     <ClInclude Include="Graphics\Direct3D11\D3D11ConstantBuffer.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11IndexBuffer.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11Texture2D.h" />
+    <ClInclude Include="Graphics\Direct3D11\D3D11Utils.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11VertexBuffer.h" />
     <ClInclude Include="Graphics\Direct3D11\Direct3D11Device.h" />
     <ClInclude Include="Graphics\Direct3D11\HlslEffect.h" />
