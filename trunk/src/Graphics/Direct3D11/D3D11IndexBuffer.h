@@ -24,7 +24,7 @@ namespace Direct3D11
 
 		virtual void SetData(void* data, int indexCount) override;
 
-		void Bind() const;
+		void* GetInternalBuffer() const { return m_indexBuffer; };
 	};
 }
 }

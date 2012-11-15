@@ -39,6 +39,7 @@ namespace Graphics
 		int m_numElements;
 		VertexElement m_elements[MAX_ELEMENTS];
 		int m_stride;
+		unsigned int m_hash;
 
 	public:
 		VertexDeclaration(VertexElement* elements, int numElements)
@@ -53,11 +54,18 @@ namespace Graphics
 				sizeOfFinalElement = (int)elements[numElements - 1].ElementFormat * sizeof(float);
 
 			m_stride = elements[numElements - 1].Offset + sizeOfFinalElement;
+
+			m_hash = calcHash();
 		}
 
 		int GetStride() const { return m_stride; }
 		int GetNumElements() const { return m_numElements; }
 		const VertexElement* GetElements() const { return m_elements; }
+
+		unsigned int GetHash() const { return m_hash; }
+
+	private:
+		unsigned int calcHash();
 	};
 }
 }

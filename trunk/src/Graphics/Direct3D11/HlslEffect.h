@@ -6,6 +6,7 @@
 #include "../../NxnaConfig.h"
 #include "../Effect.h"
 #include "../VertexDeclaration.h"
+#include "../ConstantBuffer.h"
 
 namespace Nxna
 {
@@ -17,6 +18,8 @@ namespace Direct3D11
 
 	class HlslEffect : virtual public Effect
 	{
+		friend Direct3D11Device;
+
 		struct GlslUniform
 		{
 			EffectParameter* Param;
@@ -28,19 +31,11 @@ namespace Direct3D11
 		{
 			void* D3DVertexShader;
 			void* D3DPixelShader;
-		};
-
-		enum CacheType
-		{
-			CacheType_Float,
-			CacheType_Int
-		};
-
-		struct ParamCache
-		{
-			CacheType CachedValueType;
-			int CachedValueSize;
-			int CachedValue[4 * 4];
+			unsigned int Hash;
+			byte* VertexBytecode;
+			int VertexBytecodeLength;
+			int* CBuffers;
+			int NumCBuffers;
 		};
 
 		struct strcmpop
@@ -57,19 +52,22 @@ namespace Direct3D11
 		std::vector<HlslPermutation> m_permutations;
 		std::vector<EffectParameter*> m_parameterList;
 		std::vector<EffectParameter*> m_textureParams;
-		std::vector<ParamCache> m_cache;
-
+		
 		static const int MAX_ATTRIB_SIZE = 256;
 		static char m_attribNameBuffer[MAX_ATTRIB_SIZE];
 		static int m_boundProgramIndex;
+
+	protected:
+		std::vector<ConstantBuffer> m_cbuffers;
 
 	public:
 		HlslEffect(Direct3D11Device* device);
 		virtual ~HlslEffect();
 
-		void AddPermutation(const byte* vertexBytecode, int vertexBytecodeLength, const byte* pixelBytecode, int pixelBytecodeLength);
+		void AddPermutation(const byte* vertexBytecode, int vertexBytecodeLength,
+			const byte* pixelBytecode, int pixelBytecodeLength);
 
-		virtual void Apply() override { }
+		virtual void Apply() override;
 
 		virtual EffectParameter* GetParameter(const char* name) override
 		{
@@ -92,9 +90,20 @@ namespace Direct3D11
 			return m_parameterList.size();
 		}
 
+		unsigned int GetHash(int program);
+		void GetBytecode(int program, byte** bytecode, int* length);
+
+		void SetConstantBuffers();
+
 	protected:
 
 		void ApplyProgram(int programIndex);
+		void AddParameter(EffectParameter* parameter)
+		{
+			m_parameters.insert(ParamMap::value_type(parameter->Name.c_str(), parameter));
+
+			m_parameterList.push_back(parameter);
+		}
 
 	private:
 		int compile(const std::string& source, const char* defines, bool vertex);

@@ -29,11 +29,17 @@ namespace Graphics
 		StencilOperation_Zero
 	};
 
+	class GraphicsDevice;
+
 	class DepthStencilState
 	{
+		friend GraphicsDevice;
+
 		static DepthStencilState m_default;
 		static DepthStencilState m_depthRead;
 		static DepthStencilState m_none;
+
+		void* m_handle;
 
 	public:
 
@@ -47,6 +53,8 @@ namespace Graphics
 			StencilEnable = false;
 			StencilFunction = CompareFunction_Always;
 			StencilPass = StencilOperation_Keep;
+
+			m_handle = nullptr;
 		}
 
 		CompareFunction DepthBufferFunction;

@@ -127,6 +127,11 @@ namespace Graphics
 		GraphicsDeviceCapabilities* GetCaps() { return m_caps; }
 
 		static GraphicsDevice* GetDevice() { return m_instance; }
+
+	protected:
+		void** GetInternalHandle(BlendState* blendState) { return &blendState->m_handle; }
+		void** GetInternalHandle(DepthStencilState* depthStencilState) { return &depthStencilState->m_handle; }
+
 	};
 
 	class GraphicsException : public Exception
