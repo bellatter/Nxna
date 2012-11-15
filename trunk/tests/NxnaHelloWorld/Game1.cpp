@@ -1,5 +1,4 @@
 #include <iostream>
-#include "Graphics/OpenGL/OpenGLDevice.h"
 #include "Platform/SDL/SDLOpenGlWindow.h"
 #include "Platform/Windows/WindowsDirect3D11Window.h"
 #include "Platform/Windows/WindowsOpenGlWindow.h"

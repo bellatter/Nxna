@@ -1,3 +1,7 @@
+#include "../../NxnaConfig.h"
+
+#if defined NXNA_PLATFORM_WIN32
+
 #include "WindowsCommon.h"
 #include "../../Exception.h"
 
@@ -75,3 +79,6 @@ namespace Windows
 }
 }
 }
+
+#endif
+

@@ -8,12 +8,12 @@ echo SDLMAIN_OBJECT = SDLMain.o
 echo SDL_COMPILER_FLAGS = -I../lib/SDL/include
 echo 'LINKER_FLAGS=  -framework SDL -framework Cocoa -framework OpenGL  -L../lib/Glew/bin/OSX -lGLEW -lnxna'
 echo else
-echo 'LINKER_FLAGS= -L../lib/SDL_13/build/.libs -L../nxna/build/x64 -lnxna -lSDL -lGL -lGLEW'
+echo 'LINKER_FLAGS= -L../lib/SDL_13/build/.libs -L../../src/build/x64 -lnxna -lSDL -lGL -lGLEW'
 echo SDLMAIN_OBJECT =
 echo SDL_COMPILER_FLAGS = -I../lib/SDL_13/include
 echo endif
 
-echo 'COMPILER_FLAGS =-g -msse -Dnullptr=NULL -Doverride= $(SDL_COMPILER_FLAGS)'
+echo 'COMPILER_FLAGS =-g -msse -Doverride= $(SDL_COMPILER_FLAGS) -I../../src'
 echo EXECUTABLE = NxnaHelloWorld
 
 echo -n 'SOURCES='

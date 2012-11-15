@@ -1,6 +1,8 @@
 #ifndef GRAPHICS_BLENDSTATE_H
 #define GRAPHICS_BLENDSTATE_H
 
+#include "../NxnaConfig.h"
+
 namespace Nxna
 {
 namespace Graphics

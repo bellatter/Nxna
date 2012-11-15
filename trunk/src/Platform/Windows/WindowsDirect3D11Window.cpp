@@ -1,3 +1,7 @@
+#include "../../NxnaConfig.h"
+
+#if defined NXNA_PLATFORM_WIN32
+
 #include <cassert>
 #include "WindowsDirect3D11Window.h"
 #include "../../Graphics/Direct3D11/Direct3D11Device.h"
@@ -74,3 +78,5 @@ namespace Windows
 }
 }
 }
+
+#endif

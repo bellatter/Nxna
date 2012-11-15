@@ -1,6 +1,8 @@
 #ifndef GRAPHICS_DEPTHSTENCILSTATE_H
 #define GRAPHICS_DEPTHSTENCILSTATE_H
 
+#include "../NxnaConfig.h"
+
 namespace Nxna
 {
 namespace Graphics

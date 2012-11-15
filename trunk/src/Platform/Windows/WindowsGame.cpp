@@ -1,3 +1,7 @@
+#include "../../NxnaConfig.h"
+
+#if defined NXNA_PLATFORM_WIN32
+
 #include "WindowsGame.h"
 #include "../../Audio/AudioManager.h"
 
@@ -280,3 +284,5 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 
 	return 0;
 }
+
+#endif

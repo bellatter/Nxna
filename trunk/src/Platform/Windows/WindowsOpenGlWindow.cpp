@@ -1,3 +1,7 @@
+#include "../../NxnaConfig.h"
+
+#if defined NXNA_PLATFORM_WIN32
+
 #include <cassert>
 #include "WindowsOpenGlWindow.h"
 #include "WindowsGame.h"
@@ -127,3 +131,5 @@ namespace Windows
 }
 }
 }
+
+#endif

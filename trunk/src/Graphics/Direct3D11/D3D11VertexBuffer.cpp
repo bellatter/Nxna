@@ -1,3 +1,7 @@
+#include "../../NxnaConfig.h"
+
+#if defined NXNA_PLATFORM_WIN32
+
 #include <cassert>
 #include "Direct3D11Device.h"
 #include "D3D11VertexBuffer.h"
@@ -91,3 +95,5 @@ namespace Direct3D11
 }
 }
 }
+
+#endif
