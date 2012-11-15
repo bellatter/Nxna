@@ -1,3 +1,7 @@
+#include "../../NxnaConfig.h"
+
+#if defined NXNA_PLATFORM_WIN32
+
 #include "D3D11IndexBuffer.h"
 #include "../GraphicsDevice.h"
 #include "d3d11.h"
@@ -38,3 +42,5 @@ namespace Direct3D11
 }
 }
 }
+
+#endif
