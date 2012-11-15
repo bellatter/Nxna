@@ -5,6 +5,8 @@
 #include "../Content/ContentManager.h"
 #include "../Vector3.h"
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 namespace Audio
@@ -85,5 +87,7 @@ namespace Audio
 	};
 }
 }
+
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #endif // AUDIO_SOUNDEFFECT_H

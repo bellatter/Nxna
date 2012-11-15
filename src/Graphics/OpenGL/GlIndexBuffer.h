@@ -4,6 +4,8 @@
 #include "../../NxnaConfig.h"
 #include "../IndexBuffer.h"
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 namespace Graphics
@@ -34,5 +36,7 @@ namespace OpenGl
 }
 }
 }
+
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #endif // GRAPHICS_GLINDEXBUFFER_H

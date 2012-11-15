@@ -11,6 +11,8 @@
 #pragma warning(disable: 4250)
 #endif
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 namespace Graphics
@@ -56,6 +58,8 @@ namespace OpenGl
 }
 }
 }
+
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #ifdef _MSC_VER
 #pragma warning(pop)

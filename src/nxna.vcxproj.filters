@@ -349,5 +349,8 @@
     <ClCompile Include="Platform\Windows\WindowsCommon.cpp" />
     <ClCompile Include="Graphics\VertexDeclaration.cpp" />
     <ClCompile Include="Graphics\Direct3D11\D3D11ConstantBuffer.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsMain.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

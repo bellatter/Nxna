@@ -178,6 +178,7 @@
     <ClCompile Include="Platform\Windows\WindowsCommon.cpp" />
     <ClCompile Include="Platform\Windows\WindowsDirect3D11Window.cpp" />
     <ClCompile Include="Platform\Windows\WindowsGame.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsMain.cpp" />
     <ClCompile Include="Platform\Windows\WindowsOpenGlWindow.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Vector2.cpp" />

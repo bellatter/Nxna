@@ -26,4 +26,10 @@ __pragma(warning(disable:4481))
 #define NXNA_ENABLE_OVERRIDE_WARNING
 #endif
 
+// make sure the SDL libraries get included if needed
+#if defined NXNA_PLATFORM_WIN32_SDL
+#pragma comment(lib, "SDL")
+#pragma comment(lib, "SDLMain")
+#endif
+
 #endif // NXNACONFIG_H

@@ -6,6 +6,8 @@
 #include "../Vector2.h"
 #include "../Content/ContentManager.h"
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 	struct Rectangle;
@@ -72,5 +74,6 @@ namespace Graphics
 }
 }
 
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #endif // GRAPHICS_SPRITEFONT_H

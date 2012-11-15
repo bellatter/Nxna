@@ -4,6 +4,8 @@
 #include "../Texture2D.h"
 #include "../SamplerState.h"
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 namespace Graphics
@@ -34,5 +36,7 @@ namespace OpenGl
 }
 }
 }
+
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #endif // GRAPHICS_OPENGL_GLTEXTURE2D_H

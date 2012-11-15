@@ -5,6 +5,8 @@
 #include "../Content/ContentManager.h"
 #include "../Rectangle.h"
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 namespace Content
@@ -85,5 +87,7 @@ namespace Graphics
 	};
 }
 }
+
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #endif // GRAPHICS_TEXTURE2D_H
