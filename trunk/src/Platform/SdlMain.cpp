@@ -1,6 +1,6 @@
 #include "PlatformDefs.h"
 
-#ifndef NXNA_PLATFORM_NACL
+#if !defined NXNA_PLATFORM_NACL && (!defined NXNA_PLATFORM_WIN32 || defined NXNA_PLATFORM_WIN32_SDL) 
 
 #include <SDL.h>
 

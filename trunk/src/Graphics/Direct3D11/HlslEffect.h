@@ -8,6 +8,8 @@
 #include "../VertexDeclaration.h"
 #include "../ConstantBuffer.h"
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 namespace Graphics
@@ -167,5 +169,7 @@ namespace Direct3D11
 }
 }
 }
+
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #endif // NXNA_GRAPHICS_DIRECT3D11_HLSLEFFECT_H

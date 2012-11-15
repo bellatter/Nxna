@@ -9,6 +9,10 @@
 #elif defined _WIN32
 #define NXNA_PLATFORM_WIN32
 
+// within Windows we can use either SDL or our own windowing code.
+// If you want to use SDL instead of our own windowing code, uncomment the following line.
+//#define NXNA_PLATFORM_WIN32_SDL
+
 // some kind of Apple platform
 #elif defined __APPLE__
 #define NXNA_PLATFORM_APPLE

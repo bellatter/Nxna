@@ -7,9 +7,16 @@
 
 Game1::Game1()
 {
-	//m_graphics = new Nxna::Platform::SDL::SDLOpenGlWindow(this);
-	m_graphics = new Nxna::Platform::Windows::WindowsOpenGlWindow(this);
-	//m_graphics = new Nxna::Platform::Windows::WindowsDirect3D11Window(this);
+#if defined NXNA_PLATFORM_WIN32
+#if defined NXNA_PLATFORM_WIN32_SDL
+	m_graphics = new Nxna::Platform::SDL::SDLOpenGlWindow(this);
+#else
+	//m_graphics = new Nxna::Platform::Windows::WindowsOpenGlWindow(this);
+	m_graphics = new Nxna::Platform::Windows::WindowsDirect3D11Window(this);
+#endif
+#else
+	m_graphics = new Nxna::Platform::SDL::SDLOpenGlWindow(this);
+#endif
 }
 
 Nxna::Vector2 pos;

@@ -4,6 +4,8 @@
 #include "../AlphaTestEffect.h"
 #include "GlslEffect.h"
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 namespace Graphics
@@ -60,5 +62,7 @@ namespace OpenGl
 }
 }
 }
+
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #endif // NXNA_GRAPHICS_OPENGL_GLSLALPHATESTEFFECT_H

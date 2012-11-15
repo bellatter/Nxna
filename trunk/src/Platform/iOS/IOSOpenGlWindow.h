@@ -4,6 +4,8 @@
 #include "../../NxnaConfig.h"
 #include "../../IGraphicsDeviceManager.h"
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 namespace Platform
@@ -36,5 +38,7 @@ namespace iOS
 }
 }
 }
+
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #endif // NXNA_PLATFORM_IOS_IOSOPENGLWINDOW_H

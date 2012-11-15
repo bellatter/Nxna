@@ -4,6 +4,8 @@
 #include "../../NxnaConfig.h"
 #include "../../IGraphicsDeviceManager.h"
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 namespace Platform
@@ -29,5 +31,7 @@ namespace SDL
 }
 }
 }
+
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #endif // NXNA_PLATFORM_SDL_SDLOPENGLWINDOW_H

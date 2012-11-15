@@ -6,6 +6,8 @@
 #include "../Content/ContentManager.h"
 #include "../Rectangle.h"
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 namespace Graphics
@@ -33,5 +35,7 @@ namespace Graphics
 	};
 }
 }
+
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #endif // GRAPHICS_SPRITESHEET_H
