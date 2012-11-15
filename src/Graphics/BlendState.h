@@ -24,12 +24,18 @@ namespace Graphics
 		BlendFunction_Subtract
 	};
 
+	class GraphicsDevice;
+
 	class BlendState
 	{
+		friend GraphicsDevice;
+
 		static BlendState m_additive;
 		static BlendState m_alphaBlend;
 		static BlendState m_nonPreMultiplied;
 		static BlendState m_opaque;
+
+		void* m_handle;
 
 	public:
 
@@ -42,6 +48,8 @@ namespace Graphics
 			ColorBlendFunction = BlendFunction_Add;
 			ColorDestinationBlend = Blend_One;
 			ColorSourceBlend = Blend_One;
+
+			m_handle = nullptr;
 		}
 
 		BlendFunction AlphaBlendFunction;

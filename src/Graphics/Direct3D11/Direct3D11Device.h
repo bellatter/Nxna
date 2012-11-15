@@ -3,10 +3,17 @@
 
 #include "../GraphicsDevice.h"
 #include "../../Color.h"
+#include <map>
+#include <cstdint>
 
 struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct IDXGISwapChain;
+struct ID3D11RenderTargetView;
+struct ID3D11DepthStencilView;
+struct ID3D11Texture2D;
+struct ID3D11InputLayout;
+
 
 NXNA_DISABLE_OVERRIDE_WARNING
 
@@ -16,11 +23,34 @@ namespace Graphics
 {
 namespace Direct3D11
 {
+	class D3D11VertexBuffer;
+	class D3D11IndexBuffer;
+	class HlslEffect;
+
 	class Direct3D11Device : public GraphicsDevice
 	{
 		ID3D11Device* m_device;
 		ID3D11DeviceContext* m_deviceContext;
 		IDXGISwapChain* m_swapChain;
+		ID3D11RenderTargetView* m_renderTargetView;
+		ID3D11Texture2D* m_depthStencilBuffer;
+		ID3D11DepthStencilView* m_depthStencilView;
+
+		const D3D11VertexBuffer* m_vertices;
+		const D3D11IndexBuffer* m_indices;
+		HlslEffect* m_effect;
+		int m_effectProgram;
+
+		bool m_indexBufferDirty;
+		bool m_vertexBufferDirty;
+		bool m_effectDirty;
+		bool m_blendStateDirty;
+		bool m_depthStencilStateDirty;
+
+		BlendState m_blendState;
+		DepthStencilState m_depthState;
+
+		std::map<uint64_t, ID3D11InputLayout*> m_layouts;
 
 	public:
 		Direct3D11Device();
@@ -64,6 +94,17 @@ namespace Direct3D11
 
 		void* GetDevice() { return m_device; }
 		void* GetDeviceContext() { return m_deviceContext; }
+
+		HlslEffect* GetCurrentEffect() { return m_effect; }
+		int GetCurrentProgramIndex() { return m_effectProgram; }
+
+		void SetCurrentEffect(HlslEffect* effect, int program) { m_effect = effect; m_effectProgram = program; m_effectDirty = true; }
+		unsigned int CalcShaderHash(const byte* bytecode, int length);
+
+	private:
+		void applyDirtyStates();
+		unsigned int hashVertexDeclaration(const VertexDeclaration& decl);
+		ID3D11InputLayout* getLayout(HlslEffect* shader, int program, const VertexDeclaration& decl);
 	};
 
 }

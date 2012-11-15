@@ -4,6 +4,9 @@
 #include "../../Input/Touch/TouchPanel.h"
 #include "WindowsCommon.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
 
 namespace Nxna
 {
@@ -30,6 +33,7 @@ namespace Windows
 
 	void WindowsDirect3D11Window::EndDraw()
 	{
+		m_device->Present();
 	}
 
 	void WindowsDirect3D11Window::ApplyChanges()
@@ -49,6 +53,10 @@ namespace Windows
 		assert(m_device != nullptr);
 
 		m_window = CreateGameWindow(width, height, fullscreen);
+
+		::ShowWindow((HWND)m_window, SW_SHOW);
+		SetForegroundWindow((HWND)m_window);
+		SetFocus((HWND)m_window);
 
         PreferredBackBufferWidth(width);
         PreferredBackBufferHeight(height);

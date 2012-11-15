@@ -26,7 +26,7 @@ namespace Direct3D11
 		virtual const VertexDeclaration* GetDeclaration() const override { return m_declaration; }
 		virtual int GetVertexCount() const override { return m_vertexCount; }
 
-		void Bind() const;
+		void* GetInternalBuffer() const { return m_buffer; }
 	};
 
 	class D3D11DynamicVertexBuffer : public DynamicVertexBuffer, public D3D11VertexBuffer

@@ -31,6 +31,12 @@
     <Filter Include="Platform\iOS">
       <UniqueIdentifier>{02b412f4-8f5b-49d5-ab46-dd0acf29ae5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Direct3D11">
+      <UniqueIdentifier>{26125c02-6027-4806-b172-ee7401741d65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{1fc4ac49-ea01-4cf2-a73d-728dec386bd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\GraphicsDevice.h">
@@ -186,9 +192,28 @@
     <ClInclude Include="Platform\iOS\IOSOpenGlWindow.h">
       <Filter>Platform\iOS</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Direct3D11\Direct3D11Device.h">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\WindowsDirect3D11Window.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\WindowsGame.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Direct3D11\D3D11IndexBuffer.h">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Direct3D11\D3D11Texture2D.h" />
+    <ClInclude Include="Graphics\Direct3D11\D3D11VertexBuffer.h" />
+    <ClInclude Include="Graphics\Direct3D11\HlslEffect.h" />
+    <ClInclude Include="Graphics\Direct3D11\HlslSpriteEffect.h" />
+    <ClInclude Include="Platform\Windows\WindowsOpenGlWindow.h" />
     <ClInclude Include="Platform\Windows\WindowsCommon.h" />
-    <ClInclude Include="platform\windows\windowsgame.h" />
-    <ClInclude Include="platform\windows\windowsopenglwindow.h" />
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="Graphics\ConstantBuffer.h" />
+    <ClInclude Include="Graphics\IContantBufferPmpl.h" />
+    <ClInclude Include="Graphics\Direct3D11\D3D11ConstantBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -304,8 +329,25 @@
     <ClCompile Include="Platform\iOS\IOSOpenGlWindow.cpp">
       <Filter>Platform\iOS</Filter>
     </ClCompile>
-    <ClCompile Include="Platform\Windows\WindowsCommon.cpp" />
-    <ClCompile Include="Platform\Windows\WindowsGame.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\Direct3D11Device.cpp">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Windows\WindowsDirect3D11Window.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Windows\WindowsGame.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\D3D11IndexBuffer.cpp">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\D3D11Texture2D.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\D3D11VertexBuffer.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\HlslSpriteEffect.cpp" />
     <ClCompile Include="Platform\Windows\WindowsOpenGlWindow.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsCommon.cpp" />
+    <ClCompile Include="Graphics\VertexDeclaration.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\D3D11ConstantBuffer.cpp" />
   </ItemGroup>
 </Project>

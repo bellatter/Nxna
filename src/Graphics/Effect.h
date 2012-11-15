@@ -115,6 +115,11 @@ namespace Graphics
 			return r;
 		}
 		
+		void GetValueSingleArray(float* destination, int count)
+		{
+			memcpy(destination, m_value, sizeof(float) * count);
+		}
+
 		Vector2 GetValueVector2()
 		{
 			Vector2 v;
