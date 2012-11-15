@@ -9,8 +9,8 @@
 // http://create.msdn.com/en-US/education/catalog/sample/stock_effects
 
 
-//Texture2D<float4> Diffuse : register(t0);
-//sampler DiffuseSampler : register(s0);
+Texture2D<float4> Diffuse : register(t0);
+sampler DiffuseSampler : register(s0);
 
 
 cbuffer Parameters : register(b0)
@@ -30,6 +30,5 @@ void SpriteVertexShader(inout float4 color    : COLOR0,
 float4 SpritePixelShader(float4 color    : COLOR0,
                         float2 texCoord : TEXCOORD0) : SV_Target0
 {
-	return color;
-   //return Diffuse.Sample(DiffuseSampler, texCoord) * color + float4(1.0, 0, 0, 1.0);
+   return Diffuse.Sample(DiffuseSampler, texCoord) * color;
 }

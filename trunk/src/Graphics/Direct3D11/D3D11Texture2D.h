@@ -28,6 +28,8 @@ namespace Direct3D11
 
 		virtual void SetSamplerState(const SamplerState* state) override;
 
+		void* GetHandle() { return m_shaderResourceView; }
+
 	private:
 		static int convertAddressMode(TextureAddressMode mode);
 	};

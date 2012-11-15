@@ -3,6 +3,7 @@
 #include "d3d11.h"
 #include "D3D11Shader.h"
 #include "D3D11ConstantBuffer.h"
+#include "D3D11Texture2D.h"
 #include "../../Utils.h"
 
 namespace Nxna
@@ -81,8 +82,20 @@ namespace Direct3D11
 		ID3D11VertexShader* vertexShader = static_cast<ID3D11VertexShader*>(m_permutations[programIndex].D3DVertexShader);
 		ID3D11PixelShader* pixelShader = static_cast<ID3D11PixelShader*>(m_permutations[programIndex].D3DPixelShader);
 
-		static_cast<ID3D11DeviceContext*>(static_cast<Direct3D11Device*>(m_device)->GetDeviceContext())->VSSetShader(vertexShader, nullptr, 0);
-		static_cast<ID3D11DeviceContext*>(static_cast<Direct3D11Device*>(m_device)->GetDeviceContext())->PSSetShader(pixelShader, nullptr, 0);
+		ID3D11DeviceContext* context = static_cast<ID3D11DeviceContext*>(static_cast<Direct3D11Device*>(m_device)->GetDeviceContext());
+		context->VSSetShader(vertexShader, nullptr, 0);
+		context->PSSetShader(pixelShader, nullptr, 0);
+
+		// while we're at it, let's set the textures
+		for (int i = 0; i < m_parameterList.size(); i++)
+		{
+			if (m_parameterList[i]->GetType() == EffectParameterType_Texture2D)
+			{
+				D3D11Texture2D* texture = static_cast<D3D11Texture2D*>(m_parameterList[i]->GetValueTexture2D());
+				ID3D11ShaderResourceView* d3dTex = (ID3D11ShaderResourceView*)texture->GetHandle();
+				context->PSSetShaderResources(0, 1, &d3dTex);
+			}
+		}
 	}
 }
 }
