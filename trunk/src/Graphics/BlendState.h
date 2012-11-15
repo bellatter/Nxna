@@ -28,7 +28,7 @@ namespace Graphics
 
 	class BlendState
 	{
-		friend GraphicsDevice;
+		friend class GraphicsDevice;
 
 		static BlendState m_additive;
 		static BlendState m_alphaBlend;
