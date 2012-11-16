@@ -441,7 +441,9 @@ namespace OpenGl
 
 	void OpenGlDevice::GetBackBufferData(void* data)
 	{
+#ifndef USING_OPENGLES
 		glReadBuffer(GL_FRONT);
+#endif
  
 		glReadPixels(0, 0, m_screenWidth, m_screenHeight, GL_RGB, GL_UNSIGNED_BYTE, data);
 	}

@@ -57,8 +57,11 @@ namespace Graphics
 	Nxna::Vector2 SpriteFont::MeasureString(const wchar_t* text)
 	{
 		Nxna::Vector2 size(0, 0);
-
+#if defined NXNA_PLATFORM_ANDROID
+		int len = wcslen(text);
+#else
 		int len = wcsnlen(text, 10000);
+#endif
 
 		for (int i = 0; i < len; i++)
 		{

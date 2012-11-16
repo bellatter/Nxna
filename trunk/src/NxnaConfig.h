@@ -6,7 +6,7 @@
 typedef unsigned char byte;
 
 // are we using OpenGL ES?
-#if defined NXNA_PLATFORM_APPLE_IOS || defined NXNA_PLATFORM_NACL
+#if defined NXNA_PLATFORM_APPLE_IOS || defined NXNA_PLATFORM_NACL || defined NXNA_PLATFORM_ANDROID
 #define USING_OPENGLES
 #endif
 
