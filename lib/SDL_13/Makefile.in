@@ -60,6 +60,7 @@ HDRS = \
 	SDL_loadso.h \
 	SDL_log.h \
 	SDL_main.h \
+	SDL_messagebox.h \
 	SDL_mouse.h \
 	SDL_mutex.h \
 	SDL_name.h \
@@ -77,6 +78,7 @@ HDRS = \
 	SDL_shape.h \
 	SDL_stdinc.h \
 	SDL_surface.h \
+	SDL_system.h \
 	SDL_syswm.h \
 	SDL_thread.h \
 	SDL_timer.h \
