@@ -23,6 +23,10 @@
 #define NXNA_PLATFORM_APPLE_IOS
 #endif
 
+// Android
+#elif defined __ANDROID__
+#define NXNA_PLATFORM_ANDROID
+
 // assume linux
 #else
 #define NXNA_PLATFORM_NIX

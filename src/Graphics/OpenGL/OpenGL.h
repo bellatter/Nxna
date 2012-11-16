@@ -4,7 +4,7 @@
 #include "../../NxnaConfig.h"
 
 #ifdef USING_OPENGLES
-#ifdef NXNA_PLATFORM_NACL
+#if defined NXNA_PLATFORM_NACL || defined NXNA_PLATFORM_ANDROID
 #include <GLES2/gl2.h>
 #else
 #include <OpenGLES/ES2/gl.h>

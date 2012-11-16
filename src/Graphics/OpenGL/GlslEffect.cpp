@@ -349,7 +349,14 @@ namespace OpenGl
 				if (type == GL_BOOL ||
 					type == GL_INT ||
 					type == GL_FLOAT ||
-					type == GL_SAMPLER_1D || type == GL_SAMPLER_2D || type == GL_SAMPLER_3D || type == GL_SAMPLER_CUBE)
+#ifndef USING_OPENGLES
+					type == GL_SAMPLER_1D || 
+#endif
+					type == GL_SAMPLER_2D || 
+#ifndef USING_OPENGLES
+					type == GL_SAMPLER_3D ||
+#endif
+					type == GL_SAMPLER_CUBE)
 					numElements = 1;
 				else if (type == GL_BOOL_VEC2 ||
 					type == GL_INT_VEC2 ||
