@@ -14,16 +14,16 @@ There are some differences between XNA and NXNA:
 
 NXNA currently builds and runs (although there's always a chance that support for a particular platform is broken at any given time) on Windows, Linux, MacOSX, and iOS.
 
-NXNA depends on SDL 1.3, Glew (on non-OpenGL ES platforms), and OpenAL.
+NXNA depends on SDL 2.0 (on Linux and OSX), Glew (on non-OpenGL ES platforms), and OpenAL.
 
 == Windows ==
 Just open the nxna.vcxproj in Visual C++ 2010 and build.
 
 == Linux ==
-First, build SDL 1.3. It's in the lib/SDL_13 folder. Then use the genMakefile script to generate a makefile, then build using the generated makefile.
+First, build SDL 2.0. It's in the lib/SDL_13 folder. Then use the genMakefile script to generate a makefile, then build using the generated makefile.
 
 == MacOSX ==
-First, build SDL 1.3. It's in the lib/SDL_13 folder. Then use the genCMake script to generate a CMake script, then use that script to generate an Xcode project, then build with Xcode.
+First, build SDL 2.0. It's in the lib/SDL_13 folder. Then use the genCMake script to generate a CMake script, then use that script to generate an Xcode project, then build with Xcode.
 
 = Using NXNA =
 Take a look at the NxnaHelloWorld project inside the tests folder. It contains a very simple project that you can expand upon.
