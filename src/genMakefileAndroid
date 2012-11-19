@@ -1,0 +1,15 @@
+echo '# this is NOT a complete makefile. It must be included from your "main" makefile.'
+echo '# Make sure you set the NXNA_PATH variable to the path of the NXNA root directory'
+echo '# (the one with the src and lib folders), otherwise this wont work.'
+echo
+echo 'include $(CLEAR_VARS)'
+echo
+echo 'LOCAL_CFLAGS += -DDISABLE_OPENAL'
+echo 'LOCAL_MODULE := nxna'
+echo -n 'LOCAL_SRC_FILES := ../../$(NXNA_PATH)/../lib/SDL_13/src/main/android/SDL_android_main.cpp '
+grep "<ClCompile Include=" nxna.vcxproj | sed 's/\\/\//g' | awk '{ printf "../../$(NXNA_PATH)/"; printf substr($2, 10, length($2) - 10); printf " "  }'
+echo
+echo 'LOCAL_C_INCLUDES := $(NXNA_PATH)/../lib/SDL_13/include'
+echo
+echo 'include $(BUILD_STATIC_LIBRARY)'
+
