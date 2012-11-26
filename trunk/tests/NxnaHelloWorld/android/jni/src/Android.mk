@@ -1,4 +1,5 @@
 LOCAL_PATH := $(call my-dir)
+MYPATH := $(LOCAL_PATH)
 
 include $(CLEAR_VARS)
 
@@ -7,8 +8,10 @@ NXNA_PATH := ../../../src
 include ../../../src/Android.mk
 
 # Build SDL
-#include ../../../lib/SDL_13/Android.mk
+LOCAL_PATH := $(MYPATH)
+include ../../../lib/SDL_13/Android.mk
 
+LOCAL_PATH := $(MYPATH)
 LOCAL_MODULE := main
 LOCAL_MODULE_FILENAME := main
 SDL_PATH := ../SDL
