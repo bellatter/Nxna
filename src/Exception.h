@@ -32,4 +32,23 @@ public:
 	const int GetLine() { return m_line; }
 };
 
+class ArgumentException : public Exception
+{
+public:
+	ArgumentException(const std::string& parameter)
+		: Exception("Invalid argument: " + parameter)
+	{
+	}
+
+	ArgumentException(const std::string& message, const std::string& parameter)
+		: Exception(message + ": " + parameter)
+	{
+	}
+
+	ArgumentException(const std::string& message, const std::string& parameter, const char* file, int line)
+		: Exception(message + ": " + parameter, file, line)
+	{
+	}
+};
+
 #endif // EXCEPTION_H

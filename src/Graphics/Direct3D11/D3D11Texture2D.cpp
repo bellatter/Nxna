@@ -1,4 +1,5 @@
 #include "../../NxnaConfig.h"
+#include "../../MathHelper.h"
 
 #if defined NXNA_PLATFORM_WIN32
 
@@ -23,6 +24,12 @@ namespace Direct3D11
 
 	void D3D11Texture2D::SetData(int level, byte* pixels, int length)
 	{
+		// TODO: get mipmapping working
+		if (level > 0) return;
+
+		int mipWidth = m_width >> level;
+		int mipHeight = m_height >> level;
+
 		D3D11_TEXTURE2D_DESC desc;
 		desc.ArraySize = 1;
 		if (m_format == SurfaceFormat_Color)
@@ -45,7 +52,13 @@ namespace Direct3D11
 
 		D3D11_SUBRESOURCE_DATA initData;
 		initData.pSysMem = pixels;
-		initData.SysMemPitch = 4 * m_width;
+		if (m_format == SurfaceFormat_Color)
+			initData.SysMemPitch = 4 * m_width;
+		else
+		{
+			int numBlocks = Math::Max(1, m_width / 4);
+			initData.SysMemPitch = numBlocks * (m_format == SurfaceFormat_Dxt1 ? 8 : 16);
+		}
 
 		ID3D11Texture2D* texture;
 		if (FAILED(static_cast<ID3D11Device*>(static_cast<Direct3D11Device*>(m_device)->GetDevice())->CreateTexture2D(&desc, &initData, &texture)) || texture == nullptr)
