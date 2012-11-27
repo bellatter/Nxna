@@ -24,11 +24,15 @@ namespace Direct3D11
 	{
 		m_caps = new GraphicsDeviceCapabilities();
 
+		m_instance = this;
 		m_indices = nullptr;
 		m_vertices = nullptr;
 		m_indexBufferDirty = true;
 		m_vertexBufferDirty = true;
 		m_blendStateDirty = true;
+
+		m_caps->SupportsFullNonPowerOfTwoTextures = true;
+		m_caps->SupportsShaders = true;
 	}
 
 	void Direct3D11Device::OnWindowCreated(void* window, int width, int height)
