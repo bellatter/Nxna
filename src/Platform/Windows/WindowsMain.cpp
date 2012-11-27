@@ -7,7 +7,7 @@
 
 extern int NxnaMain(int argc, char* argv[]);
 
-INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     PSTR lpCmdLine, INT nCmdShow)
 {
     return NxnaMain(0, nullptr);

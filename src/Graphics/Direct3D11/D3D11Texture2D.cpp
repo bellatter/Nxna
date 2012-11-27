@@ -25,7 +25,14 @@ namespace Direct3D11
 	{
 		D3D11_TEXTURE2D_DESC desc;
 		desc.ArraySize = 1;
-		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		if (m_format == SurfaceFormat_Color)
+			desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		else if (m_format == SurfaceFormat_Dxt1)
+			desc.Format = DXGI_FORMAT_BC1_UNORM;
+		else if (m_format == SurfaceFormat_Dxt3)
+			desc.Format = DXGI_FORMAT_BC2_UNORM;
+		else if (m_format == SurfaceFormat_Dxt5)
+			desc.Format = DXGI_FORMAT_BC3_UNORM;
 		desc.Width = m_width;
 		desc.Height = m_height;
 		desc.MipLevels = 1;
