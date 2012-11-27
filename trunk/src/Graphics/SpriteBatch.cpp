@@ -38,7 +38,7 @@ namespace Graphics
 		
 		if (m_vertexBuffer == nullptr)
 		{
-			m_vertexBuffer = device->CreateDynamicVertexBuffer(m_declaration, 0, BufferUsage_WriteOnly);
+			m_vertexBuffer = device->CreateDynamicVertexBuffer(m_declaration, MAX_BATCH_SIZE * 4, BufferUsage_WriteOnly);
 		}
 
 		if (m_indexBuffer == nullptr)

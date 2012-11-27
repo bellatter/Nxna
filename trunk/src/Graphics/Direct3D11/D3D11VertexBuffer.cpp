@@ -59,9 +59,12 @@ namespace Direct3D11
 
 	void D3D11DynamicVertexBuffer::SetData(void* data, int vertexCount)
 	{
+		if (vertexCount > m_vertexCount)
+			throw GraphicsException("Too many vertices", __FILE__, __LINE__);
+
 		if (vertexCount > 0 && m_buffer == nullptr)
 		{
-			int numBytes = m_declaration->GetStride() * vertexCount;
+			int numBytes = m_declaration->GetStride() * m_vertexCount;
 
 			D3D11_BUFFER_DESC desc;
 			ZeroMemory(&desc, sizeof(desc));
@@ -72,18 +75,13 @@ namespace Direct3D11
 
 			if (FAILED(static_cast<ID3D11Device*>(static_cast<Direct3D11Device*>(D3D11VertexBuffer::GetGraphicsDevice())->GetDevice())->CreateBuffer(&desc, nullptr, (ID3D11Buffer**)&m_buffer)))
 				throw GraphicsException("Unable to create dynamic vertex buffer");
-
-			m_vertexCount = vertexCount;
 		}
 
-		m_vertexCount = vertexCount;
 		int numBytes = m_declaration->GetStride() * vertexCount;
 
 		D3D11_MAPPED_SUBRESOURCE mappedBuffer;
 
 		ID3D11DeviceContext* deviceContext = static_cast<ID3D11DeviceContext*>(static_cast<Direct3D11Device*>(D3D11VertexBuffer::GetGraphicsDevice())->GetDeviceContext());
-
-		//HRESULT r = ;
 
 		if (FAILED(deviceContext->Map(static_cast<ID3D11Buffer*>(m_buffer), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedBuffer)))
 			throw GraphicsException("Unable to create dynamic vertex buffer");

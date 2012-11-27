@@ -357,6 +357,9 @@ namespace Direct3D11
 
 	DynamicVertexBuffer* Direct3D11Device::CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)
 	{
+		if (vertexCount <= 0)
+			throw ArgumentException("vertexCount");
+
 		return new D3D11DynamicVertexBuffer(this, vertexDeclaration, vertexCount, usage);
 	}
 
