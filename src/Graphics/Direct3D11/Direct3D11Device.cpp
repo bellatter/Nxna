@@ -6,7 +6,9 @@
 #include "D3D11Texture2D.h"
 #include "D3D11VertexBuffer.h"
 #include "D3D11IndexBuffer.h"
+#include "HlslBasicEffect.h"
 #include "HlslSpriteEffect.h"
+#include "HlslDualTextureEffect.h"
 #include "D3D11Utils.h"
 #include "../GraphicsDeviceCapabilities.h"
 #include "../../Utils.h"
@@ -332,7 +334,7 @@ namespace Direct3D11
 
 	BasicEffect* Direct3D11Device::CreateBasicEffect()
 	{
-		return nullptr;
+		return new HlslBasicEffect(this);
 	}
 
 	SpriteEffect* Direct3D11Device::CreateSpriteEffect() 
@@ -342,7 +344,7 @@ namespace Direct3D11
 
 	DualTextureEffect* Direct3D11Device::CreateDualTextureEffect()
 	{
-		return nullptr;
+		return new HlslDualTextureEffect(this);
 	}
 
 	AlphaTestEffect* Direct3D11Device::CreateAlphaTestEffect()
