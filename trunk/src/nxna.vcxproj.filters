@@ -215,6 +215,8 @@
     <ClInclude Include="Graphics\IContantBufferPmpl.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11ConstantBuffer.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11Utils.h" />
+    <ClInclude Include="Graphics\Direct3D11\HlslDualTextureEffect.h" />
+    <ClInclude Include="Graphics\Direct3D11\HlslBasicEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -353,5 +355,10 @@
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Direct3D11\D3D11ConstantBuffer.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\HlslDualTextureEffect.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\HlslBasicEffect.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\Direct3D11\ShaderSource\BasicEffect.fx" />
   </ItemGroup>
 </Project>
