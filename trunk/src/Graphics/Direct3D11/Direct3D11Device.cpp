@@ -420,7 +420,7 @@ namespace Direct3D11
 				// Set up the description of the stencil state.
 				depthStencilDesc.DepthEnable = m_depthState.DepthBufferEnable;
 				depthStencilDesc.DepthWriteMask = m_depthState.DepthBufferWriteEnable ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
-				depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+				depthStencilDesc.DepthFunc = D3D11Utils::ConvertComparisonFunc(m_depthState.DepthBufferFunction);
 
 				depthStencilDesc.StencilEnable = m_depthState.StencilEnable;
 				depthStencilDesc.StencilReadMask = 0xFF;

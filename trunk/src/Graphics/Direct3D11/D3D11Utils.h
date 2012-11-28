@@ -49,6 +49,29 @@ namespace Direct3D11
 			return D3D11_BLEND_OP_MAX;
 		
 		}
+
+		static D3D11_COMPARISON_FUNC ConvertComparisonFunc(CompareFunction func)
+		{
+			if (func == CompareFunction_Always)
+				return D3D11_COMPARISON_ALWAYS;
+			if (func == CompareFunction_Equal)
+				return D3D11_COMPARISON_EQUAL;
+			if (func == CompareFunction_Greater)
+				return D3D11_COMPARISON_GREATER;
+			if (func == CompareFunction_GreaterEqual)
+				return D3D11_COMPARISON_GREATER_EQUAL;
+			if (func == CompareFunction_Less)
+				return D3D11_COMPARISON_LESS;
+			if (func == CompareFunction_LessEqual)
+				return D3D11_COMPARISON_LESS_EQUAL;
+			if (func == CompareFunction_Never)
+				return D3D11_COMPARISON_NEVER;
+			if (func == CompareFunction_NotEqual)
+				return D3D11_COMPARISON_NOT_EQUAL;
+
+			// we should never get here
+			return D3D11_COMPARISON_NEVER;
+		}
 	};
 }
 }
