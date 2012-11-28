@@ -91,13 +91,14 @@ namespace Direct3D11
 		context->PSSetShader(pixelShader, nullptr, 0);
 
 		// while we're at it, let's set the textures
+		int textureCount = 0;
 		for (int i = 0; i < m_parameterList.size(); i++)
 		{
 			if (m_parameterList[i]->GetType() == EffectParameterType_Texture2D)
 			{
 				D3D11Texture2D* texture = static_cast<D3D11Texture2D*>(m_parameterList[i]->GetValueTexture2D());
 				ID3D11ShaderResourceView* d3dTex = (ID3D11ShaderResourceView*)texture->GetHandle();
-				context->PSSetShaderResources(0, 1, &d3dTex);
+				context->PSSetShaderResources(textureCount++, 1, &d3dTex);
 			}
 		}
 	}
