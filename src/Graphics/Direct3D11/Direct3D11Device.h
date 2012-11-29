@@ -101,6 +101,9 @@ namespace Direct3D11
 		void SetCurrentEffect(HlslEffect* effect, int program) { m_effect = effect; m_effectProgram = program; m_effectDirty = true; }
 		unsigned int CalcShaderHash(const byte* bytecode, int length);
 
+	protected:
+		virtual void SetSamplers() override;
+
 	private:
 		void applyDirtyStates();
 		unsigned int hashVertexDeclaration(const VertexDeclaration& decl);

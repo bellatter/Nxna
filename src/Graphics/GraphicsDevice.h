@@ -9,6 +9,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Texture2D.h"
+#include "SamplerStateCollection.h"
 #include "../Vector3.h"
 #include "../Rectangle.h"
 
@@ -84,6 +85,7 @@ namespace Graphics
 	protected:
 		static GraphicsDevice* m_instance;
 		GraphicsDeviceCapabilities* m_caps;
+		SamplerStateCollection m_samplers;
 
 	public:
 		virtual ~GraphicsDevice();
@@ -122,6 +124,8 @@ namespace Graphics
 		virtual DynamicVertexBuffer* CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) = 0;
 		virtual IndexBuffer* CreateIndexBuffer(IndexElementSize elementSize) = 0;
 
+		SamplerStateCollection& GetSamplerStates() { return m_samplers; }
+
 		virtual void GetBackBufferData(void* data) = 0;
 
 		GraphicsDeviceCapabilities* GetCaps() { return m_caps; }
@@ -131,7 +135,9 @@ namespace Graphics
 	protected:
 		void** GetInternalHandle(BlendState* blendState) { return &blendState->m_handle; }
 		void** GetInternalHandle(DepthStencilState* depthStencilState) { return &depthStencilState->m_handle; }
+		void *const* GetInternalHandle(const SamplerState* samplerState) { return &samplerState->m_handle; }
 
+		virtual void SetSamplers() = 0;
 	};
 
 	class GraphicsException : public Exception

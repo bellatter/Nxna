@@ -29,6 +29,8 @@ namespace Graphics
 
 	class SamplerState
 	{
+		friend class GraphicsDevice;
+
 		static SamplerState m_linearClamp;
 		static SamplerState m_linearWrap;
 

@@ -26,8 +26,6 @@ namespace Direct3D11
 
 		virtual void SetData(int level, byte* pixels, int length) override;
 
-		virtual void SetSamplerState(const SamplerState* state) override;
-
 		void* GetHandle() { return m_shaderResourceView; }
 
 	private:

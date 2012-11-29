@@ -13,6 +13,8 @@ namespace Nxna
 {
 namespace Graphics
 {
+	class SamplerStateCollection;
+
 namespace OpenGl
 {
 	class OpenGlDevice;
@@ -28,6 +30,8 @@ namespace OpenGl
 
 	class GlslEffect : virtual public Effect
 	{
+		friend class OpenGlDevice;
+
 		struct GlslUniform
 		{
 			EffectParameter* Param;
@@ -113,6 +117,8 @@ namespace OpenGl
 		EffectParameter* AddParameter(EffectParameterType type, int numElements, void* handle, const char* name);
 
 		void ApplyProgram(int programIndex);
+
+		void ApplySamplerStates(SamplerStateCollection* samplerStates);
 
 	private:
 		int compile(const std::string& source, const char* defines, bool vertex);
