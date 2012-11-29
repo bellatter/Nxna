@@ -377,6 +377,48 @@ namespace Direct3D11
 		return Utils::CalcHash(bytecode, length);
 	}
 
+	void Direct3D11Device::SetSamplers()
+	{
+		ID3D11PixelShader* shader;
+		m_deviceContext->PSGetShader(&shader, nullptr, nullptr);
+
+		for (int i = 0; i < m_samplers.GetCount(); i++)
+		{
+			if (m_samplers.IsDirty(i))
+			{
+				const SamplerState* state = m_samplers.Get(i);
+				if (state == nullptr) continue;
+
+				void *const* samplerHandle = GetInternalHandle(state);
+
+				if (*samplerHandle == nullptr)
+				{
+					D3D11_SAMPLER_DESC sampler;
+					sampler.Filter = D3D11Utils::ConvertTextureFilter(state->Filter);
+					sampler.AddressU = D3D11Utils::ConvertTextureAddressMode(state->AddressU);
+					sampler.AddressV = D3D11Utils::ConvertTextureAddressMode(state->AddressV);
+					sampler.AddressW = D3D11Utils::ConvertTextureAddressMode(state->AddressW);
+					sampler.MipLODBias = state->MipMapLevelOfDetailBias;
+					sampler.MaxAnisotropy = state->MaxAnisotropy;
+					sampler.ComparisonFunc =  D3D11_COMPARISON_ALWAYS;
+					sampler.BorderColor[0] = 0;
+					sampler.BorderColor[1] = 0;
+					sampler.BorderColor[2] = 0;
+					sampler.BorderColor[3] = 0;
+					sampler.MinLOD = 0;
+					sampler.MaxLOD = D3D11_FLOAT32_MAX;
+
+					if (FAILED(m_device->CreateSamplerState(&sampler, (ID3D11SamplerState**)samplerHandle)))
+						throw GraphicsException("Unable to create sampler state");
+				}
+
+				m_deviceContext->PSSetSamplers(i, 1, (ID3D11SamplerState**)samplerHandle);
+			}
+		}
+
+		m_samplers.MakeClean();
+	}
+
 	void Direct3D11Device::applyDirtyStates()
 	{
 		if (m_blendStateDirty)
@@ -493,6 +535,8 @@ namespace Direct3D11
 		}
 
 		m_effect->SetConstantBuffers();
+
+		SetSamplers();
 	}
 
 	ID3D11InputLayout* Direct3D11Device::getLayout(HlslEffect* shader, int program, const VertexDeclaration& decl)

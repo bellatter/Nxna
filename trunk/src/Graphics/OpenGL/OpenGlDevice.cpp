@@ -270,8 +270,7 @@ namespace OpenGl
 		}
 #endif
 
-		if (m_vertexPointersNeedSetup)
-			setupVertexBufferPointers(nullptr);
+		applyDirtyStates();
 
 		IndexElementSize elementSize = m_indices->GetElementSize();
 
@@ -458,6 +457,11 @@ namespace OpenGl
 		return (char*)glGetString(GL_RENDERER);
 	}
 
+	void OpenGlDevice::SetSamplers()
+	{
+		m_effect->ApplySamplerStates(&m_samplers);
+	}
+
 	void OpenGlDevice::setClearColor(const Color& c)
 	{
 		m_clearColor = c;
@@ -478,6 +482,14 @@ namespace OpenGl
 	{
 		m_clearStencil = stencil;
 		glClearStencil(stencil);
+	}
+
+	void OpenGlDevice::applyDirtyStates()
+	{
+		if (m_vertexPointersNeedSetup)
+			setupVertexBufferPointers(nullptr);
+
+		SetSamplers();
 	}
 
 	void OpenGlDevice::setupVertexBufferPointers(void* verts)

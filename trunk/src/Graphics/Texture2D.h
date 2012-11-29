@@ -64,7 +64,7 @@ namespace Graphics
 		virtual void SetData(int level, byte* pixels, int length) = 0;
 
 		// HACK: this is NOT how XNA works! we need to find a better way to do this.
-		virtual void SetSamplerState(const SamplerState* state) = 0;
+		//virtual void SetSamplerState(const SamplerState* state) = 0;
 
 		static Texture2D* LoadFrom(Content::FileStream* stream);
 		static Texture2D* LoadFrom(Content::XnbReader* stream);

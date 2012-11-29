@@ -112,6 +112,7 @@
     <ClInclude Include="Graphics\OpenGL\OpenGLDevice.h" />
     <ClInclude Include="Graphics\RasterizerState.h" />
     <ClInclude Include="Graphics\SamplerState.h" />
+    <ClInclude Include="Graphics\SamplerStateCollection.h" />
     <ClInclude Include="Graphics\SpriteBatch.h" />
     <ClInclude Include="Graphics\SpriteEffect.h" />
     <ClInclude Include="Graphics\SpriteFont.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Graphics\OpenGL\GlslAlphaTestEffect.cpp" />
     <ClCompile Include="Graphics\RasterizerState.cpp" />
     <ClCompile Include="Graphics\SamplerState.cpp" />
+    <ClCompile Include="Graphics\SamplerStateCollection.cpp" />
     <ClCompile Include="Graphics\VertexDeclaration.cpp" />
     <ClCompile Include="IGraphicsDeviceManager.cpp" />
     <ClCompile Include="Input\GamePad.cpp" />

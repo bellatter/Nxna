@@ -72,6 +72,44 @@ namespace Direct3D11
 			// we should never get here
 			return D3D11_COMPARISON_NEVER;
 		}
+
+		static D3D11_FILTER ConvertTextureFilter(TextureFilter filter)
+		{
+			if (filter == TextureFilter_Linear)
+				return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+			if (filter == TextureFilter_Point)
+				return D3D11_FILTER_MIN_MAG_MIP_POINT;
+			if (filter == TextureFilter_Anisotropic)
+				return D3D11_FILTER_ANISOTROPIC;
+			if (filter == TextureFilter_LinearMipPoint)
+				return D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+			if (filter == TextureFilter_PointMipLinear)
+				return D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+			if (filter == TextureFilter_MinLinearMagPointMipLinear)
+				return D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+			if (filter == TextureFilter_MinLinearMagPointMipPoint)
+				return D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
+			if (filter == TextureFilter_MinPointMagLinearMipLinear)
+				return D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
+			if (filter == TextureFilter_MinPointMagLinearMipPoint)
+				return D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
+
+			// we should never get hear
+			return D3D11_FILTER_MIN_MAG_MIP_POINT;
+		}
+
+		static D3D11_TEXTURE_ADDRESS_MODE ConvertTextureAddressMode(TextureAddressMode mode)
+		{
+			if (mode == TextureAddressMode_Clamp)
+				return D3D11_TEXTURE_ADDRESS_CLAMP;
+			if (mode == TextureAddressMode_Mirror)
+				return D3D11_TEXTURE_ADDRESS_MIRROR;
+			if (mode == TextureAddressMode_Wrap)
+				return D3D11_TEXTURE_ADDRESS_WRAP;
+
+			// we should never get here
+			return D3D11_TEXTURE_ADDRESS_CLAMP;
+		}
 	};
 }
 }

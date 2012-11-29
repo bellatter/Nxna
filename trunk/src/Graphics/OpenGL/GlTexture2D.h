@@ -28,7 +28,7 @@ namespace OpenGl
 
 		unsigned int GetGlTexture() { return m_glTex; }
 
-		virtual void SetSamplerState(const SamplerState* state) override;
+		virtual void SetSamplerState(const SamplerState* state);// override;
 
 	private:
 		static int convertAddressMode(TextureAddressMode mode);

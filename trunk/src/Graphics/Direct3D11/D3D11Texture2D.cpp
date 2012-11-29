@@ -74,11 +74,6 @@ namespace Direct3D11
 
 		texture->Release();
 	}
-
-	void D3D11Texture2D::SetSamplerState(const SamplerState* state)
-	{
-		// TODO
-	}
 }
 }
 }

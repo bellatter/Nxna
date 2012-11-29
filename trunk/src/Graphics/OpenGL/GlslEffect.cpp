@@ -5,6 +5,7 @@
 #include "GlslEffect.h"
 #include "GlTexture2D.h"
 #include "OpenGLDevice.h"
+#include "../SamplerStateCollection.h"
 
 namespace Nxna
 {
@@ -229,6 +230,37 @@ namespace OpenGl
 			}
 
 			GlException::ThrowIfError(__FILE__, __LINE__);
+		}
+	}
+
+	void GlslEffect::ApplySamplerStates(SamplerStateCollection* samplerStates)
+	{
+		for (std::vector<GlslUniform>::iterator itr = m_programs[m_boundProgramIndex].Uniforms.begin();
+			itr != m_programs[m_boundProgramIndex].Uniforms.end(); itr++)
+		{
+			EffectParameterType type = (*itr).Param->GetType();
+
+			if (type == EffectParameterType_Texture2D)
+			{
+				if ((*itr).Param->GetValueTexture2D() != nullptr)
+				{
+					// look for the index of the texture
+					int texindex = 0;
+					for (int i = 0; i < m_textureParams.size(); i++)
+					{
+						if (m_textureParams[i] == (*itr).Param)
+						{
+							texindex = i;
+							break;
+						}
+					}
+
+					glActiveTexture(GL_TEXTURE0 + texindex);
+					glBindTexture(GL_TEXTURE_2D, static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D())->GetGlTexture());
+					
+					static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D())->SetSamplerState(samplerStates->Get(texindex));
+				}
+			}
 		}
 	}
 

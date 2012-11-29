@@ -80,7 +80,11 @@ namespace OpenGl
 		int GetVersion() { return m_version; }
 		int GetGlslVersion() { return m_glslVersion; }
 
+	protected:
+		virtual void SetSamplers() override;
+
 	private:
+		void applyDirtyStates();
 
 		void setClearColor(const Color& c);
 		void setClearDepth(float depth);
