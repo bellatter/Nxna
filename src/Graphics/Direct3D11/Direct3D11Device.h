@@ -46,9 +46,11 @@ namespace Direct3D11
 		bool m_effectDirty;
 		bool m_blendStateDirty;
 		bool m_depthStencilStateDirty;
+		bool m_rasterizerStateDirty;
 
 		BlendState m_blendState;
 		DepthStencilState m_depthState;
+		RasterizerState m_rasterizerState;
 
 		std::map<uint64_t, ID3D11InputLayout*> m_layouts;
 

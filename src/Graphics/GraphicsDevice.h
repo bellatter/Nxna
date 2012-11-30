@@ -136,6 +136,7 @@ namespace Graphics
 		void** GetInternalHandle(BlendState* blendState) { return &blendState->m_handle; }
 		void** GetInternalHandle(DepthStencilState* depthStencilState) { return &depthStencilState->m_handle; }
 		void *const* GetInternalHandle(const SamplerState* samplerState) { return &samplerState->m_handle; }
+		void** GetInternalHandle(RasterizerState* rasterizerState) { return &rasterizerState->m_handle; }
 
 		virtual void SetSamplers() = 0;
 	};
