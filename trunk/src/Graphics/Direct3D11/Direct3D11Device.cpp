@@ -32,6 +32,7 @@ namespace Direct3D11
 		m_indexBufferDirty = true;
 		m_vertexBufferDirty = true;
 		m_blendStateDirty = true;
+		m_rasterizerStateDirty = true;
 
 		m_caps->SupportsFullNonPowerOfTwoTextures = true;
 		m_caps->SupportsShaders = true;
@@ -207,7 +208,11 @@ namespace Direct3D11
 		return CullMode::CullMode_CullClockwiseFace;
 	}
 
-	void Direct3D11Device::SetRasterizerState(const RasterizerState* state) {}
+	void Direct3D11Device::SetRasterizerState(const RasterizerState* state)
+	{
+		m_rasterizerState = *state;
+		m_rasterizerStateDirty = true;
+	}
 
 	DepthStencilState Direct3D11Device::GetDepthStencilState()
 	{
@@ -489,6 +494,42 @@ namespace Direct3D11
 			m_deviceContext->OMSetDepthStencilState((ID3D11DepthStencilState*)*internalHandle, 1);
 
 			m_depthStencilStateDirty = false;
+		}
+
+		if (m_rasterizerStateDirty)
+		{
+			void** internalHandle = GetInternalHandle(&m_rasterizerState);
+
+			if (*internalHandle == nullptr)
+			{
+				D3D11_RASTERIZER_DESC rasterizerDesc;
+				ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
+
+				rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+				if (m_rasterizerState.TheCullMode == CullMode_CullClockwiseFace)
+				{
+					rasterizerDesc.CullMode = D3D11_CULL_BACK;
+					rasterizerDesc.FrontCounterClockwise = true;
+				}
+				else if (m_rasterizerState.TheCullMode == CullMode_CullCounterClockwiseFace)
+				{
+					rasterizerDesc.CullMode = D3D11_CULL_BACK;
+					rasterizerDesc.FrontCounterClockwise = false;
+				}
+				else
+				{
+					rasterizerDesc.CullMode = D3D11_CULL_NONE;
+					rasterizerDesc.FrontCounterClockwise = true;
+				}
+				rasterizerDesc.DepthClipEnable = true;
+
+				if (FAILED(m_device->CreateRasterizerState(&rasterizerDesc, (ID3D11RasterizerState**)internalHandle)))
+					throw GraphicsException("Unable to create D3D11 rasterizer state", __FILE__, __LINE__);
+			}
+
+			m_deviceContext->RSSetState((ID3D11RasterizerState*)*internalHandle);
+
+			m_rasterizerStateDirty = false;
 		}
 
 		if (m_indexBufferDirty)

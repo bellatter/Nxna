@@ -14,15 +14,21 @@ namespace Graphics
 
 	class RasterizerState
 	{
+		friend class GraphicsDevice;
+
 		static RasterizerState m_cullClockwise;
 		static RasterizerState m_cullCounterClockwise;
 		static RasterizerState m_cullNone;
+
+		void* m_handle;
 
 	public:
 
 		RasterizerState()
 		{
 			TheCullMode = CullMode_CullCounterClockwiseFace;
+
+			m_handle = nullptr;
 		}
 
 		CullMode TheCullMode;
