@@ -23,21 +23,21 @@ void BasicEffectVS(inout float4 position : SV_Position)
    position = mul(position, ModelViewProjection);
 }
 
-void BasicEffectTextureVS(inout float4 position : SV_Position,
-						inout float2 texCoord : TEXCOORD0)
+void BasicEffectTextureVS(inout float2 texCoord : TEXCOORD0,
+						inout float4 position : SV_Position)
 {
 	position = mul(position, ModelViewProjection);
 }
 
-void BasicEffectColorVS(inout float4 position : SV_Position,
-						inout float4 color : TEXCOORD0)
+void BasicEffectColorVS(inout float4 color : COLOR0,
+						inout float4 position : SV_Position)
 {
 	position = mul(position, ModelViewProjection);
 }
 
-void BasicEffectColorTextureVS(inout float4 position : SV_Position,
-						inout float2 texCoord : TEXCOORD0,
-						inout float4 color : COLOR0)
+void BasicEffectColorTextureVS(inout float2 texCoord : TEXCOORD0,
+						inout float4 color : COLOR0,
+						inout float4 position : SV_Position)
 {
 	position = mul(position, ModelViewProjection);
 }
