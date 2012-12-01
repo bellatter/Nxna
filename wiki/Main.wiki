@@ -4,7 +4,6 @@ Nxna ("Not XNA") is an implementation of the Microsoft XNA 4.0 Framework in unma
 
 There are some differences between XNA and NXNA:
 
-  * XNA has sampler states. NXNA does not implement sampler states. Instead you have to use texture parameters, like in plain OpenGL. Hopefully someday sampler states will be implemented.
   * XNA supports programmable shaders in HLSL. NXNA only currently supports the built-in shaders (it may be possible to write your own GLSL shaders and use them, but you have to use the "hacky path"). Hopefully there will someday be some kind of HLSL compiler built-in. 
   * Setting up the video device is much more primitive in NXNA. Currently you have to call GraphicsDeviceManager::SetScreenSize(). ApplyChanges() doesn't work.
   * NXNA does not have its own content pipeline mechanism. It expects all resources to be already built by the XNA content pipeline (in other words, it expects all content to be in .xnb files)
