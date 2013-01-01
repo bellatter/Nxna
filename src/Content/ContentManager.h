@@ -45,6 +45,7 @@ namespace Content
 	public:
 
 		ContentManager();
+		ContentManager(const char* rootDirectory);
 		~ContentManager();
 
 		void SetRootDirectory(const char* rootDirectory)
