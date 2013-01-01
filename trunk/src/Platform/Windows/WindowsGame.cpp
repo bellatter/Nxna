@@ -208,12 +208,12 @@ namespace Windows
 			case MouseButtonUp:
 				Nxna::Input::Mouse::InjectMouseButton(e.ParamA, false);
 				break;
-			/*case KeyDown:
-				Nxna::Input::Keyboard::InjectKeyDown(e.ParamA);
+			case KeyDown:
+				Nxna::Input::Keyboard::InjectKeyDown(translateVirtualKey(e.ParamA));
 				break;
 			case KeyUp:
-				Nxna::Input::Keyboard::InjectKeyUp(e.ParamA);
-				break;*/
+				Nxna::Input::Keyboard::InjectKeyUp(translateVirtualKey(e.ParamA));
+				break;
 			}
 		}
 	}
@@ -228,6 +228,15 @@ namespace Windows
 		m_realTime.ElapsedGameTime = (float)(time - m_preciseRealTime);
 		m_realTime.TotalGameTime = (float)time;
 		m_preciseRealTime = time;
+	}
+
+	Nxna::Input::Keys WindowsGame::translateVirtualKey(int key)
+	{
+		// TODO: add the rest of the keys
+		if (key == VK_OEM_3)
+			return Nxna::Input::Keys_OemTilde;
+
+		return Nxna::Input::Keys_None;
 	}
 }
 }
@@ -274,6 +283,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 			e.ParamA = 1;
 			e.ParamB = LOWORD(lparam);
 			e.ParamC = HIWORD(lparam);
+			Nxna::Platform::Windows::addEvent(e);
+
+			return 0;
+		}
+		case WM_KEYDOWN:
+		{
+			Nxna::Platform::Windows::WinEvent e;
+			e.Type = Nxna::Platform::Windows::KeyDown;
+			e.ParamA = wparam;
+			e.ParamB = lparam;
+			e.ParamC = 0;
+			Nxna::Platform::Windows::addEvent(e);
+
+			return 0;
+		}
+		case WM_KEYUP:
+		{
+			Nxna::Platform::Windows::WinEvent e;
+			e.Type = Nxna::Platform::Windows::KeyUp;
+			e.ParamA = wparam;
+			e.ParamB = lparam;
+			e.ParamC = 0;
 			Nxna::Platform::Windows::addEvent(e);
 
 			return 0;

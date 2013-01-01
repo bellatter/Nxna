@@ -32,6 +32,8 @@ namespace Windows
 	private:
 		void handleEvents();
 		void updateTime();
+
+		static Nxna::Input::Keys translateVirtualKey(int key);
 	};
 }
 }

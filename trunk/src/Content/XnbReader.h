@@ -37,11 +37,12 @@ namespace Content
 		FileStream* GetStream() { return m_stream; }
 		int ReadTypeID();
 
-	private:
+		std::string ReadString();
 
+	private:
 		void readHeader();
 		int read7BitEncodedInt();
-		std::string readString();
+		
 		void skipString();
 	};
 }
