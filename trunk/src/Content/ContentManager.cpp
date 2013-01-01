@@ -20,6 +20,17 @@ namespace Content
 		addLoader<Nxna::Audio::SoundEffectLoader>();
 	}
 
+	ContentManager::ContentManager(const char* rootDirectory)
+	{
+		// add all the loaders
+		addLoader<Nxna::Graphics::SpriteSheet>();
+		addLoader<Nxna::Graphics::Texture2DLoader>();
+		addLoader<Nxna::Graphics::SpriteFontLoader>();
+		addLoader<Nxna::Audio::SoundEffectLoader>();
+
+		SetRootDirectory(rootDirectory);
+	}
+
 	ContentManager::~ContentManager()
 	{
 		Unload();
