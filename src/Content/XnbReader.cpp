@@ -1,6 +1,7 @@
 #include "XnbReader.h"
 #include "FileStream.h"
 #include "ContentManager.h"
+#include "../MathHelper.h"
 
 namespace Nxna
 {
@@ -21,6 +22,17 @@ namespace Content
 	int XnbReader::ReadTypeID()
 	{
 		return read7BitEncodedInt();
+	}
+	
+	std::string XnbReader::ReadString()
+	{
+		int len = read7BitEncodedInt();
+
+		byte buffer[256];
+		m_stream->Read(buffer, Math::Min(256, len));
+		buffer[255] = 0;
+
+		return std::string((char*)buffer);
 	}
 
 	void XnbReader::readHeader()
@@ -83,13 +95,6 @@ namespace Content
 		while (value & 0x80);
 
 		return result;
-	}
-
-	std::string XnbReader::readString()
-	{
-		skipString();
-
-		return "todo";
 	}
 
 	void XnbReader::skipString()
