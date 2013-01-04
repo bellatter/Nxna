@@ -58,6 +58,8 @@ namespace iOS
 		time.TotalGameTime = m_currentTime;
 		time.ElapsedGameTime = elapsedTime;
 
+		Media::MediaPlayer::Tick();
+
 		m_game->Update(time);
 	}
 

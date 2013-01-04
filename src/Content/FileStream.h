@@ -7,6 +7,13 @@ namespace Nxna
 {
 namespace Content
 {
+	enum SeekOrigin
+	{
+		SeekOrigin_Begin,
+		SeekOrigin_Current,
+		SeekOrigin_End
+	};
+
 	class FileStream
 	{
 		void* m_fp;
@@ -16,13 +23,14 @@ namespace Content
 		FileStream(void* fp);
 		~FileStream();
 
-		void Read(byte* destination, int length);
+		int Read(byte* destination, int length);
 		int ReadInt32();
 		short ReadInt16();
 		float ReadFloat();
 		byte ReadByte();
 
-		void Advance(int bytes);
+		void Seek(int offset, SeekOrigin origin);
+		void Advance(int bytes) { Seek(bytes, SeekOrigin_Current); }
 
 		int Position();
 		int Length();

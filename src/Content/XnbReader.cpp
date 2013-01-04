@@ -7,9 +7,11 @@ namespace Nxna
 {
 namespace Content
 {
-	XnbReader::XnbReader(FileStream* stream)
+	XnbReader::XnbReader(FileStream* stream, const char* name, ContentManager* contentManager)
 	{
 		m_stream = stream;
+		m_name = name;
+		m_content = contentManager;
 
 		readHeader();
 	}
@@ -29,8 +31,9 @@ namespace Content
 		int len = read7BitEncodedInt();
 
 		byte buffer[256];
-		m_stream->Read(buffer, Math::Min(256, len));
-		buffer[255] = 0;
+		int bytesToRead = Math::Min(255, len);
+		m_stream->Read(buffer, bytesToRead);
+		buffer[bytesToRead] = 0;
 
 		return std::string((char*)buffer);
 	}

@@ -56,6 +56,8 @@ namespace Content
 				m_rootDirectory += '/';
 		}
 
+		const char* GetRootDirectory() { return m_rootDirectory.c_str(); }
+
 		template<typename T>
 		T* Load(const char* name)
 		{
