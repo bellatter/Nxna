@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\lib\SDL_13\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\lib\vorbis\include;..\lib\SDL_13\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>..\lib\SDL_13\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
@@ -53,6 +53,13 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>libvorbisfile_static.lib;libogg_static.lib;libvorbis_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib\vorbis\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -72,6 +79,7 @@
     <ClInclude Include="Audio\AudioEmitter.h" />
     <ClInclude Include="Audio\AudioListener.h" />
     <ClInclude Include="Audio\AudioManager.h" />
+    <ClInclude Include="Audio\OggVorbis\OggVorbisDecoder.h" />
     <ClInclude Include="Audio\SoundEffect.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Content\ContentManager.h" />
@@ -129,6 +137,8 @@
     <ClInclude Include="Input\Touch\TouchPanel.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Media\MediaPlayer.h" />
+    <ClInclude Include="Media\Song.h" />
     <ClInclude Include="Nxna.h" />
     <ClInclude Include="NxnaConfig.h" />
     <ClInclude Include="Platform\iOS\IOSOpenGlWindow.h" />
@@ -150,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="Audio\ADPCM\ADPCMDecoder.cpp" />
     <ClCompile Include="Audio\AudioManager.cpp" />
+    <ClCompile Include="Audio\OggVorbis\OggVorbisDecoder.cpp" />
     <ClCompile Include="Audio\SoundEffect.cpp" />
     <ClCompile Include="Content\ContentManager.cpp" />
     <ClCompile Include="Content\FileStream.cpp" />
@@ -177,6 +188,8 @@
     <ClCompile Include="Input\Touch\TouchPanel.cpp" />
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Media\MediaPlayer.cpp" />
+    <ClCompile Include="Media\Song.cpp" />
     <ClCompile Include="Platform\iOS\IOSOpenGlWindow.cpp" />
     <ClCompile Include="Platform\NaClMain.cpp" />
     <ClCompile Include="Platform\SdlMain.cpp" />
@@ -208,9 +221,6 @@
     <ClCompile Include="Graphics\Texture2D.cpp" />
     <ClCompile Include="Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Graphics\Direct3D11\ShaderSource\BasicEffect.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

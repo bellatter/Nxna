@@ -45,4 +45,7 @@ namespace Nxna
 #include "Audio/AudioEmitter.h"
 #include "Audio/AudioListener.h"
 
+#include "Media/MediaPlayer.h"
+#include "Media/Song.h"
+
 #endif // NXNA_H

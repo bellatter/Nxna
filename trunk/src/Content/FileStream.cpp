@@ -19,10 +19,12 @@ namespace Content
 		fclose((FILE*)m_fp);
 	}
 
-	void FileStream::Read(byte* destination, int length)
+	int FileStream::Read(byte* destination, int length)
 	{
-		fread(destination, 1, length, (FILE*)m_fp);
-		m_bytesRead += length;
+		int read = fread(destination, 1, length, (FILE*)m_fp);
+		m_bytesRead += read;
+
+		return read;
 	}
 
 	byte FileStream::ReadByte()
@@ -63,10 +65,23 @@ namespace Content
 		return r;
 	}
 
-	void FileStream::Advance(int bytes)
+	void FileStream::Seek(int offset, SeekOrigin origin)
 	{
-		fseek((FILE*)m_fp, bytes, SEEK_CUR);
-		m_bytesRead += bytes;
+		if (origin == SeekOrigin_Current)
+		{
+			fseek((FILE*)m_fp, offset, SEEK_CUR);
+			m_bytesRead += offset;
+		}
+		else if (origin == SeekOrigin_Begin)
+		{
+			fseek((FILE*)m_fp, offset, SEEK_SET);
+			m_bytesRead = offset;
+		}
+		else if (origin == SeekOrigin_End)
+		{
+			fseek((FILE*)m_fp, offset, SEEK_END);
+			m_bytesRead = Length() - offset;
+		}
 	}
 
 	int FileStream::Position()

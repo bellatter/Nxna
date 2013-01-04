@@ -6,6 +6,7 @@
 #include "../Graphics/SpriteSheet.h"
 #include "../Graphics/SpriteFont.h"
 #include "../Audio/SoundEffect.h"
+#include "../Media/Song.h"
 
 namespace Nxna
 {
@@ -18,6 +19,7 @@ namespace Content
 		addLoader<Nxna::Graphics::Texture2DLoader>();
 		addLoader<Nxna::Graphics::SpriteFontLoader>();
 		addLoader<Nxna::Audio::SoundEffectLoader>();
+		addLoader<Nxna::Media::SongLoader>();
 	}
 
 	ContentManager::ContentManager(const char* rootDirectory)
@@ -27,6 +29,7 @@ namespace Content
 		addLoader<Nxna::Graphics::Texture2DLoader>();
 		addLoader<Nxna::Graphics::SpriteFontLoader>();
 		addLoader<Nxna::Audio::SoundEffectLoader>();
+		addLoader<Nxna::Media::SongLoader>();
 
 		SetRootDirectory(rootDirectory);
 	}
@@ -63,7 +66,7 @@ namespace Content
 		if (fp == nullptr)
 			throw ContentException(std::string("Unable to open file: ") + fullName);
 
-		return new XnbReader(new FileStream(fp));
+		return new XnbReader(new FileStream(fp), name, this);
 	}
 }
 }

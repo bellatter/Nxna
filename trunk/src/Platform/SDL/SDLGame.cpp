@@ -43,6 +43,8 @@ namespace SDL
 		{
 			handleEvents();
 			updateTime();
+
+			Media::MediaPlayer::Tick();
 		
 			bool needToDraw = false;
 
