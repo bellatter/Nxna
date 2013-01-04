@@ -73,16 +73,16 @@ namespace Audio
 		static void SetDistanceScale(float scale);
 		static void SetMasterVolume(float volume);
 
-		static SoundEffect* LoadFrom(Content::FileStream* stream);
+		static SoundEffect* LoadFrom(Content::Stream* stream);
 	};
 
 	
 
-	class SoundEffectLoader : public Content::IContentResourceLoader
+	class SoundEffectLoader : public Content::IContentReader
 	{
 	public:
 		virtual const char* GetTypeName() override { return typeid(SoundEffect).name(); }
-		virtual void* Load(Content::XnbReader* stream) override;
+		virtual void* Read(Content::XnbReader* stream) override;
 		virtual void Destroy(void* resource) override;
 	};
 }

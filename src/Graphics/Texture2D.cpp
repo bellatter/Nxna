@@ -10,7 +10,7 @@ namespace Nxna
 {
 namespace Graphics
 {
-	void* Texture2DLoader::Load(Content::XnbReader* stream)
+	void* Texture2DLoader::Read(Content::XnbReader* stream)
 	{
 		return Texture2D::LoadFrom(stream);
 	}
@@ -27,10 +27,15 @@ namespace Graphics
 		return Texture2D::LoadFrom(stream->GetStream());
 	}
 
-	Texture2D* Texture2D::LoadFrom(Content::FileStream* stream)
+	Texture2D* Texture2D::LoadFrom(Content::Stream* stream)
 	{
 		assert(stream != nullptr);
         
+		// Note: MonoGame works a little differently. We expect the format stored in the XNB to
+		// be the true format. MonoGame uses only the original XNA format codes, then
+		// takes the current platform into account when deciding the true format of the texture.
+		// IE: A DXT5 formatted texture on iOS is *actually* a PVRTC4 compressed texture.
+
         const int FormatColor = 0;
 		const int FormatBGR565 = 1;
 		const int FormatDXT1 = 4;

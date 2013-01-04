@@ -9,10 +9,10 @@ namespace Nxna
 {
 namespace Graphics
 {
-	void* SpriteSheet::Load(Content::XnbReader* reader)
+	void* SpriteSheet::Read(Content::XnbReader* reader)
 	{
 		assert(reader != nullptr);
-		Content::FileStream* stream = reader->GetStream();
+		Content::Stream* stream = reader->GetStream();
 
 		SpriteSheet* newSheet = new SpriteSheet();
 

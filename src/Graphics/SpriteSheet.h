@@ -14,7 +14,7 @@ namespace Graphics
 {
 	class Texture2D;
 
-	class SpriteSheet : public Content::IContentResourceLoader
+	class SpriteSheet : public Content::IContentReader
 	{
 		Texture2D* m_texture;
 		std::vector<Rectangle> m_spriteRectangles;
@@ -30,7 +30,7 @@ namespace Graphics
 		int GetNumSprites() { return m_spriteRectangles.size(); }
 
 		virtual const char* GetTypeName() override { return typeid(SpriteSheet).name(); }
-		virtual void* Load(Content::XnbReader* stream) override;
+		virtual void* Read(Content::XnbReader* stream) override;
 		virtual void Destroy(void* resource) override;
 	};
 }

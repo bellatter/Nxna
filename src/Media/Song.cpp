@@ -12,7 +12,7 @@ namespace Media
 		m_handle = nullptr;
 	}
 
-	void* SongLoader::Load(Content::XnbReader* stream)
+	void* SongLoader::Read(Content::XnbReader* stream)
 	{
 		stream->GetContentManager();
 		int typeID = stream->ReadTypeID();

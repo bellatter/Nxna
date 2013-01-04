@@ -17,7 +17,7 @@ namespace Audio
 	public:
 		AdpcmDecoder();
 
-		void Decode(Content::FileStream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock);
+		void Decode(Content::Stream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock);
 
 		void GetOutput(byte** output, int* outputSize)
 		{

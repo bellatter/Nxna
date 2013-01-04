@@ -7,7 +7,7 @@ namespace Nxna
 {
 namespace Content
 {
-	class FileStream;
+	class Stream;
 	class ContentManager;
 
 	enum TargetPlatform
@@ -19,7 +19,7 @@ namespace Content
 
 	class XnbReader
 	{
-		FileStream* m_stream;
+		Stream* m_stream;
 		std::string m_name;
 		ContentManager* m_content;
 
@@ -30,14 +30,14 @@ namespace Content
 		int m_uncompressedSize;
 
 	public:
-		XnbReader(FileStream* stream, const char* name, ContentManager* contentManager);
+		XnbReader(Stream* stream, const char* name, ContentManager* contentManager);
 		~XnbReader();
 
 		TargetPlatform GetTargetPlatform();
 		bool IsHighDef();
 		bool IsCompressed();
 
-		FileStream* GetStream() { return m_stream; }
+		Stream* GetStream() { return m_stream; }
 		ContentManager* GetContentManager() { return m_content; }
 		const char* GetName() { return m_name.c_str(); }
 		int ReadTypeID();
