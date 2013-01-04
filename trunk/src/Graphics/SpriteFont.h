@@ -64,11 +64,11 @@ namespace Graphics
 
 	};
 
-	class SpriteFontLoader : public Content::IContentResourceLoader
+	class SpriteFontLoader : public Content::IContentReader
 	{
 	public:
 		virtual const char* GetTypeName() override { return typeid(SpriteFont).name(); }
-		virtual void* Load(Content::XnbReader* stream) override;
+		virtual void* Read(Content::XnbReader* stream) override;
 		virtual void Destroy(void* resource) override;
 	};
 }

@@ -251,7 +251,7 @@ namespace Audio
 		AudioManager::SetMasterVolume(volume);
 	}
 
-	SoundEffect* SoundEffect::LoadFrom(Content::FileStream* stream)
+	SoundEffect* SoundEffect::LoadFrom(Content::Stream* stream)
 	{
 #ifndef DISABLE_OPENAL
 		int formatSize = stream->ReadInt32();
@@ -269,7 +269,7 @@ namespace Audio
 			format2.wf = format;
 
 			// skip the coefficients
-			stream->Advance(7 * 4);
+			stream->Seek(7 * 4, Content::SeekOrigin_Current);
 
 			samplesPerBlock = format2.SamplesPerBlock;
 		}
@@ -360,7 +360,7 @@ namespace Audio
 #endif
 	}
 
-	void* SoundEffectLoader::Load(Content::XnbReader* stream)
+	void* SoundEffectLoader::Read(Content::XnbReader* stream)
 	{
 		int typeID = stream->ReadTypeID();
 

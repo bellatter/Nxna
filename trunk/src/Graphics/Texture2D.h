@@ -66,7 +66,7 @@ namespace Graphics
 		// HACK: this is NOT how XNA works! we need to find a better way to do this.
 		//virtual void SetSamplerState(const SamplerState* state) = 0;
 
-		static Texture2D* LoadFrom(Content::FileStream* stream);
+		static Texture2D* LoadFrom(Content::Stream* stream);
 		static Texture2D* LoadFrom(Content::XnbReader* stream);
 
 	protected:
@@ -78,11 +78,11 @@ namespace Graphics
 		static void convert565(unsigned short pixel, byte* r, byte* g, byte* b);
 	};
 
-	class Texture2DLoader : public Content::IContentResourceLoader
+	class Texture2DLoader : public Content::IContentReader
 	{
 	public:
 		virtual const char* GetTypeName() override { return typeid(Texture2D).name(); }
-		virtual void* Load(Content::XnbReader* stream) override;
+		virtual void* Read(Content::XnbReader* stream) override;
 		virtual void Destroy(void* resource) override;
 	};
 }

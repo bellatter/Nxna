@@ -11,7 +11,7 @@ namespace Nxna
 {
 namespace Graphics
 {
-	void* SpriteFontLoader::Load(Content::XnbReader* stream)
+	void* SpriteFontLoader::Read(Content::XnbReader* stream)
 	{
 		return SpriteFont::LoadFrom(stream);
 	}

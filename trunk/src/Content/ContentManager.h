@@ -15,11 +15,11 @@ namespace Content
 	class FileStream;
 	class XnbReader;
 	
-	class IContentResourceLoader
+	class IContentReader
 	{
 	public:
 		virtual const char* GetTypeName() = 0;
-		virtual void* Load(XnbReader* reader) = 0;
+		virtual void* Read(XnbReader* reader) = 0;
 		virtual void Destroy(void* resource) = 0;
 	};
 
@@ -36,10 +36,10 @@ namespace Content
 	{
 		std::string m_rootDirectory;
 
-		typedef std::map<std::string, IContentResourceLoader*> LoaderMap;
+		typedef std::map<std::string, IContentReader*> LoaderMap;
 		LoaderMap m_loaders;
 
-		typedef std::map<std::string, std::pair<IContentResourceLoader*, void*> > ResourceMap;
+		typedef std::map<std::string, std::pair<IContentReader*, void*> > ResourceMap;
 		ResourceMap m_resources;
 
 	public:
@@ -75,8 +75,8 @@ namespace Content
 				// load the raw resource data from a file
 				XnbReader* stream = load(name);
 
-				T* resource = static_cast<T*>((*loader).second->Load(stream));
-				m_resources.insert(ResourceMap::value_type(name, std::pair<IContentResourceLoader*, void*>((*loader).second, resource)));
+				T* resource = static_cast<T*>((*loader).second->Read(stream));
+				m_resources.insert(ResourceMap::value_type(name, std::pair<IContentReader*, void*>((*loader).second, resource)));
 
 				delete stream;
 
@@ -88,16 +88,21 @@ namespace Content
 
 		void Unload();
 
-	private:
-
-		XnbReader* load(const char* name);
-
+		// Regular XNA provides the ability to create custom ContentReaders. NXNA needs that too.
+		// The API to do this needs to be cleaned up a little, though. But XNA can use reflection
+		// to make the magic happen. We can't. So if you want to add a custom content reader you
+		// have to use the following method (T = the custom content reader that implements the IContentReader interface).
+		// A good place to do this is probably in your game class's Initialize() method.
 		template<typename T>
-		void addLoader()
+		void AddContentReader()
 		{
 			T* t = new T();
 			m_loaders.insert(LoaderMap::value_type(t->GetTypeName(), t));
 		}
+
+	private:
+
+		XnbReader* load(const char* name);
 	};
 }
 }

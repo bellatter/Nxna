@@ -27,11 +27,11 @@ namespace Media
 		const char* GetName() { return m_name.c_str(); }
 	};
 
-	class SongLoader : public Content::IContentResourceLoader
+	class SongLoader : public Content::IContentReader
 	{
 	public:
 		virtual const char* GetTypeName() override { return typeid(Song).name(); }
-		virtual void* Load(Content::XnbReader* stream) override;
+		virtual void* Read(Content::XnbReader* stream) override;
 		virtual void Destroy(void* resource) override;
 	};
 }

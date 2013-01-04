@@ -7,7 +7,7 @@ namespace Nxna
 {
 namespace Content
 {
-	XnbReader::XnbReader(FileStream* stream, const char* name, ContentManager* contentManager)
+	XnbReader::XnbReader(Stream* stream, const char* name, ContentManager* contentManager)
 	{
 		m_stream = stream;
 		m_name = name;
@@ -104,7 +104,7 @@ namespace Content
 	{
 		int len = read7BitEncodedInt();
 		
-		m_stream->Advance(len);
+		m_stream->Seek(len, SeekOrigin_Current);
 	}
 }
 }

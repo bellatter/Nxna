@@ -15,21 +15,21 @@ namespace Content
 	ContentManager::ContentManager()
 	{
 		// add all the loaders
-		addLoader<Nxna::Graphics::SpriteSheet>();
-		addLoader<Nxna::Graphics::Texture2DLoader>();
-		addLoader<Nxna::Graphics::SpriteFontLoader>();
-		addLoader<Nxna::Audio::SoundEffectLoader>();
-		addLoader<Nxna::Media::SongLoader>();
+		AddContentReader<Nxna::Graphics::SpriteSheet>();
+		AddContentReader<Nxna::Graphics::Texture2DLoader>();
+		AddContentReader<Nxna::Graphics::SpriteFontLoader>();
+		AddContentReader<Nxna::Audio::SoundEffectLoader>();
+		AddContentReader<Nxna::Media::SongLoader>();
 	}
 
 	ContentManager::ContentManager(const char* rootDirectory)
 	{
 		// add all the loaders
-		addLoader<Nxna::Graphics::SpriteSheet>();
-		addLoader<Nxna::Graphics::Texture2DLoader>();
-		addLoader<Nxna::Graphics::SpriteFontLoader>();
-		addLoader<Nxna::Audio::SoundEffectLoader>();
-		addLoader<Nxna::Media::SongLoader>();
+		AddContentReader<Nxna::Graphics::SpriteSheet>();
+		AddContentReader<Nxna::Graphics::Texture2DLoader>();
+		AddContentReader<Nxna::Graphics::SpriteFontLoader>();
+		AddContentReader<Nxna::Audio::SoundEffectLoader>();
+		AddContentReader<Nxna::Media::SongLoader>();
 
 		SetRootDirectory(rootDirectory);
 	}
@@ -42,7 +42,7 @@ namespace Content
 		for (LoaderMap::iterator itr = m_loaders.begin();
 			itr != m_loaders.end(); itr++)
 		{
-			IContentResourceLoader* r = (*itr).second;
+			IContentReader* r = (*itr).second;
 			delete r;
 		}
 	}

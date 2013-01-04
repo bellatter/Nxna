@@ -70,7 +70,7 @@ namespace Audio
 			header->Delta = 16;
 	}
 
-	int decodeFrame(AdpcmInfo* info, AdpcmBlockHeader* headers, Content::FileStream* data)
+	int decodeFrame(AdpcmInfo* info, AdpcmBlockHeader* headers, Content::Stream* data)
 	{
 		int bytesRead = 0;
 		for (int i = 0; i < info->NumChannels; i++)
@@ -99,7 +99,7 @@ namespace Audio
 		return bytesRead;
 	}
 
-	int decodeStereoBlock(AdpcmInfo* info, Content::FileStream* block, int blockSize, byte* output)
+	int decodeStereoBlock(AdpcmInfo* info, Content::Stream* block, int blockSize, byte* output)
 	{
 		// this is based on the info here:
 		// http://wiki.multimedia.cx/index.php?title=Microsoft_ADPCM
@@ -142,7 +142,7 @@ namespace Audio
 		return blockSize;
 	}
 
-	void AdpcmDecoder::Decode(Content::FileStream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock)
+	void AdpcmDecoder::Decode(Content::Stream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock)
 	{
 		int outputSize = (blockSize - 14) * 4 + 8; // expand from 4 bit to 16 bit
 		byte* output = new byte[outputSize];
