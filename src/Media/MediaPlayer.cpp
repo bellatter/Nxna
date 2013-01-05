@@ -19,9 +19,10 @@ namespace Nxna
 namespace Media
 {
 	Song* MediaPlayer::m_currentSong = nullptr;
-	int MediaPlayer::m_source = 0;
+	unsigned int MediaPlayer::m_source = 0;
 	unsigned int MediaPlayer::m_buffers[];
 	bool MediaPlayer::m_repeat = false;
+	float MediaPlayer::m_volume = 1.0f;
 
 	void MediaPlayer::Play(Song* song)
 	{
@@ -33,7 +34,17 @@ namespace Media
 			decoder->Rewind();
 		else
 		{
-			Content::FileStream* file = new Content::FileStream(fopen(song->m_path.c_str(), "rb"));
+			FILE* fp = fopen(song->m_path.c_str(), "rb");
+			
+			if (fp == nullptr)
+			{
+				// we were unable to find the ogg file associated with this song :(
+				// in this case we'll just ignore the song.
+				m_currentSong = nullptr;
+				return;
+			}
+			
+			Content::FileStream* file = new Content::FileStream(fp);
 			decoder = new Audio::OggVorbisDecoder(file, false);
 
 			song->m_handle = decoder;
@@ -41,7 +52,7 @@ namespace Media
 
 		if (m_source == 0)
 		{
-			m_source = Audio::AudioManager::GetFreeSource(&m_source);
+			alGenSources(1, &m_source);
 
 			alSourcei(m_source, AL_SOURCE_RELATIVE, AL_TRUE);
 			alSourcei(m_source, AL_LOOPING, AL_FALSE);
@@ -50,17 +61,30 @@ namespace Media
 			alSourcef(m_source, AL_GAIN, 1.0f);
 
 			alGenBuffers(3, m_buffers);
-
-			stream(m_buffers[0]);
-			stream(m_buffers[1]);
-			stream(m_buffers[2]);
-
-			alSourceQueueBuffers(m_source, 3, m_buffers);
 		}
 
 		alSourceStop(m_source);
+		alSourcei(m_source, AL_BUFFER, 0);
+
+		stream(m_buffers[0]);
+		stream(m_buffers[1]);
+		stream(m_buffers[2]);
+
+		alSourceQueueBuffers(m_source, 3, m_buffers);
+
 		alSourcePlay(m_source);
 #endif
+	}
+
+	void MediaPlayer::Stop()
+	{
+		alSourceStop(m_source);
+	}
+
+	void MediaPlayer::SetVolume(float volume)
+	{
+		m_volume = volume;
+		alSourcef(m_source, AL_GAIN, volume);
 	}
 
 	void MediaPlayer::Tick()

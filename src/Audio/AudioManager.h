@@ -14,7 +14,7 @@ namespace Audio
 		static void* m_device;
 		static void* m_context;
 		
-		static const int MAX_SOURCES = 16;
+		static const int MAX_SOURCES = 15;
 
 		struct SourceInfo
 		{
