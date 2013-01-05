@@ -32,4 +32,7 @@ __pragma(warning(disable:4481))
 #pragma comment(lib, "SDLMain")
 #endif
 
+// if for some reason you don't want Ogg Vorbis (.ogg files) support you can uncomment the following line
+//#define NXNA_DISABLE_OGG
+
 #endif // NXNACONFIG_H

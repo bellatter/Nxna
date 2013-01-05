@@ -1,4 +1,6 @@
 #include "OggVorbisDecoder.h"
+#ifndef NXNA_DISABLE_OGG
+
 #include "../../Content/FileStream.h"
 #include "../../Exception.h"
 #include "vorbis/vorbisfile.h"
@@ -89,3 +91,5 @@ namespace Audio
 	}
 }
 }
+
+#endif // NXNA_DISABLE_OGG

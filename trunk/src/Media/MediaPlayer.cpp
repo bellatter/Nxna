@@ -25,6 +25,7 @@ namespace Media
 
 	void MediaPlayer::Play(Song* song)
 	{
+#ifndef NXNA_DISABLE_OGG
 		m_currentSong = song;
 
 		Audio::OggVorbisDecoder* decoder = static_cast<Audio::OggVorbisDecoder*>(song->m_handle);
@@ -59,10 +60,12 @@ namespace Media
 
 		alSourceStop(m_source);
 		alSourcePlay(m_source);
+#endif
 	}
 
 	void MediaPlayer::Tick()
 	{
+#ifndef NXNA_DISABLE_OGG
 		if (m_currentSong != nullptr)
 		{
 			int processed;
@@ -86,10 +89,12 @@ namespace Media
 				alSourceQueueBuffers(m_source, 1, &albuffer);
 			}
 		}
+#endif
 	}
 
 	void MediaPlayer::stream(unsigned int alBuffer)
 	{
+#ifndef NXNA_DISABLE_OGG
 		const int BUFFER_SIZE = 176400; // 1 second
 		static byte buffer[BUFFER_SIZE];
 
@@ -99,6 +104,7 @@ namespace Media
 
 		if (read == 0 && m_repeat)
 			decoder->Rewind();
+#endif
 	}
 }
 }

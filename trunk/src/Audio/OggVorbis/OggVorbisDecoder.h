@@ -1,6 +1,10 @@
 #ifndef NXNA_AUDIO_OGGVORBISDECODER_H
 #define NXNA_AUDIO_OGGVORBISDECODER_H
 
+#include "../../NxnaConfig.h"
+
+#ifndef NXNA_DISABLE_OGG
+
 #include <cstdint>
 #include "vorbis/vorbisfile.h"
 #include "../../NxnaConfig.h"
@@ -41,5 +45,7 @@ namespace Audio
 	};
 }
 }
+
+#endif // NXNA_DISABLE_OGG
 
 #endif // NXNA_AUDIO_OGGVORBISDECODER_H
