@@ -43,8 +43,14 @@ namespace Graphics
 		int m_lineHeight;
 		float m_spacing;
 
-	public:
+		SpriteFont() { }
 
+	public:
+		// In XNA the constructor is hidden, but here it isn't, for I am kind.
+		// You are free to delete glyphs, cropping, charMap, and kerning after you call this.
+		// The SpriteFont takes over ownership of texture, so make sure it isn't deleted or unloaded.
+		SpriteFont(Texture2D* texture, int numCharacters, Rectangle* glyphs, Rectangle* cropping, unsigned short* charMap,
+			int lineSpacing, float spacing, Vector3* kerning, unsigned short* defaultCharacter);
 		~SpriteFont();
 
 		Nxna::Vector2 MeasureString(const char* text);

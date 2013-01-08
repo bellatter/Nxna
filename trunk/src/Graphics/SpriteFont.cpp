@@ -21,6 +21,28 @@ namespace Graphics
 		delete static_cast<SpriteFont*>(resource);
 	}
 
+	SpriteFont::SpriteFont(Texture2D* texture, int numCharacters, Rectangle* glyphs, Rectangle* cropping, unsigned short* charMap,
+		int lineSpacing, float spacing, Vector3* kerning, unsigned short* defaultCharacter)
+	{
+		m_texture = texture;
+
+		m_numGlyphs = m_numCropping = m_numKerning = numCharacters;
+
+		m_glyphs = new Rectangle[numCharacters];
+		m_cropping = new Rectangle[numCharacters];
+		m_kerning = new float[numCharacters * 3];
+
+		memcpy(m_glyphs, glyphs, sizeof(Rectangle) * numCharacters);
+		memcpy(m_cropping, cropping, sizeof(Rectangle) * numCharacters);
+		memcpy(m_kerning, kerning, sizeof(Vector3) * numCharacters);
+
+		for (int i = 0; i < numCharacters; i++)
+			m_characters.insert(std::map<unsigned short,int>::value_type(charMap[i], i));
+
+		m_lineHeight = lineSpacing;
+		m_spacing = spacing;
+	}
+
 	SpriteFont::~SpriteFont()
 	{
 		delete m_texture;
