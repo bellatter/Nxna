@@ -1,6 +1,8 @@
 #ifndef NXNA_GRAPHICS_RASTERIZERSTATE_H
 #define NXNA_GRAPHICS_RASTERIZERSTATE_H
 
+#include "../NxnaConfig.h"
+
 namespace Nxna
 {
 namespace Graphics

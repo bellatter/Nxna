@@ -5,7 +5,11 @@
 
 #ifndef NXNA_DISABLE_OGG
 
+#ifdef NXNA_PLATFORM_APPLE
+#include <tr1/cstdint>
+#else
 #include <cstdint>
+#endif
 #include "vorbis/vorbisfile.h"
 #include "../../NxnaConfig.h"
 
