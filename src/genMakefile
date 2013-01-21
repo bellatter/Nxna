@@ -1,6 +1,11 @@
+echo 'UNAME=$(shell uname)'
 echo COMPILER = g++
 echo LINKER = ar
+echo 'ifeq ($(UNAME), Darwin)'
+echo COMPILER_FLAGS = -g -msse -DDISABLE_OPENAL -I../lib/Glew/include -I../lib/SDL_13/include
+echo 'else'
 echo COMPILER_FLAGS =-std=c++0x -g -msse -DDISABLE_OPENAL -I../lib/Glew/include -I../lib/SDL_13/include
+echo 'endif'
 echo LINKER_FLAGS = cq
 echo EXECUTABLE = libnxna.a
 echo OUTPUTDIR = build/x64/
