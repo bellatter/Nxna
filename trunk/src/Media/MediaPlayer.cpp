@@ -26,6 +26,7 @@ namespace Media
 
 	void MediaPlayer::Play(Song* song)
 	{
+#ifndef DISABLE_OPENAL
 #ifndef NXNA_DISABLE_OGG
 		m_currentSong = song;
 
@@ -74,22 +75,29 @@ namespace Media
 
 		alSourcePlay(m_source);
 #endif
+#endif
 	}
 
 	void MediaPlayer::Stop()
 	{
+#ifndef DISABLE_OPENAL
 		alSourceStop(m_source);
+#endif
 	}
 
 	void MediaPlayer::SetVolume(float volume)
 	{
 		m_volume = volume;
+		
+#ifndef DISABLE_OPENAL
 		alSourcef(m_source, AL_GAIN, volume);
+#endif
 	}
 
 	void MediaPlayer::Tick()
 	{
 #ifndef NXNA_DISABLE_OGG
+#ifndef DISABLE_OPENAL
 		if (m_currentSong != nullptr)
 		{
 			int processed;
@@ -114,11 +122,13 @@ namespace Media
 			}
 		}
 #endif
+#endif
 	}
 
 	void MediaPlayer::stream(unsigned int alBuffer)
 	{
 #ifndef NXNA_DISABLE_OGG
+#ifndef DISABLE_OPENAL
 		const int BUFFER_SIZE = 176400; // 1 second
 		static byte buffer[BUFFER_SIZE];
 
@@ -128,6 +138,7 @@ namespace Media
 
 		if (read == 0 && m_repeat)
 			decoder->Rewind();
+#endif
 #endif
 	}
 }
