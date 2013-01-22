@@ -10,7 +10,7 @@
 #include <OpenGLES/ES2/gl.h>
 #endif
 #else
-#include <GL/glew.h>
+#include <GL/glew.h> 
 #endif
 
 #endif // NXNA_GRAPHICS_OPENGL_OPENGL_H

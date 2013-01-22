@@ -4,15 +4,25 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Nxna.xcscheme</key>
+		<key>Nxna IOS.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
+		</dict>
+		<key>Nxna.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>A228BBEF1505B54200045911</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A2963B4816ADF23600817CFC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
