@@ -114,6 +114,71 @@
 		A28809A81512E83C005D983A /* OpenGLDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = A28809951512E83C005D983A /* OpenGLDevice.h */; };
 		A28809AC1512E8A7005D983A /* TouchPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809AA1512E8A7005D983A /* TouchPanel.cpp */; };
 		A28809AD1512E8A7005D983A /* TouchPanel.h in Headers */ = {isa = PBXBuildFile; fileRef = A28809AB1512E8A7005D983A /* TouchPanel.h */; };
+		A2963B4116ADEE9700817CFC /* MediaPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963B3D16ADEE9700817CFC /* MediaPlayer.cpp */; };
+		A2963B4216ADEE9700817CFC /* MediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963B3E16ADEE9700817CFC /* MediaPlayer.h */; };
+		A2963B4316ADEE9700817CFC /* Song.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963B3F16ADEE9700817CFC /* Song.cpp */; };
+		A2963B4416ADEE9700817CFC /* Song.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963B4016ADEE9700817CFC /* Song.h */; };
+		A2963B4D16ADF35F00817CFC /* MediaPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963B3D16ADEE9700817CFC /* MediaPlayer.cpp */; };
+		A2963B4F16ADF35F00817CFC /* Song.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963B3F16ADEE9700817CFC /* Song.cpp */; };
+		A2963B5216ADF35F00817CFC /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808D21512E54E005D983A /* Game.cpp */; };
+		A2963B5416ADF35F00817CFC /* IGraphicsDeviceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808D41512E54E005D983A /* IGraphicsDeviceManager.cpp */; };
+		A2963B5616ADF35F00817CFC /* MathHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808D61512E54E005D983A /* MathHelper.cpp */; };
+		A2963B5816ADF35F00817CFC /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808D81512E54E005D983A /* Matrix.cpp */; };
+		A2963B5D16ADF35F00817CFC /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808DD1512E54E005D983A /* Quaternion.cpp */; };
+		A2963B6016ADF35F00817CFC /* Vector2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808E01512E54E005D983A /* Vector2.cpp */; };
+		A2963B6216ADF35F00817CFC /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808E21512E54E005D983A /* Vector3.cpp */; };
+		A2963B6416ADF35F00817CFC /* Vector4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808E41512E54E005D983A /* Vector4.cpp */; };
+		A2963B6916ADF35F00817CFC /* NaClMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809461512E6F8005D983A /* NaClMain.cpp */; };
+		A2963B6F16ADF35F00817CFC /* IOSGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809551512E726005D983A /* IOSGame.cpp */; };
+		A2963B7116ADF35F00817CFC /* IOSOpenGlWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809571512E726005D983A /* IOSOpenGlWindow.cpp */; };
+		A2963B7616ADF35F00817CFC /* GamePad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809741512E7EF005D983A /* GamePad.cpp */; };
+		A2963B7816ADF35F00817CFC /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809761512E7EF005D983A /* Keyboard.cpp */; };
+		A2963B7B16ADF35F00817CFC /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809791512E7EF005D983A /* Mouse.cpp */; };
+		A2963B7D16ADF35F00817CFC /* TouchPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809AA1512E8A7005D983A /* TouchPanel.cpp */; };
+		A2963B7F16ADF35F00817CFC /* ContentManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809671512E7AF005D983A /* ContentManager.cpp */; };
+		A2963B8116ADF35F00817CFC /* FileStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809691512E7AF005D983A /* FileStream.cpp */; };
+		A2963B8316ADF35F00817CFC /* XnbReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A288096B1512E7AF005D983A /* XnbReader.cpp */; };
+		A2963B8716ADF35F00817CFC /* AudioManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809391512E68C005D983A /* AudioManager.cpp */; };
+		A2963B8916ADF35F00817CFC /* SoundEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A288093B1512E68C005D983A /* SoundEffect.cpp */; };
+		A2963B8B16ADF35F00817CFC /* ADPCMDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809631512E750005D983A /* ADPCMDecoder.cpp */; };
+		A2963B8F16ADF35F00817CFC /* BlendState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808FD1512E5A1005D983A /* BlendState.cpp */; };
+		A2963B9116ADF35F00817CFC /* DepthStencilState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808FF1512E5A1005D983A /* DepthStencilState.cpp */; };
+		A2963B9416ADF35F00817CFC /* Effect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809021512E5A1005D983A /* Effect.cpp */; };
+		A2963B9616ADF35F00817CFC /* GraphicsDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809041512E5A1005D983A /* GraphicsDevice.cpp */; };
+		A2963B9916ADF35F00817CFC /* RasterizerState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809071512E5A1005D983A /* RasterizerState.cpp */; };
+		A2963B9B16ADF35F00817CFC /* SamplerState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809091512E5A1005D983A /* SamplerState.cpp */; };
+		A2963B9D16ADF35F00817CFC /* SpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A288090B1512E5A1005D983A /* SpriteBatch.cpp */; };
+		A2963BA016ADF35F00817CFC /* SpriteFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A288090E1512E5A1005D983A /* SpriteFont.cpp */; };
+		A2963BA216ADF35F00817CFC /* SpriteSheet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809101512E5A1005D983A /* SpriteSheet.cpp */; };
+		A2963BA416ADF35F00817CFC /* Texture2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809121512E5A1005D983A /* Texture2D.cpp */; };
+		A2963BA616ADF35F00817CFC /* VertexBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809141512E5A1005D983A /* VertexBuffer.cpp */; };
+		A2963BA916ADF35F00817CFC /* GlIndexBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809831512E83C005D983A /* GlIndexBuffer.cpp */; };
+		A2963BAB16ADF35F00817CFC /* GlslAlphaTestEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809851512E83C005D983A /* GlslAlphaTestEffect.cpp */; };
+		A2963BAD16ADF35F00817CFC /* GlslBasicEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809871512E83C005D983A /* GlslBasicEffect.cpp */; };
+		A2963BAF16ADF35F00817CFC /* GlslDualTextureEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809891512E83C005D983A /* GlslDualTextureEffect.cpp */; };
+		A2963BB116ADF35F00817CFC /* GlslEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A288098B1512E83C005D983A /* GlslEffect.cpp */; };
+		A2963BB316ADF35F00817CFC /* GlslSpriteEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A288098D1512E83C005D983A /* GlslSpriteEffect.cpp */; };
+		A2963BB516ADF35F00817CFC /* GlTexture2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A288098F1512E83C005D983A /* GlTexture2D.cpp */; };
+		A2963BB716ADF35F00817CFC /* GlVertexBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809911512E83C005D983A /* GlVertexBuffer.cpp */; };
+		A2963BBA16ADF35F00817CFC /* OpenGlDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809941512E83C005D983A /* OpenGlDevice.cpp */; };
+		A2963BBD16ADF3D000817CFC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2963BBC16ADF3D000817CFC /* Foundation.framework */; };
+		A2963C5E16AE04AE00817CFC /* SamplerStateCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C5C16AE04AE00817CFC /* SamplerStateCollection.cpp */; };
+		A2963C5F16AE04AE00817CFC /* SamplerStateCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C5C16AE04AE00817CFC /* SamplerStateCollection.cpp */; };
+		A2963C6016AE04AE00817CFC /* VertexDeclaration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C5D16AE04AE00817CFC /* VertexDeclaration.cpp */; };
+		A2963C6116AE04AE00817CFC /* VertexDeclaration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C5D16AE04AE00817CFC /* VertexDeclaration.cpp */; };
+		A2963C6516AE050F00817CFC /* OggVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C6316AE050F00817CFC /* OggVorbisDecoder.cpp */; };
+		A2963C6616AE050F00817CFC /* OggVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C6316AE050F00817CFC /* OggVorbisDecoder.cpp */; };
+		A2963C6716AE050F00817CFC /* OggVorbisDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6416AE050F00817CFC /* OggVorbisDecoder.h */; };
+		A2963C6816AE050F00817CFC /* OggVorbisDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6416AE050F00817CFC /* OggVorbisDecoder.h */; };
+		A2963C7016AE3F3A00817CFC /* SDLGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C6C16AE3F3A00817CFC /* SDLGame.cpp */; };
+		A2963C7116AE3F3A00817CFC /* SDLGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C6C16AE3F3A00817CFC /* SDLGame.cpp */; };
+		A2963C7216AE3F3A00817CFC /* SDLGame.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6D16AE3F3A00817CFC /* SDLGame.h */; };
+		A2963C7316AE3F3A00817CFC /* SDLGame.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6D16AE3F3A00817CFC /* SDLGame.h */; };
+		A2963C7416AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C6E16AE3F3A00817CFC /* SDLOpenGlWindow.cpp */; };
+		A2963C7516AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C6E16AE3F3A00817CFC /* SDLOpenGlWindow.cpp */; };
+		A2963C7616AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6F16AE3F3A00817CFC /* SDLOpenGlWindow.h */; };
+		A2963C7716AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6F16AE3F3A00817CFC /* SDLOpenGlWindow.h */; };
+		A2963CA616AE510F00817CFC /* SdlMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963CA516AE510F00817CFC /* SdlMain.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -227,6 +292,21 @@
 		A28809951512E83C005D983A /* OpenGLDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLDevice.h; path = Graphics/OpenGL/OpenGLDevice.h; sourceTree = SOURCE_ROOT; };
 		A28809AA1512E8A7005D983A /* TouchPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TouchPanel.cpp; path = Input/Touch/TouchPanel.cpp; sourceTree = SOURCE_ROOT; };
 		A28809AB1512E8A7005D983A /* TouchPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TouchPanel.h; path = Input/Touch/TouchPanel.h; sourceTree = SOURCE_ROOT; };
+		A2963B3D16ADEE9700817CFC /* MediaPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MediaPlayer.cpp; path = Media/MediaPlayer.cpp; sourceTree = SOURCE_ROOT; };
+		A2963B3E16ADEE9700817CFC /* MediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MediaPlayer.h; path = Media/MediaPlayer.h; sourceTree = SOURCE_ROOT; };
+		A2963B3F16ADEE9700817CFC /* Song.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Song.cpp; path = Media/Song.cpp; sourceTree = SOURCE_ROOT; };
+		A2963B4016ADEE9700817CFC /* Song.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Song.h; path = Media/Song.h; sourceTree = SOURCE_ROOT; };
+		A2963B4916ADF23600817CFC /* libNxna.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNxna.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2963BBC16ADF3D000817CFC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		A2963C5C16AE04AE00817CFC /* SamplerStateCollection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SamplerStateCollection.cpp; path = Graphics/SamplerStateCollection.cpp; sourceTree = SOURCE_ROOT; };
+		A2963C5D16AE04AE00817CFC /* VertexDeclaration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VertexDeclaration.cpp; path = Graphics/VertexDeclaration.cpp; sourceTree = SOURCE_ROOT; };
+		A2963C6316AE050F00817CFC /* OggVorbisDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OggVorbisDecoder.cpp; path = Audio/OggVorbis/OggVorbisDecoder.cpp; sourceTree = SOURCE_ROOT; };
+		A2963C6416AE050F00817CFC /* OggVorbisDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OggVorbisDecoder.h; path = Audio/OggVorbis/OggVorbisDecoder.h; sourceTree = SOURCE_ROOT; };
+		A2963C6C16AE3F3A00817CFC /* SDLGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SDLGame.cpp; path = Platform/SDL/SDLGame.cpp; sourceTree = SOURCE_ROOT; };
+		A2963C6D16AE3F3A00817CFC /* SDLGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLGame.h; path = Platform/SDL/SDLGame.h; sourceTree = SOURCE_ROOT; };
+		A2963C6E16AE3F3A00817CFC /* SDLOpenGlWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SDLOpenGlWindow.cpp; path = Platform/SDL/SDLOpenGlWindow.cpp; sourceTree = SOURCE_ROOT; };
+		A2963C6F16AE3F3A00817CFC /* SDLOpenGlWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLOpenGlWindow.h; path = Platform/SDL/SDLOpenGlWindow.h; sourceTree = SOURCE_ROOT; };
+		A2963CA516AE510F00817CFC /* SdlMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SdlMain.cpp; path = Platform/SdlMain.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,12 +318,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A2963B4616ADF23600817CFC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2963BBD16ADF3D000817CFC /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		A228BBE51505B54200045911 = {
 			isa = PBXGroup;
 			children = (
+				A2963BBC16ADF3D000817CFC /* Foundation.framework */,
 				A228BBF51505B54200045911 /* Nxna */,
 				A228BBF21505B54200045911 /* Frameworks */,
 				A228BBF11505B54200045911 /* Products */,
@@ -254,6 +343,7 @@
 			isa = PBXGroup;
 			children = (
 				A228BBF01505B54200045911 /* libNxna.a */,
+				A2963B4916ADF23600817CFC /* libNxna.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -290,6 +380,7 @@
 				A28808E31512E54E005D983A /* Vector3.h */,
 				A28808E41512E54E005D983A /* Vector4.cpp */,
 				A28808E51512E54E005D983A /* Vector4.h */,
+				A2963B3B16ADEE7900817CFC /* Media */,
 				A228BCBB1505B78B00045911 /* Platform */,
 				A228BCA61505B6D600045911 /* Input */,
 				A228BC721505B68700045911 /* Content */,
@@ -311,6 +402,8 @@
 		A228BC271505B5D000045911 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				A2963C5C16AE04AE00817CFC /* SamplerStateCollection.cpp */,
+				A2963C5D16AE04AE00817CFC /* VertexDeclaration.cpp */,
 				A28808FB1512E5A1005D983A /* AlphaTestEffect.h */,
 				A28808FC1512E5A1005D983A /* BasicEffect.h */,
 				A28808FD1512E5A1005D983A /* BlendState.cpp */,
@@ -347,6 +440,7 @@
 		A228BC601505B65000045911 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				A2963C6216AE04F100817CFC /* OggVorbis */,
 				A28809371512E68C005D983A /* AudioEmitter.h */,
 				A28809381512E68C005D983A /* AudioListener.h */,
 				A28809391512E68C005D983A /* AudioManager.cpp */,
@@ -425,6 +519,8 @@
 		A228BCBB1505B78B00045911 /* Platform */ = {
 			isa = PBXGroup;
 			children = (
+				A2963CA516AE510F00817CFC /* SdlMain.cpp */,
+				A2963C6B16AE3F1B00817CFC /* SDL */,
 				A28809431512E6F8005D983A /* AppDelegate.h */,
 				A28809441512E6F8005D983A /* AppDelegate.m */,
 				A28809451512E6F8005D983A /* main.m */,
@@ -444,6 +540,37 @@
 				A28809AB1512E8A7005D983A /* TouchPanel.h */,
 			);
 			name = Touch;
+			sourceTree = "<group>";
+		};
+		A2963B3B16ADEE7900817CFC /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				A2963B3D16ADEE9700817CFC /* MediaPlayer.cpp */,
+				A2963B3E16ADEE9700817CFC /* MediaPlayer.h */,
+				A2963B3F16ADEE9700817CFC /* Song.cpp */,
+				A2963B4016ADEE9700817CFC /* Song.h */,
+			);
+			name = Media;
+			sourceTree = "<group>";
+		};
+		A2963C6216AE04F100817CFC /* OggVorbis */ = {
+			isa = PBXGroup;
+			children = (
+				A2963C6316AE050F00817CFC /* OggVorbisDecoder.cpp */,
+				A2963C6416AE050F00817CFC /* OggVorbisDecoder.h */,
+			);
+			name = OggVorbis;
+			sourceTree = "<group>";
+		};
+		A2963C6B16AE3F1B00817CFC /* SDL */ = {
+			isa = PBXGroup;
+			children = (
+				A2963C6C16AE3F3A00817CFC /* SDLGame.cpp */,
+				A2963C6D16AE3F3A00817CFC /* SDLGame.h */,
+				A2963C6E16AE3F3A00817CFC /* SDLOpenGlWindow.cpp */,
+				A2963C6F16AE3F3A00817CFC /* SDLOpenGlWindow.h */,
+			);
+			name = SDL;
 			sourceTree = "<group>";
 		};
 		A2D5B39C150698EA001A6A13 /* iOS */ = {
@@ -529,15 +656,30 @@
 				A28809A61512E83C005D983A /* OpenGL.h in Headers */,
 				A28809A81512E83C005D983A /* OpenGLDevice.h in Headers */,
 				A28809AD1512E8A7005D983A /* TouchPanel.h in Headers */,
+				A2963B4216ADEE9700817CFC /* MediaPlayer.h in Headers */,
+				A2963B4416ADEE9700817CFC /* Song.h in Headers */,
+				A2963C6716AE050F00817CFC /* OggVorbisDecoder.h in Headers */,
+				A2963C7216AE3F3A00817CFC /* SDLGame.h in Headers */,
+				A2963C7616AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2963B4716ADF23600817CFC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2963C6816AE050F00817CFC /* OggVorbisDecoder.h in Headers */,
+				A2963C7316AE3F3A00817CFC /* SDLGame.h in Headers */,
+				A2963C7716AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		A228BBEF1505B54200045911 /* Nxna */ = {
+		A228BBEF1505B54200045911 /* Nxna_ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A228BBFD1505B54200045911 /* Build configuration list for PBXNativeTarget "Nxna" */;
+			buildConfigurationList = A228BBFD1505B54200045911 /* Build configuration list for PBXNativeTarget "Nxna_ios" */;
 			buildPhases = (
 				A228BBEC1505B54200045911 /* Sources */,
 				A228BBED1505B54200045911 /* Frameworks */,
@@ -547,9 +689,26 @@
 			);
 			dependencies = (
 			);
-			name = Nxna;
+			name = Nxna_ios;
 			productName = Nxna;
 			productReference = A228BBF01505B54200045911 /* libNxna.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		A2963B4816ADF23600817CFC /* Nxna */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A2963B4A16ADF23600817CFC /* Build configuration list for PBXNativeTarget "Nxna" */;
+			buildPhases = (
+				A2963B4516ADF23600817CFC /* Sources */,
+				A2963B4616ADF23600817CFC /* Frameworks */,
+				A2963B4716ADF23600817CFC /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Nxna;
+			productName = Nxna;
+			productReference = A2963B4916ADF23600817CFC /* libNxna.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -572,7 +731,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A228BBEF1505B54200045911 /* Nxna */,
+				A228BBEF1505B54200045911 /* Nxna_ios */,
+				A2963B4816ADF23600817CFC /* Nxna */,
 			);
 		};
 /* End PBXProject section */
@@ -627,6 +787,69 @@
 				A28809A41512E83C005D983A /* GlVertexBuffer.cpp in Sources */,
 				A28809A71512E83C005D983A /* OpenGlDevice.cpp in Sources */,
 				A28809AC1512E8A7005D983A /* TouchPanel.cpp in Sources */,
+				A2963B4116ADEE9700817CFC /* MediaPlayer.cpp in Sources */,
+				A2963B4316ADEE9700817CFC /* Song.cpp in Sources */,
+				A2963C5E16AE04AE00817CFC /* SamplerStateCollection.cpp in Sources */,
+				A2963C6016AE04AE00817CFC /* VertexDeclaration.cpp in Sources */,
+				A2963C6516AE050F00817CFC /* OggVorbisDecoder.cpp in Sources */,
+				A2963C7016AE3F3A00817CFC /* SDLGame.cpp in Sources */,
+				A2963C7416AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2963B4516ADF23600817CFC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2963B4D16ADF35F00817CFC /* MediaPlayer.cpp in Sources */,
+				A2963B4F16ADF35F00817CFC /* Song.cpp in Sources */,
+				A2963B5216ADF35F00817CFC /* Game.cpp in Sources */,
+				A2963B5416ADF35F00817CFC /* IGraphicsDeviceManager.cpp in Sources */,
+				A2963B5616ADF35F00817CFC /* MathHelper.cpp in Sources */,
+				A2963B5816ADF35F00817CFC /* Matrix.cpp in Sources */,
+				A2963B5D16ADF35F00817CFC /* Quaternion.cpp in Sources */,
+				A2963B6016ADF35F00817CFC /* Vector2.cpp in Sources */,
+				A2963B6216ADF35F00817CFC /* Vector3.cpp in Sources */,
+				A2963B6416ADF35F00817CFC /* Vector4.cpp in Sources */,
+				A2963B6916ADF35F00817CFC /* NaClMain.cpp in Sources */,
+				A2963B6F16ADF35F00817CFC /* IOSGame.cpp in Sources */,
+				A2963B7116ADF35F00817CFC /* IOSOpenGlWindow.cpp in Sources */,
+				A2963B7616ADF35F00817CFC /* GamePad.cpp in Sources */,
+				A2963B7816ADF35F00817CFC /* Keyboard.cpp in Sources */,
+				A2963B7B16ADF35F00817CFC /* Mouse.cpp in Sources */,
+				A2963B7D16ADF35F00817CFC /* TouchPanel.cpp in Sources */,
+				A2963B7F16ADF35F00817CFC /* ContentManager.cpp in Sources */,
+				A2963B8116ADF35F00817CFC /* FileStream.cpp in Sources */,
+				A2963B8316ADF35F00817CFC /* XnbReader.cpp in Sources */,
+				A2963B8716ADF35F00817CFC /* AudioManager.cpp in Sources */,
+				A2963B8916ADF35F00817CFC /* SoundEffect.cpp in Sources */,
+				A2963B8B16ADF35F00817CFC /* ADPCMDecoder.cpp in Sources */,
+				A2963B8F16ADF35F00817CFC /* BlendState.cpp in Sources */,
+				A2963B9116ADF35F00817CFC /* DepthStencilState.cpp in Sources */,
+				A2963B9416ADF35F00817CFC /* Effect.cpp in Sources */,
+				A2963B9616ADF35F00817CFC /* GraphicsDevice.cpp in Sources */,
+				A2963B9916ADF35F00817CFC /* RasterizerState.cpp in Sources */,
+				A2963B9B16ADF35F00817CFC /* SamplerState.cpp in Sources */,
+				A2963B9D16ADF35F00817CFC /* SpriteBatch.cpp in Sources */,
+				A2963BA016ADF35F00817CFC /* SpriteFont.cpp in Sources */,
+				A2963BA216ADF35F00817CFC /* SpriteSheet.cpp in Sources */,
+				A2963BA416ADF35F00817CFC /* Texture2D.cpp in Sources */,
+				A2963BA616ADF35F00817CFC /* VertexBuffer.cpp in Sources */,
+				A2963BA916ADF35F00817CFC /* GlIndexBuffer.cpp in Sources */,
+				A2963BAB16ADF35F00817CFC /* GlslAlphaTestEffect.cpp in Sources */,
+				A2963BAD16ADF35F00817CFC /* GlslBasicEffect.cpp in Sources */,
+				A2963BAF16ADF35F00817CFC /* GlslDualTextureEffect.cpp in Sources */,
+				A2963BB116ADF35F00817CFC /* GlslEffect.cpp in Sources */,
+				A2963BB316ADF35F00817CFC /* GlslSpriteEffect.cpp in Sources */,
+				A2963BB516ADF35F00817CFC /* GlTexture2D.cpp in Sources */,
+				A2963BB716ADF35F00817CFC /* GlVertexBuffer.cpp in Sources */,
+				A2963BBA16ADF35F00817CFC /* OpenGlDevice.cpp in Sources */,
+				A2963C5F16AE04AE00817CFC /* SamplerStateCollection.cpp in Sources */,
+				A2963C6116AE04AE00817CFC /* VertexDeclaration.cpp in Sources */,
+				A2963C6616AE050F00817CFC /* OggVorbisDecoder.cpp in Sources */,
+				A2963C7116AE3F3A00817CFC /* SDLGame.cpp in Sources */,
+				A2963C7516AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */,
+				A2963CA616AE510F00817CFC /* SdlMain.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,6 +920,42 @@
 			};
 			name = Release;
 		};
+		A2963B4B16ADF23600817CFC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				HEADER_SEARCH_PATHS = (
+					../lib/Glew/include,
+					../lib/SDL_13/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A2963B4C16ADF23600817CFC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				HEADER_SEARCH_PATHS = (
+					../lib/Glew/include,
+					../lib/SDL_13/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -709,7 +968,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A228BBFD1505B54200045911 /* Build configuration list for PBXNativeTarget "Nxna" */ = {
+		A228BBFD1505B54200045911 /* Build configuration list for PBXNativeTarget "Nxna_ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A228BBFE1505B54200045911 /* Debug */,
@@ -717,6 +976,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		A2963B4A16ADF23600817CFC /* Build configuration list for PBXNativeTarget "Nxna" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A2963B4B16ADF23600817CFC /* Debug */,
+				A2963B4C16ADF23600817CFC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
