@@ -79,6 +79,16 @@ namespace OpenGl
 
 		CreateProgram(vertexResult, fragResult, color, 1);
 		CreateProgram(vertexResult, fragResult, nullptr, 0);
+		
+		// HACK: sometimes OpenGL reports the sampler uniforms in a different
+		// order than they exist in the shader source, which breaks this effect.
+		// Go back and make sure the order is correct.
+		if (m_textureParams[0]->Name != "Diffuse")
+		{
+			EffectParameter* dummy = m_textureParams[0];
+			m_textureParams[0] = m_textureParams[1];
+			m_textureParams[1] = dummy;
+		}
 	}
 
 	void GlslDualTextureEffect::SetTexture(Texture2D* texture)
