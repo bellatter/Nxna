@@ -219,7 +219,9 @@ namespace OpenGl
 
 			if (type == EffectParameterType_Texture2D)
 			{
-				if ((*itr).Param->GetValueTexture2D() != nullptr)
+				GlTexture2D* glTex = static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D());
+				
+				if (glTex != nullptr)
 				{
 					// look for the index of the texture
 					int texindex = 0;
@@ -233,9 +235,9 @@ namespace OpenGl
 					}
 
 					glActiveTexture(GL_TEXTURE0 + texindex);
-					glBindTexture(GL_TEXTURE_2D, static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D())->GetGlTexture());
+					glBindTexture(GL_TEXTURE_2D, glTex->GetGlTexture());
 					
-					static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D())->SetSamplerState(samplerStates->Get(texindex));
+					glTex->SetSamplerState(samplerStates->Get(texindex));
 				}
 			}
 		}

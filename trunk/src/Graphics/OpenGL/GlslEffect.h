@@ -73,8 +73,11 @@ namespace OpenGl
 		std::vector<GlslProgram> m_programs;
 		std::vector<GlslAttribute> m_attributes;
 		std::vector<EffectParameter*> m_parameterList;
+		
+	protected:
 		std::vector<EffectParameter*> m_textureParams;
 
+	private:
 		static const int MAX_ATTRIB_SIZE = 256;
 		static char m_attribNameBuffer[MAX_ATTRIB_SIZE];
 		static int m_boundProgramIndex;

@@ -179,6 +179,10 @@
 		A2963C7616AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6F16AE3F3A00817CFC /* SDLOpenGlWindow.h */; };
 		A2963C7716AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6F16AE3F3A00817CFC /* SDLOpenGlWindow.h */; };
 		A2963CA616AE510F00817CFC /* SdlMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963CA516AE510F00817CFC /* SdlMain.cpp */; };
+		A2963CAC16B49D2600817CFC /* GlslSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963CAA16B49D2500817CFC /* GlslSource.cpp */; };
+		A2963CAD16B49D2600817CFC /* GlslSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963CAA16B49D2500817CFC /* GlslSource.cpp */; };
+		A2963CAE16B49D2600817CFC /* GlslSource.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963CAB16B49D2500817CFC /* GlslSource.h */; };
+		A2963CAF16B49D2600817CFC /* GlslSource.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963CAB16B49D2500817CFC /* GlslSource.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -307,6 +311,8 @@
 		A2963C6E16AE3F3A00817CFC /* SDLOpenGlWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SDLOpenGlWindow.cpp; path = Platform/SDL/SDLOpenGlWindow.cpp; sourceTree = SOURCE_ROOT; };
 		A2963C6F16AE3F3A00817CFC /* SDLOpenGlWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLOpenGlWindow.h; path = Platform/SDL/SDLOpenGlWindow.h; sourceTree = SOURCE_ROOT; };
 		A2963CA516AE510F00817CFC /* SdlMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SdlMain.cpp; path = Platform/SdlMain.cpp; sourceTree = SOURCE_ROOT; };
+		A2963CAA16B49D2500817CFC /* GlslSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GlslSource.cpp; path = Graphics/OpenGL/GlslSource.cpp; sourceTree = SOURCE_ROOT; };
+		A2963CAB16B49D2500817CFC /* GlslSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlslSource.h; path = Graphics/OpenGL/GlslSource.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -477,6 +483,8 @@
 		A228BC7F1505B6A700045911 /* OpenGl */ = {
 			isa = PBXGroup;
 			children = (
+				A2963CAA16B49D2500817CFC /* GlslSource.cpp */,
+				A2963CAB16B49D2500817CFC /* GlslSource.h */,
 				A28809831512E83C005D983A /* GlIndexBuffer.cpp */,
 				A28809841512E83C005D983A /* GlIndexBuffer.h */,
 				A28809851512E83C005D983A /* GlslAlphaTestEffect.cpp */,
@@ -661,6 +669,7 @@
 				A2963C6716AE050F00817CFC /* OggVorbisDecoder.h in Headers */,
 				A2963C7216AE3F3A00817CFC /* SDLGame.h in Headers */,
 				A2963C7616AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */,
+				A2963CAE16B49D2600817CFC /* GlslSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -671,6 +680,7 @@
 				A2963C6816AE050F00817CFC /* OggVorbisDecoder.h in Headers */,
 				A2963C7316AE3F3A00817CFC /* SDLGame.h in Headers */,
 				A2963C7716AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */,
+				A2963CAF16B49D2600817CFC /* GlslSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -794,6 +804,7 @@
 				A2963C6516AE050F00817CFC /* OggVorbisDecoder.cpp in Sources */,
 				A2963C7016AE3F3A00817CFC /* SDLGame.cpp in Sources */,
 				A2963C7416AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */,
+				A2963CAC16B49D2600817CFC /* GlslSource.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -850,6 +861,7 @@
 				A2963C7116AE3F3A00817CFC /* SDLGame.cpp in Sources */,
 				A2963C7516AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */,
 				A2963CA616AE510F00817CFC /* SdlMain.cpp in Sources */,
+				A2963CAD16B49D2600817CFC /* GlslSource.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
