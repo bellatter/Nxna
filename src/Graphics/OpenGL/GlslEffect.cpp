@@ -6,6 +6,7 @@
 #include "GlTexture2D.h"
 #include "OpenGLDevice.h"
 #include "../SamplerStateCollection.h"
+#include "GlslSource.h"
 
 namespace Nxna
 {
@@ -16,13 +17,15 @@ namespace OpenGl
 	char GlslEffect::m_attribNameBuffer[];
 	int GlslEffect::m_boundProgramIndex = -1;
 
-	GlslEffect::GlslEffect(OpenGlDevice* device, const char* source)
+	GlslEffect::GlslEffect(OpenGlDevice* device, const char* vertexSource, const char* fragmentSource)
 	{
 		m_device = device;
 
 		std::string vertexResult, fragResult;
-		ProcessSource(source, vertexResult, fragResult);
-		CreateProgram(vertexResult, fragResult, nullptr);
+		ProcessSource(vertexSource, fragmentSource, vertexResult, fragResult);
+
+
+		CreateProgram(vertexResult, fragResult, nullptr, 0);
 	}
 
 	GlslEffect::GlslEffect(OpenGlDevice* device)
@@ -47,52 +50,26 @@ namespace OpenGl
 		}
 	}
 
-	void GlslEffect::ProcessSource(const char* source, std::string& vertexResult, std::string& fragResult)
+	void GlslEffect::ProcessSource(const char* vertexSource, const char* fragmentSource, std::string& vertexResult, std::string& fragResult)
 	{
-		const char* vertex = strstr(source, "#vertex");
-		const char* frag = strstr(source, "#fragment");
+		assert(vertexSource != nullptr);
+		assert(fragmentSource != nullptr);
 
-		assert(vertex != nullptr);
-		assert(frag != nullptr);
-
-		vertexResult = vertex + 7;
-		fragResult = frag + 9;
-		vertexResult.erase(vertexResult.length() - fragResult.length() - 9);
+		vertexResult = vertexSource;
+		fragResult = fragmentSource;
 
 		processSource(vertexResult, true);
 		processSource(fragResult, false);
 	}
 
-	void GlslEffect::CreateProgram(const std::string& vertexSource, const std::string& fragSource, const char* defines)
+	void GlslEffect::CreateProgram(const std::string& vertexSource, const std::string& fragSource, const char* defines[], int numDefines)
 	{
 		glGetError();
 
-		int vertexShader = compile(vertexSource, defines, true);
-		int fragShader = compile(fragSource, defines, false);
+		GlslSource source(vertexSource.c_str(), fragSource.c_str(), static_cast<OpenGlDevice*>(GetGraphicsDevice())->GetGlslVersion());
 
 		GlslProgram program;
-		program.Program = glCreateProgram();
-
-		glAttachShader(program.Program, vertexShader);
-		if (fragShader != 0) glAttachShader(program.Program, fragShader);
-
-		glLinkProgram(program.Program);
-
-		int result;
-		glGetProgramiv(program.Program, GL_LINK_STATUS, &result);
-
-		char buffer[256];
-		int len;
-		glGetProgramInfoLog(program.Program, 255, &len, buffer);
-		buffer[255] = 0;
-		if (result != GL_TRUE)
-		{
-			throw GraphicsException(std::string("Error while linking GLSL program: ") + buffer);
-		}
-
-		GLenum err = glGetError();
-		if (err != GL_NO_ERROR)
-			throw GraphicsException("Error while loading GLSL effect");
+		program.Program = source.Build(defines, numDefines);
 
 		loadUniformInfo(program);
 		loadAttributeInfo(program);
@@ -277,7 +254,7 @@ namespace OpenGl
 		return nullptr;
 	}
 
-	int GlslEffect::compile(const std::string& source, const char* defines, bool vertex)
+	int GlslEffect::compile(const char* source[], int numSource, bool vertex)
 	{
 		int shader;
 		if (vertex)
@@ -291,16 +268,7 @@ namespace OpenGl
         if (shader == 0)
             throw GraphicsException("Unable to create shader");
 
-		if (defines != nullptr)
-		{
-			const char* sources[] = {defines, source.c_str()};
-			glShaderSource(shader, 2, sources, nullptr);
-		}
-		else
-		{
-			const char* s = source.c_str();
-			glShaderSource(shader, 1, &s, nullptr);
-		}
+		glShaderSource(shader, numSource, source, nullptr);
 
 		glCompileShader(shader);
 
@@ -323,16 +291,6 @@ namespace OpenGl
 		// extract all the attrib info
 		if (vertex)
 			source = extractAttribInfo(source.c_str());
-
-		// replace the {VERSION} macro
-		replaceVersionMacros(source);
-
-		// replace the {highp} stuff
-		replacePrecisionMacros(source);
-
-		// convert "in" and "out" params, if necessary
-		if (static_cast<OpenGlDevice*>(GetGraphicsDevice())->GetGlslVersion() < 130)
-			fixParameters(source, vertex);
 	}
 
 	void GlslEffect::loadUniformInfo(GlslProgram& program)
@@ -512,55 +470,6 @@ namespace OpenGl
 		}
 
 		return result;
-	}
-
-	void GlslEffect::replaceVersionMacros(std::string& code)
-	{
-		int version = static_cast<OpenGlDevice*>(GetGraphicsDevice())->GetGlslVersion();
-		int major = version / 100;
-		int minor = (version - major * 100) / 10;
-
-		std::string versionString = "000";
-		versionString[0] = (char)(major + '0');
-		versionString[1] = (char)(minor + '0');
-
-		std::string versionStringNewline = versionString + "\n";
-
-		// there are 2 different versions of the {VERSION} macro,
-		// 1 that adds a newline immediately after (because some GLSL compilers don't like trailing
-		// spaces after the preprocessor directive) and 1 that doesn't.
-		// {VERSION} adds a newline, {VERSION } doesn't.
-		// Unfortunately we can't rely on __VERSION__ because ATI drivers have a bug
-		// that makes __VERSION__ always = 100.
-		replaceAll(code, "{VERSION}", versionStringNewline);
-		replaceAll(code, "{VERSION }", versionString);
-	}
-
-	void GlslEffect::replacePrecisionMacros(std::string& code)
-	{
-		int version = static_cast<OpenGlDevice*>(GetGraphicsDevice())->GetGlslVersion();
-
-		if (version > 100)
-			replaceAll(code, "{highp}", "");
-		else
-			replaceAll(code, "{highp}", "highp");
-	}
-
-	void GlslEffect::fixParameters(std::string& code, bool isVertexShader)
-	{
-		if (isVertexShader)
-		{
-			// replace "in" with "attribute"
-			replaceAll(code, "in", "attribute");
-
-			// replace "out" with "varying"
-			replaceAll(code, "out", "varying");
-		}
-		else
-		{
-			// replace "in" with "varying"
-			replaceAll(code, "in", "varying");
-		}
 	}
 
 	void GlslEffect::replaceAll(std::string& original, const std::string& toRemove, const std::string& toPut)

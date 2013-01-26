@@ -80,7 +80,7 @@ namespace OpenGl
 		static int m_boundProgramIndex;
 
 	public:
-		GlslEffect(OpenGlDevice* device, const char* source);
+		GlslEffect(OpenGlDevice* device, const char* vertexSource, const char* fragmentSource);
 		virtual ~GlslEffect();
 
 		virtual void Apply() override;
@@ -111,8 +111,8 @@ namespace OpenGl
 	protected:
 		GlslEffect(OpenGlDevice* device);
 
-		void ProcessSource(const char* source, std::string& vertexResult, std::string& fragResult);
-		void CreateProgram(const std::string& vertexSource, const std::string& fragSource, const char* defines);
+		void ProcessSource(const char* vertexSource, const char* fragmentSource, std::string& vertexResult, std::string& fragResult);
+		void CreateProgram(const std::string& vertexSource, const std::string& fragSource, const char* defines[], int numDefines);
 
 		EffectParameter* AddParameter(EffectParameterType type, int numElements, void* handle, const char* name);
 
@@ -121,14 +121,11 @@ namespace OpenGl
 		void ApplySamplerStates(SamplerStateCollection* samplerStates);
 
 	private:
-		int compile(const std::string& source, const char* defines, bool vertex);
+		int compile(const char* source[], int numSource, bool vertex);
 		void processSource(std::string& source, bool vertex);
 		void loadUniformInfo(GlslProgram& program);
 		void loadAttributeInfo(GlslProgram& program);
 		std::string extractAttribInfo(const char* vertexShaderSource);
-		void replaceVersionMacros(std::string& code);
-		void replacePrecisionMacros(std::string& code);
-		void fixParameters(std::string& code, bool isVertexShader);
 		void replaceAll(std::string& original, const std::string& toRemove, const std::string& toPut);
 
 		static const char* lastIndexNotSpace(const char* str, int startIndex)

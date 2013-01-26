@@ -119,6 +119,7 @@
     <ClInclude Include="Graphics\OpenGL\GlslBasicEffect.h" />
     <ClInclude Include="Graphics\OpenGL\GlslDualTextureEffect.h" />
     <ClInclude Include="Graphics\OpenGL\GlslEffect.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslSource.h" />
     <ClInclude Include="Graphics\OpenGL\GlslSpriteEffect.h" />
     <ClInclude Include="Graphics\OpenGL\GlTexture2D.h" />
     <ClInclude Include="Graphics\OpenGL\GlVertexBuffer.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslSpriteEffect.cpp" />
     <ClCompile Include="Graphics\OpenGL\GlslAlphaTestEffect.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslSource.cpp" />
     <ClCompile Include="Graphics\RasterizerState.cpp" />
     <ClCompile Include="Graphics\SamplerState.cpp" />
     <ClCompile Include="Graphics\SamplerStateCollection.cpp" />
