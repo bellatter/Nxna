@@ -8,9 +8,7 @@ namespace Graphics
 {
 namespace OpenGl
 {
-	const char* alphaTestSource = 
-		"#vertex\n"
-
+	const char* alphaTestVertexSource = 
 		"uniform highp mat4 ModelViewProjection;\n"
 
 		"in vec4 position : POSITION0;\n"
@@ -28,28 +26,27 @@ namespace OpenGl
 		"#if defined VERTEXCOLORENABLED\n"
 		"	o_color = color;\n"
 		"#endif\n"
-		"}\n"
+		"}";
 
-		"#fragment\n"
-
+	const char* alphaTestFragmentSource =
 		"uniform highp vec4 AlphaTest;\n"
 		"uniform sampler2D Diffuse;\n"
-		"in {highp} vec2 o_diffuseCoords;\n"
+		"in HIGHP vec2 o_diffuseCoords;\n"
 		"#if defined VERTEXCOLORENABLED\n"
-		"in {highp} vec4 o_color;\n"
+		"in HIGHP vec4 o_color;\n"
 		"#endif\n"
 		"#if __VERSION__ >= 130\n"
 		"out vec4 outputColor;\n"
 		"#endif\n"
 
-		"void clip({highp} float a) "
+		"void clip(HIGHP float a) "
 		"{ "
 		"	if (a < 0.0) discard; "
 		"} "
 
 		"void main()\n"
 		"{\n"
-		"	{highp} vec4 finalColor;\n"
+		"	HIGHP vec4 finalColor;\n"
 		"#if __VERSION__ < 130\n"
 		"	finalColor = texture2D(Diffuse, o_diffuseCoords);\n"
 		"#else\n"
@@ -88,16 +85,20 @@ namespace OpenGl
 		Matrix::GetIdentity(m_projection);
 
 		std::string vertexResult, fragResult;
-		ProcessSource(alphaTestSource, vertexResult, fragResult);
+		ProcessSource(alphaTestVertexSource, alphaTestFragmentSource, vertexResult, fragResult);
 
 		char buffer[100];
 		sprintf(buffer, "#version %d\n", device->GetGlslVersion());
 		std::string versionString = buffer;
 
-		CreateProgram(vertexResult, fragResult, (versionString + "#define VERTEXCOLORENABLED\n#define LESSGREATER\n").c_str());
-		CreateProgram(vertexResult, fragResult, (versionString + "#define VERTEXCOLORENABLED\n").c_str());
-		CreateProgram(vertexResult, fragResult, (versionString + "#define LESSGREATER\n").c_str());
-		CreateProgram(vertexResult, fragResult, (versionString).c_str());
+		const char* colorAndLess[] = { "#define VERTEXCOLORENABLED\n", "#define LESSGREATER\n"};
+		const char* color[] = { "#define VERTEXCOLORENABLED\n" };
+		const char* less[] = { "#define LESSGREATER\n" };
+
+		CreateProgram(vertexResult, fragResult, colorAndLess, 2);
+		CreateProgram(vertexResult, fragResult, color, 1);
+		CreateProgram(vertexResult, fragResult, less, 1);
+		CreateProgram(vertexResult, fragResult, nullptr, 0);
 	}
 
 	void GlslAlphaTestEffect::SetTexture(Texture2D* texture)

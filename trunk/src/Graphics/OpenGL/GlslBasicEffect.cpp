@@ -10,10 +10,8 @@ namespace Graphics
 namespace OpenGl
 {
 	// this shader code is so messy. Apologies.
-	const char* basicEffectSrc = 
-		"#vertex\n"
-
-		"uniform {highp} mat4 ModelViewProjection;\n"
+	const char* basicEffectVertexSrc = 
+		"uniform HIGHP mat4 ModelViewProjection;\n"
 
 		"in vec4 position : POSITION0;\n"
 		"#if defined TEXTUREENABLED\n"
@@ -34,25 +32,24 @@ namespace OpenGl
 		"#if defined VERTEXCOLORENABLED\n"
 		"	o_color = color;\n"
 		"#endif\n"
-		"}\n"
+		"}";
 
-		"#fragment\n"
-
+	const char* basicEffectFragmentSrc =
 		"#if defined TEXTUREENABLED\n"
 		"uniform sampler2D Diffuse;\n"
-		"in {highp} vec2 o_diffuseCoords;\n"
+		"in HIGHP vec2 o_diffuseCoords;\n"
 		"#endif\n"
 
 		"#if defined VERTEXCOLORENABLED\n"
-		"in {highp} vec4 o_color;\n"
+		"in HIGHP vec4 o_color;\n"
 		"#endif\n"
 
         "#if __VERSION__ >= 130\n"
-		"out {highp} vec4 outputColor;\n"
+		"out HIGHP vec4 outputColor;\n"
         "#endif\n"
 		"void main()\n"
 		"{\n"
-		"	{highp} vec4 finalColor;\n"
+		"	HIGHP vec4 finalColor;\n"
 		"#if defined TEXTUREENABLED\n\n"
 		"#if __VERSION__ < 130\n"
 		"	finalColor = texture2D(Diffuse, o_diffuseCoords);\n"
@@ -86,16 +83,20 @@ namespace OpenGl
 		Matrix::GetIdentity(m_projection);
 
 		std::string vertexResult, fragResult;
-		ProcessSource(basicEffectSrc, vertexResult, fragResult);
+		ProcessSource(basicEffectVertexSrc, basicEffectFragmentSrc, vertexResult, fragResult);
 
 		char buffer[100];
 		sprintf(buffer, "#version %d\n", device->GetGlslVersion());
 		std::string versionString = buffer;
 
-		CreateProgram(vertexResult, fragResult, (versionString + "#define VERTEXCOLORENABLED\n#define TEXTUREENABLED\n").c_str());
-		CreateProgram(vertexResult, fragResult, (versionString + "#define VERTEXCOLORENABLED\n").c_str());
-		CreateProgram(vertexResult, fragResult, (versionString + "#define TEXTUREENABLED\n").c_str());
-		CreateProgram(vertexResult, fragResult, versionString.c_str());
+		const char* colorAndTexture[] = { "#define VERTEXCOLORENABLED\n", "#define TEXTUREENABLED\n" };
+		const char* color[] = { "#define VERTEXCOLORENABLED\n" };
+		const char* texture[] = { "#define TEXTUREENABLED\n" };
+
+		CreateProgram(vertexResult, fragResult, colorAndTexture, 2);
+		CreateProgram(vertexResult, fragResult, color, 1);
+		CreateProgram(vertexResult, fragResult, texture, 1);
+		CreateProgram(vertexResult, fragResult, nullptr, 0);
 	}
 
 	void GlslBasicEffect::SetTexture(Texture2D* texture)

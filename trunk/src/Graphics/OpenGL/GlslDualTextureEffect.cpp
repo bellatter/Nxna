@@ -8,10 +8,8 @@ namespace Graphics
 {
 namespace OpenGl
 {
-	const char* dualTextureEffectSrc = 
-		"#vertex\n"
-
-		"uniform {highp} mat4 ModelViewProjection;\n"
+	const char* dualTextureEffectVertexSrc = 
+		"uniform HIGHP mat4 ModelViewProjection;\n"
 
 		"in vec4 position : POSITION0;\n"
 		"in vec2 texCoords1 : TEXCOORD0;\n"
@@ -31,30 +29,28 @@ namespace OpenGl
 		"#if defined VERTEXCOLORENABLED\n"
 		"	o_color = color;\n"
 		"#endif\n"
-		"}\n"
+		"}";
 
-
-		"#fragment\n"
-
+	const char* dualTextureEffectFragmentSrc =
 		"uniform sampler2D Diffuse;\n"
 		"uniform sampler2D Diffuse2;\n"
 
-		"in {highp} vec2 o_diffuseCoords1;\n"
-		"in {highp} vec2 o_diffuseCoords2;\n"
+		"in HIGHP vec2 o_diffuseCoords1;\n"
+		"in HIGHP vec2 o_diffuseCoords2;\n"
 
 		"#if defined VERTEXCOLORENABLED\n"
-		"in {highp} vec4 o_color;\n"
+		"in HIGHP vec4 o_color;\n"
 		"#endif\n"
 
         "#if __VERSION__ >= 130\n"
-		"out {highp} vec4 outputColor;\n"
+		"out HIGHP vec4 outputColor;\n"
         "#endif\n"
 		"void main()\n"
 		"{\n"
-		"	{highp} vec4 finalColor;\n"
+		"	HIGHP vec4 finalColor;\n"
 		"#if __VERSION__ < 130\n"
-		"	{highp} vec4 color1 = texture2D(Diffuse, o_diffuseCoords1); \n"
-		"	{highp} vec4 color2 = texture2D(Diffuse2, o_diffuseCoords2); \n"
+		"	HIGHP vec4 color1 = texture2D(Diffuse, o_diffuseCoords1); \n"
+		"	HIGHP vec4 color2 = texture2D(Diffuse2, o_diffuseCoords2); \n"
 		"#else\n"
 		"	vec4 color1 = texture(Diffuse, o_diffuseCoords1); \n"
 		"	vec4 color2 = texture(Diffuse2, o_diffuseCoords2); \n"
@@ -77,14 +73,12 @@ namespace OpenGl
 		m_isVertexColorEnabled = false;
 
 		std::string vertexResult, fragResult;
-		ProcessSource(dualTextureEffectSrc, vertexResult, fragResult);
+		ProcessSource(dualTextureEffectVertexSrc, dualTextureEffectFragmentSrc, vertexResult, fragResult);
 
-		char buffer[100];
-		sprintf(buffer, "#version %d\n", device->GetGlslVersion());
-		std::string versionString = buffer;
+		const char* color[] = { "#define VERTEXCOLORENABLED\n" };
 
-		CreateProgram(vertexResult, fragResult, (versionString + "#define VERTEXCOLORENABLED\n").c_str());
-		CreateProgram(vertexResult, fragResult, versionString.c_str());
+		CreateProgram(vertexResult, fragResult, color, 1);
+		CreateProgram(vertexResult, fragResult, nullptr, 0);
 	}
 
 	void GlslDualTextureEffect::SetTexture(Texture2D* texture)

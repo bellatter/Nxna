@@ -221,6 +221,7 @@
     <ClInclude Include="Graphics\Direct3D11\HlslBasicEffect.h" />
     <ClInclude Include="Graphics\Direct3D11\HlslDualTextureEffect.h" />
     <ClInclude Include="Audio\OggVorbis\OggVorbisDecoder.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslSource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -365,5 +366,6 @@
     <ClCompile Include="Graphics\SamplerStateCollection.cpp" />
     <ClCompile Include="Media\MediaPlayer.cpp" />
     <ClCompile Include="Audio\OggVorbis\OggVorbisDecoder.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslSource.cpp" />
   </ItemGroup>
 </Project>
