@@ -563,9 +563,9 @@ namespace Graphics
 		m_device->SetBlendState(m_blend);
 		m_device->SetRasterizerState(m_rasterizerState);
 		m_device->SetDepthStencilState(m_depthStencilState);
-		//renderer.DepthTestEnabled = false;
-		//renderer.CullMode = CullMode.CounterClockwise;
-		//renderer.BlendState = BlendState.AlphaBlend;
+		
+		// TODO: this shouldn't be hard coded
+		m_device->GetSamplerStates().Set(0, SamplerState::GetLinearClamp());
 	}
 
 
