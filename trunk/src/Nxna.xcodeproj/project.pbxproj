@@ -170,11 +170,9 @@
 		A2963C6616AE050F00817CFC /* OggVorbisDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C6316AE050F00817CFC /* OggVorbisDecoder.cpp */; };
 		A2963C6716AE050F00817CFC /* OggVorbisDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6416AE050F00817CFC /* OggVorbisDecoder.h */; };
 		A2963C6816AE050F00817CFC /* OggVorbisDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6416AE050F00817CFC /* OggVorbisDecoder.h */; };
-		A2963C7016AE3F3A00817CFC /* SDLGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C6C16AE3F3A00817CFC /* SDLGame.cpp */; };
 		A2963C7116AE3F3A00817CFC /* SDLGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C6C16AE3F3A00817CFC /* SDLGame.cpp */; };
 		A2963C7216AE3F3A00817CFC /* SDLGame.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6D16AE3F3A00817CFC /* SDLGame.h */; };
 		A2963C7316AE3F3A00817CFC /* SDLGame.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6D16AE3F3A00817CFC /* SDLGame.h */; };
-		A2963C7416AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C6E16AE3F3A00817CFC /* SDLOpenGlWindow.cpp */; };
 		A2963C7516AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963C6E16AE3F3A00817CFC /* SDLOpenGlWindow.cpp */; };
 		A2963C7616AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6F16AE3F3A00817CFC /* SDLOpenGlWindow.h */; };
 		A2963C7716AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963C6F16AE3F3A00817CFC /* SDLOpenGlWindow.h */; };
@@ -691,8 +689,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A228BBFD1505B54200045911 /* Build configuration list for PBXNativeTarget "Nxna_ios" */;
 			buildPhases = (
-				A228BBEC1505B54200045911 /* Sources */,
 				A228BBED1505B54200045911 /* Frameworks */,
+				A228BBEC1505B54200045911 /* Sources */,
 				A228BBEE1505B54200045911 /* Headers */,
 			);
 			buildRules = (
@@ -802,8 +800,6 @@
 				A2963C5E16AE04AE00817CFC /* SamplerStateCollection.cpp in Sources */,
 				A2963C6016AE04AE00817CFC /* VertexDeclaration.cpp in Sources */,
 				A2963C6516AE050F00817CFC /* OggVorbisDecoder.cpp in Sources */,
-				A2963C7016AE3F3A00817CFC /* SDLGame.cpp in Sources */,
-				A2963C7416AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */,
 				A2963CAC16B49D2600817CFC /* GlslSource.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

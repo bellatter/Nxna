@@ -35,4 +35,8 @@ __pragma(warning(disable:4481))
 // if for some reason you don't want Ogg Vorbis (.ogg files) support you can uncomment the following line
 //#define NXNA_DISABLE_OGG
 
+#if defined NXNA_PLATFORM_APPLE_IOS
+#define NXNA_DISABLE_OGG
+#endif
+
 #endif // NXNACONFIG_H
