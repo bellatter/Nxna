@@ -311,6 +311,7 @@ namespace OpenGl
 		m_vertices = nullptr;
 		m_declaration = vertexDeclaration;
 		setupVertexBufferPointers(data);
+		SetSamplers();
 
 		GLenum glPrimitiveType;
 		if (primitiveType == PrimitiveType_TriangleStrip)
