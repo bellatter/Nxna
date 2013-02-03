@@ -185,6 +185,8 @@
 		A2963CB416BE02A100817CFC /* IOSMediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963CB216BE02A100817CFC /* IOSMediaPlayer.h */; };
 		A2963CB816BE059100817CFC /* IOSMediaPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A2963CB716BE050D00817CFC /* IOSMediaPlayer.mm */; };
 		A2963CBA16BE0A2200817CFC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2963CB916BE0A2200817CFC /* AVFoundation.framework */; };
+		A2963CBF16BE15CB00817CFC /* OggMediaPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963CBD16BE15CB00817CFC /* OggMediaPlayer.cpp */; };
+		A2963CC016BE15CB00817CFC /* OggMediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963CBE16BE15CB00817CFC /* OggMediaPlayer.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -318,6 +320,8 @@
 		A2963CB216BE02A100817CFC /* IOSMediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSMediaPlayer.h; path = Media/IOSMediaPlayer.h; sourceTree = SOURCE_ROOT; };
 		A2963CB716BE050D00817CFC /* IOSMediaPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSMediaPlayer.mm; path = Media/IOSMediaPlayer.mm; sourceTree = SOURCE_ROOT; };
 		A2963CB916BE0A2200817CFC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		A2963CBD16BE15CB00817CFC /* OggMediaPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OggMediaPlayer.cpp; path = Media/OggMediaPlayer.cpp; sourceTree = SOURCE_ROOT; };
+		A2963CBE16BE15CB00817CFC /* OggMediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OggMediaPlayer.h; path = Media/OggMediaPlayer.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -560,6 +564,8 @@
 		A2963B3B16ADEE7900817CFC /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				A2963CBD16BE15CB00817CFC /* OggMediaPlayer.cpp */,
+				A2963CBE16BE15CB00817CFC /* OggMediaPlayer.h */,
 				A2963B3D16ADEE9700817CFC /* MediaPlayer.cpp */,
 				A2963B3E16ADEE9700817CFC /* MediaPlayer.h */,
 				A2963B3F16ADEE9700817CFC /* Song.cpp */,
@@ -692,6 +698,7 @@
 				A2963C7716AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */,
 				A2963CAF16B49D2600817CFC /* GlslSource.h in Headers */,
 				A2963CB416BE02A100817CFC /* IOSMediaPlayer.h in Headers */,
+				A2963CC016BE15CB00817CFC /* OggMediaPlayer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -872,6 +879,7 @@
 				A2963C7516AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */,
 				A2963CA616AE510F00817CFC /* SdlMain.cpp in Sources */,
 				A2963CAD16B49D2600817CFC /* GlslSource.cpp in Sources */,
+				A2963CBF16BE15CB00817CFC /* OggMediaPlayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
