@@ -11,11 +11,13 @@ namespace Media
 {
 	class SongLoader;
 	class MediaPlayer;
+	class OggMediaPlayer;
 
 	class Song
 	{
 		friend class SongLoader;
 		friend class MediaPlayer;
+		friend class OggMediaPlayer;
 
 		std::string m_name;
 		std::string m_path;
