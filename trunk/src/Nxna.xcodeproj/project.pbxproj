@@ -181,6 +181,10 @@
 		A2963CAD16B49D2600817CFC /* GlslSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963CAA16B49D2500817CFC /* GlslSource.cpp */; };
 		A2963CAE16B49D2600817CFC /* GlslSource.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963CAB16B49D2500817CFC /* GlslSource.h */; };
 		A2963CAF16B49D2600817CFC /* GlslSource.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963CAB16B49D2500817CFC /* GlslSource.h */; };
+		A2963CB316BE02A100817CFC /* IOSMediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963CB216BE02A100817CFC /* IOSMediaPlayer.h */; };
+		A2963CB416BE02A100817CFC /* IOSMediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963CB216BE02A100817CFC /* IOSMediaPlayer.h */; };
+		A2963CB816BE059100817CFC /* IOSMediaPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A2963CB716BE050D00817CFC /* IOSMediaPlayer.mm */; };
+		A2963CBA16BE0A2200817CFC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2963CB916BE0A2200817CFC /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -311,6 +315,9 @@
 		A2963CA516AE510F00817CFC /* SdlMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SdlMain.cpp; path = Platform/SdlMain.cpp; sourceTree = SOURCE_ROOT; };
 		A2963CAA16B49D2500817CFC /* GlslSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GlslSource.cpp; path = Graphics/OpenGL/GlslSource.cpp; sourceTree = SOURCE_ROOT; };
 		A2963CAB16B49D2500817CFC /* GlslSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlslSource.h; path = Graphics/OpenGL/GlslSource.h; sourceTree = SOURCE_ROOT; };
+		A2963CB216BE02A100817CFC /* IOSMediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSMediaPlayer.h; path = Media/IOSMediaPlayer.h; sourceTree = SOURCE_ROOT; };
+		A2963CB716BE050D00817CFC /* IOSMediaPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSMediaPlayer.mm; path = Media/IOSMediaPlayer.mm; sourceTree = SOURCE_ROOT; };
+		A2963CB916BE0A2200817CFC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,6 +325,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2963CBA16BE0A2200817CFC /* AVFoundation.framework in Frameworks */,
 				A228BBF41505B54200045911 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -336,6 +344,7 @@
 		A228BBE51505B54200045911 = {
 			isa = PBXGroup;
 			children = (
+				A2963CB916BE0A2200817CFC /* AVFoundation.framework */,
 				A2963BBC16ADF3D000817CFC /* Foundation.framework */,
 				A228BBF51505B54200045911 /* Nxna */,
 				A228BBF21505B54200045911 /* Frameworks */,
@@ -555,6 +564,8 @@
 				A2963B3E16ADEE9700817CFC /* MediaPlayer.h */,
 				A2963B3F16ADEE9700817CFC /* Song.cpp */,
 				A2963B4016ADEE9700817CFC /* Song.h */,
+				A2963CB216BE02A100817CFC /* IOSMediaPlayer.h */,
+				A2963CB716BE050D00817CFC /* IOSMediaPlayer.mm */,
 			);
 			name = Media;
 			sourceTree = "<group>";
@@ -668,6 +679,7 @@
 				A2963C7216AE3F3A00817CFC /* SDLGame.h in Headers */,
 				A2963C7616AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */,
 				A2963CAE16B49D2600817CFC /* GlslSource.h in Headers */,
+				A2963CB316BE02A100817CFC /* IOSMediaPlayer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -679,6 +691,7 @@
 				A2963C7316AE3F3A00817CFC /* SDLGame.h in Headers */,
 				A2963C7716AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */,
 				A2963CAF16B49D2600817CFC /* GlslSource.h in Headers */,
+				A2963CB416BE02A100817CFC /* IOSMediaPlayer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -750,6 +763,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2963CB816BE059100817CFC /* IOSMediaPlayer.mm in Sources */,
 				A28808E71512E54E005D983A /* Game.cpp in Sources */,
 				A28808E91512E54E005D983A /* IGraphicsDeviceManager.cpp in Sources */,
 				A28808EB1512E54E005D983A /* MathHelper.cpp in Sources */,
