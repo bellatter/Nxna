@@ -10,10 +10,6 @@ namespace Media
 	class MediaPlayer
 	{
 		static Song* m_currentSong;
-		static unsigned int m_source;
-		static unsigned int m_buffers[3];
-		static bool m_repeat;
-		static float m_volume;
 
 	public:
 		static void Play(Song* song);
@@ -21,17 +17,16 @@ namespace Media
 		static void Resume();
 		static void Stop();
 
-		static bool IsRepeating() { return m_repeat; }
-		static void IsRepeating(bool repeat) { m_repeat = repeat; }
+		static bool IsRepeating();
+		static void IsRepeating(bool repeat);
 
 		static void SetVolume(float volume);
-		static float GetVolume() { return m_volume; }
+		static float GetVolume();
 
 		// don't use this! This is just for the AudioManager to call!
 		static void Tick();
 
-	private:
-		static void stream(unsigned int alBuffer);
+	
 	};
 }
 }

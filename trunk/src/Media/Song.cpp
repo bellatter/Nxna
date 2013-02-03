@@ -21,7 +21,10 @@ namespace Media
 		std::string pathWithoutExtension = path.substr(0, path.find_last_of('.'));
 
 		char audioFile[256];
-#ifdef NXNA_PLATFORM_WIN32
+
+#ifdef NXNA_PLATFORM_APPLE_IOS
+		snprintf(audioFile, 256, "%s/%s.mp3", stream->GetContentManager()->GetRootDirectory(), stream->GetName());
+#elif defined NXNA_PLATFORM_WIN32
 		_snprintf(audioFile, 256, "%s/%s.ogg", stream->GetContentManager()->GetRootDirectory(), stream->GetName());
 #else
 		snprintf(audioFile, 256, "%s/%s.ogg", stream->GetContentManager()->GetRootDirectory(), stream->GetName());

@@ -145,6 +145,7 @@
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Media\MediaPlayer.h" />
+    <ClInclude Include="Media\OggMediaPlayer.h" />
     <ClInclude Include="Media\Song.h" />
     <ClInclude Include="Nxna.h" />
     <ClInclude Include="NxnaConfig.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Media\MediaPlayer.cpp" />
+    <ClCompile Include="Media\OggMediaPlayer.cpp" />
     <ClCompile Include="Media\Song.cpp" />
     <ClCompile Include="Platform\iOS\IOSOpenGlWindow.cpp" />
     <ClCompile Include="Platform\NaClMain.cpp" />
