@@ -10,8 +10,8 @@ Game1::Game1()
 #if defined NXNA_PLATFORM_WIN32_SDL
 	m_graphics = new Nxna::Platform::SDL::SDLOpenGlWindow(this);
 #else
-	//m_graphics = new Nxna::Platform::Windows::WindowsOpenGlWindow(this);
-	m_graphics = new Nxna::Platform::Windows::WindowsDirect3D11Window(this);
+	m_graphics = new Nxna::Platform::Windows::WindowsOpenGlWindow(this);
+	//m_graphics = new Nxna::Platform::Windows::WindowsDirect3D11Window(this);
 #endif
 #else
 	m_graphics = new Nxna::Platform::SDL::SDLOpenGlWindow(this);

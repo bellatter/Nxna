@@ -1,6 +1,6 @@
 #include "../../NxnaConfig.h"
 
-#if defined NXNA_PLATFORM_WIN32
+#if !defined NXNA_DISABLE_D3D11
 
 #include <cassert>
 #include "WindowsDirect3D11Window.h"
