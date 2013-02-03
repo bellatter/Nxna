@@ -4,6 +4,8 @@
 #include "../../NxnaConfig.h"
 #include "../../IGraphicsDeviceManager.h"
 
+#if !defined NXNA_DISABLE_D3D11
+
 NXNA_DISABLE_OVERRIDE_WARNING
 
 namespace Nxna
@@ -33,5 +35,7 @@ namespace Windows
 }
 
 NXNA_ENABLE_OVERRIDE_WARNING
+
+#endif
 
 #endif // NXNA_PLATFORM_WINDOWS_WINDOWSDIRECT3D11WINDOW_H

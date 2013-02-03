@@ -35,8 +35,15 @@ __pragma(warning(disable:4481))
 // if for some reason you don't want Ogg Vorbis (.ogg files) support you can uncomment the following line
 //#define NXNA_DISABLE_OGG
 
+// if you don't want Direct3D 11 support you can uncomment the following line
+//#define NXNA_DISABLE_D3D11
+
 #if defined NXNA_PLATFORM_APPLE_IOS
 #define NXNA_DISABLE_OGG
+#endif
+
+#if !defined NXNA_PLATFORM_WIN32
+#define NXNA_DISABLE_D3D11
 #endif
 
 #endif // NXNACONFIG_H

@@ -37,6 +37,9 @@
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{1fc4ac49-ea01-4cf2-a73d-728dec386bd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Media">
+      <UniqueIdentifier>{220a9999-b1a0-486c-9769-9815297a4198}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\GraphicsDevice.h">
@@ -204,25 +207,57 @@
     <ClInclude Include="Graphics\Direct3D11\D3D11IndexBuffer.h">
       <Filter>Graphics\Direct3D11</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Direct3D11\D3D11Texture2D.h" />
-    <ClInclude Include="Graphics\Direct3D11\D3D11VertexBuffer.h" />
-    <ClInclude Include="Graphics\Direct3D11\HlslEffect.h" />
-    <ClInclude Include="Graphics\Direct3D11\HlslSpriteEffect.h" />
-    <ClInclude Include="Platform\Windows\WindowsOpenGlWindow.h" />
-    <ClInclude Include="Platform\Windows\WindowsCommon.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Graphics\ConstantBuffer.h" />
     <ClInclude Include="Graphics\IContantBufferPmpl.h" />
-    <ClInclude Include="Graphics\Direct3D11\D3D11ConstantBuffer.h" />
-    <ClInclude Include="Graphics\Direct3D11\D3D11Utils.h" />
-    <ClInclude Include="Media\Song.h" />
-    <ClInclude Include="Media\MediaPlayer.h" />
-    <ClInclude Include="Graphics\SamplerStateCollection.h" />
-    <ClInclude Include="Graphics\Direct3D11\HlslBasicEffect.h" />
-    <ClInclude Include="Graphics\Direct3D11\HlslDualTextureEffect.h" />
-    <ClInclude Include="Audio\OggVorbis\OggVorbisDecoder.h" />
-    <ClInclude Include="Graphics\OpenGL\GlslSource.h" />
-    <ClInclude Include="Media\OggMediaPlayer.h" />
+    <ClInclude Include="Graphics\Direct3D11\D3D11VertexBuffer.h">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Direct3D11\D3D11ConstantBuffer.h">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Direct3D11\D3D11Texture2D.h">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Direct3D11\D3D11Utils.h">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Direct3D11\HlslSpriteEffect.h">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Direct3D11\HlslBasicEffect.h">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Direct3D11\HlslDualTextureEffect.h">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Direct3D11\HlslEffect.h">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Media\MediaPlayer.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="Media\Song.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\OggVorbis\OggVorbisDecoder.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="Media\OggMediaPlayer.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GlslSource.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\SamplerStateCollection.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\WindowsCommon.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\WindowsOpenGlWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -350,24 +385,56 @@
     <ClCompile Include="Graphics\Direct3D11\D3D11IndexBuffer.cpp">
       <Filter>Graphics\Direct3D11</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Direct3D11\D3D11Texture2D.cpp" />
-    <ClCompile Include="Graphics\Direct3D11\D3D11VertexBuffer.cpp" />
-    <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp" />
-    <ClCompile Include="Graphics\Direct3D11\HlslSpriteEffect.cpp" />
-    <ClCompile Include="Platform\Windows\WindowsOpenGlWindow.cpp" />
-    <ClCompile Include="Platform\Windows\WindowsCommon.cpp" />
-    <ClCompile Include="Graphics\VertexDeclaration.cpp" />
     <ClCompile Include="Platform\Windows\WindowsMain.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Direct3D11\D3D11ConstantBuffer.cpp" />
-    <ClCompile Include="Media\Song.cpp" />
-    <ClCompile Include="Graphics\Direct3D11\HlslBasicEffect.cpp" />
-    <ClCompile Include="Graphics\Direct3D11\HlslDualTextureEffect.cpp" />
-    <ClCompile Include="Graphics\SamplerStateCollection.cpp" />
-    <ClCompile Include="Media\MediaPlayer.cpp" />
-    <ClCompile Include="Audio\OggVorbis\OggVorbisDecoder.cpp" />
-    <ClCompile Include="Graphics\OpenGL\GlslSource.cpp" />
-    <ClCompile Include="Media\OggMediaPlayer.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\D3D11ConstantBuffer.cpp">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\D3D11Texture2D.cpp">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\D3D11VertexBuffer.cpp">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\HlslBasicEffect.cpp">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\HlslDualTextureEffect.cpp">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\HlslSpriteEffect.cpp">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Media\MediaPlayer.cpp">
+      <Filter>Media</Filter>
+    </ClCompile>
+    <ClCompile Include="Media\Song.cpp">
+      <Filter>Media</Filter>
+    </ClCompile>
+    <ClCompile Include="Media\OggMediaPlayer.cpp">
+      <Filter>Media</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\OggVorbis\OggVorbisDecoder.cpp">
+      <Filter>Media</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GlslSource.cpp">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\SamplerStateCollection.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\VertexDeclaration.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Windows\WindowsCommon.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Windows\WindowsOpenGlWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
