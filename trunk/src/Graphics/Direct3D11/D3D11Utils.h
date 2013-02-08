@@ -75,23 +75,23 @@ namespace Direct3D11
 
 		static D3D11_FILTER ConvertTextureFilter(TextureFilter filter)
 		{
-			if (filter == TextureFilter_Linear)
+			if (filter == TextureFilter::Linear)
 				return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-			if (filter == TextureFilter_Point)
+			if (filter == TextureFilter::Point)
 				return D3D11_FILTER_MIN_MAG_MIP_POINT;
-			if (filter == TextureFilter_Anisotropic)
+			if (filter == TextureFilter::Anisotropic)
 				return D3D11_FILTER_ANISOTROPIC;
-			if (filter == TextureFilter_LinearMipPoint)
+			if (filter == TextureFilter::LinearMipPoint)
 				return D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
-			if (filter == TextureFilter_PointMipLinear)
+			if (filter == TextureFilter::PointMipLinear)
 				return D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
-			if (filter == TextureFilter_MinLinearMagPointMipLinear)
+			if (filter == TextureFilter::MinLinearMagPointMipLinear)
 				return D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-			if (filter == TextureFilter_MinLinearMagPointMipPoint)
+			if (filter == TextureFilter::MinLinearMagPointMipPoint)
 				return D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
-			if (filter == TextureFilter_MinPointMagLinearMipLinear)
+			if (filter == TextureFilter::MinPointMagLinearMipLinear)
 				return D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
-			if (filter == TextureFilter_MinPointMagLinearMipPoint)
+			if (filter == TextureFilter::MinPointMagLinearMipPoint)
 				return D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
 
 			// we should never get hear
@@ -100,11 +100,11 @@ namespace Direct3D11
 
 		static D3D11_TEXTURE_ADDRESS_MODE ConvertTextureAddressMode(TextureAddressMode mode)
 		{
-			if (mode == TextureAddressMode_Clamp)
+			if (mode == TextureAddressMode::Clamp)
 				return D3D11_TEXTURE_ADDRESS_CLAMP;
-			if (mode == TextureAddressMode_Mirror)
+			if (mode == TextureAddressMode::Mirror)
 				return D3D11_TEXTURE_ADDRESS_MIRROR;
-			if (mode == TextureAddressMode_Wrap)
+			if (mode == TextureAddressMode::Wrap)
 				return D3D11_TEXTURE_ADDRESS_WRAP;
 
 			// we should never get here

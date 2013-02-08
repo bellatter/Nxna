@@ -1,18 +1,19 @@
 #ifndef INPUT_KEYS_H
 #define INPUT_KEYS_H
 
+#include "../NxnaConfig.h"
+
 namespace Nxna
 {
 namespace Input
 {
-	enum Keys
-	{
-		Keys_None,
-		Keys_Back,
-		Keys_Tab,
-		Keys_Enter,
-		Keys_OemTilde
-	};
+	NXNA_ENUM(Keys)
+		None,
+		Back,
+		Tab,
+		Enter,
+		OemTilde
+	END_NXNA_ENUM(Keys)
 }
 }
 

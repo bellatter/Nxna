@@ -7,12 +7,11 @@ namespace Nxna
 {
 namespace Graphics
 {
-	enum CullMode
-	{
-		CullMode_CullClockwiseFace,
-		CullMode_CullCounterClockwiseFace,
-		CullMode_None
-	};
+	NXNA_ENUM(CullMode)
+		CullClockwiseFace,
+		CullCounterClockwiseFace,
+		None
+	END_NXNA_ENUM(CullMode)
 
 	class RasterizerState
 	{
@@ -28,7 +27,7 @@ namespace Graphics
 
 		RasterizerState()
 		{
-			TheCullMode = CullMode_CullCounterClockwiseFace;
+			TheCullMode = CullMode::CullCounterClockwiseFace;
 
 			m_handle = nullptr;
 		}

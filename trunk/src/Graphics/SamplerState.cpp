@@ -10,13 +10,13 @@ namespace Graphics
 
 	void SamplerState::init()
 	{
-		m_linearClamp.AddressU = TextureAddressMode_Clamp;
-		m_linearClamp.AddressV = TextureAddressMode_Clamp;
-		m_linearClamp.AddressW = TextureAddressMode_Clamp;
+		m_linearClamp.AddressU = TextureAddressMode::Clamp;
+		m_linearClamp.AddressV = TextureAddressMode::Clamp;
+		m_linearClamp.AddressW = TextureAddressMode::Clamp;
 
-		m_linearWrap.AddressU = TextureAddressMode_Wrap;
-		m_linearWrap.AddressV = TextureAddressMode_Wrap;
-		m_linearWrap.AddressW = TextureAddressMode_Wrap;
+		m_linearWrap.AddressU = TextureAddressMode::Wrap;
+		m_linearWrap.AddressV = TextureAddressMode::Wrap;
+		m_linearWrap.AddressW = TextureAddressMode::Wrap;
 	}
 }
 }

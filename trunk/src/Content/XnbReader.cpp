@@ -47,11 +47,11 @@ namespace Content
 
 		byte target = m_stream->ReadByte();
 		if (target == 'w')
-			m_target = TargetPlatform_Windows;
+			m_target = TargetPlatform::Windows;
 		else if (target == 'm')
-			m_target = TargetPlatform_WinPhone;
+			m_target = TargetPlatform::WinPhone;
 		else if (target == 'x')
-			m_target = TargetPlatform_XBox360;
+			m_target = TargetPlatform::XBox360;
 		else
 			throw ContentException("Not a valid XNB file");
 

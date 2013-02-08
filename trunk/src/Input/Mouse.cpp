@@ -14,7 +14,7 @@ namespace Input
 
 	void Mouse::InjectMouseButton(int button, bool down)
 	{
-		ButtonState state = down ? ButtonState_Pressed : ButtonState_Released;
+		ButtonState state = down ? ButtonState::Pressed : ButtonState::Released;
 
 		if (button == 1)
 			_current.LeftButton = state;

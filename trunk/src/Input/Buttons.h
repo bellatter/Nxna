@@ -1,36 +1,36 @@
 #ifndef INPUT_BUTTONS_H
 #define INPUT_BUTTONS_H
 
+#include "../NxnaConfig.h"
+
 namespace Nxna
 {
 namespace Input
 {
-	enum Buttons
-	{
-		Buttons_DPadUp,
-		Buttons_DPadDown,
-		Buttons_DPadLeft,
-		Buttons_DPadRight,
-		Buttons_Start,
-		Buttons_Back,
-		Buttons_LeftStick,
-		Buttons_RightStick,
-		Buttons_LeftShoulder,
-		Buttons_RightShoulder,
-		Buttons_BigButton,
-		Buttons_A,
-		Buttons_B,
-		Buttons_X,
-		Buttons_Y
+	NXNA_ENUM(Buttons)
+		DPadUp,
+		DPadDown,
+		DPadLeft,
+		DPadRight,
+		Start,
+		Back,
+		LeftStick,
+		RightStick,
+		LeftShoulder,
+		RightShoulder,
+		BigButton,
+		A,
+		B,
+		X,
+		Y
 
 		// TODO: finish this
-	};
+	END_NXNA_ENUM(Buttons)
 
-	enum ButtonState
-	{
-		ButtonState_Released,
-		ButtonState_Pressed
-	};
+	NXNA_ENUM(ButtonState)
+		Released,
+		Pressed
+	END_NXNA_ENUM(ButtonState)
 }
 }
 

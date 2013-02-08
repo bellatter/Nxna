@@ -92,29 +92,29 @@ namespace OpenGl
 	CullMode OpenGlDevice::GetRasterizerState()
 	{
 		if (glIsEnabled(GL_CULL_FACE) == GL_FALSE)
-            return CullMode_None;
+            return CullMode::None;
 
         int param;
         glGetIntegerv(GL_FRONT_FACE, &param);
 
         // OpenGL stores what NOT to cull, so we need to reverse it
         if (param == GL_CW)
-            return CullMode_CullCounterClockwiseFace;
+            return CullMode::CullCounterClockwiseFace;
         else
-            return CullMode_CullClockwiseFace;
+            return CullMode::CullClockwiseFace;
 	}
 
 	void OpenGlDevice::SetRasterizerState(const RasterizerState* state)
 	{
 		assert(state != nullptr);
 
-		if (state->TheCullMode == CullMode_None)
+		if (state->TheCullMode == CullMode::None)
             glDisable(GL_CULL_FACE);
 		else
 		{
 			glEnable(GL_CULL_FACE);
 
-            if (state->TheCullMode == CullMode_CullClockwiseFace)
+            if (state->TheCullMode == CullMode::CullClockwiseFace)
                 glFrontFace(GL_CCW);
             else
                 glFrontFace(GL_CW);
@@ -368,7 +368,7 @@ namespace OpenGl
 
 	Texture2D* OpenGlDevice::CreateTexture(int width, int height)
 	{
-		return new GlTexture2D(this, width, height, SurfaceFormat_Color);
+		return new GlTexture2D(this, width, height, SurfaceFormat::Color);
 	}
 
 	Texture2D* OpenGlDevice::CreateTexture(int width, int height, SurfaceFormat format)

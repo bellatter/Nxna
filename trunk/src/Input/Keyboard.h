@@ -8,11 +8,10 @@ namespace Nxna
 {
 namespace Input
 {
-	enum KeyState
-	{
-		KeyState_Up = 0,
-		KeyState_Down
-	};
+	NXNA_ENUM(KeyState)
+		Up = 0,
+		Down
+	END_NXNA_ENUM(KeyState)
 
 	class Keyboard;
 
@@ -25,8 +24,8 @@ namespace Input
 
 	public:
 		KeyState GetState(Keys key);
-		bool IsKeyDown(Keys key) { return GetState(key) == KeyState_Down; }
-		bool IsKeyUp(Keys key) { return GetState(key) == KeyState_Up; }
+		bool IsKeyDown(Keys key) { return GetState(key) == KeyState::Down; }
+		bool IsKeyUp(Keys key) { return GetState(key) == KeyState::Up; }
 	};
 
 	class Keyboard
