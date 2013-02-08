@@ -269,7 +269,7 @@ namespace Audio
 			format2.wf = format;
 
 			// skip the coefficients
-			stream->Seek(7 * 4, Content::SeekOrigin_Current);
+			stream->Seek(7 * 4, Content::SeekOrigin::Current);
 
 			samplesPerBlock = format2.SamplesPerBlock;
 		}

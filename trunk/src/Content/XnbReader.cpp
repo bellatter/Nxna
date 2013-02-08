@@ -104,7 +104,7 @@ namespace Content
 	{
 		int len = read7BitEncodedInt();
 		
-		m_stream->Seek(len, SeekOrigin_Current);
+		m_stream->Seek(len, SeekOrigin::Current);
 	}
 }
 }
