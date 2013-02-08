@@ -110,13 +110,13 @@ namespace SDL
 	Nxna::Input::Keys convertSDLK(SDL_Keycode sdlk)
 	{
 		if (sdlk == SDLK_BACKSPACE)
-			return Nxna::Input::Keys_Back;
+			return Nxna::Input::Keys::Back;
 		if (sdlk == SDLK_RETURN)
-			return Nxna::Input::Keys_Enter;
+			return Nxna::Input::Keys::Enter;
 		if (sdlk == SDLK_BACKQUOTE)
-			return Nxna::Input::Keys_OemTilde;
+			return Nxna::Input::Keys::OemTilde;
 
-		return Nxna::Input::Keys_None;
+		return Nxna::Input::Keys::None;
 	}
 
 	void SDLGame::handleEvents()

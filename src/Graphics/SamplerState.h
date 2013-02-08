@@ -7,25 +7,23 @@ namespace Nxna
 {
 namespace Graphics
 {
-	enum TextureAddressMode
-	{
-		TextureAddressMode_Clamp,
-		TextureAddressMode_Mirror,
-		TextureAddressMode_Wrap
-	};
+	NXNA_ENUM(TextureAddressMode)
+		Clamp,
+		Mirror,
+		Wrap
+	END_NXNA_ENUM(TextureAddressMode)
 
-	enum TextureFilter
-	{
-		TextureFilter_Linear,
-		TextureFilter_Point,
-		TextureFilter_Anisotropic,
-		TextureFilter_LinearMipPoint,
-		TextureFilter_PointMipLinear,
-		TextureFilter_MinLinearMagPointMipLinear,
-		TextureFilter_MinLinearMagPointMipPoint,
-		TextureFilter_MinPointMagLinearMipLinear,
-		TextureFilter_MinPointMagLinearMipPoint
-	};
+	NXNA_ENUM(TextureFilter)
+		Linear,
+		Point,
+		Anisotropic,
+		LinearMipPoint,
+		PointMipLinear,
+		MinLinearMagPointMipLinear,
+		MinLinearMagPointMipPoint,
+		MinPointMagLinearMipLinear,
+		MinPointMagLinearMipPoint
+	END_NXNA_ENUM(TextureFilter)
 
 	class SamplerState
 	{
@@ -40,10 +38,10 @@ namespace Graphics
 
 		SamplerState()
 		{
-			AddressU = TextureAddressMode_Wrap;
-			AddressV = TextureAddressMode_Wrap;
-			AddressW = TextureAddressMode_Wrap;
-			Filter = TextureFilter_Linear;
+			AddressU = TextureAddressMode::Wrap;
+			AddressV = TextureAddressMode::Wrap;
+			AddressW = TextureAddressMode::Wrap;
+			Filter = TextureFilter::Linear;
 			MaxAnisotropy = 4;
 			MaxMipLevel = 0;
 			MipMapLevelOfDetailBias = 0;

@@ -11,9 +11,9 @@ namespace Graphics
 
 	void RasterizerState::init()
 	{
-		m_cullClockwise.TheCullMode = CullMode_CullClockwiseFace;
-		m_cullCounterClockwise.TheCullMode = CullMode_CullCounterClockwiseFace;
-		m_cullNone.TheCullMode = CullMode_None;
+		m_cullClockwise.TheCullMode = CullMode::CullClockwiseFace;
+		m_cullCounterClockwise.TheCullMode = CullMode::CullCounterClockwiseFace;
+		m_cullNone.TheCullMode = CullMode::None;
 
 		m_isInitialized = true;
 	}

@@ -33,7 +33,7 @@ namespace OpenGl
 
 		glBindTexture(GL_TEXTURE_2D, m_glTex);
 
-		if (m_format == SurfaceFormat_Dxt1 || m_format == SurfaceFormat_Dxt3)
+		if (m_format == SurfaceFormat::Dxt1 || m_format == SurfaceFormat::Dxt3)
 		{
 #ifndef GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
 #define GL_COMPRESSED_RGBA_S3TC_DXT1_EXT 0x83F1
@@ -46,7 +46,7 @@ namespace OpenGl
 			if (m_device->GetCaps()->SupportsS3tcTextureCompression == false)
 			{
 				byte* converted;
-				if (m_format == SurfaceFormat_Dxt1)
+				if (m_format == SurfaceFormat::Dxt1)
 					converted = DecompressDxtc1(pixels, mipWidth, mipHeight, length);
 				else
 					converted = DecompressDxtc3(pixels, mipWidth, mipHeight, length); 
@@ -55,13 +55,13 @@ namespace OpenGl
 			}
 			else
 			{
-				if (m_format == SurfaceFormat_Dxt1)
+				if (m_format == SurfaceFormat::Dxt1)
 					glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, mipWidth, mipHeight, 0, length, pixels);
 				else
 					glCompressedTexImage2D(GL_TEXTURE_2D, level, GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, mipWidth, mipHeight, 0, length, pixels);
 			}
 		}
-		else if (m_format == SurfaceFormat_Pvrtc4)
+		else if (m_format == SurfaceFormat::Pvrtc4)
 		{
 #ifndef GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG
 #define GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG 0x8C02
@@ -90,43 +90,43 @@ namespace OpenGl
 		glBindTexture(GL_TEXTURE_2D, m_glTex);
 
 		int minFilter, magFilter;
-		if (state->Filter == TextureFilter_Linear)
+		if (state->Filter == TextureFilter::Linear)
 		{
 			minFilter = (m_hasMipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 			magFilter = GL_LINEAR;
 		}
-		else if (state->Filter == TextureFilter_Point)
+		else if (state->Filter == TextureFilter::Point)
 		{
 			minFilter = (m_hasMipmaps ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST);
 			magFilter = GL_NEAREST;
 		}
-		else if (state->Filter == TextureFilter_LinearMipPoint)
+		else if (state->Filter == TextureFilter::LinearMipPoint)
 		{
 			// TODO: what should we do if they want a mipmap filter but the texture isn't mipmapped?
 			minFilter = GL_LINEAR_MIPMAP_NEAREST;
 			magFilter = GL_LINEAR;
 		}
-		else if (state->Filter == TextureFilter_PointMipLinear)
+		else if (state->Filter == TextureFilter::PointMipLinear)
 		{
 			minFilter = GL_NEAREST_MIPMAP_LINEAR;
 			magFilter = GL_NEAREST;
 		}
-		else if (state->Filter == TextureFilter_MinLinearMagPointMipLinear)
+		else if (state->Filter == TextureFilter::MinLinearMagPointMipLinear)
 		{
 			minFilter = GL_LINEAR_MIPMAP_LINEAR;
 			magFilter = GL_NEAREST;
 		}
-		else if (state->Filter == TextureFilter_MinLinearMagPointMipPoint)
+		else if (state->Filter == TextureFilter::MinLinearMagPointMipPoint)
 		{
 			minFilter = GL_LINEAR_MIPMAP_NEAREST;
 			magFilter = GL_NEAREST;
 		}
-		else if (state->Filter == TextureFilter_MinPointMagLinearMipLinear)
+		else if (state->Filter == TextureFilter::MinPointMagLinearMipLinear)
 		{
 			minFilter = GL_NEAREST_MIPMAP_LINEAR;
 			magFilter = GL_LINEAR;
 		}
-		else if (state->Filter == TextureFilter_MinPointMagLinearMipPoint)
+		else if (state->Filter == TextureFilter::MinPointMagLinearMipPoint)
 		{
 			minFilter = GL_NEAREST_MIPMAP_NEAREST;
 			magFilter = GL_LINEAR;
@@ -149,9 +149,9 @@ namespace OpenGl
 
 	int GlTexture2D::convertAddressMode(TextureAddressMode mode)
 	{
-		if (mode == TextureAddressMode_Wrap)
+		if (mode == TextureAddressMode::Wrap)
 			return GL_REPEAT;
-		if (mode == TextureAddressMode_Clamp)
+		if (mode == TextureAddressMode::Clamp)
 			return GL_CLAMP_TO_EDGE;
 		
 		return GL_MIRRORED_REPEAT;

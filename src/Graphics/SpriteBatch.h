@@ -12,21 +12,19 @@ namespace Nxna
 {
 namespace Graphics
 {
-	enum SpriteSortMode
-	{
-		SpriteSortMode_BackToFront,
-		SpriteSortMode_Deferred,
-		SpriteSortMode_FrontToBack,
-		SpriteSortMode_Immediate,
-		SpriteSortMode_Texture
-	};
+	NXNA_ENUM(SpriteSortMode)
+		BackToFront,
+		Deferred,
+		FrontToBack,
+		Immediate,
+		Texture
+	END_NXNA_ENUM(SpriteSortMode)
 
-	enum SpriteEffects
-	{
-		SpriteEffects_None = 0,
-		SpriteEffects_FlipHorizontally = 2,
-		SpriteEffects_FlipVertically = 4
-	};
+	NXNA_ENUM(SpriteEffects)
+		None = 0,
+		FlipHorizontally = 2,
+		FlipVertically = 4
+	END_NXNA_ENUM(SpriteEffects)
 
 	class Texture2D;
 	class Effect;

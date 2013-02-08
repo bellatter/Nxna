@@ -10,7 +10,7 @@ namespace Input
 		int keyVal = (int)key;
 		assert(keyVal < 32);
 
-		return (m_state1 & (1 << keyVal)) > 0 ? KeyState_Down : KeyState_Up;
+		return (m_state1 & (1 << keyVal)) > 0 ? KeyState::Down : KeyState::Up;
 	}
 
 	KeyboardState Keyboard::m_current;

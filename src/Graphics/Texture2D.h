@@ -16,17 +16,16 @@ namespace Content
 
 namespace Graphics
 {
-	enum SurfaceFormat
-	{
-		SurfaceFormat_Color,
-		SurfaceFormat_Dxt1,
-		SurfaceFormat_Dxt3,
-		SurfaceFormat_Dxt5,
+	NXNA_ENUM(SurfaceFormat)
+		Color,
+		Dxt1,
+		Dxt3,
+		Dxt5,
 
 		// the following are not supported by XNA. These are our own
 		// extensions so that iOS devices can have compressed textures too.
-		SurfaceFormat_Pvrtc4
-	};
+		Pvrtc4
+	END_NXNA_ENUM(SurfaceFormat)
 
 	class GraphicsDevice;
 	class SamplerState;
@@ -47,6 +46,9 @@ namespace Graphics
 			m_height = 0;
 			m_device = device;
 		}
+
+		// You may notice that Texture2D is missing some constructors.
+		// Right now you have to use GraphicsDevice.CreateTexture2D() instead.
 
 		virtual ~Texture2D() { }
 

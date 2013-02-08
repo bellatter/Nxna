@@ -2,6 +2,7 @@
 #define CONTENT_XNBREADER_H
 
 #include <string>
+#include "../NxnaConfig.h"
 
 namespace Nxna
 {
@@ -10,12 +11,11 @@ namespace Content
 	class Stream;
 	class ContentManager;
 
-	enum TargetPlatform
-	{
-		TargetPlatform_Windows,
-		TargetPlatform_WinPhone,
-		TargetPlatform_XBox360
-	};
+	NXNA_ENUM(TargetPlatform)
+		Windows,
+		WinPhone,
+		XBox360
+	END_NXNA_ENUM(TargetPlatform)
 
 	class XnbReader
 	{

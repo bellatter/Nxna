@@ -54,7 +54,7 @@ namespace Graphics
 
 	void SpriteBatch::Begin()
 	{
-		Begin(SpriteSortMode_Texture, nullptr, nullptr, 
+		Begin(SpriteSortMode::Texture, nullptr, nullptr, 
 			nullptr, nullptr, Nxna::Matrix::GetIdentity());
 	}
 
@@ -86,7 +86,7 @@ namespace Graphics
 		else
 			m_rasterizerState = rasterizerState;
 
-		if (sortMode == SpriteSortMode_Immediate)
+		if (sortMode == SpriteSortMode::Immediate)
 		{
 			setRenderStates();
 		}
@@ -94,7 +94,7 @@ namespace Graphics
 
 	void SpriteBatch::End()
 	{
-		if (m_sortMode != SpriteSortMode_Immediate)
+		if (m_sortMode != SpriteSortMode::Immediate)
 		{
 			setRenderStates();
 		}
@@ -265,12 +265,12 @@ namespace Graphics
 
 	void SpriteBatch::DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color)
 	{
-		DrawString(spriteFont, text, position, color, 0, Nxna::Vector2(0, 0), 1.0f, SpriteEffects_None, 0);
+		DrawString(spriteFont, text, position, color, 0, Nxna::Vector2(0, 0), 1.0f, SpriteEffects::None, 0);
 	}
 
 	void SpriteBatch::DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, const Color& color)
 	{
-		DrawString(spriteFont, text, position, color, 0, Nxna::Vector2(0, 0), 1.0f, SpriteEffects_None, 0);
+		DrawString(spriteFont, text, position, color, 0, Nxna::Vector2(0, 0), 1.0f, SpriteEffects::None, 0);
 	}
 
 	void SpriteBatch::DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color,

@@ -236,9 +236,9 @@ namespace Windows
 	{
 		// TODO: add the rest of the keys
 		if (key == VK_OEM_3)
-			return Nxna::Input::Keys_OemTilde;
+			return Nxna::Input::Keys::OemTilde;
 
-		return Nxna::Input::Keys_None;
+		return Nxna::Input::Keys::None;
 	}
 }
 }

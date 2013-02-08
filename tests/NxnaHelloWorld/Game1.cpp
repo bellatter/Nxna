@@ -41,7 +41,7 @@ void Game1::LoadContent()
     
 	byte pixels[] = { 128, 128, 128, 128 };
 
-	tex = GetGraphicsDevice()->CreateTexture(1, 1, Nxna::Graphics::SurfaceFormat_Color);
+	tex = GetGraphicsDevice()->CreateTexture(1, 1, Nxna::Graphics::SurfaceFormat::Color);
 	tex->SetData(0, pixels, 4);
 
 	vel.X = 50.0f;

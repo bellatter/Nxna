@@ -53,13 +53,13 @@ namespace Graphics
         
         Texture2D* texture;
 		if (format == FormatDXT1)
-			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat_Dxt1);
+			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat::Dxt1);
 		else if (format == FormatDXT3)
-			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat_Dxt3);
+			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat::Dxt3);
 		else if (format == FormatPVRTC4)
-			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat_Pvrtc4);
+			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat::Pvrtc4);
 		else
-			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat_Color);
+			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat::Color);
 
 		byte* pixels = nullptr;
 		int imageSize;

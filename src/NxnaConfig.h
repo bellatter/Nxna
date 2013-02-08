@@ -28,14 +28,16 @@ class safe_enum : public def
 	inner val;
 public:
 	safe_enum(type v) : val(v) {}
+	safe_enum() : val((inner)0) {}
 	inner underlying() const { return val; }
  
-	bool operator == (const safe_enum & s) const { return this->val == s.val; }
-	bool operator != (const safe_enum & s) const { return this->val != s.val; }
+	//bool operator == (const safe_enum & s) const { return this->val == s.val; }
+	//bool operator != (const safe_enum & s) const { return this->val != s.val; }
 	bool operator <  (const safe_enum & s) const { return this->val <  s.val; }
 	bool operator <= (const safe_enum & s) const { return this->val <= s.val; }
 	bool operator >  (const safe_enum & s) const { return this->val >  s.val; }
 	bool operator >= (const safe_enum & s) const { return this->val >= s.val; }
+	operator int() const { return (int)this->val; }
 };
 
 #define NXNA_ENUM(e) struct e##_def { enum type {

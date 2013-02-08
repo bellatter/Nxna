@@ -205,7 +205,7 @@ namespace Direct3D11
 
 	CullMode Direct3D11Device::GetRasterizerState() 
 	{
-		return CullMode::CullMode_CullClockwiseFace;
+		return CullMode::CullClockwiseFace;
 	}
 
 	void Direct3D11Device::SetRasterizerState(const RasterizerState* state)
@@ -329,7 +329,7 @@ namespace Direct3D11
 
 	Texture2D* Direct3D11Device::CreateTexture(int width, int height)
 	{
-		return new D3D11Texture2D(this, width, height, SurfaceFormat_Color);
+		return new D3D11Texture2D(this, width, height, SurfaceFormat::Color);
 	}
 	
 	Texture2D* Direct3D11Device::CreateTexture(int width, int height, SurfaceFormat format) 
@@ -506,12 +506,12 @@ namespace Direct3D11
 				ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
 
 				rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-				if (m_rasterizerState.TheCullMode == CullMode_CullClockwiseFace)
+				if (m_rasterizerState.TheCullMode == CullMode::CullClockwiseFace)
 				{
 					rasterizerDesc.CullMode = D3D11_CULL_BACK;
 					rasterizerDesc.FrontCounterClockwise = true;
 				}
-				else if (m_rasterizerState.TheCullMode == CullMode_CullCounterClockwiseFace)
+				else if (m_rasterizerState.TheCullMode == CullMode::CullCounterClockwiseFace)
 				{
 					rasterizerDesc.CullMode = D3D11_CULL_BACK;
 					rasterizerDesc.FrontCounterClockwise = false;

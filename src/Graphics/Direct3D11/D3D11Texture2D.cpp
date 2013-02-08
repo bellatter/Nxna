@@ -32,13 +32,13 @@ namespace Direct3D11
 
 		D3D11_TEXTURE2D_DESC desc;
 		desc.ArraySize = 1;
-		if (m_format == SurfaceFormat_Color)
+		if (m_format == SurfaceFormat::Color)
 			desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		else if (m_format == SurfaceFormat_Dxt1)
+		else if (m_format == SurfaceFormat::Dxt1)
 			desc.Format = DXGI_FORMAT_BC1_UNORM;
-		else if (m_format == SurfaceFormat_Dxt3)
+		else if (m_format == SurfaceFormat::Dxt3)
 			desc.Format = DXGI_FORMAT_BC2_UNORM;
-		else if (m_format == SurfaceFormat_Dxt5)
+		else if (m_format == SurfaceFormat::Dxt5)
 			desc.Format = DXGI_FORMAT_BC3_UNORM;
 		desc.Width = m_width;
 		desc.Height = m_height;
@@ -52,12 +52,12 @@ namespace Direct3D11
 
 		D3D11_SUBRESOURCE_DATA initData;
 		initData.pSysMem = pixels;
-		if (m_format == SurfaceFormat_Color)
+		if (m_format == SurfaceFormat::Color)
 			initData.SysMemPitch = 4 * m_width;
 		else
 		{
 			int numBlocks = Math::Max(1, m_width / 4);
-			initData.SysMemPitch = numBlocks * (m_format == SurfaceFormat_Dxt1 ? 8 : 16);
+			initData.SysMemPitch = numBlocks * (m_format == SurfaceFormat::Dxt1 ? 8 : 16);
 		}
 
 		ID3D11Texture2D* texture;
