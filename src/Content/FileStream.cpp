@@ -67,17 +67,17 @@ namespace Content
 
 	void FileStream::Seek(int offset, SeekOrigin origin)
 	{
-		if (origin == SeekOrigin_Current)
+		if (origin == SeekOrigin::Current)
 		{
 			fseek((FILE*)m_fp, offset, SEEK_CUR);
 			m_bytesRead += offset;
 		}
-		else if (origin == SeekOrigin_Begin)
+		else if (origin == SeekOrigin::Begin)
 		{
 			fseek((FILE*)m_fp, offset, SEEK_SET);
 			m_bytesRead = offset;
 		}
-		else if (origin == SeekOrigin_End)
+		else if (origin == SeekOrigin::End)
 		{
 			fseek((FILE*)m_fp, offset, SEEK_END);
 			m_bytesRead = Length() - offset;

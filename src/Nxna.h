@@ -1,15 +1,18 @@
+// NXNA - Licensed under the terms of the MIT License
+
 #ifndef NXNA_H
 #define NXNA_H
 
+#include "NxnaConfig.h"
+
 namespace Nxna
 {
-	enum PlayerIndex
-	{
-		PlayerIndex_One,
-		PlayerIndex_Two,
-		PlayerIndex_Three,
-		PlayerIndex_Four
-	};
+	NXNA_ENUM(PlayerIndex)
+		One,
+		Two,
+		Three,
+		Four
+	END_NXNA_ENUM(PlayerIndex)
 }
 
 #include "GameTime.h"

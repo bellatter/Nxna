@@ -9,12 +9,11 @@ namespace Nxna
 {
 namespace Content
 {
-	enum SeekOrigin
-	{
-		SeekOrigin_Begin,
-		SeekOrigin_Current,
-		SeekOrigin_End
-	};
+	NXNA_ENUM(SeekOrigin)
+		Begin,
+		Current,
+		End
+	END_NXNA_ENUM(SeekOrigin)
 
 	class Stream
 	{
@@ -49,7 +48,7 @@ namespace Content
 		virtual byte ReadByte() override;
 
 		virtual void Seek(int offset, SeekOrigin origin) override;
-		void Advance(int bytes) { Seek(bytes, SeekOrigin_Current); }
+		void Advance(int bytes) { Seek(bytes, SeekOrigin::Current); }
 
 		virtual int Position() override;
 		virtual int Length() override;

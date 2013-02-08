@@ -16,6 +16,32 @@ typedef unsigned char byte;
 #define override
 #endif
 
+// allow typesafe enums
+#if _MSC_VER == 1700
+#define NXNA_ENUM(e) enum class e {
+#define END_NXNA_ENUM(e) };
+#else
+template<typename def, typename inner = typename def::type>
+class safe_enum : public def
+{
+	typedef typename def::type type;
+	inner val;
+public:
+	safe_enum(type v) : val(v) {}
+	inner underlying() const { return val; }
+ 
+	bool operator == (const safe_enum & s) const { return this->val == s.val; }
+	bool operator != (const safe_enum & s) const { return this->val != s.val; }
+	bool operator <  (const safe_enum & s) const { return this->val <  s.val; }
+	bool operator <= (const safe_enum & s) const { return this->val <= s.val; }
+	bool operator >  (const safe_enum & s) const { return this->val >  s.val; }
+	bool operator >= (const safe_enum & s) const { return this->val >= s.val; }
+};
+
+#define NXNA_ENUM(e) struct e##_def { enum type {
+#define END_NXNA_ENUM(e) }; }; typedef safe_enum<e##_def> e;
+#endif
+
 // create some macros to disable constant warnings about "override" keyword
 #ifdef _MSC_VER
 #define NXNA_DISABLE_OVERRIDE_WARNING __pragma(warning(push)) \

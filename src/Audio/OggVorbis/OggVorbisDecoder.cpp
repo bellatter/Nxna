@@ -76,9 +76,9 @@ namespace Audio
 	int OggVorbisDecoder::seek_callback(void* datasource, int64_t offset, int whence)
 	{
 		OggVorbisDecoder* decoder = static_cast<OggVorbisDecoder*>(datasource);
-		if (whence == SEEK_SET) decoder->m_file->Seek((int)offset, Content::SeekOrigin_Begin);
-		else if (whence == SEEK_CUR) decoder->m_file->Seek((int)offset, Content::SeekOrigin_Current);
-		else if (whence == SEEK_END) decoder->m_file->Seek((int)offset, Content::SeekOrigin_End);
+		if (whence == SEEK_SET) decoder->m_file->Seek((int)offset, Content::SeekOrigin::Begin);
+		else if (whence == SEEK_CUR) decoder->m_file->Seek((int)offset, Content::SeekOrigin::Current);
+		else if (whence == SEEK_END) decoder->m_file->Seek((int)offset, Content::SeekOrigin::End);
 
 		// TODO: our seek function returns nothing, so there's no way for Vorbis to know about an error!
 		return 0;
