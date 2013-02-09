@@ -232,20 +232,13 @@ namespace OpenGl
 
 	Viewport OpenGlDevice::GetViewport()
 	{
-		int vp[4];
-		glGetIntegerv(GL_VIEWPORT, vp);
-
-		Viewport v;
-		v.X = vp[0];
-		v.Y = vp[1];
-		v.Width = vp[2];
-		v.Height = vp[3];
-
-		return v;
+		return m_viewport;
 	}
 
 	void OpenGlDevice::SetViewport(const Viewport& viewport)
 	{
+		m_viewport = viewport;
+
 		// OpenGL stores the bottom-left corner, but XNA
 		// stores the upper-left corner, so we have to convert.
 		int y = m_screenHeight - (viewport.Height + viewport.Y);
@@ -662,12 +655,14 @@ namespace OpenGl
             return GL_MAX;
 	}
 
+#ifndef NXNA_DISABLE_OPENGL_ERRORS
 	void GlException::ThrowIfError(const char* file, int line)
 	{
 		int err = glGetError();
 		if (err != 0)
 			throw GlException(err);
 	}
+#endif
 }
 }
 }

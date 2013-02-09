@@ -17,6 +17,7 @@ namespace OpenGl
 
 	class OpenGlDevice : public GraphicsDevice
 	{
+		Viewport m_viewport;
 		Color m_clearColor;
 		float m_clearDepth;
 		int m_clearStencil;
@@ -119,7 +120,11 @@ namespace OpenGl
 			m_message = "GlException: err " + glError + std::string(" at ") + std::string(file);
 		}
 
+#ifdef NXNA_DISABLE_OPENGL_ERRORS
+		static void ThrowIfError(const char* filename, int line) { }
+#else
 		static void ThrowIfError(const char* filename, int line);
+#endif
 	};
 }
 }
