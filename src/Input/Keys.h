@@ -12,6 +12,12 @@ namespace Input
 		Back,
 		Tab,
 		Enter,
+
+		Left,
+		Up,
+		Right,
+		Down,
+
 		OemTilde
 	END_NXNA_ENUM(Keys)
 }
