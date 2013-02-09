@@ -25,6 +25,7 @@ namespace Media
 
 	bool OggMediaPlayer::Play(Song* song)
 	{
+#ifndef DISABLE_OPENAL
 		Audio::OggVorbisDecoder* decoder = static_cast<Audio::OggVorbisDecoder*>(song->m_handle);
 		if (decoder != nullptr)
 			decoder->Rewind();
@@ -70,6 +71,9 @@ namespace Media
 		alSourcePlay(m_source);
 
 		return true;
+#else
+		return false;
+#endif
 	}
 
 	void OggMediaPlayer::Stop()
