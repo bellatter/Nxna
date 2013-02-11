@@ -55,18 +55,34 @@ namespace Graphics
 		int X, Y, Width, Height;
 	};
 
-	enum PrimitiveType
-	{
-		PrimitiveType_TriangleList,
-		PrimitiveType_TriangleStrip
-	};
+	NXNA_ENUM(PrimitiveType)
+		TriangleList,
+		TriangleStrip
+	END_NXNA_ENUM(PrimitiveType)
 
-	enum ClearOptions
+	NXNA_ENUM(ClearOptions)
+		DepthBuffer = 0x01,
+		Stencil = 0x02,
+		Target = 0x04
+	END_NXNA_ENUM(ClearOptions)
+
+#ifdef NXNA_CLASS_ENUMS_NOT_SUPPORTED
+	inline ClearOptions operator|(ClearOptions& a, ClearOptions& b)
+#else
+	inline ClearOptions operator|(ClearOptions a, ClearOptions b)
+#endif
 	{
-		ClearOptions_DepthBuffer = 0x01,
-		ClearOptions_Stencil = 0x02,
-		ClearOptions_Target = 0x04
-	};
+		return static_cast<ClearOptions>(static_cast<int>(a) | static_cast<int>(b));
+	}
+
+#ifdef NXNA_CLASS_ENUMS_NOT_SUPPORTED
+	inline ClearOptions operator&(ClearOptions& a, ClearOptions& b)
+#else
+	inline ClearOptions operator&(ClearOptions a, ClearOptions b)
+#endif
+	{
+		return static_cast<ClearOptions>(static_cast<int>(a) & static_cast<int>(b));
+	}
 
 	class VertexDeclaration;
 	class VertexBuffer;

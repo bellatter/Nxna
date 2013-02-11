@@ -12,25 +12,25 @@ namespace Graphics
 
 	void BlendState::init()
 	{
-		m_additive.ColorSourceBlend = Blend_SourceAlpha;
-		m_additive.AlphaSourceBlend = Blend_SourceAlpha;
-		m_additive.ColorDestinationBlend = Blend_One;
-		m_additive.AlphaDestinationBlend = Blend_One;
+		m_additive.ColorSourceBlend = Blend::SourceAlpha;
+		m_additive.AlphaSourceBlend = Blend::SourceAlpha;
+		m_additive.ColorDestinationBlend = Blend::One;
+		m_additive.AlphaDestinationBlend = Blend::One;
 
-		m_alphaBlend.ColorSourceBlend = Blend_One;
-		m_alphaBlend.AlphaSourceBlend = Blend_One;
-		m_alphaBlend.ColorDestinationBlend = Blend_InverseSourceAlpha;
-		m_alphaBlend.AlphaDestinationBlend = Blend_InverseSourceAlpha;
+		m_alphaBlend.ColorSourceBlend = Blend::One;
+		m_alphaBlend.AlphaSourceBlend = Blend::One;
+		m_alphaBlend.ColorDestinationBlend = Blend::InverseSourceAlpha;
+		m_alphaBlend.AlphaDestinationBlend = Blend::InverseSourceAlpha;
 
-		m_nonPreMultiplied.ColorSourceBlend = Blend_SourceAlpha;
-		m_nonPreMultiplied.AlphaSourceBlend = Blend_SourceAlpha;
-		m_nonPreMultiplied.ColorDestinationBlend = Blend_InverseSourceAlpha;
-		m_nonPreMultiplied.AlphaDestinationBlend = Blend_InverseSourceAlpha;
+		m_nonPreMultiplied.ColorSourceBlend = Blend::SourceAlpha;
+		m_nonPreMultiplied.AlphaSourceBlend = Blend::SourceAlpha;
+		m_nonPreMultiplied.ColorDestinationBlend = Blend::InverseSourceAlpha;
+		m_nonPreMultiplied.AlphaDestinationBlend = Blend::InverseSourceAlpha;
 
-		m_opaque.ColorSourceBlend = Blend_One;
-		m_opaque.AlphaSourceBlend = Blend_One;
-		m_opaque.ColorDestinationBlend = Blend_Zero;
-		m_opaque.AlphaDestinationBlend = Blend_Zero;
+		m_opaque.ColorSourceBlend = Blend::One;
+		m_opaque.AlphaSourceBlend = Blend::One;
+		m_opaque.ColorDestinationBlend = Blend::Zero;
+		m_opaque.AlphaDestinationBlend = Blend::Zero;
 
 		m_isInitialized = true;
 	}

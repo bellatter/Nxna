@@ -15,17 +15,17 @@ namespace Direct3D11
 	public:
 		static D3D11_BLEND ConvertBlendMode(Blend blend)
 		{
-			if (blend == Blend_Zero)
+			if (blend == Blend::Zero)
 				return D3D11_BLEND_ZERO;
-			if (blend == Blend_One)
+			if (blend == Blend::One)
 				return D3D11_BLEND_ONE;
-			if (blend == Blend_SourceAlpha)
+			if (blend == Blend::SourceAlpha)
 				return D3D11_BLEND_SRC_ALPHA;
-			if (blend == Blend_InverseSourceAlpha)
+			if (blend == Blend::InverseSourceAlpha)
 				return D3D11_BLEND_INV_SRC_ALPHA;
-			if (blend == Blend_DestinationAlpha)
+			if (blend == Blend::DestinationAlpha)
 				return D3D11_BLEND_DEST_ALPHA;
-			if (blend == Blend_InverseDestinationAlpha)
+			if (blend == Blend::InverseDestinationAlpha)
 				return D3D11_BLEND_INV_DEST_ALPHA;
 
 			// we should never get here
@@ -34,15 +34,15 @@ namespace Direct3D11
 
 		static D3D11_BLEND_OP ConvertBlendFunc(BlendFunction func)
 		{
-			if (func == BlendFunction_Add)
+			if (func == BlendFunction::Add)
 				return D3D11_BLEND_OP_ADD;
-			if (func == BlendFunction_Subtract)
+			if (func == BlendFunction::Subtract)
 				return D3D11_BLEND_OP_SUBTRACT;
-			if (func == BlendFunction_ReverseSubtract)
+			if (func == BlendFunction::ReverseSubtract)
 				return D3D11_BLEND_OP_REV_SUBTRACT;
-			if (func == BlendFunction_Max)
+			if (func == BlendFunction::Max)
 				return D3D11_BLEND_OP_MAX;
-			if (func == BlendFunction_Min)
+			if (func == BlendFunction::Min)
 				return D3D11_BLEND_OP_MIN;
 
 			// we should never get here
@@ -52,21 +52,21 @@ namespace Direct3D11
 
 		static D3D11_COMPARISON_FUNC ConvertComparisonFunc(CompareFunction func)
 		{
-			if (func == CompareFunction_Always)
+			if (func == CompareFunction::Always)
 				return D3D11_COMPARISON_ALWAYS;
-			if (func == CompareFunction_Equal)
+			if (func == CompareFunction::Equal)
 				return D3D11_COMPARISON_EQUAL;
-			if (func == CompareFunction_Greater)
+			if (func == CompareFunction::Greater)
 				return D3D11_COMPARISON_GREATER;
-			if (func == CompareFunction_GreaterEqual)
+			if (func == CompareFunction::GreaterEqual)
 				return D3D11_COMPARISON_GREATER_EQUAL;
-			if (func == CompareFunction_Less)
+			if (func == CompareFunction::Less)
 				return D3D11_COMPARISON_LESS;
-			if (func == CompareFunction_LessEqual)
+			if (func == CompareFunction::LessEqual)
 				return D3D11_COMPARISON_LESS_EQUAL;
-			if (func == CompareFunction_Never)
+			if (func == CompareFunction::Never)
 				return D3D11_COMPARISON_NEVER;
-			if (func == CompareFunction_NotEqual)
+			if (func == CompareFunction::NotEqual)
 				return D3D11_COMPARISON_NOT_EQUAL;
 
 			// we should never get here

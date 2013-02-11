@@ -28,7 +28,7 @@ namespace Direct3D11
 	{
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));
-		desc.ByteWidth = m_elementSize * indexCount;
+		desc.ByteWidth = (int)m_elementSize * indexCount;
 		desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		desc.CPUAccessFlags = 0;
 

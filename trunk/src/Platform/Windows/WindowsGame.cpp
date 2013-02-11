@@ -140,15 +140,14 @@ namespace Windows
 		return Nxna::Input::Keys_None;
 	}*/
 
-	enum WinEventType
-	{
+	NXNA_ENUM(WinEventType)
 		Quit,
 		MouseMotion,
 		MouseButtonDown,
 		MouseButtonUp,
 		KeyDown,
 		KeyUp
-	};
+	END_NXNA_ENUM(WinEventType)
 	
 	struct WinEvent
 	{
@@ -198,22 +197,22 @@ namespace Windows
 		{
 			switch(e.Type)
 			{
-			case Quit:
+			case WinEventType::Quit:
 				m_quitReceived = true;
 				break;
-			case MouseMotion:
+			case WinEventType::MouseMotion:
 				Nxna::Input::Mouse::InjectMouseMove(e.ParamA, e.ParamB);
 				break;
-			case MouseButtonDown:
+			case WinEventType::MouseButtonDown:
 				Nxna::Input::Mouse::InjectMouseButton(e.ParamA, true);
 				break;
-			case MouseButtonUp:
+			case WinEventType::MouseButtonUp:
 				Nxna::Input::Mouse::InjectMouseButton(e.ParamA, false);
 				break;
-			case KeyDown:
+			case WinEventType::KeyDown:
 				Nxna::Input::Keyboard::InjectKeyDown(translateVirtualKey(e.ParamA));
 				break;
-			case KeyUp:
+			case WinEventType::KeyUp:
 				Nxna::Input::Keyboard::InjectKeyUp(translateVirtualKey(e.ParamA));
 				break;
 			}
@@ -260,7 +259,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 		case WM_CLOSE:
 		{
 			Nxna::Platform::Windows::WinEvent e;
-			e.Type = Nxna::Platform::Windows::Quit;
+			e.Type = Nxna::Platform::Windows::WinEventType::Quit;
 			Nxna::Platform::Windows::addEvent(e);
 
 			return 0;
@@ -268,7 +267,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 		case WM_MOUSEMOVE:
 		{
 			Nxna::Platform::Windows::WinEvent e;
-			e.Type = Nxna::Platform::Windows::MouseMotion;
+			e.Type = Nxna::Platform::Windows::WinEventType::MouseMotion;
 			e.ParamA = LOWORD(lparam);
 			e.ParamB = HIWORD(lparam);
 			Nxna::Platform::Windows::addEvent(e);
@@ -278,7 +277,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 		case WM_LBUTTONDOWN:
 		{
 			Nxna::Platform::Windows::WinEvent e;
-			e.Type = Nxna::Platform::Windows::MouseButtonDown;
+			e.Type = Nxna::Platform::Windows::WinEventType::MouseButtonDown;
 			e.ParamA = 1;
 			e.ParamB = LOWORD(lparam);
 			e.ParamC = HIWORD(lparam);
@@ -289,7 +288,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 		case WM_LBUTTONUP:
 		{
 			Nxna::Platform::Windows::WinEvent e;
-			e.Type = Nxna::Platform::Windows::MouseButtonUp;
+			e.Type = Nxna::Platform::Windows::WinEventType::MouseButtonUp;
 			e.ParamA = 1;
 			e.ParamB = LOWORD(lparam);
 			e.ParamC = HIWORD(lparam);
@@ -300,7 +299,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 		case WM_KEYDOWN:
 		{
 			Nxna::Platform::Windows::WinEvent e;
-			e.Type = Nxna::Platform::Windows::KeyDown;
+			e.Type = Nxna::Platform::Windows::WinEventType::KeyDown;
 			e.ParamA = wparam;
 			e.ParamB = lparam;
 			e.ParamC = 0;
@@ -311,7 +310,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 		case WM_KEYUP:
 		{
 			Nxna::Platform::Windows::WinEvent e;
-			e.Type = Nxna::Platform::Windows::KeyUp;
+			e.Type = Nxna::Platform::Windows::WinEventType::KeyUp;
 			e.ParamA = wparam;
 			e.ParamB = lparam;
 			e.ParamC = 0;

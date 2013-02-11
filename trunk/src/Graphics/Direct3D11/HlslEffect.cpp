@@ -94,7 +94,7 @@ namespace Direct3D11
 		int textureCount = 0;
 		for (int i = 0; i < m_parameterList.size(); i++)
 		{
-			if (m_parameterList[i]->GetType() == EffectParameterType_Texture2D)
+			if (m_parameterList[i]->GetType() == EffectParameterType::Texture2D)
 			{
 				D3D11Texture2D* texture = static_cast<D3D11Texture2D*>(m_parameterList[i]->GetValueTexture2D());
 				ID3D11ShaderResourceView* d3dTex = (ID3D11ShaderResourceView*)texture->GetHandle();

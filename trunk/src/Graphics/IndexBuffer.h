@@ -7,11 +7,10 @@ namespace Nxna
 {
 namespace Graphics
 {
-	enum IndexElementSize
-	{
-		IndexElementSize_SixteenBits = 2,
-		IndexElementSize_ThirtyTwoBits = 4
-	};
+	NXNA_ENUM(IndexElementSize)
+		SixteenBits = 2,
+		ThirtyTwoBits = 4
+	END_NXNA_ENUM(IndexElementSize)
 
 	class GraphicsDevice;
 

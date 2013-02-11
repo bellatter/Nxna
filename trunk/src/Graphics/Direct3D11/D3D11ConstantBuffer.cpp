@@ -79,7 +79,7 @@ namespace Direct3D11
 
 	void D3D11ConstantBuffer::setParameter(int offset, EffectParameter* param)
 	{
-		if (param->GetType() == EffectParameterType_Single)
+		if (param->GetType() == EffectParameterType::Single)
 		{
 			param->GetValueSingleArray((float*)&m_workingBuffer[offset], param->GetNumElements());
 		}

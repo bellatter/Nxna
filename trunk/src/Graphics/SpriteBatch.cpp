@@ -28,9 +28,9 @@ namespace Graphics
 		if (m_declaration == nullptr)
 		{
 			VertexElement elements[] = {
-				{ 0, VEF_Vector3, VEU_Position, 0 },
-				{ sizeof(float) * 3, VEF_Vector2, VEU_TextureCoordinate, 0},
-				{ sizeof(float) * 5, VEF_Vector4, VEU_Color, 0}
+				{ 0, VertexElementFormat::Vector3, VertexElementUsage::Position, 0 },
+				{ sizeof(float) * 3, VertexElementFormat::Vector2, VertexElementUsage::TextureCoordinate, 0},
+				{ sizeof(float) * 5, VertexElementFormat::Vector4, VertexElementUsage::Color, 0}
 			};
 
 			m_declaration = new VertexDeclaration(elements, 3);
@@ -38,7 +38,7 @@ namespace Graphics
 		
 		if (m_vertexBuffer == nullptr)
 		{
-			m_vertexBuffer = device->CreateDynamicVertexBuffer(m_declaration, MAX_BATCH_SIZE * 4, BufferUsage_WriteOnly);
+			m_vertexBuffer = device->CreateDynamicVertexBuffer(m_declaration, MAX_BATCH_SIZE * 4, BufferUsage::WriteOnly);
 		}
 
 		if (m_indexBuffer == nullptr)
@@ -427,11 +427,11 @@ namespace Graphics
 			{
 				EffectParameter* param = m_customEffect->GetParameter(j);
 				EffectParameterType type = param->GetType();
-				if (type == EffectParameterType_Texture ||
-					type == EffectParameterType_Texture1D ||
-					type == EffectParameterType_Texture2D ||
-					type == EffectParameterType_Texture3D ||
-					type == EffectParameterType_TextureCube)
+				if (type == EffectParameterType::Texture ||
+					type == EffectParameterType::Texture1D ||
+					type == EffectParameterType::Texture2D ||
+					type == EffectParameterType::Texture3D ||
+					type == EffectParameterType::TextureCube)
 				{
 					diffuse = param;
 					break;
@@ -454,7 +454,7 @@ namespace Graphics
 				lastTexture = m_sprites[i].Texture;
 			}
 
-			m_device->DrawIndexedPrimitives(PrimitiveType_TriangleList, 0, 0, numSprites * vertsPerSprite, i * 6, 2);
+			m_device->DrawIndexedPrimitives(PrimitiveType::TriangleList, 0, 0, numSprites * vertsPerSprite, i * 6, 2);
 		}
 
 		m_sprites.clear();
@@ -554,7 +554,7 @@ namespace Graphics
 			indices[i * 6 + 5] = i * 4 + 3;
 		}
 
-		m_indexBuffer = m_device->CreateIndexBuffer(IndexElementSize_SixteenBits);
+		m_indexBuffer = m_device->CreateIndexBuffer(IndexElementSize::SixteenBits);
 		m_indexBuffer->SetData(indices, MAX_BATCH_SIZE * 6);
 	}
 

@@ -11,22 +11,24 @@ typedef unsigned char byte;
 #endif
 
 // disable Visual C++ 2010 specific stuff if needed
-#if _MSC_VER != 1600
+#if !defined _MSC_VER || _MSC_VER < 1600
 #define nullptr 0
 #define override
 #endif
 
 // allow typesafe enums
-#if _MSC_VER == 1700
+#if _MSC_VER >= 1700
 #define NXNA_ENUM(e) enum class e {
 #define END_NXNA_ENUM(e) };
 #else
+#define NXNA_CLASS_ENUMS_NOT_SUPPORTED 1
 template<typename def, typename inner = typename def::type>
 class safe_enum : public def
 {
 	typedef typename def::type type;
 	inner val;
 public:
+	safe_enum(int v) : val((type)v) {}
 	safe_enum(type v) : val(v) {}
 	safe_enum() : val((inner)0) {}
 	inner underlying() const { return val; }

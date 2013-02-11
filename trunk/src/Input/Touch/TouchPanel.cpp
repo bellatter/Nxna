@@ -25,28 +25,28 @@ namespace Touch
 		for (int i = 0; i < m_touches.size(); i++)
 		{
 			// ignore released touch points that have already been read
-			if (m_touches[i].Current.State == TouchLocationState_Released &&
-				m_touches[i].Previous.State == TouchLocationState_Released)
+			if (m_touches[i].Current.State == TouchLocationState::Released &&
+				m_touches[i].Previous.State == TouchLocationState::Released)
 				continue;
 
 			state.push_back(m_touches[i].Current);
 
-			if (m_touches[i].Current.State == TouchLocationState_Pressed)
+			if (m_touches[i].Current.State == TouchLocationState::Pressed)
 			{
 				// convert read Pressed touchpoints to Moved
-				m_touches[i].Current.State = TouchLocationState_Moved;
-				m_touches[i].Previous.State = TouchLocationState_Pressed;
+				m_touches[i].Current.State = TouchLocationState::Moved;
+				m_touches[i].Previous.State = TouchLocationState::Pressed;
 			}
-			else if (m_touches[i].Current.State == TouchLocationState_Released)
+			else if (m_touches[i].Current.State == TouchLocationState::Released)
 			{
-				m_touches[i].Previous.State = TouchLocationState_Released;
+				m_touches[i].Previous.State = TouchLocationState::Released;
 			}
 		}
 
 		// remove all the released fingers
 		for (int i = m_touches.size() - 1; i >= 0; i--)
 		{
-			if (m_touches[i].Current.State == TouchLocationState_Released)
+			if (m_touches[i].Current.State == TouchLocationState::Released)
 				m_touches.erase(m_touches.begin() + i);
 		}
 	}
@@ -60,8 +60,8 @@ namespace Touch
 		t.Current._internalID = id;
 		t.Current.Position.X = x * m_width;
 		t.Current.Position.Y = y * m_height;
-		t.Current.State = TouchLocationState_Pressed;
-		t.Previous.State = TouchLocationState_Invalid;
+		t.Current.State = TouchLocationState::Pressed;
+		t.Previous.State = TouchLocationState::Invalid;
 
 		m_touches.push_back(t);
 	}
@@ -76,8 +76,8 @@ namespace Touch
 				m_touches[i].Current.Position.X = x * m_width;
 				m_touches[i].Current.Position.Y = y * m_height;
 
-				if (m_touches[i].Current.State != TouchLocationState_Invalid)
-					m_touches[i].Current.State = TouchLocationState_Moved;
+				if (m_touches[i].Current.State != TouchLocationState::Invalid)
+					m_touches[i].Current.State = TouchLocationState::Moved;
 
 				break;
 			}
@@ -93,7 +93,7 @@ namespace Touch
 			{
 				m_touches[i].Current.Position.X = x * m_width;
 				m_touches[i].Current.Position.Y = y * m_height;
-				m_touches[i].Current.State = TouchLocationState_Released;
+				m_touches[i].Current.State = TouchLocationState::Released;
 
 				break;
 			}

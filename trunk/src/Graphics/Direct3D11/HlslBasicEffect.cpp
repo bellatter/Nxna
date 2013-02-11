@@ -40,10 +40,10 @@ namespace Direct3D11
 			BasicEffect_BasicEffectPS, sizeof(BasicEffect_BasicEffectPS));
 
 		// create the parameters
-		EffectParameter* modelViewProjection = new EffectParameter(this, EffectParameterType_Single, 16, 0, "ModelViewProjection");
+		EffectParameter* modelViewProjection = new EffectParameter(this, EffectParameterType::Single, 16, 0, "ModelViewProjection");
 		AddParameter(modelViewProjection);
 
-		EffectParameter* diffuse = new EffectParameter(this, EffectParameterType_Texture2D, 1, 0, "Diffuse");
+		EffectParameter* diffuse = new EffectParameter(this, EffectParameterType::Texture2D, 1, 0, "Diffuse");
 		AddParameter(diffuse);
 
 		int indices[] = {0, 1};

@@ -46,11 +46,10 @@ namespace OpenGl
 			std::vector<GlslUniform> Uniforms;
 		};
 
-		enum CacheType
-		{
+		NXNA_ENUM(CacheType)
 			CacheType_Float,
 			CacheType_Int
-		};
+		END_NXNA_ENUM(CacheType)
 
 		struct ParamCache
 		{

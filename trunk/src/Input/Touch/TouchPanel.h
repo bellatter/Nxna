@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <stdint.h>
+#include "../../NxnaConfig.h"
 #include "../../Vector2.h"
 
 namespace Nxna
@@ -11,13 +12,12 @@ namespace Input
 {
 namespace Touch
 {
-	enum TouchLocationState
-	{
-		TouchLocationState_Invalid,
-		TouchLocationState_Released,
-		TouchLocationState_Pressed,
-		TouchLocationState_Moved
-	};
+	NXNA_ENUM(TouchLocationState)
+		Invalid,
+		Released,
+		Pressed,
+		Moved
+	END_NXNA_ENUM(TouchLocationState)
 
 	struct TouchLocation
 	{
