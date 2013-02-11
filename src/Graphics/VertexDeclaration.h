@@ -2,28 +2,27 @@
 #define GRAPHICS_VERTEXDECLARATION_H
 
 #include <cstring>
+#include "../NxnaConfig.h"
 
 namespace Nxna
 {
 namespace Graphics
 {
-	enum VertexElementFormat
-	{
-		VEF_Single = 1,
-		VEF_Vector2,
-		VEF_Vector3,
-		VEF_Vector4,
+	NXNA_ENUM(VertexElementFormat)
+		Single = 1,
+		Vector2,
+		Vector3,
+		Vector4,
 
-		VEF_Color
-	};
+		Color
+	END_NXNA_ENUM(VertexElementFormat)
 
-	enum VertexElementUsage
-	{
-		VEU_Position,
-		VEU_Normal,
-		VEU_TextureCoordinate,
-		VEU_Color
-	};
+	NXNA_ENUM(VertexElementUsage)
+		Position,
+		Normal,
+		TextureCoordinate,
+		Color
+	END_NXNA_ENUM(VertexElementUsage)
 
 	struct VertexElement
 	{
@@ -48,7 +47,7 @@ namespace Graphics
 			memcpy(m_elements, elements, sizeof(VertexElement) * numElements);
 
 			int sizeOfFinalElement = 0;
-			if (elements[numElements - 1].ElementFormat == VEF_Color)
+			if (elements[numElements - 1].ElementFormat == VertexElementFormat::Color)
 				sizeOfFinalElement = 4;
 			else
 				sizeOfFinalElement = (int)elements[numElements - 1].ElementFormat * sizeof(float);

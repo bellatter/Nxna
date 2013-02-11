@@ -207,7 +207,7 @@ namespace OpenGl
 
 		int depthMask = 0;
 		int gloptions = 0;
-		if ((options & ClearOptions_DepthBuffer) == ClearOptions_DepthBuffer)
+		if ((options & ClearOptions::DepthBuffer) == ClearOptions::DepthBuffer)
 		{
 			gloptions |= GL_DEPTH_BUFFER_BIT;
 
@@ -215,15 +215,15 @@ namespace OpenGl
 			glGetIntegerv(GL_DEPTH_WRITEMASK, &depthMask);
 			glDepthMask(GL_TRUE);
 		}
-		if ((options & ClearOptions_Stencil) == ClearOptions_Stencil)
+		if ((options & ClearOptions::Stencil) == ClearOptions::Stencil)
 			gloptions |= GL_STENCIL_BUFFER_BIT;
-		if ((options & ClearOptions_Target) == ClearOptions_Target)
+		if ((options & ClearOptions::Target) == ClearOptions::Target)
 			gloptions |= GL_COLOR_BUFFER_BIT;
 
 		if (gloptions != 0)
 			glClear(gloptions);
 
-		if ((options & ClearOptions_DepthBuffer) == ClearOptions_DepthBuffer)
+		if ((options & ClearOptions::DepthBuffer) == ClearOptions::DepthBuffer)
 		{
 			// restore the original depth mask state
 			glDepthMask((GLboolean)depthMask);
@@ -268,11 +268,11 @@ namespace OpenGl
 		IndexElementSize elementSize = m_indices->GetElementSize();
 
 		int size = GL_UNSIGNED_SHORT;
-		if (elementSize == IndexElementSize_ThirtyTwoBits)
+		if (elementSize == IndexElementSize::ThirtyTwoBits)
 			size = GL_UNSIGNED_INT;
 
 		GLenum glPrimitiveType;
-		if (primitiveType == PrimitiveType_TriangleStrip)
+		if (primitiveType == PrimitiveType::TriangleStrip)
 			glPrimitiveType = GL_TRIANGLE_STRIP;
 		else
 			glPrimitiveType = GL_TRIANGLES;
@@ -307,7 +307,7 @@ namespace OpenGl
 		SetSamplers();
 
 		GLenum glPrimitiveType;
-		if (primitiveType == PrimitiveType_TriangleStrip)
+		if (primitiveType == PrimitiveType::TriangleStrip)
 			glPrimitiveType = GL_TRIANGLE_STRIP;
 		else
 			glPrimitiveType = GL_TRIANGLES;
@@ -505,7 +505,7 @@ namespace OpenGl
 			GLboolean normalize;
 
 			VertexElementFormat format = m_declaration->GetElements()[i].ElementFormat;
-			if (format == VEF_Color)
+			if (format == VertexElementFormat::Color)
 			{
 				sizeOfElement = 4;
 				type = GL_UNSIGNED_BYTE;
@@ -529,21 +529,21 @@ namespace OpenGl
 
 	int OpenGlDevice::convertCompareFunction(CompareFunction func)
 	{
-		if (func == CompareFunction_Never)
+		if (func == CompareFunction::Never)
 			return GL_NEVER;
-		if (func == CompareFunction_Less)
+		if (func == CompareFunction::Less)
 			return GL_LESS;
-		if (func == CompareFunction_Equal)
+		if (func == CompareFunction::Equal)
 			return GL_EQUAL;
-		if (func == CompareFunction_LessEqual)
+		if (func == CompareFunction::LessEqual)
 			return GL_LEQUAL;
-		if (func == CompareFunction_Greater)
+		if (func == CompareFunction::Greater)
 			return GL_GREATER;
-		if (func == CompareFunction_NotEqual)
+		if (func == CompareFunction::NotEqual)
 			return GL_NOTEQUAL;
-		if (func == CompareFunction_GreaterEqual)
+		if (func == CompareFunction::GreaterEqual)
 			return GL_GEQUAL;
-		if (func == CompareFunction_Always)
+		if (func == CompareFunction::Always)
 			return GL_ALWAYS;
 
 		return GL_ALWAYS;
@@ -552,42 +552,42 @@ namespace OpenGl
 	CompareFunction OpenGlDevice::convertCompareFunction(int func)
 	{
 		if (func == GL_NEVER)
-			return CompareFunction_Never;
+			return CompareFunction::Never;
 		if (func == GL_LESS)
-			return CompareFunction_Less;
+			return CompareFunction::Less;
 		if (func == GL_EQUAL)
-			return CompareFunction_Equal;
+			return CompareFunction::Equal;
 		if (func == GL_LEQUAL)
-			return CompareFunction_LessEqual;
+			return CompareFunction::LessEqual;
 		if (func == GL_GREATER)
-			return CompareFunction_Greater;
+			return CompareFunction::Greater;
 		if (func == GL_NOTEQUAL)
-			return CompareFunction_NotEqual;
+			return CompareFunction::NotEqual;
 		if (func == GL_GEQUAL)
-			return CompareFunction_GreaterEqual;
+			return CompareFunction::GreaterEqual;
 		if (func == GL_ALWAYS)
-			return CompareFunction_Always;
+			return CompareFunction::Always;
 
-		return CompareFunction_Always;
+		return CompareFunction::Always;
 	}
 
 	int OpenGlDevice::convertStencilOperation(StencilOperation op)
 	{
-		if (op == StencilOperation_Keep)
+		if (op == StencilOperation::Keep)
 			return GL_KEEP;
-		if (op == StencilOperation_Zero)
+		if (op == StencilOperation::Zero)
 			return GL_ZERO;
-		if (op == StencilOperation_Replace)
+		if (op == StencilOperation::Replace)
 			return GL_REPLACE;
-		if (op == StencilOperation_IncrementSaturation)
+		if (op == StencilOperation::IncrementSaturation)
 			return GL_INCR;
-		if (op == StencilOperation_Increment)
+		if (op == StencilOperation::Increment)
 			return GL_INCR_WRAP;
-		if (op == StencilOperation_DecrementSaturation)
+		if (op == StencilOperation::DecrementSaturation)
 			return GL_DECR;
-		if (op == StencilOperation_Decrement)
+		if (op == StencilOperation::Decrement)
 			return GL_DECR_WRAP;
-		if (op == StencilOperation_Invert)
+		if (op == StencilOperation::Invert)
 			return GL_INVERT;
 
 		return GL_KEEP;
@@ -596,38 +596,38 @@ namespace OpenGl
 	StencilOperation OpenGlDevice::convertStencilOperation(int op)
 	{
 		if (op == GL_KEEP)
-			return StencilOperation_Keep;
+			return StencilOperation::Keep;
 		if (op == GL_ZERO)
-			return StencilOperation_Zero;
+			return StencilOperation::Zero;
 		if (op == GL_REPLACE)
-			return StencilOperation_Replace;
+			return StencilOperation::Replace;
 		if (op == GL_INCR)
-			return StencilOperation_IncrementSaturation;
+			return StencilOperation::IncrementSaturation;
 		if (op == GL_INCR_WRAP)
-			return StencilOperation_Increment;
+			return StencilOperation::Increment;
 		if (op == GL_DECR)
-			return StencilOperation_DecrementSaturation;
+			return StencilOperation::DecrementSaturation;
 		if (op == GL_DECR_WRAP)
-			return StencilOperation_Decrement;
+			return StencilOperation::Decrement;
 		if (op == GL_INVERT)
-			return StencilOperation_Invert;
+			return StencilOperation::Invert;
 
-		return StencilOperation_Keep;
+		return StencilOperation::Keep;
 	}
 
 	int OpenGlDevice::convertBlendMode(Blend mode)
 	{
-		if (mode == Blend_One)
+		if (mode == Blend::One)
             return GL_ONE;
-        if (mode == Blend_Zero)
+        if (mode == Blend::Zero)
             return GL_ZERO;
-        if (mode == Blend_SourceAlpha)
+        if (mode == Blend::SourceAlpha)
             return GL_SRC_ALPHA;
-        if (mode == Blend_DestinationAlpha)
+        if (mode == Blend::DestinationAlpha)
             return GL_DST_ALPHA;
-        if (mode == Blend_InverseSourceAlpha)
+        if (mode == Blend::InverseSourceAlpha)
             return GL_ONE_MINUS_SRC_ALPHA;
-        if (mode == Blend_InverseDestinationAlpha)
+        if (mode == Blend::InverseDestinationAlpha)
             return GL_ONE_MINUS_DST_ALPHA;
 
         return GL_ZERO;
@@ -643,13 +643,13 @@ namespace OpenGl
 
 	int OpenGlDevice::convertBlendFunc(BlendFunction func)
 	{
-		if (func == BlendFunction_Add)
+		if (func == BlendFunction::Add)
             return GL_FUNC_ADD;
-        else if (func == BlendFunction_Subtract)
+        else if (func == BlendFunction::Subtract)
             return GL_FUNC_SUBTRACT;
-        else if (func == BlendFunction_ReverseSubtract)
+        else if (func == BlendFunction::ReverseSubtract)
             return GL_FUNC_REVERSE_SUBTRACT;
-        else if (func == BlendFunction_Min)
+        else if (func == BlendFunction::Min)
             return GL_MIN;
         else
             return GL_MAX;

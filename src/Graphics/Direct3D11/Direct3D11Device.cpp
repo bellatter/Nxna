@@ -233,12 +233,12 @@ namespace Direct3D11
 
 	void Direct3D11Device::Clear(const Color& c)
 	{
-		Clear((ClearOptions)(ClearOptions_Target | ClearOptions_DepthBuffer | ClearOptions_Stencil), c, 1.0f, 0);
+		Clear((ClearOptions::Target | ClearOptions::DepthBuffer | ClearOptions::Stencil), c, 1.0f, 0);
 	}
 
 	void Direct3D11Device::Clear(ClearOptions options, const Color& c, float depth, int stencil)
 	{
-		if ((options & ClearOptions_Target) == ClearOptions_Target)
+		if ((options & ClearOptions::Target) == ClearOptions::Target)
 		{
 			float color[4];
 			color[0] = c.R / 255.0f;
@@ -250,9 +250,9 @@ namespace Direct3D11
 		}
 
 		int flags = 0;
-		if ((options & ClearOptions_DepthBuffer) == ClearOptions_DepthBuffer)
+		if ((options & ClearOptions::DepthBuffer) == ClearOptions::DepthBuffer)
 			flags |= D3D11_CLEAR_DEPTH;
-		if ((options & ClearOptions_Stencil) == ClearOptions_Stencil)
+		if ((options & ClearOptions::Stencil) == ClearOptions::Stencil)
 			flags |= D3D11_CLEAR_STENCIL;
 		m_deviceContext->ClearDepthStencilView(m_depthStencilView, flags, depth, (byte)stencil);
 	}
@@ -291,12 +291,12 @@ namespace Direct3D11
 
 		int indexCount;
 		D3D11_PRIMITIVE_TOPOLOGY topology;
-		if (primitiveType == PrimitiveType_TriangleList)
+		if (primitiveType == PrimitiveType::TriangleList)
 		{
 			indexCount = primitiveCount * 3;
 			m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		}
-		else if (primitiveType == PrimitiveType_TriangleStrip)
+		else if (primitiveType == PrimitiveType::TriangleStrip)
 		{
 			indexCount = primitiveCount * 3; // FIXME
 			m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
@@ -434,10 +434,10 @@ namespace Direct3D11
 				// this is the first time this blend state has been used, so we need to create a new D3D blend state object
 				D3D11_BLEND_DESC blendState;
 				ZeroMemory(&blendState, sizeof(D3D11_BLEND_DESC));
-				blendState.RenderTarget[0].BlendEnable = m_blendState.ColorSourceBlend != Blend_One ||
-					m_blendState.AlphaSourceBlend != Blend_One ||
-					m_blendState.ColorDestinationBlend != Blend_Zero ||
-					m_blendState.AlphaDestinationBlend != Blend_Zero;
+				blendState.RenderTarget[0].BlendEnable = m_blendState.ColorSourceBlend != Blend::One ||
+					m_blendState.AlphaSourceBlend != Blend::One ||
+					m_blendState.ColorDestinationBlend != Blend::Zero ||
+					m_blendState.AlphaDestinationBlend != Blend::Zero;
 				blendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 				blendState.RenderTarget[0].SrcBlend = D3D11Utils::ConvertBlendMode(m_blendState.ColorSourceBlend);
@@ -538,7 +538,7 @@ namespace Direct3D11
 			{
 				IndexElementSize elementSize = m_indices->GetElementSize();
 				DXGI_FORMAT format;
-				if (elementSize == IndexElementSize_SixteenBits)
+				if (elementSize == IndexElementSize::SixteenBits)
 					format = DXGI_FORMAT_R16_UINT;
 				else
 					format = DXGI_FORMAT_R32_UINT;
@@ -591,26 +591,26 @@ namespace Direct3D11
 			const VertexElement* e = decl.GetElements();
 			for (int i = 0; i < decl.GetNumElements(); i++)
 			{
-				if (e[i].ElementUsage == VEU_Position)
+				if (e[i].ElementUsage == VertexElementUsage::Position)
 					desc[i].SemanticName = "SV_POSITION";
-				else if (e[i].ElementUsage == VEU_Normal)
+				else if (e[i].ElementUsage == VertexElementUsage::Normal)
 					desc[i].SemanticName = "NORMAL";
-				else if (e[i].ElementUsage == VEU_TextureCoordinate)
+				else if (e[i].ElementUsage == VertexElementUsage::TextureCoordinate)
 					desc[i].SemanticName = "TEXCOORD";
-				else if (e[i].ElementUsage == VEU_Color)
+				else if (e[i].ElementUsage == VertexElementUsage::Color)
 					desc[i].SemanticName = "COLOR";
 
 				desc[i].SemanticIndex = e[i].UsageIndex;
 			
-				if (e[i].ElementFormat == VEF_Single)
+				if (e[i].ElementFormat == VertexElementFormat::Single)
 					desc[i].Format = DXGI_FORMAT_R32_FLOAT;
-				else if (e[i].ElementFormat == VEF_Vector2)
+				else if (e[i].ElementFormat == VertexElementFormat::Vector2)
 					desc[i].Format = DXGI_FORMAT_R32G32_FLOAT;
-				else if (e[i].ElementFormat == VEF_Vector3)
+				else if (e[i].ElementFormat == VertexElementFormat::Vector3)
 					desc[i].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-				else if (e[i].ElementFormat == VEF_Vector4)
+				else if (e[i].ElementFormat == VertexElementFormat::Vector4)
 					desc[i].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-				else if (e[i].ElementFormat == VEF_Color)
+				else if (e[i].ElementFormat == VertexElementFormat::Color)
 					desc[i].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
 				desc[i].InputSlot = 0;

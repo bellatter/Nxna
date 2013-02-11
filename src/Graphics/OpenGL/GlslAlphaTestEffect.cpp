@@ -78,7 +78,7 @@ namespace OpenGl
 		m_isVertexColorEnabled = false;
 		m_alpha = 0;
 		m_referenceAlpha = 0;
-		m_compareFunction = CompareFunction_Greater;
+		m_compareFunction = CompareFunction::Greater;
 
 		Matrix::GetIdentity(m_world);
 		Matrix::GetIdentity(m_view);
@@ -119,50 +119,50 @@ namespace OpenGl
 		// calculate the AlphaTest parameter
 		const float threshold = 0.5f / 255.0f;
 		Vector4 alphaTest;
-		if (m_compareFunction == CompareFunction_Less)
+		if (m_compareFunction == CompareFunction::Less)
 		{
 			alphaTest.X = m_referenceAlpha - threshold;
 			alphaTest.Z = 1.0f;
 			alphaTest.W = -1.0f;
 		}
-		else if (m_compareFunction == CompareFunction_LessEqual)
+		else if (m_compareFunction == CompareFunction::LessEqual)
 		{
 			alphaTest.X = m_referenceAlpha + threshold;
 			alphaTest.Z = 1.0f;
 			alphaTest.W = -1.0f;
 		}
-		else if (m_compareFunction == CompareFunction_GreaterEqual)
+		else if (m_compareFunction == CompareFunction::GreaterEqual)
 		{
 			alphaTest.X = m_referenceAlpha - threshold;
 			alphaTest.Z = -1.0f;
 			alphaTest.W = 1.0f;
 		}
-		else if (m_compareFunction == CompareFunction_Greater)
+		else if (m_compareFunction == CompareFunction::Greater)
 		{
 			alphaTest.X = m_referenceAlpha + threshold;
 			alphaTest.Z = -1.0f;
 			alphaTest.W = 1.0f;
 		}
-		else if (m_compareFunction == CompareFunction_Equal)
+		else if (m_compareFunction == CompareFunction::Equal)
 		{
 			alphaTest.X = m_referenceAlpha;
 			alphaTest.Y = threshold;
 			alphaTest.Z = 1.0f;
 			alphaTest.W = -1.0f;
 		}
-		else if (m_compareFunction == CompareFunction_NotEqual)
+		else if (m_compareFunction == CompareFunction::NotEqual)
 		{
 			alphaTest.X = m_referenceAlpha;
 			alphaTest.Y = threshold;
 			alphaTest.Z = -1.0f;
 			alphaTest.W = 1.0f;
 		}
-		else if (m_compareFunction == CompareFunction_Never)
+		else if (m_compareFunction == CompareFunction::Never)
 		{
 			alphaTest.Z = -1.0f;
 			alphaTest.W = -1.0f;
 		}
-		else if (m_compareFunction == CompareFunction_Always)
+		else if (m_compareFunction == CompareFunction::Always)
 		{
 			alphaTest.Z = 1.0f;
 			alphaTest.W = -1.0f;
@@ -173,16 +173,16 @@ namespace OpenGl
 		// figure out which program to use
 		if (m_isVertexColorEnabled)
 		{
-			if (m_compareFunction == CompareFunction_Equal ||
-				m_compareFunction == CompareFunction_NotEqual)
+			if (m_compareFunction == CompareFunction::Equal ||
+				m_compareFunction == CompareFunction::NotEqual)
 				ApplyProgram(1);
 			else
 				ApplyProgram(0);
 		}
 		else
 		{
-			if (m_compareFunction == CompareFunction_Equal ||
-				m_compareFunction == CompareFunction_NotEqual)
+			if (m_compareFunction == CompareFunction::Equal ||
+				m_compareFunction == CompareFunction::NotEqual)
 				ApplyProgram(3);
 			else
 				ApplyProgram(2);

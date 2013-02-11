@@ -1,6 +1,8 @@
 #ifndef GRAPHICS_VERTEXBUFFER_H
 #define GRAPHICS_VERTEXBUFFER_H
 
+#include "../NxnaConfig.h"
+
 namespace Nxna
 {
 namespace Graphics
@@ -8,11 +10,10 @@ namespace Graphics
 	class GraphicsDevice;
 	class VertexDeclaration;
 
-	enum BufferUsage
-	{
-		BufferUsage_None,
-		BufferUsage_WriteOnly
-	};
+	NXNA_ENUM(BufferUsage)
+		None,
+		WriteOnly
+	END_NXNA_ENUM(BufferUsage)
 
 	class VertexBuffer
 	{

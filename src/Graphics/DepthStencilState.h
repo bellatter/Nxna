@@ -7,29 +7,27 @@ namespace Nxna
 {
 namespace Graphics
 {
-	enum CompareFunction
-	{
-		CompareFunction_Always,
-		CompareFunction_Equal,
-		CompareFunction_Greater,
-		CompareFunction_GreaterEqual,
-		CompareFunction_Less,
-		CompareFunction_LessEqual,
-		CompareFunction_Never,
-		CompareFunction_NotEqual
-	};
+	NXNA_ENUM(CompareFunction)
+		Always,
+		Equal,
+		Greater,
+		GreaterEqual,
+		Less,
+		LessEqual,
+		Never,
+		NotEqual
+	END_NXNA_ENUM(CompareFunction)
 
-	enum StencilOperation
-	{
-		StencilOperation_Decrement,
-		StencilOperation_DecrementSaturation,
-		StencilOperation_Increment,
-		StencilOperation_IncrementSaturation,
-		StencilOperation_Invert,
-		StencilOperation_Keep,
-		StencilOperation_Replace,
-		StencilOperation_Zero
-	};
+	NXNA_ENUM(StencilOperation)
+		Decrement,
+		DecrementSaturation,
+		Increment,
+		IncrementSaturation,
+		Invert,
+		Keep,
+		Replace,
+		Zero
+	END_NXNA_ENUM(StencilOperation)
 
 	class GraphicsDevice;
 
@@ -47,14 +45,14 @@ namespace Graphics
 
 		DepthStencilState()
 		{
-			DepthBufferFunction = CompareFunction_LessEqual;
+			DepthBufferFunction = CompareFunction::LessEqual;
 			DepthBufferEnable = true;
 			DepthBufferWriteEnable = true;
 
 			ReferenceStencil = 0;
 			StencilEnable = false;
-			StencilFunction = CompareFunction_Always;
-			StencilPass = StencilOperation_Keep;
+			StencilFunction = CompareFunction::Always;
+			StencilPass = StencilOperation::Keep;
 
 			m_handle = nullptr;
 		}

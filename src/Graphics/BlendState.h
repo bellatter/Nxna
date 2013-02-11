@@ -7,24 +7,22 @@ namespace Nxna
 {
 namespace Graphics
 {
-	enum Blend
-	{
-		Blend_Zero,
-		Blend_One,
-		Blend_SourceAlpha,
-		Blend_InverseSourceAlpha,
-		Blend_DestinationAlpha,
-		Blend_InverseDestinationAlpha
-	};
+	NXNA_ENUM(Blend)
+		Zero,
+		One,
+		SourceAlpha,
+		InverseSourceAlpha,
+		DestinationAlpha,
+		InverseDestinationAlpha
+	END_NXNA_ENUM(Blend)
 
-	enum BlendFunction
-	{
-		BlendFunction_Add,
-		BlendFunction_Max,
-		BlendFunction_Min,
-		BlendFunction_ReverseSubtract,
-		BlendFunction_Subtract
-	};
+	NXNA_ENUM(BlendFunction)
+		Add,
+		Max,
+		Min,
+		ReverseSubtract,
+		Subtract
+	END_NXNA_ENUM(BlendFunction)
 
 	class GraphicsDevice;
 
@@ -43,13 +41,13 @@ namespace Graphics
 
 		BlendState()
 		{
-			AlphaBlendFunction = BlendFunction_Add;
-			AlphaDestinationBlend = Blend_One;
-			AlphaSourceBlend = Blend_One;
+			AlphaBlendFunction = BlendFunction::Add;
+			AlphaDestinationBlend = Blend::One;
+			AlphaSourceBlend = Blend::One;
 
-			ColorBlendFunction = BlendFunction_Add;
-			ColorDestinationBlend = Blend_One;
-			ColorSourceBlend = Blend_One;
+			ColorBlendFunction = BlendFunction::Add;
+			ColorDestinationBlend = Blend::One;
+			ColorSourceBlend = Blend::One;
 
 			m_handle = nullptr;
 		}

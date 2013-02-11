@@ -134,13 +134,13 @@ namespace Audio
 			alGetSourcei(m_source, AL_SOURCE_STATE, &state);
 
 			if (state == AL_PLAYING)
-				return SoundState_Playing;
+				return SoundState::Playing;
 			if (state == AL_PAUSED)
-				return SoundState_Paused;
+				return SoundState::Paused;
 		}
 #endif
 
-		return SoundState_Stopped;
+		return SoundState::Stopped;
 	}
 
 	void SoundEffectInstance::Apply3D(const AudioListener* listener, const AudioEmitter* emitter)

@@ -19,19 +19,18 @@ namespace Graphics
 	class Texture2D;
 	class EffectParameter;
 
-	enum EffectParameterType
-	{
-		EffectParameterType_Bool,
-		EffectParameterType_Int32,
-		EffectParameterType_Single,
-		EffectParameterType_String,
-		EffectParameterType_Texture,
-		EffectParameterType_Texture1D,
-		EffectParameterType_Texture2D,
-		EffectParameterType_Texture3D,
-		EffectParameterType_TextureCube,
-		EffectParameterType_Void
-	};
+	NXNA_ENUM(EffectParameterType)
+		Bool,
+		Int32,
+		Single,
+		String,
+		Texture,
+		Texture1D,
+		Texture2D,
+		Texture3D,
+		TextureCube,
+		Void
+	END_NXNA_ENUM(EffectParameterType)
 
 	class GraphicsDevice;
 

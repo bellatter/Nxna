@@ -11,12 +11,11 @@ namespace Nxna
 {
 namespace Audio
 {
-	enum SoundState
-	{
-		SoundState_Paused,
-		SoundState_Playing,
-		SoundState_Stopped
-	};
+	NXNA_ENUM(SoundState)
+		Paused,
+		Playing,
+		Stopped
+	END_NXNA_ENUM(SoundState);
 
 	class SoundEffect;
 	class AudioListener;

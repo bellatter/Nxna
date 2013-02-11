@@ -168,11 +168,11 @@ namespace OpenGl
 			EffectParameterType type = (*itr).Param->GetType();
 			int numElements = (*itr).Param->GetNumElements();
 
-			if (type == EffectParameterType_Int32)
+			if (type == EffectParameterType::Int32)
 			{
 				glUniform1iv((*itr).Uniform, numElements, GetRawValue((*itr).Param));
 			}
-			else if (type == EffectParameterType_Single)
+			else if (type == EffectParameterType::Single)
 			{
 				if (numElements == 1)
 					glUniform1fv((*itr).Uniform, 1, (float*)GetRawValue((*itr).Param));
@@ -185,7 +185,7 @@ namespace OpenGl
 				else if (numElements == 16)
 					glUniformMatrix4fv((*itr).Uniform, 1, GL_FALSE, (float*)GetRawValue((*itr).Param));
 			}
-			else if (type == EffectParameterType_Texture2D)
+			else if (type == EffectParameterType::Texture2D)
 			{
 				if ((*itr).Param->GetValueTexture2D() != nullptr)
 				{
@@ -217,7 +217,7 @@ namespace OpenGl
 		{
 			EffectParameterType type = (*itr).Param->GetType();
 
-			if (type == EffectParameterType_Texture2D)
+			if (type == EffectParameterType::Texture2D)
 			{
 				GlTexture2D* glTex = static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D());
 				
@@ -316,25 +316,25 @@ namespace OpenGl
 			{
 				EffectParameterType pType;
 				if (type == GL_BOOL || type == GL_BOOL_VEC2 || type == GL_BOOL_VEC3 || type == GL_BOOL_VEC4)
-					pType = EffectParameterType_Bool;
+					pType = EffectParameterType::Bool;
 				else if (type == GL_INT || type == GL_INT_VEC2 || type == GL_INT_VEC3 || type == GL_INT_VEC4)
-					pType = EffectParameterType_Int32;
+					pType = EffectParameterType::Int32;
 				else if (type == GL_FLOAT || type == GL_FLOAT_VEC2 || type == GL_FLOAT_VEC3 || type == GL_FLOAT_VEC4 || type == GL_FLOAT_MAT4)
-					pType = EffectParameterType_Single;
+					pType = EffectParameterType::Single;
 #ifndef USING_OPENGLES
 				else if (type == GL_SAMPLER_1D)
-					pType = EffectParameterType_Texture1D;
+					pType = EffectParameterType::Texture1D;
 #endif
 				else if (type == GL_SAMPLER_2D)
-					pType = EffectParameterType_Texture2D;
+					pType = EffectParameterType::Texture2D;
 #ifndef USING_OPENGLES
 				else if (type == GL_SAMPLER_3D)
-					pType = EffectParameterType_Texture3D;
+					pType = EffectParameterType::Texture3D;
 #endif
 				else if (type == GL_SAMPLER_CUBE)
-					pType = EffectParameterType_TextureCube;
+					pType = EffectParameterType::TextureCube;
 				else
-					pType = EffectParameterType_Void;
+					pType = EffectParameterType::Void;
 				// what about EffectParameterType_String? does GLSL even support that?
 
 				int numElements = 1;
@@ -370,11 +370,11 @@ namespace OpenGl
 
 				// if this is a texture param then add it to the list of
 				// texture parameters
-				if (pType == EffectParameterType_Texture ||
-					pType == EffectParameterType_Texture1D ||
-					pType == EffectParameterType_Texture2D ||
-					pType == EffectParameterType_Texture3D ||
-					pType == EffectParameterType_TextureCube)
+				if (pType == EffectParameterType::Texture ||
+					pType == EffectParameterType::Texture1D ||
+					pType == EffectParameterType::Texture2D ||
+					pType == EffectParameterType::Texture3D ||
+					pType == EffectParameterType::TextureCube)
 				{
 					m_textureParams.push_back(param);
 				}
@@ -440,7 +440,7 @@ namespace OpenGl
 
 			GlslAttribute attrib;
 			attrib.Name = nameBuffer;
-			attrib.Usage = VEU_Position;
+			attrib.Usage = VertexElementUsage::Position;
 			attrib.Index = 0;
 			attrib.GlHandle = 0;
 
@@ -456,13 +456,13 @@ namespace OpenGl
 			}
 
 			if (strncmp(usageBuffer, "POSITION", 8) == 0)
-				attrib.Usage = VEU_Position;
+				attrib.Usage = VertexElementUsage::Position;
 			else if (strncmp(usageBuffer, "TEXCOORD", 8) == 0)
-				attrib.Usage = VEU_TextureCoordinate;
+				attrib.Usage = VertexElementUsage::TextureCoordinate;
 			else if (strncmp(usageBuffer, "COLOR", 5) == 0)
-				attrib.Usage = VEU_Color;
+				attrib.Usage = VertexElementUsage::Color;
 			else if (strncmp(usageBuffer, "NORMAL", 6) == 0)
-				attrib.Usage = VEU_Normal;
+				attrib.Usage = VertexElementUsage::Normal;
 
 			result.append(cursor, colon - cursor);
 
