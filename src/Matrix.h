@@ -3,6 +3,8 @@
 
 #include "Vector3.h"
 
+NXNA_DISABLE_NAMELESS_STRUCT_WARNING
+
 namespace Nxna
 {
 	struct Matrix
@@ -52,5 +54,7 @@ namespace Nxna
 		static void Multiply(const Matrix& matrix1, const Matrix& matrix2, Matrix& result);
 	};
 }
+
+NXNA_ENABLE_NAMELESS_STRUCT_WARNING
 
 #endif // MATH_MATRIX_H

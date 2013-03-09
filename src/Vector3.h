@@ -2,6 +2,9 @@
 #define MATH_VECTOR3_H
 
 #include <cmath>
+#include "NxnaConfig.h"
+
+NXNA_DISABLE_NAMELESS_STRUCT_WARNING
 
 namespace Nxna
 {
@@ -102,5 +105,7 @@ namespace Nxna
 		static float DistanceSquared(const Vector3& v1, const Vector3& v2);
 	};
 }
+
+NXNA_ENABLE_NAMELESS_STRUCT_WARNING
 
 #endif // MATH_VECTOR3_H

@@ -56,11 +56,29 @@ __pragma(warning(disable:4481))
 #define NXNA_ENABLE_OVERRIDE_WARNING
 #endif
 
+// create some macros to disable constant warnings about "nameless struct/union"
+#ifdef _MSC_VER
+#define NXNA_DISABLE_NAMELESS_STRUCT_WARNING __pragma(warning(push)) \
+__pragma(warning(disable:4201))
+#define NXNA_ENABLE_NAMELESS_STRUCT_WARNING __pragma(warning(pop))
+#else
+#define NXNA_DISABLE_NAMELESS_STRUCT_WARNING
+#define NXNA_ENABLE_NAMELESS_STRUCT_WARNING
+#endif
+
 // make sure the SDL libraries get included if needed
 #if defined NXNA_PLATFORM_WIN32_SDL
 #pragma comment(lib, "SDL")
 #pragma comment(lib, "SDLMain")
 #endif
+
+// don't do excessive error OpenGL error checking in non-debug builds
+// (this only has an effect when using an OpenGL renderer)
+#ifdef NDEBUG
+#define NXNA_DISABLE_OPENGL_ERRORS
+#endif
+
+#define NXNA_DISABLE_OPENGL_ERRORS
 
 // if for some reason you don't want Ogg Vorbis (.ogg files) support you can uncomment the following line
 //#define NXNA_DISABLE_OGG
