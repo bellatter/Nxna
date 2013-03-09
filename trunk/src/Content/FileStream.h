@@ -35,12 +35,15 @@ namespace Content
 	class FileStream : public Stream
 	{
 		void* m_fp;
+
+	protected:
 		int m_bytesRead;
 
 	public:
-		FileStream(void* fp);
+		FileStream(const char* path);
 		virtual ~FileStream();
 
+		virtual bool IsOpen();
 		virtual int Read(byte* destination, int length) override;
 		virtual int ReadInt32() override;
 		virtual short ReadInt16() override;
@@ -53,6 +56,9 @@ namespace Content
 		virtual int Position() override;
 		virtual int Length() override;
 		bool Eof();
+
+	protected:
+		FileStream();
 
 	private:
 		void swapLE(void* data, int length);

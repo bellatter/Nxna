@@ -30,17 +30,11 @@ namespace Media
 		if (decoder != nullptr)
 			decoder->Rewind();
 		else
-		{
-			FILE* fp = fopen(song->m_path.c_str(), "rb");
-			
-			if (fp == nullptr)
-			{
-				// we were unable to find the ogg file associated with this song :(
-				// in this case we'll just ignore the song.
+		{		
+			Content::FileStream* file = new Content::FileStream(song->m_path.c_str());
+			if (file->IsOpen() == false)
 				return false;
-			}
-			
-			Content::FileStream* file = new Content::FileStream(fp);
+
 			decoder = new Audio::OggVorbisDecoder(file, false);
 
 			song->m_handle = decoder;

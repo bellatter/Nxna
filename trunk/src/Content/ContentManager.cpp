@@ -62,11 +62,11 @@ namespace Content
 	{
 		std::string fullName = m_rootDirectory + name + ".xnb";
 
-		FILE* fp = fopen(fullName.c_str(), "rb");
-		if (fp == nullptr)
+		FileStream* fs = new FileStream(fullName.c_str());
+		if (fs->IsOpen() == false)
 			throw ContentException(std::string("Unable to open file: ") + fullName);
 
-		return new XnbReader(new FileStream(fp), name, this);
+		return new XnbReader(fs, name, this);
 	}
 }
 }

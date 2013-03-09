@@ -6,17 +6,26 @@ namespace Nxna
 {
 namespace Content
 {
-	FileStream::FileStream(void* fp)
+	FileStream::FileStream(const char* path)
 	{
-		assert(fp != nullptr);
+		m_fp = fopen(path, "rb");
+		m_bytesRead = 0;
+	}
 
-		m_fp = fp;
+	FileStream::FileStream()
+	{
+		m_fp = nullptr;
 		m_bytesRead = 0;
 	}
 
 	FileStream::~FileStream()
 	{
 		fclose((FILE*)m_fp);
+	}
+
+	bool FileStream::IsOpen()
+	{
+		return m_fp != nullptr;
 	}
 
 	int FileStream::Read(byte* destination, int length)
