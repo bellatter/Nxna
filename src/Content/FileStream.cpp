@@ -20,7 +20,8 @@ namespace Content
 
 	FileStream::~FileStream()
 	{
-		fclose((FILE*)m_fp);
+		if (m_fp != nullptr)
+			fclose((FILE*)m_fp);
 	}
 
 	bool FileStream::IsOpen()

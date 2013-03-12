@@ -3,6 +3,7 @@
 #include "../Platform/Android/JNI.h"
 
 #include <jni.h>
+#include <android/log.h>
 #include <cstdint>
 #include <sys/types.h>
 #include <unistd.h>
@@ -16,8 +17,8 @@ namespace Content
 		int m_fd;
 		jobject m_asset;
 		jmethodID m_close;
-		uint64_t m_offset;
-		uint64_t m_length;
+		jlong m_offset;
+		jlong m_length;
 
 	public:
 
@@ -25,7 +26,7 @@ namespace Content
 		{
 			// TODO: can getting pointers to all these methods be cached and done just once?
 
-			JNIEnv* env = Platform::Android::JNI::GetEnv();
+			JNIEnv* env = static_cast<JNIEnv*>(Platform::Android::JNI::GetEnv());
 
 			m_asset = env->NewGlobalRef(asset);
 			jclass assetClass = env->GetObjectClass(m_asset);
@@ -39,7 +40,7 @@ namespace Content
 
 			// get the length of the file
 			jmethodID getLength = env->GetMethodID(assetClass, "getDeclaredLength", "()J");
-			m_length = m_env->CallLongMethod(m_asset, getLength);
+			m_length = env->CallLongMethod(m_asset, getLength);
 
 			// now get the actual file descriptor
 			jmethodID getFileDescriptor = env->GetMethodID(assetClass, "getFileDescriptor", "()Ljava/io/FileDescriptor;");
@@ -48,11 +49,15 @@ namespace Content
 			jfieldID fdDesc = env->GetFieldID(fdClass, "descriptor", "I");
 
 			m_fd = env->GetIntField(fd, fdDesc);
+			
+			lseek(m_fd, m_offset, SEEK_SET);
+			
+			__android_log_print(ANDROID_LOG_DEBUG, "CNK", "FD = %d, offset = %ld, length = %ld", m_fd, m_offset, m_length);
 		}
 
 		virtual ~AndroidFDStream()
 		{
-			JNIEnv* env = Platform::Android::JNI::GetEnv();
+			JNIEnv* env = static_cast<JNIEnv*>(Platform::Android::JNI::GetEnv());
 
 			env->CallVoidMethod(m_asset, m_close);
 			env->DeleteGlobalRef(m_asset);
@@ -60,16 +65,23 @@ namespace Content
 
 		virtual int Read(byte* destination, int length) override
 		{
+			__android_log_print(ANDROID_LOG_DEBUG, "CNK", "Reading %d bytes from AndroidFDStream", length);
+			
 			if (m_length != -1)
 			{
 				uint64_t maxLength = m_length - m_bytesRead;
-				if (maxLength > length)
+				if (length > maxLength)
 					length = maxLength;
 			}
+			
+			__android_log_print(ANDROID_LOG_DEBUG, "CNK", "Actually... reading %d bytes from AndroidFDStream", length);
 
 			int bytesRead = read(m_fd, destination, length);
 			if (bytesRead == -1)
+			{
+				__android_log_print(ANDROID_LOG_DEBUG, "CNK", "Unknown error while reading from AndroidFDStream");
 				return 0; // some sort of error occured
+			}
 
 			m_bytesRead += bytesRead;
 
@@ -104,6 +116,10 @@ namespace Content
 			{
 				m_bytesRead = r - m_offset;
 			}
+			else
+			{
+				__android_log_print(ANDROID_LOG_DEBUG, "CNK", "Unknown error while seeking in AndroidFDStream");
+			}
 		}
 
 		virtual int Position() override
@@ -116,6 +132,11 @@ namespace Content
 		virtual int Length() override
 		{
 			return m_length;
+		}
+		
+		virtual bool IsOpen() override
+		{
+			return true;
 		}
 	};
 
@@ -138,17 +159,17 @@ namespace Content
 		{
 			m_bufferLength = m_defaultBufferLength;
 
-			JNIEnv* env = Platform::Android::JNI::GetEnv();
+			JNIEnv* env = static_cast<JNIEnv*>(Platform::Android::JNI::GetEnv());
 			m_stream = env->NewGlobalRef(stream);
 			m_buffer = env->NewGlobalRef(env->NewByteArray(m_bufferLength));
 
 			jclass streamClass = env->GetObjectClass(m_stream);
 			m_mark = env->GetMethodID(streamClass, "mark", "(I)V");
-			m_available = env->GetMethodID(cls, "available", "()I");
-			m_read = env->GetMethodID(cls, "read", "([BII)I");
-			m_skip = env->GetMethodID(cls, "skip", "(J)J");
-			m_reset = env->GetMethodID(cls, "reset", "()V");
-			m_close = env->GetMethodID(cls, "close", "()V");
+			m_available = env->GetMethodID(streamClass, "available", "()I");
+			m_read = env->GetMethodID(streamClass, "read", "([BII)I");
+			m_skip = env->GetMethodID(streamClass, "skip", "(J)J");
+			m_reset = env->GetMethodID(streamClass, "reset", "()V");
+			m_close = env->GetMethodID(streamClass, "close", "()V");
 
 			env->CallVoidMethod(m_stream, m_mark, 100 * 1024 * 1024);
 			m_length = env->CallIntMethod(m_stream, m_available);
@@ -156,20 +177,27 @@ namespace Content
 
 		virtual ~AndroidFileStream()
 		{
-			JNIEnv* env = Platform::Android::JNI::GetEnv();
+			JNIEnv* env = static_cast<JNIEnv*>(Platform::Android::JNI::GetEnv());
 			env->CallVoidMethod(m_stream, m_close);
+			
+			if (env->ExceptionCheck())
+				env->ExceptionClear();
 
+			__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "deleting buffer with length of %d", m_bufferLength);
+			
 			env->DeleteGlobalRef(m_buffer);
 			env->DeleteGlobalRef(m_stream);
 		}
 
 		virtual int Read(byte* destination, int length) override
 		{
-			JNIEnv* env = Platform::Android::JNI::GetEnv();
+			JNIEnv* env = static_cast<JNIEnv*>(Platform::Android::JNI::GetEnv());
 
 			// expand the buffer if needed
 			if (length > m_bufferLength)
 			{
+				__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "recreating buffer with old length of %d and new length of %d", m_bufferLength, length);
+				
 				m_bufferLength = length;
 
 				env->DeleteGlobalRef(m_buffer);
@@ -180,25 +208,33 @@ namespace Content
 
 			if (env->ExceptionCheck())
 			{
+				__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "Exception while trying to read using AndroidFileStream");
+				
 				env->ExceptionClear();
 				return 0;
 			}
 			else if (bytesRead == -1)
 			{
+				__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "Unknown error while trying to read using AndroidFileStream");
+				
 				return 0;
 			}
 			else
 			{
-				env->GetByteArrayRegion(m_buffer, 0, bytesRead, destination);
+				env->GetByteArrayRegion(static_cast<jbyteArray>(m_buffer), 0, bytesRead, reinterpret_cast<jbyte*>(destination));
 				m_bytesRead += bytesRead;
 
+				__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "Read %d bytes", bytesRead);
+				
 				return bytesRead;
 			}
 		}
 
 		virtual void Seek(int offset, SeekOrigin origin) override
 		{
-			JNIEnv* env = Platform::Android::JNI::GetEnv();
+			JNIEnv* env = static_cast<JNIEnv*>(Platform::Android::JNI::GetEnv());
+			
+			__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "Seek of %d bytes requested", offset);
 
 			int newPosition = 0;
 			if (origin == SeekOrigin::Begin)
@@ -209,7 +245,7 @@ namespace Content
 				newPosition = m_length + offset;
 
 			// oh, why can't the stream have a seek method... instead we have to do this nonsense.
-			int bytesToSkip;
+			jlong bytesToSkip;
 			if (newPosition > m_bytesRead)
 			{
 				bytesToSkip = newPosition - m_bytesRead;
@@ -229,23 +265,31 @@ namespace Content
 				m_bytesRead = 0;
 				bytesToSkip = newPosition;
 			}
+			
+			__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "bytesToSkip = %ld", bytesToSkip);
 
 			// now seek to the desired spot
 			while(bytesToSkip > 0)
 			{
-				int64_t r = env->CallLongMethod(m_stream, m_skip, bytesToSkip);
+				jlong r = env->CallLongMethod(m_stream, m_skip, bytesToSkip);
 
 				if (env->ExceptionCheck())
 				{
+					__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "Exception while seeking AndroidFileStream");
+					
 					env->ExceptionClear();
 					return;
 				}
 				else if (r == 0)
 				{
 					// seeking failed for some reason...
+					__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "Unknown error while seeking AndroidFileStream");
+					
 					return;
 				}
 
+				__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "Seeked %ld bytes", r);
+				
 				m_bytesRead += r;
 				bytesToSkip -= r;
 			}
@@ -260,6 +304,11 @@ namespace Content
 		{
 			return m_length;
 		}
+		
+		virtual bool IsOpen() override
+		{
+			return true;
+		}
 	};
 
 
@@ -269,9 +318,9 @@ namespace Content
 
 	void AndroidFileSystem::Initialize(void* assetManager)
 	{
-		JNIEnv* env = Platform::Android::JNI::GetEnv();
-		m_androidAssetManager = env->NewGlobalRef(assetManager);
-		jclass cls = env->GetObjectClass(m_androidAssetManager);
+		JNIEnv* env = static_cast<JNIEnv*>(Platform::Android::JNI::GetEnv());
+		m_androidAssetManager = env->NewGlobalRef(static_cast<jobject>(assetManager));
+		jclass cls = env->GetObjectClass(static_cast<jobject>(m_androidAssetManager));
 
 		// get method info
 		m_openFd = env->GetMethodID(cls, "openFd", "(Ljava/lang/String;)Landroid/content/res/AssetFileDescriptor;");
@@ -280,17 +329,17 @@ namespace Content
 
 	void AndroidFileSystem::Shutdown()
 	{
-		JNIEnv* env = Platform::Android::JNI::GetEnv();
-		env->DeleteGlobalRef(m_androidAssetManager);
+		JNIEnv* env = static_cast<JNIEnv*>(Platform::Android::JNI::GetEnv());
+		env->DeleteGlobalRef(static_cast<jobject>(m_androidAssetManager));
 	}
 
 	FileStream* AndroidFileSystem::Open(const char* path)
 	{
-		JNIEnv* env = Platform::Android::JNI::GetEnv();
+		JNIEnv* env = static_cast<JNIEnv*>(Platform::Android::JNI::GetEnv());
 		jstring javaPath = env->NewStringUTF(path);
 
 		// try openFd() first, since it's a LOT faster
-		jobject fd = env->CallObjectMethod(m_androidAssetManager, m_openFd, javaPath);
+		jobject fd = env->CallObjectMethod(static_cast<jobject>(m_androidAssetManager), static_cast<jmethodID>(m_openFd), javaPath);
 
 		if (env->ExceptionCheck())
 		{
@@ -299,12 +348,15 @@ namespace Content
 		else if (fd != 0)
 		{
 			// yay! it worked!
+			__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "Opened %s with AndroidFDStream", path);
+			
 			env->DeleteLocalRef(javaPath);
 			return new AndroidFDStream(fd);
 		}
 
 		// well, looks like we're going to have to use the slow path...
-		jobject inputStream = env->CallObjectMethod(m_androidAssetManager, m_open, jpath, ACCESS_RANDOM);
+		const int ACCESS_RANDOM = 1;
+		jobject inputStream = env->CallObjectMethod(static_cast<jobject>(m_androidAssetManager), static_cast<jmethodID>(m_open), javaPath, ACCESS_RANDOM);
 
 		if (env->ExceptionCheck())
 		{
@@ -316,6 +368,9 @@ namespace Content
 		}
 
 		// it worked!
+		__android_log_print(ANDROID_LOG_DEBUG, "NXNA", "Opened %s with AndroidFileStream", path);
+		
+		env->DeleteLocalRef(javaPath);
 		return new AndroidFileStream(inputStream);
 	}
 }

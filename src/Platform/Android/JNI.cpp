@@ -6,7 +6,7 @@ namespace Platform
 {
 namespace Android
 {
-	JNIEnv* JNI::m_env = nullptr;
+	void* JNI::m_env = nullptr;
 
 
 }

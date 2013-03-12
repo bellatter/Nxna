@@ -8,6 +8,10 @@
 #include "../Audio/SoundEffect.h"
 #include "../Media/Song.h"
 
+#ifdef NXNA_PLATFORM_ANDROID
+#include "AndroidFileSystem.h"
+#endif
+
 namespace Nxna
 {
 namespace Content
@@ -62,8 +66,12 @@ namespace Content
 	{
 		std::string fullName = m_rootDirectory + name + ".xnb";
 
+#if defined NXNA_PLATFORM_ANDROID
+		FileStream* fs = AndroidFileSystem::Open(fullName.c_str());
+#else
 		FileStream* fs = new FileStream(fullName.c_str());
-		if (fs->IsOpen() == false)
+#endif
+		if (fs == nullptr || fs->IsOpen() == false)
 			throw ContentException(std::string("Unable to open file: ") + fullName);
 
 		return new XnbReader(fs, name, this);
