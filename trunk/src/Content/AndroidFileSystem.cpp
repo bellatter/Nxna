@@ -161,7 +161,9 @@ namespace Content
 
 			JNIEnv* env = static_cast<JNIEnv*>(Platform::Android::JNI::GetEnv());
 			m_stream = env->NewGlobalRef(stream);
-			m_buffer = env->NewGlobalRef(env->NewByteArray(m_bufferLength));
+			
+			jbyteArray buffer = env->NewByteArray(m_bufferLength);
+			m_buffer = env->NewGlobalRef(buffer);
 
 			jclass streamClass = env->GetObjectClass(m_stream);
 			m_mark = env->GetMethodID(streamClass, "mark", "(I)V");
@@ -173,6 +175,10 @@ namespace Content
 
 			env->CallVoidMethod(m_stream, m_mark, 100 * 1024 * 1024);
 			m_length = env->CallIntMethod(m_stream, m_available);
+			
+			env->DeleteLocalRef(buffer);
+			env->DeleteLocalRef(stream);
+			env->DeleteLocalRef(streamClass);
 		}
 
 		virtual ~AndroidFileStream()
@@ -201,7 +207,9 @@ namespace Content
 				m_bufferLength = length;
 
 				env->DeleteGlobalRef(m_buffer);
-				m_buffer = env->NewGlobalRef(env->NewByteArray(m_bufferLength));
+				jbyteArray buffer = env->NewByteArray(m_bufferLength);
+				m_buffer = env->NewGlobalRef(buffer);
+				env->DeleteLocalRef(buffer);
 			}
 
 			int bytesRead = env->CallIntMethod(m_stream, m_read, m_buffer, 0, length);
@@ -325,6 +333,8 @@ namespace Content
 		// get method info
 		m_openFd = env->GetMethodID(cls, "openFd", "(Ljava/lang/String;)Landroid/content/res/AssetFileDescriptor;");
 		m_open = env->GetMethodID(cls, "open", "(Ljava/lang/String;I)Ljava/io/InputStream;");
+		
+		env->DeleteLocalRef(cls);
 	}
 
 	void AndroidFileSystem::Shutdown()
