@@ -128,6 +128,18 @@ namespace Nxna
         result.M33 = cosine;
 	}
 
+	void Matrix::CreateRotationY(float rotation, Matrix& result)
+	{
+		float sine = sin(rotation);
+        float cosine = cos(rotation);
+
+		GetIdentity(result);
+		result.M11 = cosine;
+		result.M13 = -sine;
+		result.M31 = sine;
+		result.M33 = cosine;
+	}
+
 	void Matrix::CreateRotationZ(float rotation, Matrix& result)
 	{
 		float sine = sin(rotation);
@@ -146,7 +158,76 @@ namespace Nxna
 
 		result.M11 = x;
         result.M22 = y;
-        result.M33 = z;
+		result.M33 = z;
+	}
+
+	void Matrix::CreateConstrainedBillboard(const Nxna::Vector3& objectPosition, const Nxna::Vector3& cameraPosition, const Nxna::Vector3& rotationAxis, const Nxna::Vector3* cameraForwardVector, const Nxna::Vector3* objectForwardVector, Matrix& result)
+	{
+		float num;
+		Vector3 vector;
+		Vector3 vector2;
+		Vector3 vector3;
+		vector2.X = objectPosition.X - cameraPosition.X;
+		vector2.Y = objectPosition.Y - cameraPosition.Y;
+		vector2.Z = objectPosition.Z - cameraPosition.Z;
+
+		float num2 = vector2.LengthSquared();
+		if (num2 < 0.0001f)
+		{
+			vector2 = cameraForwardVector != nullptr ? -*cameraForwardVector : Vector3::GetForward();
+		}
+		else
+		{
+			Vector3::Multiply(vector2, (float) (1.0f / ((float)sqrt((double) num2))), vector2);
+		}
+		Vector3 vector4 = rotationAxis;
+		Vector3::Dot(rotationAxis, vector2, num);
+		if (fabs(num) > 0.9982547f)
+		{
+			if (objectForwardVector != nullptr)
+			{
+				vector = *objectForwardVector;
+				Vector3::Dot(rotationAxis, vector, num);
+				if (fabs(num) > 0.9982547f)
+				{
+					num = ((rotationAxis.X * Vector3::GetForward().X) + (rotationAxis.Y * Vector3::GetForward().Y)) + (rotationAxis.Z * Vector3::GetForward().Z);
+					vector = (fabs(num) > 0.9982547f) ? Vector3::GetRight() : Vector3::GetForward();
+				}
+			}
+			else
+			{
+				num = ((rotationAxis.X * Vector3::GetForward().X) + (rotationAxis.Y * Vector3::GetForward().Y)) + (rotationAxis.Z * Vector3::GetForward().Z);
+				vector = (fabs(num) > 0.9982547f) ? Vector3::GetRight() : Vector3::GetForward();
+			}
+			Vector3::Cross(rotationAxis, vector, vector3);
+			vector3.Normalize();
+			Vector3::Cross(vector3, rotationAxis, vector);
+			vector.Normalize();
+		}
+		else
+		{
+			Vector3::Cross(rotationAxis, vector2, vector3);
+			vector3.Normalize();
+			Vector3::Cross(vector3, vector4, vector);
+			vector.Normalize();
+		}
+
+		result.M11 = vector3.X;
+		result.M12 = vector3.Y;
+		result.M13 = vector3.Z;
+		result.M14 = 0;
+		result.M21 = vector4.X;
+		result.M22 = vector4.Y;
+		result.M23 = vector4.Z;
+		result.M24 = 0;
+		result.M31 = vector.X;
+		result.M32 = vector.Y;
+		result.M33 = vector.Z;
+		result.M34 = 0;
+		result.M41 = objectPosition.X;
+		result.M42 = objectPosition.Y;
+		result.M43 = objectPosition.Z;
+		result.M44 = 1.0f;
 	}
 
 	void Matrix::Invert(const Matrix& matrix, Matrix& result)

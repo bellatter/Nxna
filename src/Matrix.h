@@ -22,6 +22,13 @@ namespace Nxna
 			};
 			float C[16];
 		};
+		
+		Matrix operator*(const Matrix& matrix)
+		{
+			Matrix result;
+			Multiply(*this, matrix, result);
+			return result;
+		}
 
 		static Matrix GetIdentity()
 		{
@@ -45,10 +52,18 @@ namespace Nxna
 		static Matrix CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane);
 		static Matrix CreatePerspectiveFieldOfView(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance);
 		static Matrix CreatePerspective(float width, float height, float nearPlaneDistance, float farPlaneDistance);
+		static Matrix CreateTranslation(float x, float y, float z) { Matrix m; CreateTranslation(x, y, z, m); return m; }
 		static void CreateTranslation(float x, float y, float z, Matrix& result);
+		static Matrix CreateScale(float scale) { Matrix m; CreateScale(scale, scale, scale, m); return m; }
 		static void CreateScale(float x, float y, float z, Matrix& result);
+		static Matrix CreateRotationX(float rotation) { Matrix m; CreateRotationX(rotation, m); return m; }
 		static void CreateRotationX(float rotation, Matrix& result);
+		static Matrix CreateRotationY(float rotation) { Matrix m; CreateRotationY(rotation, m); return m; }
+		static void CreateRotationY(float rotation, Matrix& result);
+		static Matrix CreateRotationZ(float rotation) { Matrix m; CreateRotationZ(rotation, m); return m; }
 		static void CreateRotationZ(float rotation, Matrix& result);
+		static Matrix CreateConstrainedBillboard(const Nxna::Vector3& objectPosition, const Nxna::Vector3& cameraPosition, const Nxna::Vector3& rotationAxis, const Nxna::Vector3* cameraForwardVector, const Nxna::Vector3* objectForwardVector) { Matrix m; CreateConstrainedBillboard(objectPosition, cameraPosition, rotationAxis, cameraForwardVector, objectForwardVector, m); return m; }
+		static void CreateConstrainedBillboard(const Nxna::Vector3& objectPosition, const Nxna::Vector3& cameraPosition, const Nxna::Vector3& rotationAxis, const Nxna::Vector3* cameraForwardVector, const Nxna::Vector3* objectForwardVector, Matrix& result);
 		static void Invert(const Matrix& matrix, Matrix& result);
 
 		static void Multiply(const Matrix& matrix1, const Matrix& matrix2, Matrix& result);

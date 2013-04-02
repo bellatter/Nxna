@@ -9,6 +9,7 @@
 #include "HlslBasicEffect.h"
 #include "HlslSpriteEffect.h"
 #include "HlslDualTextureEffect.h"
+#include "HlslAlphaTestEffect.h"
 #include "D3D11Utils.h"
 #include "../GraphicsDeviceCapabilities.h"
 #include "../../Utils.h"
@@ -308,7 +309,9 @@ namespace Direct3D11
 	void Direct3D11Device::DrawPrimitives(PrimitiveType primitiveType, int startVertex, int primitiveCount) { }
 	void Direct3D11Device::DrawUserIndexedPrimitives(PrimitiveType primitiveType, void* data, int numVertices, int* indices, int primitiveCount, const VertexDeclaration* vertexDeclaration) { }
 	void Direct3D11Device::DrawUserIndexedPrimitives(PrimitiveType primitiveType, void* data, int numVertices, short* indices, int primitiveCount, const VertexDeclaration* vertexDeclaration) { }
-	void Direct3D11Device::DrawUserPrimitives(PrimitiveType primitiveType, void* data, int primitiveCount, const VertexDeclaration* vertexDeclaration) { }
+	void Direct3D11Device::DrawUserPrimitives(PrimitiveType primitiveType, void* data, int primitiveCount, const VertexDeclaration* vertexDeclaration)
+	{
+	}
 
 	void Direct3D11Device::SetVertexBuffer(const VertexBuffer* vertexBuffer)
 	{
@@ -354,7 +357,7 @@ namespace Direct3D11
 
 	AlphaTestEffect* Direct3D11Device::CreateAlphaTestEffect()
 	{
-		return nullptr;
+		return new HlslAlphaTestEffect(this);
 	}
 
 	VertexBuffer* Direct3D11Device::CreateVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)

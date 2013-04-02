@@ -10,6 +10,13 @@ typedef unsigned char byte;
 #define USING_OPENGLES
 #endif
 
+// which sound engine should we use?
+#if defined NXNA_PLATFORM_ANDROID
+#define NXNA_AUDIOENGINE_OPENSL
+#else
+#define NXNA_AUDIOENGINE_OPENAL
+#endif
+
 // disable Visual C++ 2010 specific stuff if needed
 #if !defined _MSC_VER || _MSC_VER < 1600
 #define nullptr 0
@@ -85,6 +92,11 @@ __pragma(warning(disable:4201))
 
 // if you don't want Direct3D 11 support you can uncomment the following line
 //#define NXNA_DISABLE_D3D11
+
+// if you don't want any audio then uncomment the following lines
+#undef NXNA_AUDIOENGINE_OPENAL
+#undef NXNA_AUDIOENGINE_OPENSL
+#define NXNA_AUDIOENGINE_NONE
 
 #if defined NXNA_PLATFORM_APPLE_IOS
 #define NXNA_DISABLE_OGG

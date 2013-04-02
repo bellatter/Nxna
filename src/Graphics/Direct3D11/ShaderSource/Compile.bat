@@ -26,6 +26,15 @@ call :CompileShader BasicEffect ps BasicEffectTexturePS
 call :CompileShader BasicEffect ps BasicEffectColorPS
 call :CompileShader BasicEffect ps BasicEffectColorTexturePS
 
+call :CompileShader AlphaTestEffect vs VSAlphaTest
+call :CompileShader AlphaTestEffect vs VSAlphaTestNoFog
+call :CompileShader AlphaTestEffect vs VSAlphaTestVc
+call :CompileShader AlphaTestEffect vs VSAlphaTestVcNoFog
+call :CompileShader AlphaTestEffect ps PSAlphaTestLtGt
+call :CompileShader AlphaTestEffect ps PSAlphaTestLtGtNoFog
+call :CompileShader AlphaTestEffect ps PSAlphaTestEqNe
+call :CompileShader AlphaTestEffect ps PSAlphaTestEqNeNoFog
+
 echo.
 
 if %error% == 0 (

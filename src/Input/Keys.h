@@ -18,6 +18,8 @@ namespace Input
 		Right,
 		Down,
 
+		Escape = 27,
+
 		OemTilde
 	END_NXNA_ENUM(Keys)
 }
