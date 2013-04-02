@@ -1,10 +1,3 @@
-#ifndef DISABLE_OPENAL
-#ifdef __APPLE__
-#include <OpenAL/al.h>
-#else
-#include <al.h>
-#endif
-#endif
 #include <cassert>
 #include "SoundEffect.h"
 #include "AudioManager.h"
@@ -23,21 +16,11 @@ namespace Audio
 		assert(effect != nullptr);
 
 		m_isLooped = false;
-		m_source = -1;
+		m_source = nullptr;
 		m_gain = 1.0f;
 		m_positioned = false;
 
-#ifndef DISABLE_OPENAL
-		m_buffer = effect->m_alBuffer;
-
-		/*m_source = AudioManager::GetFreeSource(true);
-
-		alSourcei(m_source, AL_BUFFER, effect->m_alBuffer);
-		alSourcei(m_source, AL_SOURCE_RELATIVE, 1);
-		alSourcei(m_source, AL_LOOPING, 0);
-		alSource3f(m_source, AL_POSITION, 0, 20, 0);
-		alSourcef(m_source, AL_GAIN, m_gain);*/
-#endif
+		m_bufferHandle = effect->m_bufferHandle;
 	}
 
 	SoundEffectInstance::~SoundEffectInstance()
@@ -48,51 +31,34 @@ namespace Audio
 
 	void SoundEffectInstance::Play()
 	{
-#ifndef DISABLE_OPENAL
 		if (isSourceValid() == false)
 		{
 			m_source = AudioManager::GetFreeSource(this);
-			if (m_source == -1) return;
+			if (m_source == nullptr) return;
 
-			alSourcei(m_source, AL_BUFFER, m_buffer);
-			alSourcei(m_source, AL_LOOPING, m_isLooped ? AL_TRUE : AL_FALSE);
-			alSourcef(m_source, AL_GAIN, m_gain);
-
-			if (m_positioned)
-			{
-				alSourcei(m_source, AL_SOURCE_RELATIVE, 0);
-				alSource3f(m_source, AL_POSITION, m_cachedPosition.X, m_cachedPosition.Y, m_cachedPosition.Z);
-			}
-			else
-			{
-				alSourcei(m_source, AL_SOURCE_RELATIVE, 1);
-				alSource3f(m_source, AL_POSITION, 0, 20, 0);
-			}
+			m_source->SetPosition(m_positioned == false, m_cachedPosition);
+			m_source->SetBuffer(m_bufferHandle);
+			m_source->IsLooping(m_isLooped);
 		}
-		
-		alSourcePlay(m_source);
-#endif
+
+		m_source->Play(m_gain, 1.0f, 1.0f);
 	}
 
 	void SoundEffectInstance::Stop()
 	{
 		if (isSourceValid() == false) return;
 
-#ifndef DISABLE_OPENAL
-		alSourceStop(m_source);
-#endif
+		m_source->Stop();
 
 		AudioManager::ReleaseSource(m_source);
-		m_source = -1;
+		m_source = nullptr;
 	}
 
 	void SoundEffectInstance::Pause()
 	{
 		if (isSourceValid() == false) return;
 
-#ifndef DISABLE_OPENAL
-		alSourcePause(m_source);
-#endif
+		m_source->Pause();
 	}
 
 	bool SoundEffectInstance::IsLooped()
@@ -104,10 +70,8 @@ namespace Audio
 	{
 		m_isLooped = looped;
 
-#ifndef DISABLE_OPENAL
 		if (isSourceValid())
-			alSourcei(m_source, AL_LOOPING, looped ? 1 : 0);
-#endif
+			m_source->IsLooping(looped);
 	}
 
 	float SoundEffectInstance::Volume()
@@ -119,32 +83,25 @@ namespace Audio
 	{
 		m_gain = volume;
 
-#ifndef DISABLE_OPENAL
 		if (isSourceValid())
-			alSourcef(m_source, AL_GAIN, m_gain);
-#endif
+			m_source->SetGain(m_gain);
 	}
 
 	SoundState SoundEffectInstance::GetState()
 	{
-#ifndef DISABLE_OPENAL
 		if (isSourceValid())
 		{
-			int state;
-			alGetSourcei(m_source, AL_SOURCE_STATE, &state);
-
-			if (state == AL_PLAYING)
-				return SoundState::Playing;
-			if (state == AL_PAUSED)
-				return SoundState::Paused;
+			return m_source->GetState();
 		}
-#endif
 
 		return SoundState::Stopped;
 	}
 
 	void SoundEffectInstance::Apply3D(const AudioListener* listener, const AudioEmitter* emitter)
 	{
+		if (isSourceValid())
+			AudioManager::Apply3D(m_source, listener, emitter);
+/*
 #ifndef DISABLE_OPENAL
 		// TODO: OpenAL doesn't support multiple listeners like XNA does,
 		// but it may be possible to fake it...
@@ -173,12 +130,12 @@ namespace Audio
 			m_positioned = true;
 			m_cachedPosition = emitter->GetPosition();
 		}
-#endif
+#endif*/
 	}
 
 	bool SoundEffectInstance::isSourceValid()
 	{
-		return m_source != -1 && AudioManager::IsSourceOwner(m_source, this);
+		return m_source != nullptr && AudioManager::IsSourceOwner(m_source, this);
 	}
 
 
@@ -219,20 +176,12 @@ namespace Audio
 
 	bool SoundEffect::Play(float volume, float pitch, float pan)
 	{
-#ifndef DISABLE_OPENAL
-		AudioSource source = AudioManager::GetFreeSource(nullptr);
-		if (source == -1) return false;
+		AudioSource* source = AudioManager::GetFreeSource(nullptr);
+		if (source == nullptr) return false;
 
-		alSourcei(source, AL_SOURCE_RELATIVE, 1);
-		alSource3f(source, AL_POSITION, 0, 0, 0);
-		alSourcei(source, AL_LOOPING, 0);
-		alSourcei(source, AL_BUFFER, m_alBuffer);
-		alSourcef(source, AL_GAIN, volume);
-		
-		// TODO: what about "pitch" and "pan"?
+		source->SetBuffer(m_bufferHandle);
+		source->Play(volume, pitch, pan);
 
-		alSourcePlay(source);
-#endif
 		return true;
 	}
 
@@ -325,34 +274,9 @@ namespace Audio
 		}
 
 		SoundEffect* effect = new SoundEffect();
-		alGenBuffers(1, &effect->m_alBuffer);
-
-		ALenum bformat;
-		if (format.Channels == 1)
-		{
-			if (format.BitsPerSample == 8)
-			{
-				bformat = AL_FORMAT_MONO8;
-			}
-			else
-			{
-				bformat = AL_FORMAT_MONO16;
-			}
-		}
-		else
-		{
-			if (format.BitsPerSample == 8)
-			{
-				bformat = AL_FORMAT_STEREO8;
-			}
-			else
-			{
-				bformat = AL_FORMAT_STEREO16;
-			}
-		}
-		alBufferData(effect->m_alBuffer, bformat, m_workingData, dataSize, format.SamplesPerSec);
-
-		effect->m_duration = (float)dataSize / format.SamplesPerSec / format.BitsPerSample / 8;
+		AudioBuffer dummy;
+		AudioBuffer::Create(format.Channels, format.BitsPerSample, format.SamplesPerSec, m_workingData, dataSize, &dummy);
+		effect->m_bufferHandle = dummy.Handle;
 
 		return effect;
 #else

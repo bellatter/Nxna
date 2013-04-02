@@ -12,6 +12,7 @@ namespace Audio
 		Vector3 m_position;
 		Vector3 m_forward;
 		Vector3 m_up;
+		Vector3 m_velocity;
 
 	public:
 
@@ -28,6 +29,9 @@ namespace Audio
 
 		Vector3 GetUp() const { return m_up; }
 		void SetUp(const Vector3& up) { m_up = up; }
+
+		Vector3 GetVelocity() const { return m_velocity; }
+		void SetVelocity(const Vector3& velocity) { m_velocity = velocity; }
 	};
 }
 }

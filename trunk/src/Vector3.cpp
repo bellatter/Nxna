@@ -70,6 +70,17 @@ namespace Nxna
 		 result.Z = qResult2.Z;
 	 }
 
+	 void Vector3::TransformNormal(const Vector3& normal, const Matrix& matrix, Vector3& result)
+	 {
+		 float x = normal.X * matrix.M11 + normal.Y * matrix.M21 + normal.Z * matrix.M31;
+         float y = normal.X * matrix.M12 + normal.Y * matrix.M22 + normal.Z * matrix.M32;
+         float z = normal.X * matrix.M13 + normal.Y * matrix.M23 + normal.Z * matrix.M33;
+
+		 result.X = x;
+		 result.Y = y;
+		 result.Z = z;
+	 }
+
 	 float Vector3::DistanceSquared(const Vector3& v1, const Vector3& v2)
 	 {
 		 return (v1.X - v2.X) * (v1.X - v2.X) + (v1.Y - v2.Y) * (v1.Y - v2.Y) + (v1.Z - v2.Z) * (v1.Z - v2.Z);

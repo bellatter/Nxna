@@ -4,6 +4,7 @@
 #include "../NxnaConfig.h"
 #include "../Content/ContentManager.h"
 #include "../Vector3.h"
+#include "SoundState.h"
 
 NXNA_DISABLE_OVERRIDE_WARNING
 
@@ -11,12 +12,7 @@ namespace Nxna
 {
 namespace Audio
 {
-	NXNA_ENUM(SoundState)
-		Paused,
-		Playing,
-		Stopped
-	END_NXNA_ENUM(SoundState);
-
+	class AudioSource;
 	class SoundEffect;
 	class AudioListener;
 	class AudioEmitter;
@@ -24,8 +20,8 @@ namespace Audio
 	class SoundEffectInstance
 	{
 		friend class SoundEffect;
-		unsigned int m_source;
-		unsigned int m_buffer;
+		AudioSource* m_source;
+		void* m_bufferHandle;
 		bool m_isLooped;
 		float m_gain;
 		Vector3 m_cachedPosition;
@@ -55,7 +51,7 @@ namespace Audio
 	{
 		friend class SoundEffectInstance;
 
-		unsigned int m_alBuffer;
+		void* m_bufferHandle;
 		bool m_duration;
 
 		static byte* m_workingData;

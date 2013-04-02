@@ -87,6 +87,7 @@
     <ClInclude Include="Audio\AudioManager.h" />
     <ClInclude Include="Audio\OggVorbis\OggVorbisDecoder.h" />
     <ClInclude Include="Audio\SoundEffect.h" />
+    <ClInclude Include="Audio\SoundState.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Content\ContentManager.h" />
     <ClInclude Include="Content\FileStream.h" />
@@ -104,6 +105,7 @@
     <ClInclude Include="Graphics\Direct3D11\D3D11Utils.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11VertexBuffer.h" />
     <ClInclude Include="Graphics\Direct3D11\Direct3D11Device.h" />
+    <ClInclude Include="Graphics\Direct3D11\HlslAlphaTestEffect.h" />
     <ClInclude Include="Graphics\Direct3D11\HlslBasicEffect.h" />
     <ClInclude Include="Graphics\Direct3D11\HlslDualTextureEffect.h" />
     <ClInclude Include="Graphics\Direct3D11\HlslEffect.h" />
@@ -135,6 +137,7 @@
     <ClInclude Include="Graphics\Texture2D.h" />
     <ClInclude Include="Graphics\VertexBuffer.h" />
     <ClInclude Include="Graphics\VertexDeclaration.h" />
+    <ClInclude Include="Graphics\VertexPositionTexture.h" />
     <ClInclude Include="IGraphicsDeviceManager.h" />
     <ClInclude Include="Input\Buttons.h" />
     <ClInclude Include="Input\GamePad.h" />
@@ -181,6 +184,7 @@
     <ClCompile Include="Graphics\Direct3D11\D3D11Texture2D.cpp" />
     <ClCompile Include="Graphics\Direct3D11\D3D11VertexBuffer.cpp" />
     <ClCompile Include="Graphics\Direct3D11\Direct3D11Device.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\HlslAlphaTestEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslBasicEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslDualTextureEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp" />
@@ -191,6 +195,7 @@
     <ClCompile Include="Graphics\SamplerState.cpp" />
     <ClCompile Include="Graphics\SamplerStateCollection.cpp" />
     <ClCompile Include="Graphics\VertexDeclaration.cpp" />
+    <ClCompile Include="Graphics\VertexPositionTexture.cpp" />
     <ClCompile Include="IGraphicsDeviceManager.cpp" />
     <ClCompile Include="Input\GamePad.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
@@ -231,6 +236,19 @@
     <ClCompile Include="Graphics\Texture2D.cpp" />
     <ClCompile Include="Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\Direct3D11\ShaderSource\AlphaTestEffect.fx" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Common.fxh" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestEqNe.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestEqNeNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestLtGt.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestLtGtNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTest.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVc.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVcNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Structures.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -94,6 +94,15 @@ namespace Nxna
 
 		static Vector3 GetUp() { return Vector3(0, 1.0f, 0); }
 		static Vector3 GetForward() { return Vector3(0, 0, -1.0f); }
+		static Vector3 GetZero() { return Vector3(0, 0, 0); }
+		static Vector3 GetRight() { return Vector3(1.0f, 0, 0); }
+
+		static void Multiply(const Vector3& v, float scaleFactor, Vector3& result)
+		{
+			result.X = v.X * scaleFactor;
+			result.Y = v.Y * scaleFactor;
+			result.Z = v.Z * scaleFactor;
+		}
 
 		static void Dot(const Vector3& v1, const Vector3& v2, float& result);
 		static void Cross(const Vector3& v1, const Vector3& v2, Vector3& result);
@@ -101,6 +110,8 @@ namespace Nxna
 		static void Normalize(const Vector3& v, Vector3& result);
 		static void Transform(const Vector3& v, const Matrix& matrix, Vector3& result);
 		static void Transform(const Vector3& v, const Nxna::Quaternion& quat, Vector3& result);
+		static Vector3 TransformNormal(const Vector3& normal, const Matrix& matrix) { Vector3 v; TransformNormal(normal, matrix, v); return v; }
+		static void TransformNormal(const Vector3& normal, const Matrix& matrix, Vector3& result);
 
 		static float DistanceSquared(const Vector3& v1, const Vector3& v2);
 	};
