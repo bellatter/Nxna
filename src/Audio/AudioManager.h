@@ -13,6 +13,14 @@ namespace Audio
 	{
 		void* Handle;
 
+#if defined NXNA_AUDIOENGINE_OPENSL
+		int NumChannels;
+		int NumBitsPerSample;
+		int NumSamplesPerSecond;
+		byte* Data;
+		int DataLength;
+#endif
+
 		static void Create(int numChannels, int numBitsPerSample, int numSamplesPerSecond, byte* data, int numBytes, AudioBuffer* result);
 	};
 
@@ -20,6 +28,10 @@ namespace Audio
 	{
 		void* m_handle;
 		void* m_bufferHandle;
+
+#if defined NXNA_AUDIOENGINE_OPENSL
+		bool m_playing;
+#endif
 
 	public:
 		AudioSource();
@@ -38,6 +50,10 @@ namespace Audio
 		void IsLooping(bool looping);
 
 		void SetPosition(bool relative, const Vector3& position);
+
+#if defined NXNA_AUDIOENGINE_OPENSL
+		void OnStop() { m_playing = false; }
+#endif
 	};
 
 	class AudioListener;
@@ -47,8 +63,14 @@ namespace Audio
 	{
 		friend class AudioSource;
 
+#if defined NXNA_AUDIOENGINE_OPENAL
 		static void* m_device;
 		static void* m_context;
+#elif defined NXNA_AUDIOENGINE_OPENSL
+		static void* m_engine;
+		static void* m_outputMix;
+		static void* m_engineInterface;
+#endif
 		
 		static const int MAX_SOURCES = 15;
 
@@ -73,6 +95,11 @@ namespace Audio
 		static void SetMasterVolume(float volume);
 
 		static void Apply3D(AudioSource* source, const AudioListener* listener, const AudioEmitter* emitter);
+
+#if defined NXNA_AUDIOENGINE_OPENSL
+		static void* GetOutputMix() { return m_outputMix; }
+		static void* GetEngineInterface() { return m_engineInterface; }
+#endif
 	};
 }
 }
