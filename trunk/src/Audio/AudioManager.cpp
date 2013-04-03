@@ -1,3 +1,5 @@
+#include "../NxnaConfig.h"
+
 #ifdef NXNA_AUDIOENGINE_OPENAL
 #ifdef __APPLE__
 #include <OpenAL/al.h>
@@ -16,13 +18,17 @@
 #include "OpenSLES.h"
 #endif
 
+#include <memory.h>
+
+// NOTE: Most of the OpenSL code is based on http://vec3.ca/getting-started-with-opensl-on-android/
+
 namespace Nxna
 {
 namespace Audio
 {
 	void AudioBuffer::Create(int numChannels, int numBitsPerSample, int numSamplesPerSecond, byte* data, int numBytes, AudioBuffer* result)
 	{
-#ifdef NXNA_AUDIOENGINE_OPENAL
+#if defined NXNA_AUDIOENGINE_OPENAL
 		ALenum bformat;
 		if (numChannels == 1)
 		{
@@ -49,6 +55,14 @@ namespace Audio
 
 		alGenBuffers(1, (ALuint*)&result->Handle);
 		alBufferData((ALuint)result->Handle, bformat, data, numBytes, numSamplesPerSecond);
+#elif defined NXNA_AUDIOENGINE_OPENSL
+		result->Handle = result;
+		result->NumBitsPerSample = numBitsPerSample;
+		result->NumChannels = numChannels;
+		result->NumSamplesPerSecond = numSamplesPerSecond;
+		result->Data = new byte[numBytes];
+		memcpy(result->Data, data, numBytes);
+		result->DataLength = numBytes;
 #endif
 	}
 
@@ -57,24 +71,31 @@ namespace Audio
 		m_handle = nullptr;
 		m_bufferHandle = nullptr;
 
-#ifdef NXNA_AUDIOENGINE_OPENAL
+#if defined NXNA_AUDIOENGINE_OPENAL
 		alGenSources(1, (ALuint*)&m_handle);
+#elif defined NXNA_AUDIOENGINE_OPENSL
+		m_playing = false;
 #endif
 	}
 
 	AudioSource::~AudioSource()
 	{
-#ifdef NXNA_AUDIOENGINE_OPENAL
+#if defined NXNA_AUDIOENGINE_OPENAL
 		alDeleteSources(1, (ALuint*)&m_handle);
+#elif defined NXNA_AUDIOENGINE_OPENSL
+		if (m_handle != nullptr)
+			(*(SLObjectItf)m_handle)->Destroy((SLObjectItf)m_handle);
 #endif
 	}
 
 	bool AudioSource::IsAvailable()
 	{
-#ifdef NXNA_AUDIOENGINE_OPENAL
+#if defined NXNA_AUDIOENGINE_OPENAL
 		int state;
 		alGetSourcei((ALuint)m_handle, AL_SOURCE_STATE, &state);
 		return state == AL_STOPPED || state == AL_INITIAL;
+#elif defined NXNA_AUDIOENGINE_OPENSL
+		return m_handle == nullptr || !m_playing;
 #else
 		return false;
 #endif
@@ -85,9 +106,17 @@ namespace Audio
 		m_bufferHandle = buffer;
 	}
 
+void SLAPIENTRY playcallback(SLPlayItf player, void* context, SLuint32 e)
+{
+	if (e & SL_PLAYEVENT_HEADATEND)
+	{
+		((AudioSource*)context)->OnStop();
+	}
+}
+
 	void AudioSource::Play(float volume, float pitch, float pan)
 	{
-#ifdef NXNA_AUDIOENGINE_OPENAL
+#if defined NXNA_AUDIOENGINE_OPENAL
 		alSourcei((ALuint)m_handle, AL_SOURCE_RELATIVE, 1);
 		alSource3f((ALuint)m_handle, AL_POSITION, 0, 0, 0);
 		alSourcei((ALuint)m_handle, AL_LOOPING, 0);
@@ -98,13 +127,97 @@ namespace Audio
 		// TODO: what about "pitch" and "pan"?
 
 		alSourcePlay((ALuint)m_handle);
+#elif defined NXNA_AUDIOENGINE_OPENSL
+
+		if (m_bufferHandle == nullptr)
+			return;
+
+		if (m_handle != nullptr)
+		{
+			(*(SLObjectItf)m_handle)->Destroy((SLObjectItf)m_handle);
+		}
+
+		AudioBuffer* buffer = (AudioBuffer*)m_bufferHandle;
+		SLDataFormat_PCM format;
+		format.formatType = SL_DATAFORMAT_PCM;
+		format.numChannels = buffer->NumChannels;
+		format.samplesPerSec = buffer->NumSamplesPerSecond * 1000; // this is actually millihertz, not hertz
+		format.bitsPerSample = (buffer->NumBitsPerSample == 8 ? SL_PCMSAMPLEFORMAT_FIXED_8 : SL_PCMSAMPLEFORMAT_FIXED_16);
+		format.containerSize = buffer->NumBitsPerSample;
+		format.channelMask = SL_SPEAKER_FRONT_CENTER;
+		format.endianness = SL_BYTEORDER_LITTLEENDIAN;
+
+#ifdef NXNA_PLATFORM_ANDROID
+		SLDataLocator_AndroidSimpleBufferQueue in_loc;
+		in_loc.locatorType = SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE;
+		in_loc.numBuffers = 1;
+#else
+		SLDataLocator_BufferQueue in_loc;
+		in_loc.locatorType = SL_DATALOCATOR_BUFFERQUEUE;
+		in_loc.numBuffers = 1;
+#endif
+
+		SLDataSource src;
+		src.pFormat = &format;
+		src.pLocator = &in_loc;
+
+		SLDataLocator_OutputMix out_loc;
+		out_loc.locatorType = SL_DATALOCATOR_OUTPUTMIX;
+		out_loc.outputMix = (SLObjectItf)AudioManager::GetOutputMix();
+ 
+		SLDataSink dst;
+		dst.pLocator = &out_loc;
+		dst.pFormat = nullptr;
+
+#ifdef TARGET_ANDROID
+const SLInterfaceID ids[] = { SL_IID_VOLUME, SL_IID_ANDROIDSIMPLEBUFFERQUEUE };
+const SLboolean req[] = { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
+#else
+const SLInterfaceID ids[] = { SL_IID_VOLUME };
+const SLboolean req[] = { SL_BOOLEAN_TRUE };
+#endif
+
+		SLObjectItf playerObj;
+		(*((SLEngineItf)AudioManager::GetEngineInterface()))->CreateAudioPlayer((SLEngineItf)AudioManager::GetEngineInterface(), &playerObj, &src, &dst, sizeof(ids), ids, req);
+		(*playerObj)->Realize(playerObj, SL_BOOLEAN_FALSE);
+		m_handle = (void*)playerObj;
+
+		SLPlayItf player;
+		SLVolumeItf playerVol;
+		(*playerObj)->GetInterface(playerObj, SL_IID_PLAY, &player);
+		(*playerObj)->GetInterface(playerObj, SL_IID_VOLUME, &playerVol);
+
+		(*player)->RegisterCallback(player, playcallback, this);
+		(*player)->SetCallbackEventsMask(player, SL_PLAYEVENT_HEADATEND);
+ 
+#ifdef TARGET_ANDROID
+		SLAndroidSimpleBufferQueueItf playerBuffer;
+		(*player_obj)->GetInterface( player_obj, SL_IID_ANDROIDSIMPLEBUFFERQUEUE, &playerBuffer);
+#else
+		SLBufferQueueItf playerBuffer;
+		(*playerObj)->GetInterface(playerObj, SL_IID_BUFFERQUEUE, &playerBuffer);
+#endif
+
+		(*playerBuffer)->Enqueue(playerBuffer, buffer->Data, buffer->DataLength);
+
+		m_playing = true;
+		(*player)->SetPlayState(player, SL_PLAYSTATE_PLAYING);
 #endif
 	}
 
 	void AudioSource::Pause()
 	{
-#ifdef NXNA_AUDIOENGINE_OPENAL
+#if defined NXNA_AUDIOENGINE_OPENAL
 		alSourcePause((ALuint)m_handle);
+#elif defined NXNA_AUDIOENGINE_OPENSL
+		if (m_handle == nullptr || m_playing == false) return;
+
+		SLObjectItf playerObj = (SLObjectItf)m_handle;
+
+		SLPlayItf player;
+		(*playerObj)->GetInterface(playerObj, SL_IID_PLAY, &player);
+
+		(*player)->SetPlayState(player, SL_PLAYSTATE_PAUSED);
 #endif
 	}
 
@@ -112,6 +225,14 @@ namespace Audio
 	{
 #ifdef NXNA_AUDIOENGINE_OPENAL
 		alSourceStop((ALuint)m_handle);
+#elif defined NXNA_AUDIOENGINE_OPENSL
+		if (m_handle == nullptr || m_playing == false) return;
+
+		SLObjectItf playerObj = (SLObjectItf)m_handle;
+		(*playerObj)->Destroy(playerObj);
+
+		m_handle = nullptr;
+		m_playing = false;
 #endif
 	}
 
@@ -124,13 +245,28 @@ namespace Audio
 
 	SoundState AudioSource::GetState()
 	{
-#ifdef NXNA_AUDIOENGINE_OPENAL
+#if defined NXNA_AUDIOENGINE_OPENAL
 		int state;
 		alGetSourcei((ALuint)m_handle, AL_SOURCE_STATE, &state);
 
 		if (state == AL_PLAYING)
 			return SoundState::Playing;
 		if (state == AL_PAUSED)
+			return SoundState::Paused;
+#elif defined NXNA_AUDIOENGINE_OPENSL
+		if (m_handle == nullptr || m_playing == false)
+			return SoundState::Stopped;
+
+		SLObjectItf playerObj = (SLObjectItf)m_handle;
+		SLPlayItf player;
+		(*playerObj)->GetInterface(playerObj, SL_IID_PLAY, &player);
+
+		SLuint32 state;
+		(*player)->GetPlayState(player, &state);
+
+		if (state == SL_PLAYSTATE_PLAYING)
+			return SoundState::Playing;
+		if (state == SL_PLAYSTATE_PAUSED)
 			return SoundState::Paused;
 #endif
 
@@ -160,14 +296,20 @@ namespace Audio
 #endif
 	}
 
+#if defined NXNA_AUDIOENGINE_OPENAL
 	void* AudioManager::m_device = nullptr;
 	void* AudioManager::m_context = nullptr;
+#elif defined NXNA_AUDIOENGINE_OPENSL
+	void* AudioManager::m_engine = nullptr;
+	void* AudioManager::m_outputMix = nullptr;
+	void* AudioManager::m_engineInterface = nullptr;
+#endif
 	AudioManager::SourceInfo AudioManager::m_sources[MAX_SOURCES];
 	float AudioManager::m_distanceScale = 1.0f;
 
 	void AudioManager::Init()
 	{
-#ifdef NXNA_AUDIOENGINE_OPENAL
+#if defined NXNA_AUDIOENGINE_OPENAL
 		m_device = (void*)alcOpenDevice(nullptr);
 
 		m_context = (void*)alcCreateContext((ALCdevice*)m_device, nullptr);
@@ -180,23 +322,25 @@ namespace Audio
 		}
 
 		alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
-#endif
 
-		/*
+#elif defined NXNA_AUDIOENGINE_OPENSL
 		SLObjectItf engineObj;
 		SLEngineItf engine;
 
 		slCreateEngine(&engineObj, 0, nullptr, 0, nullptr, nullptr);
 		(*engineObj)->Realize(engineObj, SL_BOOLEAN_FALSE);
 		(*engineObj)->GetInterface(engineObj, SL_IID_ENGINE, &engine);
+		m_engine = (void*)engineObj;
+		m_engineInterface = (void*)engine;
 
-		SLObjectItf output_mix_obj;
+		SLObjectItf outputMixObj;
  
 		const SLInterfaceID ids[] = { SL_IID_VOLUME };
 		const SLboolean req[] = { SL_BOOLEAN_FALSE };
-		(*engine)->CreateOutputMix(engine, &output_mix_obj, 1, ids, req );
-
-		*/
+		(*engine)->CreateOutputMix(engine, &outputMixObj, 1, ids, req);
+		(*outputMixObj)->Realize(outputMixObj, SL_BOOLEAN_FALSE);
+		m_outputMix = (void*)outputMixObj;
+#endif
 	}
 
 	void AudioManager::Shutdown()
@@ -208,20 +352,18 @@ namespace Audio
 			m_sources[i].Owner = nullptr;
 		}
 
-#ifdef NXNA_AUDIOENGINE_OPENAL
+#if defined NXNA_AUDIOENGINE_OPENAL
 		alcMakeContextCurrent(nullptr);
 		alcDestroyContext((ALCcontext*)m_context);
 		alcCloseDevice((ALCdevice*)m_device);
-#endif
 
-		/*
-		(*output_mix_obj)->Destroy( output_mix_obj );
-		output_mix_obj = nullptr;
-		output_mix_vol = nullptr;
+#elif defined NXNA_AUDIOENGINE_OPENSL
+		(*((SLObjectItf)m_outputMix))->Destroy((SLObjectItf)m_outputMix);
+		m_outputMix = nullptr;
  
-		(*engine_obj)->Destroy( engine_obj );
-		engine_obj = nullptr;
-		engine = nullptr;*/
+		(*((SLObjectItf)m_engine))->Destroy((SLObjectItf)m_engine);
+		m_engine = nullptr;
+#endif
 	}
 
 	AudioSource* AudioManager::GetFreeSource(void* owner)
