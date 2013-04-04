@@ -26,6 +26,7 @@ namespace Media
 		void* m_handle;
 
 		Song(const char* name, const char* path);
+		~Song();
 
 	public:
 		const char* GetName() { return m_name.c_str(); }

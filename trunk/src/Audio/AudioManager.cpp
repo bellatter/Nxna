@@ -106,13 +106,15 @@ namespace Audio
 		m_bufferHandle = buffer;
 	}
 
-void SLAPIENTRY playcallback(SLPlayItf player, void* context, SLuint32 e)
-{
-	if (e & SL_PLAYEVENT_HEADATEND)
+#if defined NXNA_AUDIOENGINE_OPENSL
+	void SLAPIENTRY playcallback(SLPlayItf player, void* context, SLuint32 e)
 	{
-		((AudioSource*)context)->OnStop();
+		if (e & SL_PLAYEVENT_HEADATEND)
+		{
+			((AudioSource*)context)->OnStop();
+		}
 	}
-}
+#endif
 
 	void AudioSource::Play(float volume, float pitch, float pan)
 	{
