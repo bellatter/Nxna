@@ -3,7 +3,7 @@
 #include "../Content/FileStream.h"
 #include "../Audio/OggVorbis/OggVorbisDecoder.h"
 
-#ifndef DISABLE_OPENAL
+#ifdef NXNA_AUDIOENGINE_OPENAL
 #ifdef __APPLE__
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
@@ -25,7 +25,7 @@ namespace Media
 
 	bool OggMediaPlayer::Play(Song* song)
 	{
-#ifndef DISABLE_OPENAL
+#ifdef NXNA_AUDIOENGINE_OPENAL
 		Audio::OggVorbisDecoder* decoder = static_cast<Audio::OggVorbisDecoder*>(song->m_handle);
 		if (decoder != nullptr)
 			decoder->Rewind();
@@ -72,7 +72,7 @@ namespace Media
 
 	void OggMediaPlayer::Stop()
 	{
-#ifndef DISABLE_OPENAL
+#ifdef NXNA_AUDIOENGINE_OPENAL
 		alSourceStop(m_source);
 #endif
 	}
@@ -81,7 +81,7 @@ namespace Media
 	{
 		m_volume = volume;
 		
-#ifndef DISABLE_OPENAL
+#ifdef NXNA_AUDIOENGINE_OPENAL
 		alSourcef(m_source, AL_GAIN, volume);
 #endif
 	}
@@ -89,7 +89,7 @@ namespace Media
 	void OggMediaPlayer::Tick(void* handle)
 	{
 #ifndef NXNA_DISABLE_OGG
-#ifndef DISABLE_OPENAL
+#ifdef NXNA_AUDIOENGINE_OPENAL
 		int processed;
 		alGetSourcei(m_source, AL_BUFFERS_PROCESSED, &processed);
 
@@ -117,7 +117,7 @@ namespace Media
 	void OggMediaPlayer::stream(unsigned int alBuffer, void* handle)
 	{
 #ifndef NXNA_DISABLE_OGG
-#ifndef DISABLE_OPENAL
+#ifdef NXNA_AUDIOENGINE_OPENAL
 		const int BUFFER_SIZE = 176400; // 1 second
 		static byte buffer[BUFFER_SIZE];
 

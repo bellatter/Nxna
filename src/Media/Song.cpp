@@ -1,5 +1,10 @@
 #include "Song.h"
 #include "../Content/ContentManager.h"
+#ifdef NXNA_PLATFORM_APPLE_IOS
+
+#else
+#include "../Audio/OggVorbis/OggVorbisDecoder.h"
+#endif
 
 namespace Nxna
 {
@@ -10,6 +15,15 @@ namespace Media
 		m_name = name;
 		m_path = path;
 		m_handle = nullptr;
+	}
+
+	Song::~Song()
+	{
+#ifdef NXNA_PLATFORM_APPLE_IOS
+#else
+		if (m_handle != nullptr)
+			delete static_cast<Audio::OggVorbisDecoder*>(m_handle);
+#endif
 	}
 
 	void* SongLoader::Read(Content::XnbReader* stream)
