@@ -13,6 +13,7 @@
 #include "AudioManager.h"
 #include "AudioListener.h"
 #include "AudioEmitter.h"
+#include "../Logger.h"
 
 #ifdef NXNA_AUDIOENGINE_OPENSL
 #include "OpenSLES.h"
@@ -131,6 +132,10 @@ namespace Audio
 		alSourcePlay((ALuint)m_handle);
 #elif defined NXNA_AUDIOENGINE_OPENSL
 
+		SLEngineItf engine = (SLEngineItf)AudioManager::GetEngineInterface();
+		if (engine == nullptr) 
+			return;
+
 		if (m_bufferHandle == nullptr)
 			return;
 
@@ -180,30 +185,100 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 #endif
 
 		SLObjectItf playerObj;
-		(*((SLEngineItf)AudioManager::GetEngineInterface()))->CreateAudioPlayer((SLEngineItf)AudioManager::GetEngineInterface(), &playerObj, &src, &dst, sizeof(ids), ids, req);
-		(*playerObj)->Realize(playerObj, SL_BOOLEAN_FALSE);
+		SLresult r = (*engine)->CreateAudioPlayer(engine, &playerObj, &src, &dst, sizeof(ids), ids, req);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to create OpenSL audio player (error: %u)", r);
+			m_handle = nullptr;
+			m_playing = false;
+			return;
+		}
+		r = (*playerObj)->Realize(playerObj, SL_BOOLEAN_FALSE);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to realize OpenSL audio player (error: %u)", r);
+			m_handle = nullptr;
+			m_playing = false;
+			return;
+		}
 		m_handle = (void*)playerObj;
+		m_playing = true;
 
 		SLPlayItf player;
 		SLVolumeItf playerVol;
-		(*playerObj)->GetInterface(playerObj, SL_IID_PLAY, &player);
-		(*playerObj)->GetInterface(playerObj, SL_IID_VOLUME, &playerVol);
+		r = (*playerObj)->GetInterface(playerObj, SL_IID_PLAY, &player);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to get OpenSL audio player interface (error: %u)", r);
+			(*playerObj)->Destroy(playerObj);
+			m_handle = nullptr;
+			m_playing = false;
+			return;
+		}
+		r = (*playerObj)->GetInterface(playerObj, SL_IID_VOLUME, &playerVol);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to get OpenSL audio player volume interface (error: %u)", r);
+			(*playerObj)->Destroy(playerObj);
+			m_handle = nullptr;
+			m_playing = false;
+			return;
+		}
 
-		(*player)->RegisterCallback(player, playcallback, this);
-		(*player)->SetCallbackEventsMask(player, SL_PLAYEVENT_HEADATEND);
+		r = (*player)->RegisterCallback(player, playcallback, this);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to register OpenSL audio player callback (error: %u)", r);
+			(*playerObj)->Destroy(playerObj);
+			m_handle = nullptr;
+			m_playing = false;
+			return;
+		}
+		r = (*player)->SetCallbackEventsMask(player, SL_PLAYEVENT_HEADATEND);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to set OpenSL audio player callback mask (error: %u)", r);
+			(*playerObj)->Destroy(playerObj);
+			m_handle = nullptr;
+			m_playing = false;
+			return;
+		}
  
 #ifdef TARGET_ANDROID
 		SLAndroidSimpleBufferQueueItf playerBuffer;
-		(*player_obj)->GetInterface( player_obj, SL_IID_ANDROIDSIMPLEBUFFERQUEUE, &playerBuffer);
+		r = (*player_obj)->GetInterface( player_obj, SL_IID_ANDROIDSIMPLEBUFFERQUEUE, &playerBuffer);
 #else
 		SLBufferQueueItf playerBuffer;
-		(*playerObj)->GetInterface(playerObj, SL_IID_BUFFERQUEUE, &playerBuffer);
+		r = (*playerObj)->GetInterface(playerObj, SL_IID_BUFFERQUEUE, &playerBuffer);
 #endif
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to get OpenSL audio player buffer queue interface (error: %u)", r);
+			(*playerObj)->Destroy(playerObj);
+			m_handle = nullptr;
+			m_playing = false;
+			return;
+		}
 
-		(*playerBuffer)->Enqueue(playerBuffer, buffer->Data, buffer->DataLength);
+		r = (*playerBuffer)->Enqueue(playerBuffer, buffer->Data, buffer->DataLength);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to queue OpenSL audio player buffer (error: %u)", r);
+			(*playerObj)->Destroy(playerObj);
+			m_handle = nullptr;
+			m_playing = false;
+			return;
+		}
 
-		m_playing = true;
-		(*player)->SetPlayState(player, SL_PLAYSTATE_PLAYING);
+		r = (*player)->SetPlayState(player, SL_PLAYSTATE_PLAYING);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to play OpenSL audio player (error: %u)", r);
+			(*playerObj)->Destroy(playerObj);
+			m_handle = nullptr;
+			m_playing = false;
+			return;
+		}
 #endif
 	}
 
@@ -217,9 +292,19 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 		SLObjectItf playerObj = (SLObjectItf)m_handle;
 
 		SLPlayItf player;
-		(*playerObj)->GetInterface(playerObj, SL_IID_PLAY, &player);
+		SLresult r = (*playerObj)->GetInterface(playerObj, SL_IID_PLAY, &player);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to get OpenSL audio player interface (error: %u)", r);
+			return;
+		}
 
-		(*player)->SetPlayState(player, SL_PLAYSTATE_PAUSED);
+		r = (*player)->SetPlayState(player, SL_PLAYSTATE_PAUSED);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to pause OpenSL audio player (error: %u)", r);
+			return;
+		}
 #endif
 	}
 
@@ -261,10 +346,20 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 
 		SLObjectItf playerObj = (SLObjectItf)m_handle;
 		SLPlayItf player;
-		(*playerObj)->GetInterface(playerObj, SL_IID_PLAY, &player);
+		SLresult r = (*playerObj)->GetInterface(playerObj, SL_IID_PLAY, &player);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to get OpenSL audio player interface (error: %u)", r);
+			return SoundState::Stopped;
+		}
 
 		SLuint32 state;
-		(*player)->GetPlayState(player, &state);
+		r = (*player)->GetPlayState(player, &state);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to get OpenSL audio player state (error: %u)", r);
+			return SoundState::Stopped;
+		}
 
 		if (state == SL_PLAYSTATE_PLAYING)
 			return SoundState::Playing;
@@ -311,17 +406,13 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 
 	void AudioManager::Init()
 	{
+		NXNA_LOG_DEBUG("Initializing audio...");
+
 #if defined NXNA_AUDIOENGINE_OPENAL
 		m_device = (void*)alcOpenDevice(nullptr);
 
 		m_context = (void*)alcCreateContext((ALCdevice*)m_device, nullptr);
 		alcMakeContextCurrent((ALCcontext*)m_context);
-
-		for (int i = 0; i < MAX_SOURCES; i++)
-		{
-			m_sources[i].Source = new AudioSource();
-			m_sources[i].Owner = nullptr;
-		}
 
 		alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 
@@ -329,9 +420,26 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 		SLObjectItf engineObj;
 		SLEngineItf engine;
 
-		slCreateEngine(&engineObj, 0, nullptr, 0, nullptr, nullptr);
-		(*engineObj)->Realize(engineObj, SL_BOOLEAN_FALSE);
-		(*engineObj)->GetInterface(engineObj, SL_IID_ENGINE, &engine);
+		SLresult r = slCreateEngine(&engineObj, 0, nullptr, 0, nullptr, nullptr);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to create OpenSL engine (error: %u)", r);
+			return;
+		}
+		r = (*engineObj)->Realize(engineObj, SL_BOOLEAN_FALSE);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to realize OpenSL engine (error: %u)", r);
+			(*engineObj)->Destroy(engineObj);
+			return;
+		}
+		r = (*engineObj)->GetInterface(engineObj, SL_IID_ENGINE, &engine);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to get OpenSL engine interface (error: %u)", r);
+			(*engineObj)->Destroy(engineObj);
+			return;
+		}
 		m_engine = (void*)engineObj;
 		m_engineInterface = (void*)engine;
 
@@ -339,10 +447,34 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
  
 		const SLInterfaceID ids[] = { SL_IID_VOLUME };
 		const SLboolean req[] = { SL_BOOLEAN_FALSE };
-		(*engine)->CreateOutputMix(engine, &outputMixObj, 1, ids, req);
-		(*outputMixObj)->Realize(outputMixObj, SL_BOOLEAN_FALSE);
+		r = (*engine)->CreateOutputMix(engine, &outputMixObj, 1, ids, req);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to create OpenSL output mix (error: %u)", r);
+			(*engineObj)->Destroy(engineObj);
+			m_engine = nullptr;
+			m_engineInterface = nullptr;
+		}
+		r = (*outputMixObj)->Realize(outputMixObj, SL_BOOLEAN_FALSE);
+		if (r != SL_RESULT_SUCCESS)
+		{
+			NXNA_LOG_DEBUG("Unable to realize OpenSL output mix (error: %u)", r);
+			(*outputMixObj)->Destroy(outputMixObj);
+			(*engineObj)->Destroy(engineObj);
+			m_engine = nullptr;
+			m_engineInterface = nullptr;
+			return;
+		}
 		m_outputMix = (void*)outputMixObj;
 #endif
+
+		for (int i = 0; i < MAX_SOURCES; i++)
+		{
+			m_sources[i].Source = new AudioSource();
+			m_sources[i].Owner = nullptr;
+		}
+
+		NXNA_LOG_DEBUG("Audio initialized");
 	}
 
 	void AudioManager::Shutdown()
@@ -360,11 +492,17 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 		alcCloseDevice((ALCdevice*)m_device);
 
 #elif defined NXNA_AUDIOENGINE_OPENSL
-		(*((SLObjectItf)m_outputMix))->Destroy((SLObjectItf)m_outputMix);
-		m_outputMix = nullptr;
+		if (m_outputMix != nullptr)
+		{
+			(*((SLObjectItf)m_outputMix))->Destroy((SLObjectItf)m_outputMix);
+			m_outputMix = nullptr;
+		}
  
-		(*((SLObjectItf)m_engine))->Destroy((SLObjectItf)m_engine);
-		m_engine = nullptr;
+		if (m_engine != nullptr)
+		{
+			(*((SLObjectItf)m_engine))->Destroy((SLObjectItf)m_engine);
+			m_engine = nullptr;
+		}
 #endif
 	}
 
