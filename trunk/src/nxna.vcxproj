@@ -145,6 +145,7 @@
     <ClInclude Include="Input\Keys.h" />
     <ClInclude Include="Input\Mouse.h" />
     <ClInclude Include="Input\Touch\TouchPanel.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Media\MediaPlayer.h" />
