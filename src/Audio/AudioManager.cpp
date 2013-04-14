@@ -71,6 +71,7 @@ namespace Audio
 	{
 		m_handle = nullptr;
 		m_bufferHandle = nullptr;
+		m_isLooping = false;
 
 #if defined NXNA_AUDIOENGINE_OPENAL
 		alGenSources(1, (ALuint*)&m_handle);
@@ -122,7 +123,7 @@ namespace Audio
 #if defined NXNA_AUDIOENGINE_OPENAL
 		alSourcei((ALuint)m_handle, AL_SOURCE_RELATIVE, 1);
 		alSource3f((ALuint)m_handle, AL_POSITION, 0, 0, 0);
-		alSourcei((ALuint)m_handle, AL_LOOPING, 0);
+		alSourcei((ALuint)m_handle, AL_LOOPING, m_isLooping ? AL_TRUE : AL_FALSE);
 		alSourcei((ALuint)m_handle, AL_BUFFER, (ALint)m_bufferHandle);
 		alSourcef((ALuint)m_handle, AL_GAIN, volume);
 		alSourcef((ALuint)m_handle, AL_REFERENCE_DISTANCE, AudioManager::m_distanceScale);
@@ -372,6 +373,8 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 
 	void AudioSource::IsLooping(bool looping)
 	{
+		m_isLooping = looping;
+
 #ifdef NXNA_AUDIOENGINE_OPENAL
 		alSourcei((ALuint)m_handle, AL_LOOPING, looping ? 1 : 0);
 #endif

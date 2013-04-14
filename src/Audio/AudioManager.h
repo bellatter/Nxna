@@ -28,6 +28,7 @@ namespace Audio
 	{
 		void* m_handle;
 		void* m_bufferHandle;
+		bool m_isLooping;
 
 #if defined NXNA_AUDIOENGINE_OPENSL
 		bool m_playing;
@@ -46,7 +47,7 @@ namespace Audio
 		void SetGain(float gain);
 
 		SoundState GetState();
-		bool IsLooping();
+		bool IsLooping() { return m_isLooping; }
 		void IsLooping(bool looping);
 
 		void SetPosition(bool relative, const Vector3& position);
