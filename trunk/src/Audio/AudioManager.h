@@ -29,6 +29,8 @@ namespace Audio
 		void* m_handle;
 		void* m_bufferHandle;
 		bool m_isLooping;
+		Vector3 m_position;
+		bool m_positionIsRelative;
 
 #if defined NXNA_AUDIOENGINE_OPENSL
 		bool m_playing;

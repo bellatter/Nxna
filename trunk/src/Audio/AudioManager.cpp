@@ -72,6 +72,7 @@ namespace Audio
 		m_handle = nullptr;
 		m_bufferHandle = nullptr;
 		m_isLooping = false;
+		m_positionIsRelative = false;
 
 #if defined NXNA_AUDIOENGINE_OPENAL
 		alGenSources(1, (ALuint*)&m_handle);
@@ -121,8 +122,8 @@ namespace Audio
 	void AudioSource::Play(float volume, float pitch, float pan)
 	{
 #if defined NXNA_AUDIOENGINE_OPENAL
-		alSourcei((ALuint)m_handle, AL_SOURCE_RELATIVE, 1);
-		alSource3f((ALuint)m_handle, AL_POSITION, 0, 0, 0);
+		alSourcei((ALuint)m_handle, AL_SOURCE_RELATIVE, m_positionIsRelative ? 1 : 0);
+		alSource3f((ALuint)m_handle, AL_POSITION, m_position.X, m_position.Y, m_position.Z);
 		alSourcei((ALuint)m_handle, AL_LOOPING, m_isLooping ? AL_TRUE : AL_FALSE);
 		alSourcei((ALuint)m_handle, AL_BUFFER, (ALint)m_bufferHandle);
 		alSourcef((ALuint)m_handle, AL_GAIN, volume);
@@ -382,17 +383,12 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 
 	void AudioSource::SetPosition(bool relative, const Vector3& position)
 	{
+		m_positionIsRelative = relative;
+		m_position = position;
+
 #ifdef NXNA_AUDIOENGINE_OPENAL
-		if (!relative)
-		{
-			alSourcei((ALuint)m_handle, AL_SOURCE_RELATIVE, 0);
-			alSource3f((ALuint)m_handle, AL_POSITION, position.X, position.Y, position.Z);
-		}
-		else
-		{
-			alSourcei((ALuint)m_handle, AL_SOURCE_RELATIVE, 1);
-			alSource3f((ALuint)m_handle, AL_POSITION, 0, 20, 0);
-		}
+		alSourcei((ALuint)m_handle, AL_SOURCE_RELATIVE, relative ? 1 : 0);
+		alSource3f((ALuint)m_handle, AL_POSITION, position.X, position.Y, position.Z);
 #endif
 	}
 

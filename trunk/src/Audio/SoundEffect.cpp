@@ -101,6 +101,12 @@ namespace Audio
 	{
 		if (isSourceValid())
 			AudioManager::Apply3D(m_source, listener, emitter);
+		else
+		{
+			m_positioned = true;
+			m_cachedPosition = emitter->GetPosition();
+		}
+			
 /*
 #ifndef DISABLE_OPENAL
 		// TODO: OpenAL doesn't support multiple listeners like XNA does,
@@ -179,6 +185,7 @@ namespace Audio
 		AudioSource* source = AudioManager::GetFreeSource(nullptr);
 		if (source == nullptr) return false;
 
+		source->IsLooping(false);
 		source->SetBuffer(m_bufferHandle);
 		source->Play(volume, pitch, pan);
 
