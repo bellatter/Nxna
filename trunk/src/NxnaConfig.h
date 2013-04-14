@@ -94,9 +94,9 @@ __pragma(warning(disable:4201))
 //#define NXNA_DISABLE_D3D11
 
 // if you don't want any audio then uncomment the following lines
-#undef NXNA_AUDIOENGINE_OPENAL
-#undef NXNA_AUDIOENGINE_OPENSL
-#define NXNA_AUDIOENGINE_NONE
+//#undef NXNA_AUDIOENGINE_OPENAL
+//#undef NXNA_AUDIOENGINE_OPENSL
+//#define NXNA_AUDIOENGINE_NONE
 
 #if defined NXNA_PLATFORM_APPLE_IOS
 #define NXNA_DISABLE_OGG
