@@ -444,17 +444,32 @@ namespace Graphics
 		m_device->SetVertexBuffer(m_vertexBuffer);
 		m_device->SetIndices(m_indexBuffer);
 
+		int batchSize = 0;
+		int lastRenderedIndex = 0;
 		for (int i = 0; i < numSprites; i++)
 		{
 			if (lastTexture != m_sprites[i].Texture)
 			{
+				if (batchSize > 0)
+				{
+					m_device->DrawIndexedPrimitives(PrimitiveType::TriangleList, 0, 0, batchSize * vertsPerSprite, lastRenderedIndex, batchSize * 2);
+					batchSize = 0;
+					lastRenderedIndex = i * 6;
+				}
+
 				diffuse->SetValue(m_sprites[i].Texture);
 				effect->Apply();
 
 				lastTexture = m_sprites[i].Texture;
 			}
+			
+			batchSize++;
+		}
 
-			m_device->DrawIndexedPrimitives(PrimitiveType::TriangleList, 0, 0, numSprites * vertsPerSprite, i * 6, 2);
+		// render any remaining sprites
+		if (batchSize > 0)
+		{
+			m_device->DrawIndexedPrimitives(PrimitiveType::TriangleList, 0, 0, batchSize * vertsPerSprite, lastRenderedIndex, batchSize * 2);
 		}
 
 		m_sprites.clear();
