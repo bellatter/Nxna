@@ -116,6 +116,7 @@
     <ClInclude Include="Graphics\GraphicsDeviceCapabilities.h" />
     <ClInclude Include="Graphics\IContantBufferPmpl.h" />
     <ClInclude Include="Graphics\IndexBuffer.h" />
+    <ClInclude Include="Graphics\libsquish\squish.h" />
     <ClInclude Include="Graphics\OpenGL\GlIndexBuffer.h" />
     <ClInclude Include="Graphics\OpenGL\GlslAlphaTestEffect.h" />
     <ClInclude Include="Graphics\OpenGL\GlslBasicEffect.h" />
@@ -190,6 +191,15 @@
     <ClCompile Include="Graphics\Direct3D11\HlslDualTextureEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslSpriteEffect.cpp" />
+    <ClCompile Include="Graphics\libsquish\alpha.cpp" />
+    <ClCompile Include="Graphics\libsquish\clusterfit.cpp" />
+    <ClCompile Include="Graphics\libsquish\colourblock.cpp" />
+    <ClCompile Include="Graphics\libsquish\colourfit.cpp" />
+    <ClCompile Include="Graphics\libsquish\colourset.cpp" />
+    <ClCompile Include="Graphics\libsquish\maths.cpp" />
+    <ClCompile Include="Graphics\libsquish\rangefit.cpp" />
+    <ClCompile Include="Graphics\libsquish\singlecolourfit.cpp" />
+    <ClCompile Include="Graphics\libsquish\squish.cpp" />
     <ClCompile Include="Graphics\OpenGL\GlslAlphaTestEffect.cpp" />
     <ClCompile Include="Graphics\OpenGL\GlslSource.cpp" />
     <ClCompile Include="Graphics\RasterizerState.cpp" />
