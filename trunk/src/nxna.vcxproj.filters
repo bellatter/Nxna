@@ -40,6 +40,9 @@
     <Filter Include="Media">
       <UniqueIdentifier>{220a9999-b1a0-486c-9769-9815297a4198}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\libsquish">
+      <UniqueIdentifier>{c1c1459f-458e-4ea5-8359-17961414b884}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\GraphicsDevice.h">
@@ -258,6 +261,7 @@
     <ClInclude Include="Platform\Windows\WindowsOpenGlWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\libsquish\squish.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -436,5 +440,14 @@
     <ClCompile Include="Platform\Windows\WindowsOpenGlWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\libsquish\squish.cpp" />
+    <ClCompile Include="Graphics\libsquish\colourblock.cpp" />
+    <ClCompile Include="Graphics\libsquish\alpha.cpp" />
+    <ClCompile Include="Graphics\libsquish\clusterfit.cpp" />
+    <ClCompile Include="Graphics\libsquish\rangefit.cpp" />
+    <ClCompile Include="Graphics\libsquish\colourfit.cpp" />
+    <ClCompile Include="Graphics\libsquish\colourset.cpp" />
+    <ClCompile Include="Graphics\libsquish\singlecolourfit.cpp" />
+    <ClCompile Include="Graphics\libsquish\maths.cpp" />
   </ItemGroup>
 </Project>

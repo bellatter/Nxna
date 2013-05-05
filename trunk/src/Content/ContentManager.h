@@ -18,6 +18,7 @@ namespace Content
 	class IContentReader
 	{
 	public:
+		virtual ~IContentReader() { }
 		virtual const char* GetTypeName() = 0;
 		virtual void* Read(XnbReader* reader) = 0;
 		virtual void Destroy(void* resource) = 0;
