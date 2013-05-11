@@ -85,6 +85,11 @@ namespace Nxna
 
 			return angle;
 		}
+
+		static float Lerp(float value1, float value2, float amount)
+		{
+			return value1 * (1.0f - amount) + value2 * amount;
+		}
 	};
 }
 
