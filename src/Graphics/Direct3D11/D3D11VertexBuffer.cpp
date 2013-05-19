@@ -25,7 +25,7 @@ namespace Direct3D11
 
 	void D3D11VertexBuffer::SetData(void* data, int vertexCount)
 	{
-		assert(vertexCount == m_vertexCount);
+		//assert(vertexCount == m_vertexCount);
 
 		int numBytes = m_declaration->GetStride() * m_vertexCount;
 
