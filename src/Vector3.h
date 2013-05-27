@@ -35,6 +35,11 @@ namespace Nxna
 			return Vector3(X * v.X, Y * v.Y, Z * v.Z);
 		}
 
+		Vector3 operator /(float s) const
+		{
+			return Vector3(X / s, Y / s, Z / s);
+		}
+
 		Vector3 operator -(const Vector3& v) const
 		{
 			return Vector3(X - v.X, Y - v.Y, Z - v.Z);
@@ -69,6 +74,13 @@ namespace Nxna
 			X *= s;
 			Y *= s;
 			Z *= s;
+		}
+
+		void operator /=(float s)
+		{
+			X /= s;
+			Y /= s;
+			Z /= s;
 		}
 
 		float Length() const
@@ -108,6 +120,7 @@ namespace Nxna
 		static void Cross(const Vector3& v1, const Vector3& v2, Vector3& result);
 		static Vector3 Normalize(const Vector3& v);
 		static void Normalize(const Vector3& v, Vector3& result);
+		static Vector3 Transform(const Vector3& v, const Matrix& matrix) { Vector3 result; Transform(v, matrix, result); return result; }
 		static void Transform(const Vector3& v, const Matrix& matrix, Vector3& result);
 		static void Transform(const Vector3& v, const Nxna::Quaternion& quat, Vector3& result);
 		static Vector3 TransformNormal(const Vector3& normal, const Matrix& matrix) { Vector3 v; TransformNormal(normal, matrix, v); return v; }

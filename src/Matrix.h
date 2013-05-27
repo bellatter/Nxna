@@ -62,6 +62,8 @@ namespace Nxna
 		static void CreateRotationY(float rotation, Matrix& result);
 		static Matrix CreateRotationZ(float rotation) { Matrix m; CreateRotationZ(rotation, m); return m; }
 		static void CreateRotationZ(float rotation, Matrix& result);
+		static Matrix CreateFromAxisAngle(const Nxna::Vector3& axis, float angle) { Matrix m; CreateFromAxisAngle(axis, angle, m); return m; }
+		static void CreateFromAxisAngle(const Nxna::Vector3& axis, float angle, Nxna::Matrix& result);
 		static Matrix CreateConstrainedBillboard(const Nxna::Vector3& objectPosition, const Nxna::Vector3& cameraPosition, const Nxna::Vector3& rotationAxis, const Nxna::Vector3* cameraForwardVector, const Nxna::Vector3* objectForwardVector) { Matrix m; CreateConstrainedBillboard(objectPosition, cameraPosition, rotationAxis, cameraForwardVector, objectForwardVector, m); return m; }
 		static void CreateConstrainedBillboard(const Nxna::Vector3& objectPosition, const Nxna::Vector3& cameraPosition, const Nxna::Vector3& rotationAxis, const Nxna::Vector3* cameraForwardVector, const Nxna::Vector3* objectForwardVector, Matrix& result);
 		static void Invert(const Matrix& matrix, Matrix& result);

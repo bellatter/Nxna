@@ -2,6 +2,7 @@
 #define COLOR_H
 
 #include "NxnaConfig.h"
+#include "MathHelper.h"
 
 namespace Nxna
 {
@@ -81,6 +82,19 @@ struct Color
 	static Color GetSaddleBrown() { return Color(139, 69, 19); }
 	static Color GetSandyBrown() { return Color(244, 164, 96); }
 	static Color GetTomato() { return Color(255, 99, 71); }
+
+	static Color Lerp(const Color& c1, const Color& c2, float amount)
+	{
+		return Color((int)MathHelper::Lerp(c1.R, c2.R, amount),
+			(int)MathHelper::Lerp(c1.G, c2.G, amount),
+			(int)MathHelper::Lerp(c1.B, c2.B, amount),
+			(int)MathHelper::Lerp(c1.A, c2.A, amount));
+	}
+
+	static Color FromNonPremultiplied(int r, int g, int b, int a)
+	{
+		return Color((byte)(r * a / 255), (byte)(g * a / 255), (byte)(b * a / 255), (byte)a);
+	}
 };
 
 static bool operator==(const Color& c1, const Color& c2)

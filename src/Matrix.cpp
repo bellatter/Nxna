@@ -152,6 +152,38 @@ namespace Nxna
 		result.M22 = cosine;
 	}
 
+	void Matrix::CreateFromAxisAngle(const Nxna::Vector3& axis, float angle, Nxna::Matrix& result)
+	{
+		float x = axis.X;
+		float y = axis.Y;
+		float z = axis.Z;
+		float sine = sin(angle);
+		float cosine = cos(angle);
+		float x2 = x * x;
+		float y2 = y * y;
+		float z2 = z * z;
+		float xy = x * y;
+		float xz = x * z;
+		float yz = y * z;
+
+		result.M11 = x2 + (cosine * (1.0f - x2));
+		result.M12 = (xy - (cosine * xy)) + (sine * z);
+		result.M13 = (xz - (cosine * xz)) - (sine * y);
+		result.M14 = 0;
+		result.M21 = (xy - (cosine * xy)) - (sine * z);
+		result.M22 = y2 + (cosine * (1.0f - y2));
+		result.M23 = (yz - (cosine * yz)) + (sine * x);
+		result.M24 = 0;
+		result.M31 = (xz - (cosine * xz)) + (sine * y);
+		result.M32 = (yz - (cosine * yz)) - (sine * x);
+		result.M33 = z2 + (cosine * (1.0f - z2));
+		result.M34 = 0;
+		result.M41 = 0;
+		result.M42 = 0;
+		result.M43 = 0;
+		result.M44 = 1.0f;
+	}
+
 	void Matrix::CreateScale(float x, float y, float z, Matrix& result)
 	{
 		GetIdentity(result);
