@@ -22,7 +22,7 @@ namespace Direct3D11
 	public:
 		D3D11VertexBuffer(Direct3D11Device* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage);
 
-		virtual void SetData(void* data, int numVertices) override;
+		virtual void SetData(int offsetInBytes, void* data, int numVertices) override;
 		virtual const VertexDeclaration* GetDeclaration() const override { return m_declaration; }
 		virtual int GetVertexCount() const override { return m_vertexCount; }
 
@@ -34,7 +34,7 @@ namespace Direct3D11
 	public:
 		D3D11DynamicVertexBuffer(Direct3D11Device* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage);
 
-		virtual void SetData(void* data, int numVertices) override;
+		virtual void SetData(int offsetInBytes, void* data, int numVertices) override;
 		virtual const VertexDeclaration* GetDeclaration() const override { return m_declaration; }
 		virtual int GetVertexCount() const override { return m_vertexCount; }
 	};

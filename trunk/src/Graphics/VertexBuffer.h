@@ -25,10 +25,15 @@ namespace Graphics
 		virtual ~VertexBuffer() { }
 		GraphicsDevice* GetGraphicsDevice() { return m_device; }
 
-		virtual void SetData(void* data, int numVertices) = 0;
+		void SetData(int offsetInBytes, void* data, int numElements, int vertexStride, int elementSizeInBytes);
+		void SetData(void* data, int numVertices);
+
 		virtual const VertexDeclaration* GetDeclaration() const = 0;
 
 		virtual int GetVertexCount() const = 0;
+
+	protected:
+		virtual void SetData(int offsetInBytes, void* data, int numBytes) = 0;
 	};
 
 	class DynamicVertexBuffer : public VertexBuffer
@@ -39,7 +44,12 @@ namespace Graphics
 			: VertexBuffer(device) {}
 		virtual ~DynamicVertexBuffer() { }
 
-		virtual void SetData(void* data, int numVertices) = 0;
+		virtual void SetData(int offsetInBytes, void* data, int numVertices) = 0;
+		void SetData(void* data, int numVertices)
+		{
+			SetData(0, data, numVertices);
+		}
+
 		virtual const VertexDeclaration* GetDeclaration() const = 0;
 	};
 }

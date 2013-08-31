@@ -11,9 +11,8 @@ namespace Graphics
 namespace OpenGl
 {
 	GlVertexBuffer::GlVertexBuffer(OpenGlDevice* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)
-		: VertexBuffer(device)
+		: VertexBuffer(device), m_declaration(*vertexDeclaration)
 	{
-		m_declaration = vertexDeclaration;
 		m_vertexCount = vertexCount;
 
 		glGenBuffers(1, &m_buffer);
@@ -21,14 +20,14 @@ namespace OpenGl
 		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
-	void GlVertexBuffer::SetData(void* data, int vertexCount)
+	void GlVertexBuffer::SetData(int offsetInBytes, void* data, int numBytes)
 	{
-		//assert(vertexCount == m_vertexCount);
-
-		int numBytes = m_declaration->GetStride() * m_vertexCount;
-
 		glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
-		glBufferData(GL_ARRAY_BUFFER, numBytes, data, GL_STATIC_DRAW);
+
+		if (offsetInBytes == 0)
+			glBufferData(GL_ARRAY_BUFFER, numBytes, data, GL_STATIC_DRAW);
+		else
+			glBufferSubData(GL_ARRAY_BUFFER, offsetInBytes, numBytes, data);
 
 		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
@@ -47,13 +46,17 @@ namespace OpenGl
 	{
 	}
 
-	void GlDynamicVertexBuffer::SetData(void* data, int vertexCount)
+	void GlDynamicVertexBuffer::SetData(int offsetInBytes, void* data, int vertexCount)
 	{
 		m_vertexCount = vertexCount;
-		int numBytes = m_declaration->GetStride() * vertexCount;
+		int numBytes = m_declaration.GetStride() * vertexCount;
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
-		glBufferData(GL_ARRAY_BUFFER, numBytes, data, GL_STATIC_DRAW);
+
+		if (offsetInBytes == 0)
+			glBufferData(GL_ARRAY_BUFFER, numBytes, data, GL_STATIC_DRAW);
+		else
+			glBufferSubData(GL_ARRAY_BUFFER, offsetInBytes, numBytes, data);
 
 		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
