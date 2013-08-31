@@ -23,8 +23,11 @@ namespace Direct3D11
 		m_buffer = nullptr;
 	}
 
-	void D3D11VertexBuffer::SetData(void* data, int vertexCount)
+	void D3D11VertexBuffer::SetData(int offsetInBytes, void* data, int vertexCount)
 	{
+		// TODO
+		assert(offsetInBytes == 0);
+
 		//assert(vertexCount == m_vertexCount);
 
 		int numBytes = m_declaration->GetStride() * m_vertexCount;
@@ -57,8 +60,12 @@ namespace Direct3D11
 		
 	}
 
-	void D3D11DynamicVertexBuffer::SetData(void* data, int vertexCount)
+	void D3D11DynamicVertexBuffer::SetData(int offsetInBytes, void* data, int vertexCount)
 	{
+		// TODO
+		assert(offsetInBytes == 0);
+
+
 		if (vertexCount > m_vertexCount)
 			throw GraphicsException("Too many vertices", __FILE__, __LINE__);
 
