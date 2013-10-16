@@ -62,8 +62,6 @@ namespace OpenGl
 
 		virtual void Present() override;
 
-		virtual Texture2D* CreateTexture(int width, int height) override;
-		virtual Texture2D* CreateTexture(int width, int height, SurfaceFormat format) override;
 		virtual BasicEffect* CreateBasicEffect() override;
 		virtual SpriteEffect* CreateSpriteEffect() override;
 		virtual DualTextureEffect* CreateDualTextureEffect() override;
@@ -83,6 +81,8 @@ namespace OpenGl
 
 	protected:
 		virtual void SetSamplers() override;
+
+		virtual Pvt::ITexture2DPimpl* CreateTexture2DPmpl(int width, int height, bool mipMap, SurfaceFormat format) override;
 
 	private:
 		void applyDirtyStates();
@@ -121,7 +121,7 @@ namespace OpenGl
 		}
 
 #ifdef NXNA_DISABLE_OPENGL_ERRORS
-		static void ThrowIfError(const char* filename, int line) { }
+		static void ThrowIfError(const char* /* filename */, int /* line */) { }
 #else
 		static void ThrowIfError(const char* filename, int line);
 #endif

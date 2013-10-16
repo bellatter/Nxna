@@ -1,8 +1,8 @@
 #include <cassert>
 #include <cstring>
 #include "Texture2D.h"
+#include "ITexture2DPimpl.h"
 #include "GraphicsDevice.h"
-#include "libsquish/squish.h"
 #include "../Content/FileStream.h"
 #include "../Content/ContentManager.h"
 #include "../Content/XnbReader.h"
@@ -19,6 +19,34 @@ namespace Graphics
 	void Texture2DLoader::Destroy(void* resource)
 	{
 		delete static_cast<Texture2D*>(resource);
+	}
+
+	Texture2D::Texture2D(GraphicsDevice* device, int width, int height)
+	{
+		m_device = device;
+		m_width = width;
+		m_height = height;
+
+		m_pimpl = device->CreateTexture2DPmpl(width, height, false, SurfaceFormat::Color);
+	}
+
+	Texture2D::Texture2D(GraphicsDevice* device, int width, int height, bool mipMap, SurfaceFormat format)
+	{
+		m_device = device;
+		m_width = width;
+		m_height = height;
+
+		m_pimpl = device->CreateTexture2DPmpl(width, height, mipMap, format);
+	}
+
+	Texture2D::~Texture2D()
+	{
+		delete m_pimpl;
+	}
+
+	void Texture2D::SetData(int level, byte* pixels, int length)
+	{
+		m_pimpl->SetData(level, pixels, length);
 	}
 
 	Texture2D* Texture2D::LoadFrom(Content::XnbReader* stream)
@@ -54,15 +82,15 @@ namespace Graphics
         
         Texture2D* texture;
 		if (format == FormatDXT1)
-			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat::Dxt1);
+			texture = new Texture2D(GraphicsDevice::GetDevice(), width, height, mipCount > 1, SurfaceFormat::Dxt1);
 		else if (format == FormatDXT3)
-			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat::Dxt3);
+			texture = new Texture2D(GraphicsDevice::GetDevice(), width, height, mipCount > 1, SurfaceFormat::Dxt3);
 		else if (format == FormatDXT5)
-			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat::Dxt5);
+			texture = new Texture2D(GraphicsDevice::GetDevice(), width, height, mipCount > 1, SurfaceFormat::Dxt5);
 		else if (format == FormatPVRTC4)
-			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat::Pvrtc4);
+			texture = new Texture2D(GraphicsDevice::GetDevice(), width, height, mipCount > 1, SurfaceFormat::Pvrtc4);
 		else
-			texture = GraphicsDevice::GetDevice()->CreateTexture(width, height, SurfaceFormat::Color);
+			texture = new Texture2D(GraphicsDevice::GetDevice(), width, height, mipCount > 1, SurfaceFormat::Color);
 
 		byte* pixels = nullptr;
 		int imageSize;
@@ -128,31 +156,6 @@ namespace Graphics
         *b = (byte)(tb * 255 / 31);
 	}
 
-	byte* Texture2D::DecompressDxtc1(const byte* pixels, int width, int height, int size)
-	{
-		byte* output = new byte[width * height * 4];
-
-		squish::DecompressImage(output, width, height, pixels, squish::kDxt1);
-
-		return output;
-	}
-
-	byte* Texture2D::DecompressDxtc3(const byte* pixels, int width, int height, int size)
-	{
-		byte* output = new byte[width * height * 4];
-
-		squish::DecompressImage(output, width, height, pixels, squish::kDxt3);
-
-		return output;
-	}
-
-	byte* Texture2D::DecompressDxtc5(const byte* pixels, int width, int height, int size)
-	{
-		byte* output = new byte[width * height * 4];
-
-		squish::DecompressImage(output, width, height, pixels, squish::kDxt5);
-
-		return output;
-	}
+	
 }
 }

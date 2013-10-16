@@ -2,6 +2,7 @@
 #define NXNA_GRAPHICS_DIRECT3D11_D3D11TEXTURE2D_H
 
 #include "../Texture2D.h"
+#include "../ITexture2DPimpl.h"
 #include "../SamplerState.h"
 
 NXNA_DISABLE_OVERRIDE_WARNING
@@ -14,8 +15,12 @@ namespace Graphics
 
 namespace Direct3D11
 {
-	class D3D11Texture2D : public Texture2D
+	class D3D11Texture2D : public Pvt::ITexture2DPimpl
 	{
+		GraphicsDevice* m_device;
+		int m_width;
+		int m_height;
+		SurfaceFormat m_format;
 		void* m_shaderResourceView;
 		bool m_hasMipmaps;
 		SamplerState m_samplerState;
@@ -23,6 +28,7 @@ namespace Direct3D11
 	public:
 
 		D3D11Texture2D(GraphicsDevice* device, int width, int height, SurfaceFormat format);
+		~D3D11Texture2D();
 
 		virtual void SetData(int level, byte* pixels, int length) override;
 
