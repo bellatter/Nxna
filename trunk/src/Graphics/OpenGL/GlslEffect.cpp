@@ -201,7 +201,7 @@ namespace OpenGl
 					}
 
 					glActiveTexture(GL_TEXTURE0 + texindex);
-					glBindTexture(GL_TEXTURE_2D, static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D())->GetGlTexture());
+					glBindTexture(GL_TEXTURE_2D, static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D()->GetPimpl())->GetGlTexture());
 					glUniform1iv((*itr).Uniform, 1, &texindex);
 				}
 			}
@@ -219,7 +219,7 @@ namespace OpenGl
 
 			if (type == EffectParameterType::Texture2D)
 			{
-				GlTexture2D* glTex = static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D());
+				GlTexture2D* glTex = static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D()->GetPimpl());
 				
 				if (glTex != nullptr)
 				{

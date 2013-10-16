@@ -11,8 +11,8 @@ namespace Graphics
 namespace OpenGl
 {
 	GlTexture2D::GlTexture2D(GraphicsDevice* device, int width, int height, SurfaceFormat format)
-		: Texture2D(device)
 	{
+		m_device = device;
 		m_width = width;
 		m_height = height;
 		m_format = format;
@@ -24,6 +24,11 @@ namespace OpenGl
 		SetSamplerState(&m_samplerState);
 
 		GlException::ThrowIfError(__FILE__, __LINE__);
+	}
+
+	GlTexture2D::~GlTexture2D()
+	{
+		glDeleteTextures(1, &m_glTex);
 	}
 
 	void GlTexture2D::SetData(int level, byte* pixels, int length)

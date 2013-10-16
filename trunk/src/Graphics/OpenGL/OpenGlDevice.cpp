@@ -359,16 +359,6 @@ namespace OpenGl
 
 	void OpenGlDevice::Present() {}
 
-	Texture2D* OpenGlDevice::CreateTexture(int width, int height)
-	{
-		return new GlTexture2D(this, width, height, SurfaceFormat::Color);
-	}
-
-	Texture2D* OpenGlDevice::CreateTexture(int width, int height, SurfaceFormat format)
-	{
-		return new GlTexture2D(this, width, height, format);
-	}
-
 	BasicEffect* OpenGlDevice::CreateBasicEffect()
 	{
 		try
@@ -454,6 +444,11 @@ namespace OpenGl
 	void OpenGlDevice::SetSamplers()
 	{
 		m_effect->ApplySamplerStates(&m_samplers);
+	}
+
+	Pvt::ITexture2DPimpl* OpenGlDevice::CreateTexture2DPmpl(int width, int height, bool mipMap, SurfaceFormat format)
+	{
+		return new GlTexture2D(this, width, height, format);
 	}
 
 	void OpenGlDevice::setClearColor(const Color& c)

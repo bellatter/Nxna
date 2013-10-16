@@ -96,8 +96,15 @@ namespace Graphics
 	class IVertexBufferPimpl;
 	class IDynamicVertexBufferPimpl;
 
+	namespace Pvt
+	{
+		class ITexture2DPimpl;
+	}
+
 	class GraphicsDevice
 	{
+		friend class Texture2D;
+
 	protected:
 		static GraphicsDevice* m_instance;
 		GraphicsDeviceCapabilities* m_caps;
@@ -130,8 +137,6 @@ namespace Graphics
 
 		virtual void Present() = 0;
 
-		virtual Texture2D* CreateTexture(int width, int height) = 0;
-		virtual Texture2D* CreateTexture(int width, int height, SurfaceFormat format) = 0;
 		virtual BasicEffect* CreateBasicEffect() = 0;
 		virtual SpriteEffect* CreateSpriteEffect() = 0;
 		virtual DualTextureEffect* CreateDualTextureEffect() = 0;
@@ -155,6 +160,8 @@ namespace Graphics
 		void** GetInternalHandle(RasterizerState* rasterizerState) { return &rasterizerState->m_handle; }
 
 		virtual void SetSamplers() = 0;
+
+		virtual Pvt::ITexture2DPimpl* CreateTexture2DPmpl(int width, int height, bool mipMap, SurfaceFormat format) = 0;
 	};
 
 	class GraphicsException : public Exception

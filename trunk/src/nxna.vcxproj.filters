@@ -262,6 +262,13 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\libsquish\squish.h" />
+    <ClInclude Include="Audio\SoundState.h" />
+    <ClInclude Include="Graphics\Direct3D11\HlslAlphaTestEffect.h" />
+    <ClInclude Include="Graphics\VertexPositionTexture.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="Graphics\ITexture2DPimpl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -449,5 +456,23 @@
     <ClCompile Include="Graphics\libsquish\colourset.cpp" />
     <ClCompile Include="Graphics\libsquish\singlecolourfit.cpp" />
     <ClCompile Include="Graphics\libsquish\maths.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\HlslAlphaTestEffect.cpp" />
+    <ClCompile Include="Graphics\VertexPositionTexture.cpp" />
+    <ClCompile Include="Graphics\ITexture2DPimpl.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\Direct3D11\ShaderSource\AlphaTestEffect.fx" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Common.fxh" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestEqNe.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestEqNeNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestLtGt.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestLtGtNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTest.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVc.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVcNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Structures.fx" />
   </ItemGroup>
 </Project>

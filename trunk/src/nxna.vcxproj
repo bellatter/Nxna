@@ -116,6 +116,7 @@
     <ClInclude Include="Graphics\GraphicsDeviceCapabilities.h" />
     <ClInclude Include="Graphics\IContantBufferPmpl.h" />
     <ClInclude Include="Graphics\IndexBuffer.h" />
+    <ClInclude Include="Graphics\ITexture2DPimpl.h" />
     <ClInclude Include="Graphics\libsquish\squish.h" />
     <ClInclude Include="Graphics\OpenGL\GlIndexBuffer.h" />
     <ClInclude Include="Graphics\OpenGL\GlslAlphaTestEffect.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="Graphics\Direct3D11\HlslDualTextureEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslSpriteEffect.cpp" />
+    <ClCompile Include="Graphics\ITexture2DPimpl.cpp" />
     <ClCompile Include="Graphics\libsquish\alpha.cpp" />
     <ClCompile Include="Graphics\libsquish\clusterfit.cpp" />
     <ClCompile Include="Graphics\libsquish\colourblock.cpp" />

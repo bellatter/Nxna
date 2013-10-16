@@ -14,8 +14,8 @@ namespace Graphics
 namespace Direct3D11
 {
 	D3D11Texture2D::D3D11Texture2D(GraphicsDevice* device, int width, int height, SurfaceFormat format)
-		: Texture2D(device)
 	{
+		m_device = device;
 		m_width = width;
 		m_height = height;
 		m_format = format;
@@ -67,7 +67,7 @@ namespace Direct3D11
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         ZeroMemory(&srvDesc, sizeof(srvDesc));
 		srvDesc.Format = desc.Format;
-		srvDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 		srvDesc.Texture2D.MipLevels = desc.MipLevels;
 
 		static_cast<ID3D11Device*>(static_cast<Direct3D11Device*>(m_device)->GetDevice())->CreateShaderResourceView(texture, &srvDesc, (ID3D11ShaderResourceView**)&m_shaderResourceView);

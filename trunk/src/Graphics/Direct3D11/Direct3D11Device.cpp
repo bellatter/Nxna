@@ -330,16 +330,6 @@ namespace Direct3D11
 		m_swapChain->Present(0, 0);
 	}
 
-	Texture2D* Direct3D11Device::CreateTexture(int width, int height)
-	{
-		return new D3D11Texture2D(this, width, height, SurfaceFormat::Color);
-	}
-	
-	Texture2D* Direct3D11Device::CreateTexture(int width, int height, SurfaceFormat format) 
-	{
-		return new D3D11Texture2D(this, width, height, format);
-	}
-
 	BasicEffect* Direct3D11Device::CreateBasicEffect()
 	{
 		return new HlslBasicEffect(this);

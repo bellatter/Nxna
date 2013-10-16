@@ -30,6 +30,11 @@ namespace Graphics
 	class GraphicsDevice;
 	class SamplerState;
 
+	namespace Pvt
+	{
+		class ITexture2DPimpl;
+	}
+
 	class Texture2D 
 	{
 	protected:
@@ -37,20 +42,17 @@ namespace Graphics
 		int m_height;
 		SurfaceFormat m_format;
 		GraphicsDevice* m_device;
+		Pvt::ITexture2DPimpl* m_pimpl;
 
 	public:
 
-		Texture2D(GraphicsDevice* device)
-		{
-			m_width = 0;
-			m_height = 0;
-			m_device = device;
-		}
+		Texture2D(GraphicsDevice* device, int width, int height);
+		Texture2D(GraphicsDevice* device, int width, int height, bool mipMap, SurfaceFormat format);
 
 		// You may notice that Texture2D is missing some constructors.
 		// Right now you have to use GraphicsDevice.CreateTexture2D() instead.
 
-		virtual ~Texture2D() { }
+		virtual ~Texture2D();
 
 		GraphicsDevice* GetGraphicsDevice() { return m_device; }
 
@@ -58,23 +60,20 @@ namespace Graphics
 		int GetHeight() { return m_height; }
 		Rectangle GetBounds() { return Rectangle(0, 0, m_width, m_height); }
 
-		virtual void SetData(byte* pixels, int length)
+		void SetData(byte* pixels, int length)
 		{
 			SetData(0, pixels, length);
 		}
 
-		virtual void SetData(int level, byte* pixels, int length) = 0;
+		void SetData(int level, byte* pixels, int length);
 
 		// HACK: this is NOT how XNA works! we need to find a better way to do this.
 		//virtual void SetSamplerState(const SamplerState* state) = 0;
 
+		Pvt::ITexture2DPimpl* GetPimpl() { return m_pimpl; }
+
 		static Texture2D* LoadFrom(Content::Stream* stream);
 		static Texture2D* LoadFrom(Content::XnbReader* stream);
-
-	protected:
-		static byte* DecompressDxtc3(const byte* pixels, int width, int height, int size);
-		static byte* DecompressDxtc1(const byte* pixels, int width, int height, int size);
-		static byte* DecompressDxtc5(const byte* pixels, int width, int height, int size);
 
 	private:
 		static byte* convert(byte* pixels, int length, int format);
