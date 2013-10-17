@@ -650,6 +650,12 @@ namespace OpenGl
             return GL_MAX;
 	}
 
+	GlException::GlException(int glError, const char* file, int line)
+		: GraphicsException("GlException")
+	{
+		m_message = "GlException: err " + glError + std::string(" at ") + std::string(file);
+	}
+
 #ifndef NXNA_DISABLE_OPENGL_ERRORS
 	void GlException::ThrowIfError(const char* file, int line)
 	{

@@ -22,7 +22,7 @@ namespace Windows
 
 	public:
 		WindowsGame(Game* game);
-		void Init();
+		void Init(int argc, char** argv);
 		void Run();
 		void Exit();
 

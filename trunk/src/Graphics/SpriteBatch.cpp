@@ -500,14 +500,14 @@ namespace Graphics
         float width = s.Destination.Z;
         float height = s.Destination.W;
 
-		float o1 = (0 - adjustedOriginX) * s.Destination.Z;
-		float o2 = (0 - adjustedOriginY) * s.Destination.W;
-		float o3 = (1 - adjustedOriginX) * s.Destination.Z;
-		float o4 = (0 - adjustedOriginY) * s.Destination.W;
-		float o5 = (1 - adjustedOriginX) * s.Destination.Z;
-		float o6 = (1 - adjustedOriginY) * s.Destination.W;
-		float o7 = (0 - adjustedOriginX) * s.Destination.Z;
-		float o8 = (1 - adjustedOriginY) * s.Destination.W;
+		float o1 = (0 - adjustedOriginX) * width;
+		float o2 = (0 - adjustedOriginY) * height;
+		float o3 = (1 - adjustedOriginX) * width;
+		float o4 = (0 - adjustedOriginY) * height;
+		float o5 = (1 - adjustedOriginX) * width;
+		float o6 = (1 - adjustedOriginY) * height;
+		float o7 = (0 - adjustedOriginX) * width;
+		float o8 = (1 - adjustedOriginY) * height;
 
 		float r = s.SpriteColor.R / 255.0f;
 		float g = s.SpriteColor.G / 255.0f;

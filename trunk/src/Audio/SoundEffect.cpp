@@ -217,7 +217,7 @@ namespace Audio
 		WAVEFORMATEX format;
 		stream->Read((byte*)&format, 18);
 
-		int samplesPerBlock;
+		int samplesPerBlock = 0;
 		if (format.FormatTag == WAVE_FORMAT_ADPCM)
 		{
 			WAVEFORMATADPCM format2;
@@ -293,7 +293,7 @@ namespace Audio
 
 	void* SoundEffectLoader::Read(Content::XnbReader* stream)
 	{
-		int typeID = stream->ReadTypeID();
+		stream->ReadTypeID();
 
 		return SoundEffect::LoadFrom(stream->GetStream());
 	}

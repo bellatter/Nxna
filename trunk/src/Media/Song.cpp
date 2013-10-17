@@ -29,7 +29,7 @@ namespace Media
 	void* SongLoader::Read(Content::XnbReader* stream)
 	{
 		stream->GetContentManager();
-		int typeID = stream->ReadTypeID();
+		stream->ReadTypeID();
 		std::string path = stream->ReadString();
 
 		std::string pathWithoutExtension = path.substr(0, path.find_last_of('.'));
@@ -39,7 +39,7 @@ namespace Media
 #ifdef NXNA_PLATFORM_APPLE_IOS
 		snprintf(audioFile, 256, "%s/%s.mp3", stream->GetContentManager()->GetRootDirectory(), stream->GetName());
 #elif defined NXNA_PLATFORM_WIN32
-		_snprintf(audioFile, 256, "%s/%s.ogg", stream->GetContentManager()->GetRootDirectory(), stream->GetName());
+		_snprintf_s(audioFile, 256, "%s/%s.ogg", stream->GetContentManager()->GetRootDirectory(), stream->GetName());
 #else
 		snprintf(audioFile, 256, "%s/%s.ogg", stream->GetContentManager()->GetRootDirectory(), stream->GetName());
 #endif

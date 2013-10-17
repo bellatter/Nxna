@@ -16,7 +16,7 @@ namespace Graphics
 
 		SpriteSheet* newSheet = new SpriteSheet();
 
-		int typeID = reader->ReadTypeID();
+		reader->ReadTypeID();
 
 		// read the textures
 		newSheet->m_texture = Texture2D::LoadFrom(stream);

@@ -130,7 +130,7 @@ namespace Direct3D11
 
         static const char* firstIndexNotSpace(const char* str)
         {
-            for (int i = 0; i < strlen(str); i++)
+            for (size_t i = 0; i < strlen(str); i++)
             {
                 if (str[i] != ' ')
                     return &str[i];
@@ -153,7 +153,7 @@ namespace Direct3D11
 
 		static const char* strchrAny(const char* str, const char* list, int length)
 		{
-			for (int i = 0; i < strlen(str); i++)
+			for (size_t i = 0; i < strlen(str); i++)
 			{
 				for (int j = 0; j < length; j++)
 				{
