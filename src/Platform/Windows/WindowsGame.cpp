@@ -28,7 +28,7 @@ namespace Windows
 		QueryPerformanceCounter(&timeAtStart);
 	}
 
-	void WindowsGame::Init()
+	void WindowsGame::Init(int /* argc */, char** /* argv */)
 	{
 		if (m_game->m_graphicsDeviceManager != nullptr)
 		{
@@ -318,11 +318,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 
 			return 0;
 		}
-		default:
-            return DefWindowProc( hwnd, umessage, wparam, lparam );
 	}
 
-	return 0;
+	return DefWindowProc( hwnd, umessage, wparam, lparam );
 }
 
 #endif

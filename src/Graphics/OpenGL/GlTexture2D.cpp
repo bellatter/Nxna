@@ -56,11 +56,11 @@ namespace OpenGl
 			{
 				byte* converted;
 				if (m_format == SurfaceFormat::Dxt1)
-					converted = DecompressDxtc1(pixels, mipWidth, mipHeight, length);
+					converted = DecompressDxtc1(pixels, mipWidth, mipHeight);
 				else if (m_format == SurfaceFormat::Dxt3)
-					converted = DecompressDxtc3(pixels, mipWidth, mipHeight, length);
+					converted = DecompressDxtc3(pixels, mipWidth, mipHeight);
 				else
-					converted = DecompressDxtc5(pixels, mipWidth, mipHeight, length);
+					converted = DecompressDxtc5(pixels, mipWidth, mipHeight);
 				glTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, mipWidth, mipHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, converted);
 				delete[] converted;
 			}

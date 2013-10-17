@@ -17,7 +17,7 @@ namespace SDL
 		m_isFixedTimeStep = true;
 	}
 
-	void SDLGame::Init()
+	void SDLGame::Init(int /* argc */, char** /* argv */)
 	{
 		if (m_game->m_graphicsDeviceManager != nullptr)
 		{

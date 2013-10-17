@@ -575,7 +575,7 @@ namespace Direct3D11
 
 	ID3D11InputLayout* Direct3D11Device::getLayout(HlslEffect* shader, int program, const VertexDeclaration& decl)
 	{
-		uint64_t key = (decl.GetHash() << 32) | (shader->GetHash(program));
+		uint64_t key = ((uint64_t)decl.GetHash() << 32) | (shader->GetHash(program));
 
 		std::map<uint64_t, ID3D11InputLayout*>::iterator itr = m_layouts.find(key);
 		if (itr == m_layouts.end())

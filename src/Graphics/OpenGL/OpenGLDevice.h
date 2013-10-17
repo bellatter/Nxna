@@ -114,11 +114,7 @@ namespace OpenGl
 			m_message = "GlException: err " + glError;
 		}
 
-		GlException(int glError, const char* file, int line)
-			: GraphicsException("GlException")
-		{
-			m_message = "GlException: err " + glError + std::string(" at ") + std::string(file);
-		}
+		GlException(int glError, const char* file, int line);
 
 #ifdef NXNA_DISABLE_OPENGL_ERRORS
 		static void ThrowIfError(const char* /* filename */, int /* line */) { }

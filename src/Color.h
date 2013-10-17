@@ -95,20 +95,21 @@ struct Color
 	{
 		return Color((byte)(r * a / 255), (byte)(g * a / 255), (byte)(b * a / 255), (byte)a);
 	}
+
+	bool operator==(const Color& c) const
+	{
+		return R == c.R &&
+			G == c.G &&
+			B == c.B &&
+			A == c.A;
+	}
+
+	bool operator!=(const Color& c) const
+	{
+		return !(*this == c);
+	}
 };
 
-static bool operator==(const Color& c1, const Color& c2)
-{
-	return c1.R == c2.R &&
-		c1.G == c2.G &&
-		c1.B == c2.B &&
-		c1.A == c2.A;
-}
-
-static bool operator!=(const Color& c1, const Color& c2)
-{
-	return ((c1 == c2) == false);
-}
 }
 
 #endif // COLOR_H

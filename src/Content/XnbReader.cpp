@@ -60,8 +60,8 @@ namespace Content
 			throw ContentException("Not a valid XNB file");
 
 		byte flags = m_stream->ReadByte();
-		m_isHighDef = flags & 0x01;
-		m_isCompressed = flags & 0x80;
+		m_isHighDef = (flags & 0x01) != 0;
+		m_isCompressed = (flags & 0x80) != 0;
 
 		m_compressedSize = m_stream->ReadInt32();
 		if (m_isCompressed)

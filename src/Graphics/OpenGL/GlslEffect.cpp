@@ -37,14 +37,14 @@ namespace OpenGl
 	GlslEffect::~GlslEffect()
 	{
 		// delete all the parameters
-		for (int i = 0; i < m_parameterList.size(); i++)
+		for (std::vector<EffectParameter*>::size_type i = 0; i < m_parameterList.size(); i++)
 		{
 			EffectParameter* p = m_parameterList[i];
 			delete p;
 		}
 
 		// delete all the programs
-		for (int i = 0; i < m_programs.size(); i++)
+		for (std::vector<EffectParameter*>::size_type i = 0; i < m_programs.size(); i++)
 		{
 			glDeleteProgram(m_programs[i].Program);
 		}
@@ -154,8 +154,6 @@ namespace OpenGl
 
 	void GlslEffect::ApplyProgram(int programIndex)
 	{
-		int program = m_programs[programIndex].Program;
-
 		// bind the effect
 		glUseProgram(m_programs[programIndex].Program);
 		static_cast<OpenGlDevice*>(GetGraphicsDevice())->SetCurrentEffect(this);
@@ -191,7 +189,7 @@ namespace OpenGl
 				{
 					// look for the index of the texture
 					int texindex = 0;
-					for (int i = 0; i < m_textureParams.size(); i++)
+					for (std::vector<EffectParameter*>::size_type i = 0; i < m_textureParams.size(); i++)
 					{
 						if (m_textureParams[i] == (*itr).Param)
 						{
@@ -225,7 +223,7 @@ namespace OpenGl
 				{
 					// look for the index of the texture
 					int texindex = 0;
-					for (int i = 0; i < m_textureParams.size(); i++)
+					for (std::vector<EffectParameter*>::size_type i = 0; i < m_textureParams.size(); i++)
 					{
 						if (m_textureParams[i] == (*itr).Param)
 						{
@@ -300,7 +298,7 @@ namespace OpenGl
 		int numUniforms;
 		glGetProgramiv(program.Program, GL_ACTIVE_UNIFORMS, &numUniforms);
 
-		for (unsigned int i = 0; i < numUniforms; i++)
+		for (int i = 0; i < numUniforms; i++)
 		{
 			GLenum type;
 			int size;
@@ -400,7 +398,7 @@ namespace OpenGl
 			GLenum type;
 			glGetActiveAttrib(program.Program, i, MAX_ATTRIB_SIZE, &length, &size, &type, m_attribNameBuffer);
 
-			for (int j = 0; j < m_attributes.size(); j++)
+			for (std::vector<GlslAttribute>::size_type j = 0; j < m_attributes.size(); j++)
 			{
 				if (strcmp(m_attributes[j].Name.c_str(), m_attribNameBuffer) == 0)
 				{
@@ -424,7 +422,7 @@ namespace OpenGl
 		char numbers[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
 		const char* cursor = vertexShaderSource;
-		while(true)
+		for (;;)
 		{
 			const char* colon = strchr(cursor, ':');
 			if (colon == nullptr)
@@ -435,7 +433,11 @@ namespace OpenGl
 
 			const char* nameEnd = lastIndexNotSpace(cursor, colon - cursor - 1);
 			const char* nameStart = lastIndexOf(cursor, ' ', nameEnd - cursor - 1) + 1;
+#if defined NXNA_PLATFORM_WIN32
+			strncpy_s(nameBuffer, nameStart, nameEnd - nameStart + 1);
+#else
 			strncpy(nameBuffer, nameStart, nameEnd - nameStart + 1);
+#endif
 			nameBuffer[nameEnd - nameStart + 1] = 0;
 
 			GlslAttribute attrib;
@@ -446,7 +448,11 @@ namespace OpenGl
 
 			const char* semicolon = strchr(colon, ';');
 			const char* usageStart = firstIndexNotSpace(colon + 1);
+#if defined NXNA_PLATFORM_WIN32
+			strncpy_s(usageBuffer, usageStart, semicolon - usageStart);
+#else
 			strncpy(usageBuffer, usageStart, semicolon - usageStart);
+#endif
 			usageBuffer[semicolon - usageStart] = 0;
 
 			const char* firstNumber = strchrAny(usageBuffer, numbers, 10);

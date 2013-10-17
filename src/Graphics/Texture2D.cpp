@@ -51,7 +51,7 @@ namespace Graphics
 
 	Texture2D* Texture2D::LoadFrom(Content::XnbReader* stream)
 	{
-		int typeID = stream->ReadTypeID();
+		stream->ReadTypeID();
 		
 		return Texture2D::LoadFrom(stream->GetStream());
 	}

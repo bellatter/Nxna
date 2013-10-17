@@ -17,9 +17,9 @@ namespace Pvt
 		virtual void SetData(int level, byte* pixels, int length) = 0;
 
 	protected:
-		static byte* DecompressDxtc3(const byte* pixels, int width, int height, int size);
-		static byte* DecompressDxtc1(const byte* pixels, int width, int height, int size);
-		static byte* DecompressDxtc5(const byte* pixels, int width, int height, int size);
+		static byte* DecompressDxtc3(const byte* pixels, int width, int height);
+		static byte* DecompressDxtc1(const byte* pixels, int width, int height);
+		static byte* DecompressDxtc5(const byte* pixels, int width, int height);
 	};
 }
 }

@@ -8,7 +8,11 @@ namespace Content
 {
 	FileStream::FileStream(const char* path)
 	{
+#if defined NXNA_PLATFORM_WIN32
+		fopen_s((FILE**)&m_fp, path, "rb");
+#else
 		m_fp = fopen(path, "rb");
+#endif
 		m_bytesRead = 0;
 	}
 
@@ -114,7 +118,7 @@ namespace Content
 		return m_bytesRead >= Length(); 
 	}
 
-	void FileStream::swapLE(void* data, int length)
+	void FileStream::swapLE(void* /* data */, int /* length */)
 	{
 		// nothing... for now...
 	}

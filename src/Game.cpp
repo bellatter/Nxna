@@ -55,7 +55,7 @@ namespace Nxna
 #if defined NXNA_PLATFORM_APPLE_IOS
 		m_pimpl->InitMeFirst(argc, argv);
 #else
-		m_pimpl->Init();
+		m_pimpl->Init(argc, argv);
 		m_pimpl->Run();
 #endif
 
