@@ -115,6 +115,7 @@
     <ClInclude Include="Graphics\GraphicsDevice.h" />
     <ClInclude Include="Graphics\GraphicsDeviceCapabilities.h" />
     <ClInclude Include="Graphics\IContantBufferPmpl.h" />
+    <ClInclude Include="Graphics\IIndexBufferPimpl.h" />
     <ClInclude Include="Graphics\IndexBuffer.h" />
     <ClInclude Include="Graphics\ITexture2DPimpl.h" />
     <ClInclude Include="Graphics\libsquish\squish.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="Graphics\Direct3D11\HlslDualTextureEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslSpriteEffect.cpp" />
+    <ClCompile Include="Graphics\IndexBuffer.cpp" />
     <ClCompile Include="Graphics\ITexture2DPimpl.cpp" />
     <ClCompile Include="Graphics\libsquish\alpha.cpp" />
     <ClCompile Include="Graphics\libsquish\clusterfit.cpp" />

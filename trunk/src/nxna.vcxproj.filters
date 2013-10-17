@@ -269,6 +269,9 @@
     <ClInclude Include="Graphics\ITexture2DPimpl.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\IIndexBufferPimpl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -459,6 +462,9 @@
     <ClCompile Include="Graphics\Direct3D11\HlslAlphaTestEffect.cpp" />
     <ClCompile Include="Graphics\VertexPositionTexture.cpp" />
     <ClCompile Include="Graphics\ITexture2DPimpl.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\IndexBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

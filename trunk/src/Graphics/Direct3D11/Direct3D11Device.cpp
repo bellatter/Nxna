@@ -228,7 +228,7 @@ namespace Direct3D11
 
 	void Direct3D11Device::SetIndices(const IndexBuffer* indices)
 	{
-		m_indices = static_cast<const D3D11IndexBuffer*>(indices);
+		m_indices = static_cast<const D3D11IndexBuffer*>(indices->GetPimpl());
 		m_indexBufferDirty = true;
 	}
 
@@ -363,10 +363,7 @@ namespace Direct3D11
 		return new D3D11DynamicVertexBuffer(this, vertexDeclaration, vertexCount, usage);
 	}
 
-	IndexBuffer* Direct3D11Device::CreateIndexBuffer(IndexElementSize elementSize)
-	{
-		return new D3D11IndexBuffer(m_device, elementSize);
-	}
+	
 
 	void Direct3D11Device::GetBackBufferData(void* data) { }
 
@@ -415,6 +412,11 @@ namespace Direct3D11
 		}
 
 		m_samplers.MakeClean();
+	}
+	
+	Pvt::IIndexBufferPimpl* Direct3D11Device::CreateIndexBufferPimpl(IndexElementSize elementSize)
+	{
+		return new D3D11IndexBuffer(this, elementSize);
 	}
 
 	void Direct3D11Device::applyDirtyStates()

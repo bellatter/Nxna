@@ -68,7 +68,6 @@ namespace OpenGl
 		virtual AlphaTestEffect* CreateAlphaTestEffect() override;
 		virtual VertexBuffer* CreateVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) override;
 		virtual DynamicVertexBuffer* CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) override;
-		virtual IndexBuffer* CreateIndexBuffer(IndexElementSize elementSize) override;
 
 		virtual void GetBackBufferData(void* data) override;
 
@@ -82,7 +81,8 @@ namespace OpenGl
 	protected:
 		virtual void SetSamplers() override;
 
-		virtual Pvt::ITexture2DPimpl* CreateTexture2DPmpl(int width, int height, bool mipMap, SurfaceFormat format) override;
+		virtual Pvt::ITexture2DPimpl* CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format) override;
+		virtual Pvt::IIndexBufferPimpl* CreateIndexBufferPimpl(IndexElementSize elementSize) override;
 
 	private:
 		void applyDirtyStates();

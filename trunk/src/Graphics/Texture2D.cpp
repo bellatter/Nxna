@@ -27,7 +27,7 @@ namespace Graphics
 		m_width = width;
 		m_height = height;
 
-		m_pimpl = device->CreateTexture2DPmpl(width, height, false, SurfaceFormat::Color);
+		m_pimpl = device->CreateTexture2DPimpl(width, height, false, SurfaceFormat::Color);
 	}
 
 	Texture2D::Texture2D(GraphicsDevice* device, int width, int height, bool mipMap, SurfaceFormat format)
@@ -36,7 +36,7 @@ namespace Graphics
 		m_width = width;
 		m_height = height;
 
-		m_pimpl = device->CreateTexture2DPmpl(width, height, mipMap, format);
+		m_pimpl = device->CreateTexture2DPimpl(width, height, mipMap, format);
 	}
 
 	Texture2D::~Texture2D()

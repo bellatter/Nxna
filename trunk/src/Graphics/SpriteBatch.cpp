@@ -569,7 +569,7 @@ namespace Graphics
 			indices[i * 6 + 5] = i * 4 + 3;
 		}
 
-		m_indexBuffer = m_device->CreateIndexBuffer(IndexElementSize::SixteenBits);
+		m_indexBuffer = new Nxna::Graphics::IndexBuffer(m_device, IndexElementSize::SixteenBits);
 		m_indexBuffer->SetData(indices, MAX_BATCH_SIZE * 6);
 	}
 

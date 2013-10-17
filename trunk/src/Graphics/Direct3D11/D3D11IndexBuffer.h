@@ -3,6 +3,7 @@
 
 #include "../../NxnaConfig.h"
 #include "../IndexBuffer.h"
+#include "../IIndexBufferPimpl.h"
 
 NXNA_DISABLE_OVERRIDE_WARNING
 
@@ -12,7 +13,7 @@ namespace Graphics
 {
 namespace Direct3D11
 {
-	class D3D11IndexBuffer : public IndexBuffer
+	class D3D11IndexBuffer : public Pvt::IIndexBufferPimpl
 	{
 		void* m_d3d11Device;
 		void* m_indexBuffer;
