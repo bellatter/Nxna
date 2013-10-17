@@ -174,7 +174,7 @@ namespace OpenGl
 
 	void OpenGlDevice::SetIndices(const IndexBuffer* indices)
 	{
-		m_indices = static_cast<const GlIndexBuffer*>(indices);
+		m_indices = static_cast<const GlIndexBuffer*>(indices->GetPimpl());
 		m_indices->Bind();
 	}
 
@@ -417,11 +417,6 @@ namespace OpenGl
 		return new GlDynamicVertexBuffer(this, vertexDeclaration, vertexCount, usage);
 	}
 
-	IndexBuffer* OpenGlDevice::CreateIndexBuffer(IndexElementSize elementSize)
-	{
-		return new GlIndexBuffer(elementSize);
-	}
-
 	void OpenGlDevice::GetBackBufferData(void* data)
 	{
 #ifndef USING_OPENGLES
@@ -446,9 +441,14 @@ namespace OpenGl
 		m_effect->ApplySamplerStates(&m_samplers);
 	}
 
-	Pvt::ITexture2DPimpl* OpenGlDevice::CreateTexture2DPmpl(int width, int height, bool mipMap, SurfaceFormat format)
+	Pvt::ITexture2DPimpl* OpenGlDevice::CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format)
 	{
 		return new GlTexture2D(this, width, height, format);
+	}
+
+	Pvt::IIndexBufferPimpl* OpenGlDevice::CreateIndexBufferPimpl(IndexElementSize size)
+	{
+		return new GlIndexBuffer(size);
 	}
 
 	void OpenGlDevice::setClearColor(const Color& c)

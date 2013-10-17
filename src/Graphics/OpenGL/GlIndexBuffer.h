@@ -3,6 +3,7 @@
 
 #include "../../NxnaConfig.h"
 #include "../IndexBuffer.h"
+#include "../IIndexBufferPimpl.h"
 
 NXNA_DISABLE_OVERRIDE_WARNING
 
@@ -12,7 +13,7 @@ namespace Graphics
 {
 namespace OpenGl
 {
-	class GlIndexBuffer : public IndexBuffer
+	class GlIndexBuffer : public Pvt::IIndexBufferPimpl
 	{
 		unsigned int m_buffer;
 

@@ -8,6 +8,7 @@ namespace Graphics
 namespace OpenGl
 {
 	GlIndexBuffer::GlIndexBuffer(IndexElementSize indexElementSize)
+		: Pvt::IIndexBufferPimpl(indexElementSize)
 	{
 		m_elementSize = indexElementSize;
 		glGenBuffers(1, &m_buffer);

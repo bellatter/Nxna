@@ -13,6 +13,7 @@ namespace Graphics
 namespace Direct3D11
 {
 	D3D11IndexBuffer::D3D11IndexBuffer(void* d3d11Device, IndexElementSize elementSize)
+		: Pvt::IIndexBufferPimpl(elementSize)
 	{
 		m_d3d11Device = d3d11Device;
 		m_indexBuffer = nullptr;

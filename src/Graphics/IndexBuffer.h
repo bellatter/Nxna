@@ -14,19 +14,31 @@ namespace Graphics
 
 	class GraphicsDevice;
 
+	namespace Pvt
+	{
+		class IIndexBufferPimpl;
+	}
+
 	class IndexBuffer
 	{
+		Pvt::IIndexBufferPimpl* m_pimpl;
+
 	protected:
 		IndexElementSize m_elementSize;
 		int m_indexCount;
 
 	public:
 
-		virtual ~IndexBuffer() { }
-		virtual void SetData(void* indices, int indexCount) = 0;
+		IndexBuffer(GraphicsDevice* device, IndexElementSize indexElementSize); 
+		virtual ~IndexBuffer();
+
+		void SetData(void* indices, int indexCount);
 
 		int GetIndexCount() const { return m_indexCount; }
 		IndexElementSize GetElementSize() const { return m_elementSize; }
+
+		Pvt::IIndexBufferPimpl* GetPimpl() { return m_pimpl; }
+		const Pvt::IIndexBufferPimpl* GetPimpl() const { return m_pimpl; }
 	};
 }
 }
