@@ -8,68 +8,9 @@ namespace Graphics
 {
 namespace OpenGl
 {
-	const char* alphaTestVertexSource = 
-		"uniform highp mat4 ModelViewProjection;\n"
 
-		"in vec4 position : POSITION0;\n"
-		"in vec2 texCoords : TEXCOORD0;\n"
-		"#if defined VERTEXCOLORENABLED\n"
-		"in vec4 color : COLOR0;\n"
-		"out vec4 o_color;\n"
-		"#endif\n"
-		"out vec2 o_diffuseCoords;\n"
-
-		"void main()\n"
-		"{\n"
-		"	gl_Position = ModelViewProjection * position;\n"
-		"	o_diffuseCoords = texCoords;\n"
-		"#if defined VERTEXCOLORENABLED\n"
-		"	o_color = color;\n"
-		"#endif\n"
-		"}";
-
-	const char* alphaTestFragmentSource =
-		"uniform highp vec4 AlphaTest;\n"
-		"uniform sampler2D Diffuse;\n"
-		"in HIGHP vec2 o_diffuseCoords;\n"
-		"#if defined VERTEXCOLORENABLED\n"
-		"in HIGHP vec4 o_color;\n"
-		"#endif\n"
-		"#if __VERSION__ >= 130\n"
-		"out vec4 outputColor;\n"
-		"#endif\n"
-
-		"void clip(HIGHP float a) "
-		"{ "
-		"	if (a < 0.0) discard; "
-		"} "
-
-		"void main()\n"
-		"{\n"
-		"	HIGHP vec4 finalColor;\n"
-		"#if __VERSION__ < 130\n"
-		"	finalColor = texture2D(Diffuse, o_diffuseCoords);\n"
-		"#else\n"
-		"	finalColor = texture(Diffuse, o_diffuseCoords);\n"
-		"#endif\n"
-		"#if defined VERTEXCOLORENABLED\n"
-		"	finalColor *= o_color;\n"
-		"#endif\n"
-
-		"#if defined LESSGREATER\n"
-		"	clip((finalColor.a < AlphaTest.x) ? AlphaTest.z : AlphaTest.w); \n"
-		"#else\n"
-		"	clip((abs(finalColor.a - AlphaTest.x) < AlphaTest.y) ? AlphaTest.z : AlphaTest.w);\n"
-		"#endif\n"
-		
-		"#if __VERSION__ < 130\n"
-		"	gl_FragColor = finalColor;\n"
-		"#else\n"
-		"	outputColor = finalColor;\n"
-        "#endif\n"
-
-		"}";
-
+#include "ShaderSource/AlphaTestEffect.vert.inc"
+#include "ShaderSource/AlphaTestEffect.frag.inc"
 
 	GlslAlphaTestEffect::GlslAlphaTestEffect(OpenGlDevice* device)
 		: GlslEffect(device)
@@ -85,7 +26,7 @@ namespace OpenGl
 		Matrix::GetIdentity(m_projection);
 
 		std::string vertexResult, fragResult;
-		ProcessSource(alphaTestVertexSource, alphaTestFragmentSource, vertexResult, fragResult);
+		ProcessSource(AlphaTestEffect_vert, AlphaTestEffect_frag, vertexResult, fragResult);
 
 		char buffer[100];
 		sprintf(buffer, "#version %d\n", device->GetGlslVersion());

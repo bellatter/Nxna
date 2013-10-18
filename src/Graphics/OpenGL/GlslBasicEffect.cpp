@@ -10,66 +10,8 @@ namespace Graphics
 namespace OpenGl
 {
 	// this shader code is so messy. Apologies.
-	const char* basicEffectVertexSrc = 
-		"uniform HIGHP mat4 ModelViewProjection;\n"
-
-		"in vec4 position : POSITION0;\n"
-		"#if defined TEXTUREENABLED\n"
-		"in vec2 texCoords : TEXCOORD0;\n"
-		"out vec2 o_diffuseCoords;\n"
-		"#endif\n"
-		"#if defined VERTEXCOLORENABLED\n"
-		"in vec4 color : COLOR0;\n"
-		"out vec4 o_color;\n"
-		"#endif\n"
-		
-		"void main()\n"
-		"{\n"
-		"	gl_Position = ModelViewProjection * position;\n"
-		"#if defined TEXTUREENABLED\n"
-		"	o_diffuseCoords = texCoords;\n"
-		"#endif\n"
-		"#if defined VERTEXCOLORENABLED\n"
-		"	o_color = color;\n"
-		"#endif\n"
-		"}";
-
-	const char* basicEffectFragmentSrc =
-		"#if defined TEXTUREENABLED\n"
-		"uniform sampler2D Diffuse;\n"
-		"in HIGHP vec2 o_diffuseCoords;\n"
-		"#endif\n"
-
-		"#if defined VERTEXCOLORENABLED\n"
-		"in HIGHP vec4 o_color;\n"
-		"#endif\n"
-
-        "#if __VERSION__ >= 130\n"
-		"out HIGHP vec4 outputColor;\n"
-        "#endif\n"
-		"void main()\n"
-		"{\n"
-		"	HIGHP vec4 finalColor;\n"
-		"#if defined TEXTUREENABLED\n\n"
-		"#if __VERSION__ < 130\n"
-		"	finalColor = texture2D(Diffuse, o_diffuseCoords);\n"
-		"#else\n"
-		"	finalColor = texture(Diffuse, o_diffuseCoords);\n"
-		"#endif\n"
-		"#if defined VERTEXCOLORENABLED\n"
-		"	finalColor *= o_color;\n"
-		"#endif\n"
-		"#elif defined VERTEXCOLORENABLED\n"
-		"	finalColor = o_color;\n"
-		"#endif\n"
-		
-		"#if __VERSION__ < 130\n"
-		"	gl_FragColor = finalColor;\n"
-		"#else\n"
-		"	outputColor = finalColor;\n"
-        "#endif\n"
-
-		"}";
+#include "ShaderSource/BasicEffect.vert.inc"
+#include "ShaderSource/BasicEffect.frag.inc"
 
 	GlslBasicEffect::GlslBasicEffect(OpenGlDevice* device)
 		: GlslEffect(device)
@@ -83,7 +25,7 @@ namespace OpenGl
 		Matrix::GetIdentity(m_projection);
 
 		std::string vertexResult, fragResult;
-		ProcessSource(basicEffectVertexSrc, basicEffectFragmentSrc, vertexResult, fragResult);
+		ProcessSource(BasicEffect_vert, BasicEffect_frag, vertexResult, fragResult);
 
 		char buffer[100];
 		sprintf(buffer, "#version %d\n", device->GetGlslVersion());

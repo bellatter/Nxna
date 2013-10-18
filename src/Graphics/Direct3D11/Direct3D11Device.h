@@ -36,7 +36,7 @@ namespace Direct3D11
 		ID3D11Texture2D* m_depthStencilBuffer;
 		ID3D11DepthStencilView* m_depthStencilView;
 
-		const D3D11VertexBuffer* m_vertices;
+		const VertexBuffer* m_vertices;
 		const D3D11IndexBuffer* m_indices;
 		HlslEffect* m_effect;
 		int m_effectProgram;
@@ -86,8 +86,6 @@ namespace Direct3D11
 		virtual SpriteEffect* CreateSpriteEffect() override;
 		virtual DualTextureEffect* CreateDualTextureEffect() override;
 		virtual AlphaTestEffect* CreateAlphaTestEffect() override;
-		virtual VertexBuffer* CreateVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) override;
-		virtual DynamicVertexBuffer* CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) override;
 
 		virtual void GetBackBufferData(void* data) override;
 
@@ -104,6 +102,7 @@ namespace Direct3D11
 		virtual void SetSamplers() override;
 		virtual Pvt::ITexture2DPimpl* CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format) override;
 		virtual Pvt::IIndexBufferPimpl* CreateIndexBufferPimpl(IndexElementSize elementSize) override;
+		virtual Pvt::IVertexBufferPimpl* CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) override;
 
 	private:
 		void applyDirtyStates();

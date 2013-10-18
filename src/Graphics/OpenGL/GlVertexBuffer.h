@@ -3,6 +3,7 @@
 
 #include "../VertexBuffer.h"
 #include "../VertexDeclaration.h"
+#include "../IVertexBufferPimpl.h"
 
 NXNA_DISABLE_OVERRIDE_WARNING
 
@@ -12,7 +13,7 @@ namespace Graphics
 {
 namespace OpenGl
 {
-	class GlVertexBuffer : public VertexBuffer
+	class GlVertexBuffer : public Pvt::IVertexBufferPimpl
 	{
 	protected:
 		unsigned int m_buffer;
@@ -20,25 +21,12 @@ namespace OpenGl
 		int m_vertexCount;
 
 	public:
-		GlVertexBuffer(OpenGlDevice* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage);
-
-		virtual const VertexDeclaration* GetDeclaration() const override { return &m_declaration; }
-		virtual int GetVertexCount() const override { return m_vertexCount; }
+		GlVertexBuffer(bool dynamic, OpenGlDevice* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage);
 
 		void Bind() const;
 
 	protected:
 		virtual void SetData(int offsetInBytes, void* data, int numBytes) override;
-	};
-
-	class GlDynamicVertexBuffer : public DynamicVertexBuffer, public GlVertexBuffer
-	{
-	public:
-		GlDynamicVertexBuffer(OpenGlDevice* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage);
-
-		virtual void SetData(int offsetInBytes, void* data, int numVertices) override;
-		virtual const VertexDeclaration* GetDeclaration() const override { return &m_declaration; }
-		virtual int GetVertexCount() const override { return m_vertexCount; }
 	};
 }
 }

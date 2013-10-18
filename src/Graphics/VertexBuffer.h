@@ -2,13 +2,18 @@
 #define GRAPHICS_VERTEXBUFFER_H
 
 #include "../NxnaConfig.h"
+#include "VertexDeclaration.h"
 
 namespace Nxna
 {
 namespace Graphics
 {
 	class GraphicsDevice;
-	class VertexDeclaration;
+
+	namespace Pvt
+	{
+		class IVertexBufferPimpl;
+	}
 
 	NXNA_ENUM(BufferUsage)
 		None,
@@ -17,40 +22,43 @@ namespace Graphics
 
 	class VertexBuffer
 	{
+	protected:
 		GraphicsDevice* m_device;
+		VertexDeclaration m_declaration;
+		int m_vertexCount;
+		Pvt::IVertexBufferPimpl* m_pimpl;
 
 	public:
 
-		VertexBuffer(GraphicsDevice* device) { m_device = device; }
-		virtual ~VertexBuffer() { }
+		VertexBuffer(GraphicsDevice* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage);
+		virtual ~VertexBuffer();
 		GraphicsDevice* GetGraphicsDevice() { return m_device; }
 
 		void SetData(int offsetInBytes, void* data, int numElements, int vertexStride, int elementSizeInBytes);
 		void SetData(void* data, int numVertices);
 
-		virtual const VertexDeclaration* GetDeclaration() const = 0;
+		const VertexDeclaration* GetDeclaration() const { return &m_declaration; }
 
-		virtual int GetVertexCount() const = 0;
+		int GetVertexCount() const { return m_vertexCount; }
+
+		Pvt::IVertexBufferPimpl* GetPimpl() { return m_pimpl; }
 
 	protected:
-		virtual void SetData(int offsetInBytes, void* data, int numBytes) = 0;
+		VertexBuffer(const VertexDeclaration* vertexDeclaration)
+		: m_declaration(*vertexDeclaration)
+		{ 
+			// this is just used by DynamicVertexBuffer
+		} 
+
+		void SetData(int offsetInBytes, void* data, int numBytes);
 	};
 
 	class DynamicVertexBuffer : public VertexBuffer
 	{
 	public:
 
-		DynamicVertexBuffer(GraphicsDevice* device)
-			: VertexBuffer(device) {}
-		virtual ~DynamicVertexBuffer() { }
-
-		virtual void SetData(int offsetInBytes, void* data, int numVertices) = 0;
-		void SetData(void* data, int numVertices)
-		{
-			SetData(0, data, numVertices);
-		}
-
-		virtual const VertexDeclaration* GetDeclaration() const = 0;
+		DynamicVertexBuffer(GraphicsDevice* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage);
+		virtual ~DynamicVertexBuffer();
 	};
 }
 }

@@ -2,6 +2,8 @@
 #define NXNA_GRAPHICS_DIRECT3D_D3D11VERTEXBUFFER_H
 
 #include "../VertexBuffer.h"
+#include "../IVertexBufferPimpl.h"
+#include "../VertexDeclaration.h"
 #include "../../NxnaConfig.h"
 
 NXNA_DISABLE_OVERRIDE_WARNING
@@ -12,31 +14,24 @@ namespace Graphics
 {
 namespace Direct3D11
 {
-	class D3D11VertexBuffer : public VertexBuffer
+	class D3D11VertexBuffer : public Pvt::IVertexBufferPimpl
 	{
-	protected:
-		void* m_buffer;
-		const VertexDeclaration* m_declaration;
+		Direct3D11Device* m_device;
+		VertexDeclaration m_declaration;
 		int m_vertexCount;
+		void* m_buffer;
 
 	public:
-		D3D11VertexBuffer(Direct3D11Device* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage);
+		D3D11VertexBuffer(bool dynamic, Direct3D11Device* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage);
 
 		virtual void SetData(int offsetInBytes, void* data, int numVertices) override;
-		virtual const VertexDeclaration* GetDeclaration() const override { return m_declaration; }
-		virtual int GetVertexCount() const override { return m_vertexCount; }
+
 
 		void* GetInternalBuffer() const { return m_buffer; }
-	};
 
-	class D3D11DynamicVertexBuffer : public DynamicVertexBuffer, public D3D11VertexBuffer
-	{
-	public:
-		D3D11DynamicVertexBuffer(Direct3D11Device* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage);
-
-		virtual void SetData(int offsetInBytes, void* data, int numVertices) override;
-		virtual const VertexDeclaration* GetDeclaration() const override { return m_declaration; }
-		virtual int GetVertexCount() const override { return m_vertexCount; }
+	private:
+		void setDataStatic(int offsetInBytes, void* data, int numVertices);
+		void setDataDynamic(int offsetInBytes, void* data, int numVertices);
 	};
 }
 }
