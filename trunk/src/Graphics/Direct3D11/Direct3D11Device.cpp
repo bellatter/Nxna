@@ -315,7 +315,7 @@ namespace Direct3D11
 
 	void Direct3D11Device::SetVertexBuffer(const VertexBuffer* vertexBuffer)
 	{
-		m_vertices = dynamic_cast<const D3D11VertexBuffer*>(vertexBuffer); // static_cast<> won't work due to multiple inheritance :(
+		m_vertices = vertexBuffer;
 		m_vertexBufferDirty = true;
 	}
 
@@ -348,19 +348,6 @@ namespace Direct3D11
 	AlphaTestEffect* Direct3D11Device::CreateAlphaTestEffect()
 	{
 		return new HlslAlphaTestEffect(this);
-	}
-
-	VertexBuffer* Direct3D11Device::CreateVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)
-	{
-		return new D3D11VertexBuffer(this, vertexDeclaration, vertexCount, usage);
-	}
-
-	DynamicVertexBuffer* Direct3D11Device::CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)
-	{
-		if (vertexCount <= 0)
-			throw ArgumentException("vertexCount");
-
-		return new D3D11DynamicVertexBuffer(this, vertexDeclaration, vertexCount, usage);
 	}
 
 	
@@ -417,6 +404,11 @@ namespace Direct3D11
 	Pvt::IIndexBufferPimpl* Direct3D11Device::CreateIndexBufferPimpl(IndexElementSize elementSize)
 	{
 		return new D3D11IndexBuffer(this, elementSize);
+	}
+
+	Pvt::IVertexBufferPimpl* Direct3D11Device::CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)
+	{
+		return new D3D11VertexBuffer(dynamic, this, vertexDeclaration, vertexCount, usage);
 	}
 
 	void Direct3D11Device::applyDirtyStates()
@@ -547,7 +539,8 @@ namespace Direct3D11
 		{
 			if (m_vertices != nullptr)
 			{
-				ID3D11Buffer* buffer = static_cast<ID3D11Buffer*>(m_vertices->GetInternalBuffer());
+				D3D11VertexBuffer* d3dVertexBuffer = static_cast<D3D11VertexBuffer*>(const_cast<VertexBuffer*>(m_vertices)->GetPimpl());
+				ID3D11Buffer* buffer = static_cast<ID3D11Buffer*>(d3dVertexBuffer->GetInternalBuffer());
 				unsigned int stride = m_vertices->GetDeclaration()->GetStride();
 				unsigned int offset = 0;
 				m_deviceContext->IASetVertexBuffers(0, 1, &buffer, &stride, &offset); 

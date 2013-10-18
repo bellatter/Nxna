@@ -106,6 +106,8 @@ namespace Graphics
 	{
 		friend class Texture2D;
 		friend class IndexBuffer;
+		friend class VertexBuffer;
+		friend class DynamicVertexBuffer;
 
 	protected:
 		static GraphicsDevice* m_instance;
@@ -143,8 +145,6 @@ namespace Graphics
 		virtual SpriteEffect* CreateSpriteEffect() = 0;
 		virtual DualTextureEffect* CreateDualTextureEffect() = 0;
 		virtual AlphaTestEffect* CreateAlphaTestEffect() = 0;
-		virtual VertexBuffer* CreateVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) = 0;
-		virtual DynamicVertexBuffer* CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) = 0;
 
 		SamplerStateCollection& GetSamplerStates() { return m_samplers; }
 
@@ -164,6 +164,7 @@ namespace Graphics
 
 		virtual Pvt::ITexture2DPimpl* CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format) = 0;
 		virtual Pvt::IIndexBufferPimpl* CreateIndexBufferPimpl(IndexElementSize elementSize) = 0;
+		virtual Pvt::IVertexBufferPimpl* CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) = 0;
 	};
 
 	class GraphicsException : public Exception

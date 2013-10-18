@@ -5,17 +5,17 @@ namespace Nxna
 {
 namespace Graphics
 {
+namespace Pvt
+{
 	class IVertexBufferPimpl
 	{
-	public:
-		virtual void SetData(void* data) = 0;
-	};
+	protected:
+		bool m_dynamic;
 
-	class IDynamicVertexBufferPimpl
-	{
 	public:
-		virtual void SetData(void* data, int numVertices) = 0;
+		virtual void SetData(int offsetInBytes, void* data, int numBytes) = 0;
 	};
+}
 }
 }
 

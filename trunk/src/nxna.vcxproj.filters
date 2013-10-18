@@ -272,6 +272,9 @@
     <ClInclude Include="Graphics\IIndexBufferPimpl.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\IEffectPimpl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -480,5 +483,13 @@
     <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVc.inc" />
     <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVcNoFog.inc" />
     <None Include="Graphics\Direct3D11\ShaderSource\Structures.fx" />
+    <None Include="Graphics\OpenGL\ShaderSource\BasicEffect.vert" />
+    <None Include="Graphics\OpenGL\ShaderSource\BasicEffect.frag" />
+    <None Include="Graphics\OpenGL\ShaderSource\SpriteEffect.vert" />
+    <None Include="Graphics\OpenGL\ShaderSource\SpriteEffect.frag" />
+    <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.vert" />
+    <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.frag" />
+    <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.vert" />
+    <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.frag" />
   </ItemGroup>
 </Project>

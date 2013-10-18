@@ -323,7 +323,7 @@ namespace OpenGl
 	{
 		if (vertexBuffer != nullptr)
 		{
-			dynamic_cast<const GlVertexBuffer*>(vertexBuffer)->Bind();
+			static_cast<const GlVertexBuffer*>(const_cast<VertexBuffer*>(vertexBuffer)->GetPimpl())->Bind();
 
 			m_vertices = vertexBuffer;
 			m_declaration = vertexBuffer->GetDeclaration();
@@ -407,16 +407,6 @@ namespace OpenGl
 		}
 	}
 
-	VertexBuffer* OpenGlDevice::CreateVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)
-	{
-		return new GlVertexBuffer(this, vertexDeclaration, vertexCount, usage);
-	}
-
-	DynamicVertexBuffer* OpenGlDevice::CreateDynamicVertexBuffer(const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)
-	{
-		return new GlDynamicVertexBuffer(this, vertexDeclaration, vertexCount, usage);
-	}
-
 	void OpenGlDevice::GetBackBufferData(void* data)
 	{
 #ifndef USING_OPENGLES
@@ -449,6 +439,11 @@ namespace OpenGl
 	Pvt::IIndexBufferPimpl* OpenGlDevice::CreateIndexBufferPimpl(IndexElementSize size)
 	{
 		return new GlIndexBuffer(size);
+	}
+
+	Pvt::IVertexBufferPimpl* OpenGlDevice::CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)
+	{
+		return new GlVertexBuffer(dynamic, this, vertexDeclaration, vertexCount, usage);
 	}
 
 	void OpenGlDevice::setClearColor(const Color& c)
