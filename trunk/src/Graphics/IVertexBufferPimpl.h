@@ -13,6 +13,7 @@ namespace Pvt
 		bool m_dynamic;
 
 	public:
+		virtual ~IVertexBufferPimpl() { }
 		virtual void SetData(int offsetInBytes, void* data, int numBytes) = 0;
 	};
 }
