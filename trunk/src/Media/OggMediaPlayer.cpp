@@ -7,6 +7,9 @@
 #ifdef __APPLE__
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
+#elif defined NXNA_PLATFORM_NIX
+#include <AL/al.h>
+#include <AL/alc.h>
 #else
 #include <al.h>
 #include <alc.h>
