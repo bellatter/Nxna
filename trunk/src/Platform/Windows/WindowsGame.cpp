@@ -234,6 +234,8 @@ namespace Windows
 	Nxna::Input::Keys WindowsGame::translateVirtualKey(int key)
 	{
 		// TODO: add the rest of the keys
+		if (key == VK_RETURN)
+			return Nxna::Input::Keys::Enter;
 		if (key == VK_LEFT)
 			return Nxna::Input::Keys::Left;
 		if (key == VK_RIGHT)
