@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cstring>
 #include "SoundEffect.h"
 #include "AudioManager.h"
 #include "AudioListener.h"

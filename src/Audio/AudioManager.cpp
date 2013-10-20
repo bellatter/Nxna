@@ -4,12 +4,16 @@
 #ifdef __APPLE__
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
+#elif defined NXNA_PLATFORM_NIX
+#include <AL/al.h>
+#include <AL/alc.h>
 #else
 #include <al.h>
 #include <alc.h>
 #endif
 #endif
 #include <cassert>
+#include <stdint.h>
 #include "AudioManager.h"
 #include "AudioListener.h"
 #include "AudioEmitter.h"
@@ -55,7 +59,7 @@ namespace Audio
 		}
 
 		alGenBuffers(1, (ALuint*)&result->Handle);
-		alBufferData((ALuint)result->Handle, bformat, data, numBytes, numSamplesPerSecond);
+		alBufferData((ALuint)(uintptr_t)(result->Handle), bformat, data, numBytes, numSamplesPerSecond);
 #elif defined NXNA_AUDIOENGINE_OPENSL
 		result->Handle = result;
 		result->NumBitsPerSample = numBitsPerSample;
@@ -95,7 +99,7 @@ namespace Audio
 	{
 #if defined NXNA_AUDIOENGINE_OPENAL
 		int state;
-		alGetSourcei((ALuint)m_handle, AL_SOURCE_STATE, &state);
+		alGetSourcei((ALuint)(uintptr_t)m_handle, AL_SOURCE_STATE, &state);
 		return state == AL_STOPPED || state == AL_INITIAL;
 #elif defined NXNA_AUDIOENGINE_OPENSL
 		return m_handle == nullptr || !m_playing;
@@ -122,16 +126,17 @@ namespace Audio
 	void AudioSource::Play(float volume, float pitch, float pan)
 	{
 #if defined NXNA_AUDIOENGINE_OPENAL
-		alSourcei((ALuint)m_handle, AL_SOURCE_RELATIVE, m_positionIsRelative ? 1 : 0);
-		alSource3f((ALuint)m_handle, AL_POSITION, m_position.X, m_position.Y, m_position.Z);
-		alSourcei((ALuint)m_handle, AL_LOOPING, m_isLooping ? AL_TRUE : AL_FALSE);
-		alSourcei((ALuint)m_handle, AL_BUFFER, (ALint)m_bufferHandle);
-		alSourcef((ALuint)m_handle, AL_GAIN, volume);
-		alSourcef((ALuint)m_handle, AL_REFERENCE_DISTANCE, AudioManager::m_distanceScale);
+		ALuint source = (ALuint)(uintptr_t)m_handle;
+		alSourcei(source, AL_SOURCE_RELATIVE, m_positionIsRelative ? 1 : 0);
+		alSource3f(source, AL_POSITION, m_position.X, m_position.Y, m_position.Z);
+		alSourcei(source, AL_LOOPING, m_isLooping ? AL_TRUE : AL_FALSE);
+		alSourcei(source, AL_BUFFER, (ALint)(intptr_t)m_bufferHandle);
+		alSourcef(source, AL_GAIN, volume);
+		alSourcef(source, AL_REFERENCE_DISTANCE, AudioManager::m_distanceScale);
 		
 		// TODO: what about "pitch" and "pan"?
 
-		alSourcePlay((ALuint)m_handle);
+		alSourcePlay(source);
 #elif defined NXNA_AUDIOENGINE_OPENSL
 
 		SLEngineItf engine = (SLEngineItf)AudioManager::GetEngineInterface();
@@ -287,7 +292,7 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 	void AudioSource::Pause()
 	{
 #if defined NXNA_AUDIOENGINE_OPENAL
-		alSourcePause((ALuint)m_handle);
+		alSourcePause((ALuint)(uintptr_t)m_handle);
 #elif defined NXNA_AUDIOENGINE_OPENSL
 		if (m_handle == nullptr || m_playing == false) return;
 
@@ -313,7 +318,7 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 	void AudioSource::Stop()
 	{
 #ifdef NXNA_AUDIOENGINE_OPENAL
-		alSourceStop((ALuint)m_handle);
+		alSourceStop((ALuint)(uintptr_t)m_handle);
 #elif defined NXNA_AUDIOENGINE_OPENSL
 		if (m_handle == nullptr || m_playing == false) return;
 
@@ -328,7 +333,7 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 	void AudioSource::SetGain(float gain)
 	{
 #ifdef NXNA_AUDIOENGINE_OPENAL
-		alSourcef((ALuint)m_handle, AL_GAIN, gain);
+		alSourcef((ALuint)(uintptr_t)m_handle, AL_GAIN, gain);
 #endif
 	}
 
@@ -336,7 +341,7 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 	{
 #if defined NXNA_AUDIOENGINE_OPENAL
 		int state;
-		alGetSourcei((ALuint)m_handle, AL_SOURCE_STATE, &state);
+		alGetSourcei((ALuint)(uintptr_t)m_handle, AL_SOURCE_STATE, &state);
 
 		if (state == AL_PLAYING)
 			return SoundState::Playing;
@@ -377,7 +382,7 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 		m_isLooping = looping;
 
 #ifdef NXNA_AUDIOENGINE_OPENAL
-		alSourcei((ALuint)m_handle, AL_LOOPING, looping ? 1 : 0);
+		alSourcei((ALuint)(uintptr_t)m_handle, AL_LOOPING, looping ? 1 : 0);
 #endif
 	}
 
@@ -387,8 +392,8 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 		m_position = position;
 
 #ifdef NXNA_AUDIOENGINE_OPENAL
-		alSourcei((ALuint)m_handle, AL_SOURCE_RELATIVE, relative ? 1 : 0);
-		alSource3f((ALuint)m_handle, AL_POSITION, position.X, position.Y, position.Z);
+		alSourcei((ALuint)(uintptr_t)m_handle, AL_SOURCE_RELATIVE, relative ? 1 : 0);
+		alSource3f((ALuint)(uintptr_t)m_handle, AL_POSITION, position.X, position.Y, position.Z);
 #endif
 	}
 
@@ -551,7 +556,7 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 #ifdef NXNA_AUDIOENGINE_OPENAL
 		for (int i = 0; i < MAX_SOURCES; i++)
 		{
-			alSourcef((ALuint)m_sources[i].Source, AL_REFERENCE_DISTANCE, scale);
+			alSourcef((ALuint)(uintptr_t)m_sources[i].Source, AL_REFERENCE_DISTANCE, scale);
 		}
 #endif
 	}
