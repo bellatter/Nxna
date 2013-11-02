@@ -5,6 +5,7 @@
 #include "../Content/ContentManager.h"
 #include "../Vector3.h"
 #include "SoundState.h"
+#include <vector>
 
 NXNA_DISABLE_OVERRIDE_WARNING
 
@@ -54,8 +55,7 @@ namespace Audio
 		void* m_bufferHandle;
 		bool m_duration;
 
-		static byte* m_workingData;
-		static int m_workingDataLength;
+		static std::vector<byte> m_workingData;
 
 	public:
 
