@@ -173,8 +173,7 @@ namespace Audio
 	const int WAVE_FORMAT_PCM = 1;
 	const int WAVE_FORMAT_ADPCM = 2;
 
-	byte* SoundEffect::m_workingData = nullptr;
-	int SoundEffect::m_workingDataLength = 0;
+	std::vector<byte> SoundEffect::m_workingData;
 
 	bool SoundEffect::Play()
 	{
@@ -260,30 +259,26 @@ namespace Audio
 			byte* output;
 			decoder.GetOutput(&output, &dataSize);
 
-			if (dataSize > m_workingDataLength)
+			if ((unsigned int)dataSize > m_workingData.capacity())
 			{
-				delete[] m_workingData;
-				m_workingData = new byte[dataSize * 2];
-				m_workingDataLength = dataSize * 2;
+				m_workingData.reserve(dataSize * 2);
 			}
 
-			memcpy(m_workingData, output, dataSize);
+			memcpy(&m_workingData.front(), output, dataSize);
 		}
 		else
 		{
 			//dataSize = stream->ReadInt32();
-			if (m_workingDataLength < dataSize)
+			if (m_workingData.capacity() < (unsigned int)dataSize)
 			{
-				delete[] m_workingData;
-				m_workingData = new byte[dataSize * 2];
-				m_workingDataLength = dataSize * 2;
+				m_workingData.reserve(dataSize * 2);
 			}
-			stream->Read(m_workingData, dataSize);
+			stream->Read(&m_workingData.front(), dataSize);
 		}
 
 		SoundEffect* effect = new SoundEffect();
 		AudioBuffer dummy;
-		AudioBuffer::Create(format.Channels, format.BitsPerSample, format.SamplesPerSec, m_workingData, dataSize, &dummy);
+		AudioBuffer::Create(format.Channels, format.BitsPerSample, format.SamplesPerSec, &m_workingData.front(), dataSize, &dummy);
 		effect->m_bufferHandle = dummy.Handle;
 
 		return effect;

@@ -2,6 +2,7 @@
 #define NXNA_AUDIO_ADPCMDECODER_H
 
 #include "../../NxnaConfig.h"
+#include <vector>
 
 namespace Nxna
 {
@@ -21,18 +22,17 @@ namespace Audio
 
 		void GetOutput(byte** output, int* outputSize)
 		{
-			*output = m_workingData;
+			*output = &m_workingData.front();
 			*outputSize = m_bytesWritten;
 		}
 
 	private:
 	
-		int m_bytesWritten;
+		unsigned int m_bytesWritten;
 
-		static byte* m_workingData;
-		static int m_workingDataSize;
+		static std::vector<byte> m_workingData;
 
-		void copyToWorkingMemory(byte* data, int size);
+		void copyToWorkingMemory(byte* data, unsigned int size);
 	};
 }
 }
