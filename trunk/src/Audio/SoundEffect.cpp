@@ -210,6 +210,10 @@ namespace Audio
 	SoundEffect* SoundEffect::LoadFrom(Content::Stream* stream)
 	{
 #ifndef DISABLE_OPENAL
+
+		if (m_workingData.empty())
+			m_workingData.resize(100 * 1024); // 100 KB
+
 		int formatSize = stream->ReadInt32();
 		if (formatSize < 18)
 			throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
