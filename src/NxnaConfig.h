@@ -17,6 +17,12 @@ typedef unsigned char byte;
 #define NXNA_AUDIOENGINE_OPENAL
 #endif
 
+#if defined NXNA_PLATFORM_IOS
+#define NXNA_PLATFORMENGINE_IOS
+#else
+#define NXNA_PLATFORMENGINE_SDL
+#endif
+
 // disable Visual C++ 2010 specific stuff if needed
 #if !defined _MSC_VER || _MSC_VER < 1600
 #define nullptr 0
@@ -74,9 +80,9 @@ __pragma(warning(disable:4201))
 #endif
 
 // make sure the SDL libraries get included if needed
-#if defined NXNA_PLATFORM_WIN32_SDL
-#pragma comment(lib, "SDL")
-#pragma comment(lib, "SDLMain")
+#if defined NXNA_PLATFORM_WIN32 && defined NXNA_PLATFORMENGINE_SDL
+#pragma comment(lib, "SDL2")
+#pragma comment(lib, "SDL2main")
 #endif
 
 // don't do excessive error OpenGL error checking in non-debug builds

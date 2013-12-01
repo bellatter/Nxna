@@ -28,7 +28,7 @@ namespace OpenGl
 	public:
 
 		GlTexture2D(GraphicsDevice* device, int width, int height, SurfaceFormat format);
-		~GlTexture2D();
+		virtual ~GlTexture2D();
 
 		virtual void SetData(int level, byte* pixels, int length) override;
 

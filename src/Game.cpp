@@ -27,11 +27,8 @@ namespace Nxna
 		m_device = nullptr;
 		m_content = new Nxna::Content::ContentManager();
 
-#if defined NXNA_PLATFORM_APPLE_IOS
+#if defined NXNA_PLATFORMENGINE_IOS
 		m_pimpl = new Platform::iOS::IOSGame(this);
-#elif defined NXNA_PLATFORM_WIN32
-		m_pimpl = new Platform::Windows::WindowsGame(this);
-		//m_pimpl = new Platform::SDL::SDLGame(this);
 #else
 		m_pimpl = new Platform::SDL::SDLGame(this);
 #endif

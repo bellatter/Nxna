@@ -35,11 +35,6 @@ namespace Graphics
 
 			m_declaration = new VertexDeclaration(elements, 3);
 		}
-		
-		if (m_vertexBuffer == nullptr)
-		{
-			m_vertexBuffer = new DynamicVertexBuffer(device, m_declaration, MAX_BATCH_SIZE * 4, BufferUsage::WriteOnly);
-		}
 
 		if (m_indexBuffer == nullptr)
 		{
@@ -377,14 +372,19 @@ namespace Graphics
 
 		if (m_workingVerts == nullptr)
 		{
-			m_workingVertsSize = numSprites * vertsPerSprite * stride * 2;
-			m_workingVerts = new float[m_workingVertsSize];
+			m_workingVertsSize = numSprites * 2;
+			m_workingVerts = new float[m_workingVertsSize * vertsPerSprite * stride];
+
+			m_vertexBuffer = new DynamicVertexBuffer(m_device, m_declaration, m_workingVertsSize * vertsPerSprite, BufferUsage::WriteOnly);
 		}
-		else if (m_workingVertsSize < numSprites * stride * vertsPerSprite)
+		else if (m_workingVertsSize < numSprites)
 		{
 			delete[] m_workingVerts;
-			m_workingVertsSize = Math::Max(m_workingVertsSize * 2, numSprites * stride * vertsPerSprite);
-			m_workingVerts = new float[m_workingVertsSize];
+			m_workingVertsSize = Math::Max(m_workingVertsSize * 2, numSprites);
+			m_workingVerts = new float[m_workingVertsSize * vertsPerSprite * stride];
+
+			delete m_vertexBuffer;
+			m_vertexBuffer = new DynamicVertexBuffer(m_device, m_declaration, m_workingVertsSize * vertsPerSprite, BufferUsage::WriteOnly);
 		}
 
 		for (int i = 0; i < numSprites; i++)

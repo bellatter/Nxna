@@ -30,8 +30,8 @@ namespace Direct3D11
 		void* GetInternalBuffer() const { return m_buffer; }
 
 	private:
-		void setDataStatic(int offsetInBytes, void* data, int numVertices);
-		void setDataDynamic(int offsetInBytes, void* data, int numVertices);
+		void setDataStatic(int offsetInBytes, void* data, int numBytes);
+		void setDataDynamic(int offsetInBytes, void* data, int numBytes);
 	};
 }
 }

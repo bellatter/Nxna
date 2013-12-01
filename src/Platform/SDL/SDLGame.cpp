@@ -15,6 +15,8 @@ namespace SDL
 		m_quitReceived = false;
 		m_targetElapsedTime = 1.0f / 60.0f;
 		m_isFixedTimeStep = true;
+
+		SDL_Init(SDL_INIT_VIDEO);
 	}
 
 	void SDLGame::Init(int /* argc */, char** /* argv */)

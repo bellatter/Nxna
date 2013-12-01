@@ -56,9 +56,9 @@ namespace Direct3D11
 		EffectParameter* alphaTest = new EffectParameter(this, EffectParameterType::Single, 4, 0, "AlphaTest");
 		AddParameter(alphaTest);
 
-		int indices[] = {0, 1};
-		int offsets[] = {0, 0};
-		ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, 16 * sizeof(float), indices, offsets, 1));
+		int indices[] = {0, 1, 2};
+		int offsets[] = {0, 0, 16};
+		ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, 16 * sizeof(float), indices, offsets, 3));
 		m_cbuffers.push_back(cbuffer);
 	}
 
@@ -136,17 +136,17 @@ namespace Direct3D11
 		{
 			if (m_compareFunction == CompareFunction::Equal ||
 				m_compareFunction == CompareFunction::NotEqual)
-				ApplyProgram(1);
+				static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, 1);
 			else
-				ApplyProgram(0);
+				static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, 0);
 		}
 		else
 		{
 			if (m_compareFunction == CompareFunction::Equal ||
 				m_compareFunction == CompareFunction::NotEqual)
-				ApplyProgram(3);
+				static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, 3);
 			else
-				ApplyProgram(2);
+				static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, 2);
 		}
 	}
 }

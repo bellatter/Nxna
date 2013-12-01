@@ -275,6 +275,8 @@
     <ClInclude Include="Graphics\IEffectPimpl.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\GraphicsAdapter.h" />
+    <ClInclude Include="Platform\SDL\SDLDirect3D11Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -470,6 +472,8 @@
     <ClCompile Include="Graphics\IndexBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\GraphicsAdapter.cpp" />
+    <ClCompile Include="Platform\SDL\SDLDirect3D11Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\Direct3D11\ShaderSource\AlphaTestEffect.fx" />

@@ -96,9 +96,13 @@ namespace Direct3D11
 		{
 			if (m_parameterList[i]->GetType() == EffectParameterType::Texture2D)
 			{
-				D3D11Texture2D* texture = static_cast<D3D11Texture2D*>(m_parameterList[i]->GetValueTexture2D()->GetPimpl());
-				ID3D11ShaderResourceView* d3dTex = (ID3D11ShaderResourceView*)texture->GetHandle();
-				context->PSSetShaderResources(textureCount++, 1, &d3dTex);
+				Texture2D* value = m_parameterList[i]->GetValueTexture2D();
+				if (value != nullptr)
+				{
+					D3D11Texture2D* texture = static_cast<D3D11Texture2D*>(value->GetPimpl());
+					ID3D11ShaderResourceView* d3dTex = (ID3D11ShaderResourceView*)texture->GetHandle();
+					context->PSSetShaderResources(textureCount++, 1, &d3dTex);
+				}
 			}
 		}
 	}
