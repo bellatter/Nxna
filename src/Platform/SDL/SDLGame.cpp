@@ -115,6 +115,8 @@ namespace SDL
 			return Nxna::Input::Keys::Back;
 		if (sdlk == SDLK_RETURN)
 			return Nxna::Input::Keys::Enter;
+		if (sdlk == SDLK_ESCAPE)
+			return Nxna::Input::Keys::Escape;
 		if (sdlk == SDLK_BACKQUOTE)
 			return Nxna::Input::Keys::OemTilde;
 		if (sdlk == SDLK_UP)
