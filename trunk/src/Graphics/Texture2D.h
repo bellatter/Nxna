@@ -18,6 +18,9 @@ namespace Graphics
 {
 	NXNA_ENUM(SurfaceFormat)
 		Color,
+		Bgr565,
+		Bgra5551,
+		Bgra4444,
 		Dxt1,
 		Dxt3,
 		Dxt5,

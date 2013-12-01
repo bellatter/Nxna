@@ -36,7 +36,10 @@ namespace Media
 		{		
 			Content::FileStream* file = new Content::FileStream(song->m_path.c_str());
 			if (file->IsOpen() == false)
+			{
+				delete file;
 				return false;
+			}
 
 			decoder = new Audio::OggVorbisDecoder(file, false);
 

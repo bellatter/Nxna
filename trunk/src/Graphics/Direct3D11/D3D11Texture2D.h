@@ -28,7 +28,7 @@ namespace Direct3D11
 	public:
 
 		D3D11Texture2D(GraphicsDevice* device, int width, int height, SurfaceFormat format);
-		~D3D11Texture2D();
+		virtual ~D3D11Texture2D();
 
 		virtual void SetData(int level, byte* pixels, int length) override;
 

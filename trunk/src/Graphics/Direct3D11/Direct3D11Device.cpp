@@ -107,7 +107,7 @@ namespace Direct3D11
 
 		D3D_FEATURE_LEVEL featureLevel[] = {D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_10_0};
 
-		result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, featureLevel, 3, 
+		result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_DEBUG, featureLevel, 3, 
 		D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, nullptr, &m_deviceContext);
 
 		if (FAILED(result))
@@ -400,10 +400,15 @@ namespace Direct3D11
 
 		m_samplers.MakeClean();
 	}
+
+	Pvt::ITexture2DPimpl* Direct3D11Device::CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format)
+	{
+		return new D3D11Texture2D(this, width, height, format);
+	}
 	
 	Pvt::IIndexBufferPimpl* Direct3D11Device::CreateIndexBufferPimpl(IndexElementSize elementSize)
 	{
-		return new D3D11IndexBuffer(this, elementSize);
+		return new D3D11IndexBuffer(m_device, elementSize);
 	}
 
 	Pvt::IVertexBufferPimpl* Direct3D11Device::CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)

@@ -13,7 +13,6 @@ namespace SDL
 	SDLOpenGlWindow::SDLOpenGlWindow(Nxna::Game* game)
 		: Nxna::GraphicsDeviceManager(game)
 	{
-		
 	}
 
 	Nxna::Graphics::GraphicsDevice* SDLOpenGlWindow::CreateDevice()
@@ -51,7 +50,6 @@ namespace SDL
 	{
 		assert(m_device != nullptr);
 
-		SDL_Init(SDL_INIT_VIDEO);
         SDL_SetHint( "SDL_HINT_ORIENTATIONS", "LandscapeLeft LandscapeRight" );
 
         PreferredBackBufferWidth(width);

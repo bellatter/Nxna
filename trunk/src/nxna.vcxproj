@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\lib\vorbis\include;..\lib\SDL_13\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\lib\vorbis\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>..\lib\SDL_13\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
@@ -112,6 +112,7 @@
     <ClInclude Include="Graphics\Direct3D11\HlslSpriteEffect.h" />
     <ClInclude Include="Graphics\DualTextureEffect.h" />
     <ClInclude Include="Graphics\Effect.h" />
+    <ClInclude Include="Graphics\GraphicsAdapter.h" />
     <ClInclude Include="Graphics\GraphicsDevice.h" />
     <ClInclude Include="Graphics\GraphicsDeviceCapabilities.h" />
     <ClInclude Include="Graphics\IContantBufferPmpl.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="NxnaConfig.h" />
     <ClInclude Include="Platform\iOS\IOSOpenGlWindow.h" />
     <ClInclude Include="Platform\PlatformDefs.h" />
+    <ClInclude Include="Platform\SDL\SDLDirect3D11Window.h" />
     <ClInclude Include="Platform\SDL\SDLGame.h" />
     <ClInclude Include="Platform\SDL\SDLOpenGlWindow.h" />
     <ClInclude Include="Platform\Windows\WindowsCommon.h" />
@@ -194,6 +196,7 @@
     <ClCompile Include="Graphics\Direct3D11\HlslDualTextureEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslSpriteEffect.cpp" />
+    <ClCompile Include="Graphics\GraphicsAdapter.cpp" />
     <ClCompile Include="Graphics\IndexBuffer.cpp" />
     <ClCompile Include="Graphics\ITexture2DPimpl.cpp" />
     <ClCompile Include="Graphics\libsquish\alpha.cpp" />
@@ -224,6 +227,7 @@
     <ClCompile Include="Platform\iOS\IOSOpenGlWindow.cpp" />
     <ClCompile Include="Platform\NaClMain.cpp" />
     <ClCompile Include="Platform\SdlMain.cpp" />
+    <ClCompile Include="Platform\SDL\SDLDirect3D11Window.cpp" />
     <ClCompile Include="Platform\SDL\SDLGame.cpp" />
     <ClCompile Include="Platform\SDL\SDLOpenGlWindow.cpp" />
     <ClCompile Include="Platform\Windows\WindowsCommon.cpp" />

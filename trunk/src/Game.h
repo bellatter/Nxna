@@ -42,11 +42,8 @@ namespace Nxna
 		friend class Platform::Windows::WindowsGame;
 		friend class Platform::SDL::SDLGame;
 
-#if defined NXNA_PLATFORM_APPLE_IOS
+#if defined NXNA_PLATFORMENGINE_IOS
 		Platform::iOS::IOSGame* m_pimpl;
-#elif defined NXNA_PLATFORM_WIN32
-		Platform::Windows::WindowsGame* m_pimpl;
-		//Platform::SDL::SDLGame* m_pimpl;
 #else
 		Platform::SDL::SDLGame* m_pimpl;
 #endif

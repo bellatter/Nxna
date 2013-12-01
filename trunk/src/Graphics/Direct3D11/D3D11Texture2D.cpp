@@ -19,7 +19,17 @@ namespace Direct3D11
 		m_width = width;
 		m_height = height;
 		m_format = format;
+		m_shaderResourceView = nullptr;
 		m_hasMipmaps = false;
+	}
+
+	D3D11Texture2D::~D3D11Texture2D()
+	{
+		if (m_shaderResourceView != nullptr)
+		{
+			((ID3D11ShaderResourceView*)m_shaderResourceView)->Release();
+			m_shaderResourceView = nullptr;
+		}
 	}
 
 	void D3D11Texture2D::SetData(int level, byte* pixels, int length)

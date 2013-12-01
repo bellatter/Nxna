@@ -27,6 +27,7 @@ namespace Nxna
 #include "Quaternion.h"
 #include "IGraphicsDeviceManager.h"
 #include "Graphics/GraphicsDevice.h"
+#include "Graphics/GraphicsAdapter.h"
 #include "Graphics/VertexDeclaration.h"
 #include "Graphics/SpriteBatch.h"
 #include "Graphics/Texture2D.h"

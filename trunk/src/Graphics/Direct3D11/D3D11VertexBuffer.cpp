@@ -32,41 +32,53 @@ namespace Direct3D11
 			setDataStatic(offsetInBytes, data, vertexCount);
 	}
 
-	void D3D11VertexBuffer::setDataStatic(int offsetInBytes, void* data, int numVertices)
+	void D3D11VertexBuffer::setDataStatic(int offsetInBytes, void* data, int numBytes)
 	{
-		// TODO
-		assert(offsetInBytes == 0);
+		int capacity = m_declaration.GetStride() * m_vertexCount;
 
-		//assert(vertexCount == m_vertexCount);
-
-		int numBytes = m_declaration.GetStride() * m_vertexCount;
-
-		D3D11_BUFFER_DESC desc;
-		ZeroMemory(&desc, sizeof(desc));
-		desc.Usage = D3D11_USAGE_DEFAULT;
-		desc.ByteWidth = m_declaration.GetStride() * m_vertexCount;
-		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		desc.CPUAccessFlags = 0;
-		D3D11_SUBRESOURCE_DATA initData;
-		ZeroMemory(&initData, sizeof(initData));
-		initData.pSysMem = data;
-		if (FAILED(static_cast<ID3D11Device*>(m_device->GetDevice())->CreateBuffer(&desc, &initData, (ID3D11Buffer**)&m_buffer)))
-			throw GraphicsException("Unable to create vertex buffer");
-	}
-
-	void D3D11VertexBuffer::setDataDynamic(int offsetInBytes, void* data, int numVertices)
-	{
-		// TODO
-		assert(offsetInBytes == 0);
-
-
-		if (numVertices > m_vertexCount)
+		if (numBytes > capacity)
 			throw GraphicsException("Too many vertices", __FILE__, __LINE__);
 
-		if (numVertices > 0 && m_buffer == nullptr)
+		if (numBytes > 0 && m_buffer == nullptr)
 		{
-			int numBytes = m_declaration.GetStride() * m_vertexCount;
+			D3D11_BUFFER_DESC desc;
+			ZeroMemory(&desc, sizeof(desc));
+			desc.Usage = D3D11_USAGE_DEFAULT;
+			desc.ByteWidth = capacity;
+			desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+			desc.CPUAccessFlags = 0;
 
+			if (FAILED(static_cast<ID3D11Device*>(m_device->GetDevice())->CreateBuffer(&desc, nullptr, (ID3D11Buffer**)&m_buffer)))
+				throw GraphicsException("Unable to create vertex buffer");
+		}
+
+		D3D11_MAPPED_SUBRESOURCE mappedBuffer;
+
+		ID3D11DeviceContext* deviceContext = static_cast<ID3D11DeviceContext*>(m_device->GetDeviceContext());
+
+		D3D11_BOX box;
+		box.top = 0;
+		box.front = 0;
+		box.back = 1;
+		box.bottom = 1;
+		box.left = offsetInBytes;
+		box.right = offsetInBytes + numBytes;
+		deviceContext->UpdateSubresource(static_cast<ID3D11Buffer*>(m_buffer), 0, &box, data, 1, 0);
+
+	}
+
+	void D3D11VertexBuffer::setDataDynamic(int offsetInBytes, void* data, int numBytes)
+	{
+		// TODO
+		assert(offsetInBytes == 0);
+
+		int capacity = m_declaration.GetStride() * m_vertexCount;
+
+		if (numBytes > capacity)
+			throw GraphicsException("Too many vertices", __FILE__, __LINE__);
+
+		if (numBytes > 0 && m_buffer == nullptr)
+		{
 			D3D11_BUFFER_DESC desc;
 			ZeroMemory(&desc, sizeof(desc));
 			desc.Usage = D3D11_USAGE_DYNAMIC;
@@ -77,8 +89,6 @@ namespace Direct3D11
 			if (FAILED(static_cast<ID3D11Device*>(m_device->GetDevice())->CreateBuffer(&desc, nullptr, (ID3D11Buffer**)&m_buffer)))
 				throw GraphicsException("Unable to create dynamic vertex buffer");
 		}
-
-		int numBytes = m_declaration.GetStride() * numVertices;
 
 		D3D11_MAPPED_SUBRESOURCE mappedBuffer;
 
