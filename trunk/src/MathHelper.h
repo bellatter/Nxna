@@ -14,6 +14,12 @@ namespace Nxna
 			return floor(n + 0.5f);
 		}
 
+		static float Round(float n, int digits)
+		{
+			float digits10 = pow(10.0f, digits);
+			return floor(n * digits10 + 0.5f) / digits10;
+		}
+
 		static int Roundi(float n)
 		{
 			return (int)(n + 0.5f);
