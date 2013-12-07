@@ -5,6 +5,8 @@
 #include <SDL.h>
 #include <SDL_syswm.h>
 
+#if defined NXNA_PLATFORM_WIN32
+
 namespace Nxna
 {
 namespace Platform
@@ -85,3 +87,5 @@ namespace SDL
 }
 }
 }
+
+#endif // NXNA_PLATFORM_WIN32
