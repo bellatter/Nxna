@@ -68,6 +68,7 @@ struct Color
 	static Color GetWhite() { return Color(255, 255, 255); }
 	static Color GetBisque() { return Color(255, 228, 196); }
 	static Color GetBlack() { return Color(0, 0, 0); }
+	static Color GetBlue() { return Color(0, 0, 255); }
 	static Color GetBurlyWood() { return Color(222, 184, 135); }
 	static Color GetDarkOrange() { return Color(255, 140, 0); }
 	static Color GetDeepSkyBlue() { return Color(0, 191, 255); }
