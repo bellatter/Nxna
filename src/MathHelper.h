@@ -34,6 +34,11 @@ namespace Nxna
 		{
 			return (a > b ? a : b);
 		}
+		
+		static double Max(double a, double b)
+		{
+			return (a > b ? a : b);
+		}
 
 		static int Min(int a, int b)
 		{
@@ -41,6 +46,11 @@ namespace Nxna
 		}
 
 		static float Min(float a, float b)
+		{
+			return (a < b ? a : b);
+		}
+		
+		static double Min(double a, double b)
 		{
 			return (a < b ? a : b);
 		}
