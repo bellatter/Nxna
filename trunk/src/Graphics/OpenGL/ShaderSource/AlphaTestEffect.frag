@@ -1,4 +1,4 @@
-uniform highp vec4 AlphaTest;
+uniform HIGHP vec4 AlphaTest;
 uniform sampler2D Diffuse;
 
 in HIGHP vec2 o_diffuseCoords;
