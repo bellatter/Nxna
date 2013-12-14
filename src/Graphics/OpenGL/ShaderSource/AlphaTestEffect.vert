@@ -1,4 +1,4 @@
-uniform highp mat4 ModelViewProjection;
+uniform HIGHP mat4 ModelViewProjection;
 
 in vec4 position : POSITION0;
 in vec2 texCoords : TEXCOORD0;
