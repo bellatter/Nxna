@@ -2,7 +2,7 @@
 #define NXNA_GAME_H
 
 #include "GameTime.h"
-#include "Platform/PlatformDefs.h"
+#include "Nxna.h"
 
 namespace Nxna
 {

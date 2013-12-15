@@ -1,11 +1,12 @@
 #include <cassert>
+#include "../PlatformDefs.h"
+#if defined NXNA_PLATFORM_WIN32
+
 #include "SDLDirect3D11Window.h"
 #include "../../Graphics/Direct3D11/Direct3D11Device.h"
 #include "../../Input/Touch/TouchPanel.h"
 #include <SDL.h>
 #include <SDL_syswm.h>
-
-#if defined NXNA_PLATFORM_WIN32
 
 namespace Nxna
 {

@@ -187,10 +187,57 @@
 		A2963CBA16BE0A2200817CFC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2963CB916BE0A2200817CFC /* AVFoundation.framework */; };
 		A2963CBF16BE15CB00817CFC /* OggMediaPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963CBD16BE15CB00817CFC /* OggMediaPlayer.cpp */; };
 		A2963CC016BE15CB00817CFC /* OggMediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963CBE16BE15CB00817CFC /* OggMediaPlayer.h */; };
+		A2C631211735FC6400DB1FDB /* alpha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C6310E1735FC6400DB1FDB /* alpha.cpp */; };
+		A2C631221735FC6400DB1FDB /* alpha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C6310E1735FC6400DB1FDB /* alpha.cpp */; };
+		A2C631231735FC6400DB1FDB /* alpha.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C6310F1735FC6400DB1FDB /* alpha.h */; };
+		A2C631241735FC6400DB1FDB /* alpha.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C6310F1735FC6400DB1FDB /* alpha.h */; };
+		A2C631251735FC6400DB1FDB /* clusterfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C631101735FC6400DB1FDB /* clusterfit.cpp */; };
+		A2C631261735FC6400DB1FDB /* clusterfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C631101735FC6400DB1FDB /* clusterfit.cpp */; };
+		A2C631271735FC6400DB1FDB /* clusterfit.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631111735FC6400DB1FDB /* clusterfit.h */; };
+		A2C631281735FC6400DB1FDB /* clusterfit.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631111735FC6400DB1FDB /* clusterfit.h */; };
+		A2C631291735FC6400DB1FDB /* colourblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C631121735FC6400DB1FDB /* colourblock.cpp */; };
+		A2C6312A1735FC6400DB1FDB /* colourblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C631121735FC6400DB1FDB /* colourblock.cpp */; };
+		A2C6312B1735FC6400DB1FDB /* colourblock.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631131735FC6400DB1FDB /* colourblock.h */; };
+		A2C6312C1735FC6400DB1FDB /* colourblock.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631131735FC6400DB1FDB /* colourblock.h */; };
+		A2C6312D1735FC6400DB1FDB /* colourfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C631141735FC6400DB1FDB /* colourfit.cpp */; };
+		A2C6312E1735FC6400DB1FDB /* colourfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C631141735FC6400DB1FDB /* colourfit.cpp */; };
+		A2C6312F1735FC6400DB1FDB /* colourfit.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631151735FC6400DB1FDB /* colourfit.h */; };
+		A2C631301735FC6400DB1FDB /* colourfit.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631151735FC6400DB1FDB /* colourfit.h */; };
+		A2C631311735FC6400DB1FDB /* colourset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C631161735FC6400DB1FDB /* colourset.cpp */; };
+		A2C631321735FC6400DB1FDB /* colourset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C631161735FC6400DB1FDB /* colourset.cpp */; };
+		A2C631331735FC6400DB1FDB /* colourset.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631171735FC6400DB1FDB /* colourset.h */; };
+		A2C631341735FC6400DB1FDB /* colourset.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631171735FC6400DB1FDB /* colourset.h */; };
+		A2C631351735FC6400DB1FDB /* maths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C631181735FC6400DB1FDB /* maths.cpp */; };
+		A2C631361735FC6400DB1FDB /* maths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C631181735FC6400DB1FDB /* maths.cpp */; };
+		A2C631371735FC6400DB1FDB /* maths.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631191735FC6400DB1FDB /* maths.h */; };
+		A2C631381735FC6400DB1FDB /* maths.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631191735FC6400DB1FDB /* maths.h */; };
+		A2C631391735FC6400DB1FDB /* rangefit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C6311A1735FC6400DB1FDB /* rangefit.cpp */; };
+		A2C6313A1735FC6400DB1FDB /* rangefit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C6311A1735FC6400DB1FDB /* rangefit.cpp */; };
+		A2C6313B1735FC6400DB1FDB /* rangefit.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C6311B1735FC6400DB1FDB /* rangefit.h */; };
+		A2C6313C1735FC6400DB1FDB /* rangefit.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C6311B1735FC6400DB1FDB /* rangefit.h */; };
+		A2C6313D1735FC6400DB1FDB /* simd_float.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C6311C1735FC6400DB1FDB /* simd_float.h */; };
+		A2C6313E1735FC6400DB1FDB /* simd_float.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C6311C1735FC6400DB1FDB /* simd_float.h */; };
+		A2C6313F1735FC6400DB1FDB /* singlecolourfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C6311D1735FC6400DB1FDB /* singlecolourfit.cpp */; };
+		A2C631401735FC6400DB1FDB /* singlecolourfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C6311D1735FC6400DB1FDB /* singlecolourfit.cpp */; };
+		A2C631411735FC6400DB1FDB /* singlecolourfit.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C6311E1735FC6400DB1FDB /* singlecolourfit.h */; };
+		A2C631421735FC6400DB1FDB /* singlecolourfit.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C6311E1735FC6400DB1FDB /* singlecolourfit.h */; };
+		A2C631431735FC6400DB1FDB /* squish.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C6311F1735FC6400DB1FDB /* squish.cpp */; };
+		A2C631441735FC6400DB1FDB /* squish.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C6311F1735FC6400DB1FDB /* squish.cpp */; };
+		A2C631451735FC6400DB1FDB /* squish.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631201735FC6400DB1FDB /* squish.h */; };
+		A2C631461735FC6400DB1FDB /* squish.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631201735FC6400DB1FDB /* squish.h */; };
+		A2FC4B6A185965AF00258812 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FC4B69185965AF00258812 /* Vorbis.framework */; };
+		A2FC4B6C185965D300258812 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FC4B6B185965D300258812 /* Ogg.framework */; };
+		A2FC4B6E1859661400258812 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FC4B6D1859661400258812 /* SDL2.framework */; };
+		A2FC4B9D185973CC00258812 /* GraphicsAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FC4B9A185973CC00258812 /* GraphicsAdapter.cpp */; };
+		A2FC4B9E185973CC00258812 /* GraphicsAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FC4B9A185973CC00258812 /* GraphicsAdapter.cpp */; };
+		A2FC4B9F185973CC00258812 /* IndexBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FC4B9B185973CC00258812 /* IndexBuffer.cpp */; };
+		A2FC4BA0185973CC00258812 /* IndexBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FC4B9B185973CC00258812 /* IndexBuffer.cpp */; };
+		A2FC4BA1185973CC00258812 /* ITexture2DPimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FC4B9C185973CC00258812 /* ITexture2DPimpl.cpp */; };
+		A2FC4BA2185973CC00258812 /* ITexture2DPimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FC4B9C185973CC00258812 /* ITexture2DPimpl.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A228BBF01505B54200045911 /* libNxna.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNxna.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A228BBF01505B54200045911 /* libNxna.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libNxna.a; path = libNxna_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A228BBF31505B54200045911 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A28808D11512E54E005D983A /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = SOURCE_ROOT; };
 		A28808D21512E54E005D983A /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = SOURCE_ROOT; };
@@ -322,6 +369,31 @@
 		A2963CB916BE0A2200817CFC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A2963CBD16BE15CB00817CFC /* OggMediaPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OggMediaPlayer.cpp; path = Media/OggMediaPlayer.cpp; sourceTree = SOURCE_ROOT; };
 		A2963CBE16BE15CB00817CFC /* OggMediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OggMediaPlayer.h; path = Media/OggMediaPlayer.h; sourceTree = SOURCE_ROOT; };
+		A2C6310E1735FC6400DB1FDB /* alpha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = alpha.cpp; path = Graphics/libsquish/alpha.cpp; sourceTree = SOURCE_ROOT; };
+		A2C6310F1735FC6400DB1FDB /* alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = alpha.h; path = Graphics/libsquish/alpha.h; sourceTree = SOURCE_ROOT; };
+		A2C631101735FC6400DB1FDB /* clusterfit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = clusterfit.cpp; path = Graphics/libsquish/clusterfit.cpp; sourceTree = SOURCE_ROOT; };
+		A2C631111735FC6400DB1FDB /* clusterfit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = clusterfit.h; path = Graphics/libsquish/clusterfit.h; sourceTree = SOURCE_ROOT; };
+		A2C631121735FC6400DB1FDB /* colourblock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = colourblock.cpp; path = Graphics/libsquish/colourblock.cpp; sourceTree = SOURCE_ROOT; };
+		A2C631131735FC6400DB1FDB /* colourblock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = colourblock.h; path = Graphics/libsquish/colourblock.h; sourceTree = SOURCE_ROOT; };
+		A2C631141735FC6400DB1FDB /* colourfit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = colourfit.cpp; path = Graphics/libsquish/colourfit.cpp; sourceTree = SOURCE_ROOT; };
+		A2C631151735FC6400DB1FDB /* colourfit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = colourfit.h; path = Graphics/libsquish/colourfit.h; sourceTree = SOURCE_ROOT; };
+		A2C631161735FC6400DB1FDB /* colourset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = colourset.cpp; path = Graphics/libsquish/colourset.cpp; sourceTree = SOURCE_ROOT; };
+		A2C631171735FC6400DB1FDB /* colourset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = colourset.h; path = Graphics/libsquish/colourset.h; sourceTree = SOURCE_ROOT; };
+		A2C631181735FC6400DB1FDB /* maths.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = maths.cpp; path = Graphics/libsquish/maths.cpp; sourceTree = SOURCE_ROOT; };
+		A2C631191735FC6400DB1FDB /* maths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = maths.h; path = Graphics/libsquish/maths.h; sourceTree = SOURCE_ROOT; };
+		A2C6311A1735FC6400DB1FDB /* rangefit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rangefit.cpp; path = Graphics/libsquish/rangefit.cpp; sourceTree = SOURCE_ROOT; };
+		A2C6311B1735FC6400DB1FDB /* rangefit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rangefit.h; path = Graphics/libsquish/rangefit.h; sourceTree = SOURCE_ROOT; };
+		A2C6311C1735FC6400DB1FDB /* simd_float.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = simd_float.h; path = Graphics/libsquish/simd_float.h; sourceTree = SOURCE_ROOT; };
+		A2C6311D1735FC6400DB1FDB /* singlecolourfit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = singlecolourfit.cpp; path = Graphics/libsquish/singlecolourfit.cpp; sourceTree = SOURCE_ROOT; };
+		A2C6311E1735FC6400DB1FDB /* singlecolourfit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = singlecolourfit.h; path = Graphics/libsquish/singlecolourfit.h; sourceTree = SOURCE_ROOT; };
+		A2C6311F1735FC6400DB1FDB /* squish.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = squish.cpp; path = Graphics/libsquish/squish.cpp; sourceTree = SOURCE_ROOT; };
+		A2C631201735FC6400DB1FDB /* squish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = squish.h; path = Graphics/libsquish/squish.h; sourceTree = SOURCE_ROOT; };
+		A2FC4B69185965AF00258812 /* Vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Vorbis.framework; sourceTree = "<group>"; };
+		A2FC4B6B185965D300258812 /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ogg.framework; sourceTree = "<group>"; };
+		A2FC4B6D1859661400258812 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDL2.framework; sourceTree = "<group>"; };
+		A2FC4B9A185973CC00258812 /* GraphicsAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicsAdapter.cpp; path = Graphics/GraphicsAdapter.cpp; sourceTree = SOURCE_ROOT; };
+		A2FC4B9B185973CC00258812 /* IndexBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexBuffer.cpp; path = Graphics/IndexBuffer.cpp; sourceTree = SOURCE_ROOT; };
+		A2FC4B9C185973CC00258812 /* ITexture2DPimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ITexture2DPimpl.cpp; path = Graphics/ITexture2DPimpl.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -338,7 +410,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2FC4B6C185965D300258812 /* Ogg.framework in Frameworks */,
 				A2963BBD16ADF3D000817CFC /* Foundation.framework in Frameworks */,
+				A2FC4B6A185965AF00258812 /* Vorbis.framework in Frameworks */,
+				A2FC4B6E1859661400258812 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +423,9 @@
 		A228BBE51505B54200045911 = {
 			isa = PBXGroup;
 			children = (
+				A2FC4B6D1859661400258812 /* SDL2.framework */,
+				A2FC4B6B185965D300258812 /* Ogg.framework */,
+				A2FC4B69185965AF00258812 /* Vorbis.framework */,
 				A2963CB916BE0A2200817CFC /* AVFoundation.framework */,
 				A2963BBC16ADF3D000817CFC /* Foundation.framework */,
 				A228BBF51505B54200045911 /* Nxna */,
@@ -419,6 +497,10 @@
 		A228BC271505B5D000045911 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				A2FC4B9A185973CC00258812 /* GraphicsAdapter.cpp */,
+				A2FC4B9B185973CC00258812 /* IndexBuffer.cpp */,
+				A2FC4B9C185973CC00258812 /* ITexture2DPimpl.cpp */,
+				A2C6310D1735FC2D00DB1FDB /* libsquish */,
 				A2963C5C16AE04AE00817CFC /* SamplerStateCollection.cpp */,
 				A2963C5D16AE04AE00817CFC /* VertexDeclaration.cpp */,
 				A28808FB1512E5A1005D983A /* AlphaTestEffect.h */,
@@ -596,6 +678,32 @@
 			name = SDL;
 			sourceTree = "<group>";
 		};
+		A2C6310D1735FC2D00DB1FDB /* libsquish */ = {
+			isa = PBXGroup;
+			children = (
+				A2C6310E1735FC6400DB1FDB /* alpha.cpp */,
+				A2C6310F1735FC6400DB1FDB /* alpha.h */,
+				A2C631101735FC6400DB1FDB /* clusterfit.cpp */,
+				A2C631111735FC6400DB1FDB /* clusterfit.h */,
+				A2C631121735FC6400DB1FDB /* colourblock.cpp */,
+				A2C631131735FC6400DB1FDB /* colourblock.h */,
+				A2C631141735FC6400DB1FDB /* colourfit.cpp */,
+				A2C631151735FC6400DB1FDB /* colourfit.h */,
+				A2C631161735FC6400DB1FDB /* colourset.cpp */,
+				A2C631171735FC6400DB1FDB /* colourset.h */,
+				A2C631181735FC6400DB1FDB /* maths.cpp */,
+				A2C631191735FC6400DB1FDB /* maths.h */,
+				A2C6311A1735FC6400DB1FDB /* rangefit.cpp */,
+				A2C6311B1735FC6400DB1FDB /* rangefit.h */,
+				A2C6311C1735FC6400DB1FDB /* simd_float.h */,
+				A2C6311D1735FC6400DB1FDB /* singlecolourfit.cpp */,
+				A2C6311E1735FC6400DB1FDB /* singlecolourfit.h */,
+				A2C6311F1735FC6400DB1FDB /* squish.cpp */,
+				A2C631201735FC6400DB1FDB /* squish.h */,
+			);
+			name = libsquish;
+			sourceTree = "<group>";
+		};
 		A2D5B39C150698EA001A6A13 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -686,6 +794,16 @@
 				A2963C7616AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */,
 				A2963CAE16B49D2600817CFC /* GlslSource.h in Headers */,
 				A2963CB316BE02A100817CFC /* IOSMediaPlayer.h in Headers */,
+				A2C631231735FC6400DB1FDB /* alpha.h in Headers */,
+				A2C631271735FC6400DB1FDB /* clusterfit.h in Headers */,
+				A2C6312B1735FC6400DB1FDB /* colourblock.h in Headers */,
+				A2C6312F1735FC6400DB1FDB /* colourfit.h in Headers */,
+				A2C631331735FC6400DB1FDB /* colourset.h in Headers */,
+				A2C631371735FC6400DB1FDB /* maths.h in Headers */,
+				A2C6313B1735FC6400DB1FDB /* rangefit.h in Headers */,
+				A2C6313D1735FC6400DB1FDB /* simd_float.h in Headers */,
+				A2C631411735FC6400DB1FDB /* singlecolourfit.h in Headers */,
+				A2C631451735FC6400DB1FDB /* squish.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,6 +817,16 @@
 				A2963CAF16B49D2600817CFC /* GlslSource.h in Headers */,
 				A2963CB416BE02A100817CFC /* IOSMediaPlayer.h in Headers */,
 				A2963CC016BE15CB00817CFC /* OggMediaPlayer.h in Headers */,
+				A2C631241735FC6400DB1FDB /* alpha.h in Headers */,
+				A2C631281735FC6400DB1FDB /* clusterfit.h in Headers */,
+				A2C6312C1735FC6400DB1FDB /* colourblock.h in Headers */,
+				A2C631301735FC6400DB1FDB /* colourfit.h in Headers */,
+				A2C631341735FC6400DB1FDB /* colourset.h in Headers */,
+				A2C631381735FC6400DB1FDB /* maths.h in Headers */,
+				A2C6313C1735FC6400DB1FDB /* rangefit.h in Headers */,
+				A2C6313E1735FC6400DB1FDB /* simd_float.h in Headers */,
+				A2C631421735FC6400DB1FDB /* singlecolourfit.h in Headers */,
+				A2C631461735FC6400DB1FDB /* squish.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -745,7 +873,7 @@
 		A228BBE71505B54200045911 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = A228BBEA1505B54200045911 /* Build configuration list for PBXProject "Nxna" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -774,6 +902,7 @@
 				A28808E71512E54E005D983A /* Game.cpp in Sources */,
 				A28808E91512E54E005D983A /* IGraphicsDeviceManager.cpp in Sources */,
 				A28808EB1512E54E005D983A /* MathHelper.cpp in Sources */,
+				A2FC4B9D185973CC00258812 /* GraphicsAdapter.cpp in Sources */,
 				A28808ED1512E54E005D983A /* Matrix.cpp in Sources */,
 				A28808F21512E54E005D983A /* Quaternion.cpp in Sources */,
 				A28808F51512E54E005D983A /* Vector2.cpp in Sources */,
@@ -822,6 +951,17 @@
 				A2963C6016AE04AE00817CFC /* VertexDeclaration.cpp in Sources */,
 				A2963C6516AE050F00817CFC /* OggVorbisDecoder.cpp in Sources */,
 				A2963CAC16B49D2600817CFC /* GlslSource.cpp in Sources */,
+				A2FC4B9F185973CC00258812 /* IndexBuffer.cpp in Sources */,
+				A2FC4BA1185973CC00258812 /* ITexture2DPimpl.cpp in Sources */,
+				A2C631211735FC6400DB1FDB /* alpha.cpp in Sources */,
+				A2C631251735FC6400DB1FDB /* clusterfit.cpp in Sources */,
+				A2C631291735FC6400DB1FDB /* colourblock.cpp in Sources */,
+				A2C6312D1735FC6400DB1FDB /* colourfit.cpp in Sources */,
+				A2C631311735FC6400DB1FDB /* colourset.cpp in Sources */,
+				A2C631351735FC6400DB1FDB /* maths.cpp in Sources */,
+				A2C631391735FC6400DB1FDB /* rangefit.cpp in Sources */,
+				A2C6313F1735FC6400DB1FDB /* singlecolourfit.cpp in Sources */,
+				A2C631431735FC6400DB1FDB /* squish.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -845,6 +985,7 @@
 				A2963B7616ADF35F00817CFC /* GamePad.cpp in Sources */,
 				A2963B7816ADF35F00817CFC /* Keyboard.cpp in Sources */,
 				A2963B7B16ADF35F00817CFC /* Mouse.cpp in Sources */,
+				A2FC4B9E185973CC00258812 /* GraphicsAdapter.cpp in Sources */,
 				A2963B7D16ADF35F00817CFC /* TouchPanel.cpp in Sources */,
 				A2963B7F16ADF35F00817CFC /* ContentManager.cpp in Sources */,
 				A2963B8116ADF35F00817CFC /* FileStream.cpp in Sources */,
@@ -860,6 +1001,7 @@
 				A2963B9B16ADF35F00817CFC /* SamplerState.cpp in Sources */,
 				A2963B9D16ADF35F00817CFC /* SpriteBatch.cpp in Sources */,
 				A2963BA016ADF35F00817CFC /* SpriteFont.cpp in Sources */,
+				A2FC4BA0185973CC00258812 /* IndexBuffer.cpp in Sources */,
 				A2963BA216ADF35F00817CFC /* SpriteSheet.cpp in Sources */,
 				A2963BA416ADF35F00817CFC /* Texture2D.cpp in Sources */,
 				A2963BA616ADF35F00817CFC /* VertexBuffer.cpp in Sources */,
@@ -878,8 +1020,18 @@
 				A2963C7116AE3F3A00817CFC /* SDLGame.cpp in Sources */,
 				A2963C7516AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */,
 				A2963CA616AE510F00817CFC /* SdlMain.cpp in Sources */,
+				A2FC4BA2185973CC00258812 /* ITexture2DPimpl.cpp in Sources */,
 				A2963CAD16B49D2600817CFC /* GlslSource.cpp in Sources */,
 				A2963CBF16BE15CB00817CFC /* OggMediaPlayer.cpp in Sources */,
+				A2C631221735FC6400DB1FDB /* alpha.cpp in Sources */,
+				A2C631261735FC6400DB1FDB /* clusterfit.cpp in Sources */,
+				A2C6312A1735FC6400DB1FDB /* colourblock.cpp in Sources */,
+				A2C6312E1735FC6400DB1FDB /* colourfit.cpp in Sources */,
+				A2C631321735FC6400DB1FDB /* colourset.cpp in Sources */,
+				A2C631361735FC6400DB1FDB /* maths.cpp in Sources */,
+				A2C6313A1735FC6400DB1FDB /* rangefit.cpp in Sources */,
+				A2C631401735FC6400DB1FDB /* singlecolourfit.cpp in Sources */,
+				A2C631441735FC6400DB1FDB /* squish.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,7 +1042,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -901,10 +1060,15 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -913,12 +1077,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
@@ -953,8 +1128,11 @@
 		A2963B4B16ADF23600817CFC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/brad/Documents/cnk_fresh/nxna2/src,
+				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				HEADER_SEARCH_PATHS = (
@@ -971,9 +1149,12 @@
 		A2963B4C16ADF23600817CFC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/brad/Documents/cnk_fresh/nxna2/src,
+				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1014,6 +1195,7 @@
 				A2963B4C16ADF23600817CFC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

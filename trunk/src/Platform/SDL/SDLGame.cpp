@@ -1,5 +1,9 @@
 #include "SDLGame.h"
+#if defined NXNA_PLATFORM_APPLE
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 #include "../../Audio/AudioManager.h"
 
 namespace Nxna

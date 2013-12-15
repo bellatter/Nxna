@@ -5,7 +5,7 @@
 
 #ifndef NXNA_DISABLE_OGG
 
-#ifdef NXNA_PLATFORM_APPLE
+#if defined NXNA_PLATFORM_APPLE && __cplusplus < 200103L
 #include <tr1/cstdint>
 #else
 #include <cstdint>
