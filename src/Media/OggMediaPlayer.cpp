@@ -104,8 +104,8 @@ namespace Media
 			
 		// TODO: it's possible for the buffers to not get updated quick enough, which will cause
 		// the source to stop playing. Make it pick up where it left off instead!
-		//if (state != AL_PLAYING)
-		//	throw Exception("zomg");
+		if (state != AL_PLAYING)
+			return;
 
 		while(processed--)
 		{
