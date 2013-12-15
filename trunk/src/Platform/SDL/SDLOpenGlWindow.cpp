@@ -2,7 +2,12 @@
 #include "SDLOpenGlWindow.h"
 #include "../../Graphics/OpenGL/OpenGLDevice.h"
 #include "../../Input/Touch/TouchPanel.h"
+
+#if defined NXNA_PLATFORM_APPLE
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 
 namespace Nxna
 {
