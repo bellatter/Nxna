@@ -17,15 +17,18 @@ typedef unsigned char byte;
 #define NXNA_AUDIOENGINE_OPENAL
 #endif
 
-#if defined NXNA_PLATFORM_IOS
+#if defined NXNA_PLATFORM_APPLE_IOS
 #define NXNA_PLATFORMENGINE_IOS
+#define NXNA_DISABLE_OGG
 #else
 #define NXNA_PLATFORMENGINE_SDL
 #endif
 
 // disable Visual C++ 2010 specific stuff if needed
 #if !defined _MSC_VER || _MSC_VER < 1600
+#if __cplusplus < 200103L
 #define nullptr 0
+#endif
 #define override
 #endif
 

@@ -13,9 +13,9 @@ namespace Platform
 namespace iOS
 {
 	NXNA_ENUM(LeaderboardTimeScope)
-		LeaderboardTimeScope_Today,
-		LeaderboardTimeScope_Week,
-		LeaderboardTimeScope_AllTime
+		Today,
+		Week,
+		AllTime
 	END_NXNA_ENUM(LeaderboardTimeScope)
 	
 	class IOSOpenGlWindow : public Nxna::GraphicsDeviceManager
