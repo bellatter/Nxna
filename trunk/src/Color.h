@@ -28,7 +28,7 @@ struct Color
 	byte B;
 	byte A;
 
-	Color operator *(float s)
+	Color operator *(float s) const
 	{
 		float r = R * s;
 		float g = G * s;
