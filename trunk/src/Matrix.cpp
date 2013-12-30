@@ -4,9 +4,38 @@
 
 namespace Nxna
 {
+	const Matrix Matrix::Identity(
+		1.0f, 0, 0, 0,
+		0, 1.0f, 0, 0,
+		0, 0, 1.0f, 0,
+		0, 0, 0, 1.0f);
+
 	Matrix::Matrix()
 	{
 		memset(C, 0, sizeof(float) * 16);
+	}
+
+	Matrix::Matrix(float m11, float m12, float m13, float m14,
+         float m21, float m22, float m23, float m24, 
+		 float m31, float m32, float m33, float m34,
+         float m41, float m42, float m43, float m44)
+	{
+		M11 = m11;
+		M12 = m12;
+		M13 = m13;
+		M14 = m14;
+		M21 = m21;
+		M22 = m22;
+		M23 = m23;
+		M24 = m24;
+		M31 = m31;
+		M32 = m32;
+		M33 = m33;
+		M34 = m34;
+		M41 = m41;
+		M42 = m42;
+		M43 = m43;
+		M44 = m44;
 	}
 
 	Matrix Matrix::CreateLookAt(const Vector3& cameraPosition, const Vector3& cameraTarget, const Vector3& cameraUpVector)
@@ -78,7 +107,8 @@ namespace Nxna
 	{
 		bool zNegOne = true;
 
-		Matrix m = GetIdentity();
+		Matrix m;
+		GetIdentity(m);
 
         const float s = -1.0f;
         float invWidth = 1.0f / width;
@@ -206,7 +236,7 @@ namespace Nxna
 		float num2 = vector2.LengthSquared();
 		if (num2 < 0.0001f)
 		{
-			vector2 = cameraForwardVector != nullptr ? -*cameraForwardVector : Vector3::GetForward();
+			vector2 = cameraForwardVector != nullptr ? -*cameraForwardVector : Vector3::Forward;
 		}
 		else
 		{
@@ -222,14 +252,14 @@ namespace Nxna
 				Vector3::Dot(rotationAxis, vector, num);
 				if (fabs(num) > 0.9982547f)
 				{
-					num = ((rotationAxis.X * Vector3::GetForward().X) + (rotationAxis.Y * Vector3::GetForward().Y)) + (rotationAxis.Z * Vector3::GetForward().Z);
-					vector = (fabs(num) > 0.9982547f) ? Vector3::GetRight() : Vector3::GetForward();
+					num = ((rotationAxis.X * Vector3::Forward.X) + (rotationAxis.Y * Vector3::Forward.Y)) + (rotationAxis.Z * Vector3::Forward.Z);
+					vector = (fabs(num) > 0.9982547f) ? Vector3::Right : Vector3::Forward;
 				}
 			}
 			else
 			{
-				num = ((rotationAxis.X * Vector3::GetForward().X) + (rotationAxis.Y * Vector3::GetForward().Y)) + (rotationAxis.Z * Vector3::GetForward().Z);
-				vector = (fabs(num) > 0.9982547f) ? Vector3::GetRight() : Vector3::GetForward();
+				num = ((rotationAxis.X * Vector3::Forward.X) + (rotationAxis.Y * Vector3::Forward.Y)) + (rotationAxis.Z * Vector3::Forward.Z);
+				vector = (fabs(num) > 0.9982547f) ? Vector3::Right : Vector3::Forward;
 			}
 			Vector3::Cross(rotationAxis, vector, vector3);
 			vector3.Normalize();

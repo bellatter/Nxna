@@ -180,6 +180,7 @@
     <ClCompile Include="Audio\AudioManager.cpp" />
     <ClCompile Include="Audio\OggVorbis\OggVorbisDecoder.cpp" />
     <ClCompile Include="Audio\SoundEffect.cpp" />
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Content\ContentManager.cpp" />
     <ClCompile Include="Content\FileStream.cpp" />
     <ClCompile Include="Content\XnbReader.cpp" />

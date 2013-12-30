@@ -474,6 +474,7 @@
     </ClCompile>
     <ClCompile Include="Graphics\GraphicsAdapter.cpp" />
     <ClCompile Include="Platform\SDL\SDLDirect3D11Window.cpp" />
+    <ClCompile Include="Color.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\Direct3D11\ShaderSource\AlphaTestEffect.fx" />

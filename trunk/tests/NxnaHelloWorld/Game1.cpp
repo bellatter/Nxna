@@ -41,7 +41,7 @@ void Game1::LoadContent()
     
 	byte pixels[] = { 128, 128, 128, 128 };
 
-	tex = GetGraphicsDevice()->CreateTexture(1, 1, Nxna::Graphics::SurfaceFormat::Color);
+	tex = new Nxna::Graphics::Texture2D(GetGraphicsDevice(), 1, 1, false, Nxna::Graphics::SurfaceFormat::Color);
 	tex->SetData(0, pixels, 4);
 
 	vel.X = 50.0f;
@@ -87,7 +87,7 @@ void Game1::Update(const Nxna::GameTime& time)
 
 void Game1::Draw(const Nxna::GameTime& time)
 {
-	GetGraphicsDevice()->Clear(Nxna::Color::GetCornflowerBlue());
+	GetGraphicsDevice()->Clear(Nxna::Color::CornflowerBlue);
 
 	Nxna::Rectangle r;
 	r.X = pos.X - width * 0.5f;
