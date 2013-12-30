@@ -52,6 +52,7 @@ namespace Graphics
 			Vector2 Origin;
 			float Rotation;
 			float Depth;
+			SpriteEffects Effects;
 		};
 
 		std::vector<Sprite> m_sprites;
@@ -65,6 +66,8 @@ namespace Graphics
 
 	public:
 		SpriteBatch(GraphicsDevice* device);
+
+		GraphicsDevice* GetGraphicsDevice() { return m_device; }
 
 		void Begin();
 		void Begin(SpriteSortMode sortMode, const BlendState* blendState, 
