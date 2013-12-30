@@ -65,24 +65,24 @@ struct Color
 		return c;
 	}
 
-	static Color GetWhite() { return Color(255, 255, 255); }
-	static Color GetBisque() { return Color(255, 228, 196); }
-	static Color GetBlack() { return Color(0, 0, 0); }
-	static Color GetBlue() { return Color(0, 0, 255); }
-	static Color GetBurlyWood() { return Color(222, 184, 135); }
-	static Color GetDarkOrange() { return Color(255, 140, 0); }
-	static Color GetDeepSkyBlue() { return Color(0, 191, 255); }
-	static Color GetDodgerBlue() { return Color(30, 144, 255); }
-	static Color GetFuchsia() { return Color(255, 0, 255); }
-	static Color GetGray() { return Color(128, 128, 128); }
-	static Color GetCornflowerBlue() { return Color(100, 149, 237); }
-	static Color GetGold() { return Color(255, 215, 0); }
-	static Color GetGoldenrod() { return Color(218, 165, 32); }
-	static Color GetIndianRed() { return Color(205, 92, 92); }
-	static Color GetRed() { return Color(255, 0, 0); }
-	static Color GetSaddleBrown() { return Color(139, 69, 19); }
-	static Color GetSandyBrown() { return Color(244, 164, 96); }
-	static Color GetTomato() { return Color(255, 99, 71); }
+	static const Color Bisque;
+	static const Color Black;
+	static const Color Blue;
+	static const Color BurlyWood;
+	static const Color CornflowerBlue;
+	static const Color DarkOrange;
+	static const Color DeepSkyBlue;
+	static const Color DodgerBlue;
+	static const Color Fuchsia;
+	static const Color Gray;
+	static const Color Gold;
+	static const Color Goldenrod;
+	static const Color IndianRed;
+	static const Color Red;
+	static const Color SaddleBrown;
+	static const Color SandyBrown;
+	static const Color Tomato;
+	static const Color White;
 
 	static Color Lerp(const Color& c1, const Color& c2, float amount)
 	{

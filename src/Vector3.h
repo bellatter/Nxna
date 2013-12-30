@@ -104,10 +104,10 @@ namespace Nxna
 			float C[3];
 		};
 
-		static Vector3 GetUp() { return Vector3(0, 1.0f, 0); }
-		static Vector3 GetForward() { return Vector3(0, 0, -1.0f); }
-		static Vector3 GetZero() { return Vector3(0, 0, 0); }
-		static Vector3 GetRight() { return Vector3(1.0f, 0, 0); }
+		static const Vector3 Up;
+		static const Vector3 Forward;
+		static const Vector3 Zero;
+		static const Vector3 Right;
 
 		static void Multiply(const Vector3& v, float scaleFactor, Vector3& result)
 		{

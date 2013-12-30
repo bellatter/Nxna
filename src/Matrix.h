@@ -10,6 +10,10 @@ namespace Nxna
 	struct Matrix
 	{
 		Matrix();
+		Matrix(float m11, float m12, float m13, float m14,
+         float m21, float m22, float m23, float m24, 
+		 float m31, float m32, float m33, float m34,
+         float m41, float m42, float m43, float m44);
 
 		union
 		{
@@ -30,13 +34,7 @@ namespace Nxna
 			return result;
 		}
 
-		static Matrix GetIdentity()
-		{
-			Matrix r;
-			r.M11 = r.M22 = r.M33 = r.M44 = 1.0f;
-		
-			return r;
-		}
+		static const Matrix Identity;
 
 		static void GetIdentity(Matrix& m)
 		{

@@ -54,7 +54,7 @@ namespace OpenGl
 
 		glEnable(GL_BLEND);
 
-		setClearColor(Color::GetCornflowerBlue());
+		setClearColor(Color::CornflowerBlue);
 		setClearDepth(1.0f);
 
 		GlException::ThrowIfError(__FILE__, __LINE__);

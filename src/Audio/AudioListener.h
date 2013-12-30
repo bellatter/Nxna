@@ -18,7 +18,7 @@ namespace Audio
 
 		AudioListener()
 		{
-			m_up = Vector3::GetUp();
+			m_up = Vector3::Up;
 		}
 
 		Vector3 GetPosition() const { return m_position; }

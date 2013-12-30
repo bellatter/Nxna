@@ -50,13 +50,13 @@ namespace Graphics
 	void SpriteBatch::Begin()
 	{
 		Begin(SpriteSortMode::Texture, nullptr, nullptr, 
-			nullptr, nullptr, Nxna::Matrix::GetIdentity());
+			nullptr, nullptr, Nxna::Matrix::Identity);
 	}
 
 	void SpriteBatch::Begin(SpriteSortMode sortMode, const BlendState* blendState, 
 		const DepthStencilState* depthStencilState, const RasterizerState* rasterizerState, Effect* effect)
 	{
-		Begin(sortMode, blendState, depthStencilState, rasterizerState, effect, Matrix::GetIdentity());
+		Begin(sortMode, blendState, depthStencilState, rasterizerState, effect, Matrix::Identity);
 	}
 
 	void SpriteBatch::Begin(SpriteSortMode sortMode, const BlendState* blendState, 
