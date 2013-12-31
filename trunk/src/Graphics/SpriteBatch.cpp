@@ -30,7 +30,7 @@ namespace Graphics
 			VertexElement elements[] = {
 				{ 0, VertexElementFormat::Vector3, VertexElementUsage::Position, 0 },
 				{ sizeof(float) * 3, VertexElementFormat::Vector2, VertexElementUsage::TextureCoordinate, 0},
-				{ sizeof(float) * 5, VertexElementFormat::Vector4, VertexElementUsage::Color, 0}
+				{ sizeof(float) * 5, VertexElementFormat::Color, VertexElementUsage::Color, 0}
 			};
 
 			m_declaration = new VertexDeclaration(elements, 3);
@@ -371,7 +371,7 @@ namespace Graphics
 		int numSprites = m_sprites.size();
 		if (numSprites <= 0) return;
 
-		const int stride = 9;
+		const int stride = 6;
 		const int vertsPerSprite = 4;
 
 		if (m_workingVerts == nullptr)
@@ -537,46 +537,37 @@ namespace Graphics
 			texBRY = tmp;
 		}
 
-        const int stride = 3 + 2 + 4;
+		unsigned int packedColor = s.SpriteColor.GetPackedValue();
+
+        const int stride = 3 + 2 + 1;
         verts[0 * stride + 0] = x + o1 * cosine - o2 * sine;
         verts[0 * stride + 1] = y + o1 * sine + o2 * cosine;
 		verts[0 * stride + 2] = s.Depth;
         verts[0 * stride + 3] = texTLX;
         verts[0 * stride + 4] = texTLY;
-		verts[0 * stride + 5] = r;
-		verts[0 * stride + 6] = g;
-		verts[0 * stride + 7] = b;
-		verts[0 * stride + 8] = a;
+		memcpy(&verts[0 * stride + 5], &packedColor, sizeof(unsigned int));
 
         verts[1 * stride + 0] = x + o3 * cosine - o4 * sine;
         verts[1 * stride + 1] = y + o3 * sine + o4 * cosine;
 		verts[1 * stride + 2] = s.Depth;
         verts[1 * stride + 3] = texBRX;
         verts[1 * stride + 4] = texTLY;
-		verts[1 * stride + 5] = r;
-		verts[1 * stride + 6] = g;
-		verts[1 * stride + 7] = b;
-		verts[1 * stride + 8] = a;
+		memcpy(&verts[1 * stride + 5], &packedColor, sizeof(unsigned int));
 
         verts[2 * stride + 0] = x + o5 * cosine - o6 * sine;
         verts[2 * stride + 1] = y + o5 * sine + o6 * cosine;
 		verts[2 * stride + 2] = s.Depth;
         verts[2 * stride + 3] = texBRX;
         verts[2 * stride + 4] = texBRY;
-		verts[2 * stride + 5] = r;
-		verts[2 * stride + 6] = g;
-		verts[2 * stride + 7] = b;
-		verts[2 * stride + 8] = a;
+		memcpy(&verts[2 * stride + 5], &packedColor, sizeof(unsigned int));
 
         verts[3 * stride + 0] = x + o7 * cosine - o8 * sine;
         verts[3 * stride + 1] = y + o7 * sine + o8 * cosine;
 		verts[3 * stride + 2] = s.Depth;
         verts[3 * stride + 3] = texTLX;
         verts[3 * stride + 4] = texBRY;
-		verts[3 * stride + 5] = r;
-		verts[3 * stride + 6] = g;
-		verts[3 * stride + 7] = b;
-		verts[3 * stride + 8] = a;
+		memcpy(&verts[3 * stride + 5], &packedColor, sizeof(unsigned int));
+
 	}
 
 	void SpriteBatch::createIndexBuffer()
