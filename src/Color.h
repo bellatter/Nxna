@@ -28,6 +28,11 @@ struct Color
 	byte B;
 	byte A;
 
+	unsigned int GetPackedValue() const
+	{
+		return (unsigned int)A << 24 | (unsigned int)B << 16 | (unsigned int)G << 8 | R;
+	}
+
 	Color operator *(float s) const
 	{
 		float r = R * s;
