@@ -23,39 +23,29 @@ namespace Graphics
 {
 namespace Direct3D11
 {
-	HlslBasicEffect::HlslBasicEffect(Direct3D11Device* device)
-		: HlslEffect(device)
+	HlslBasicEffect::HlslBasicEffect(Direct3D11Device* device, HlslEffect* hlslEffect)
+		: Pvt::BasicEffectPimpl(hlslEffect), m_hlslEffect(hlslEffect)
 	{
-		m_finalTransformDirty = true;
-		m_isTextureEnabled = false;
-		m_isVertexColorEnabled = false;
+		m_device = device;
 
-		AddPermutation(BasicEffect_BasicEffectColorTextureVS, sizeof(BasicEffect_BasicEffectColorTextureVS),
+		hlslEffect->AddPermutation(BasicEffect_BasicEffectColorTextureVS, sizeof(BasicEffect_BasicEffectColorTextureVS),
 			BasicEffect_BasicEffectColorTexturePS, sizeof(BasicEffect_BasicEffectColorTexturePS));
-		AddPermutation(BasicEffect_BasicEffectColorVS, sizeof(BasicEffect_BasicEffectColorVS),
+		hlslEffect->AddPermutation(BasicEffect_BasicEffectColorVS, sizeof(BasicEffect_BasicEffectColorVS),
 			BasicEffect_BasicEffectColorPS, sizeof(BasicEffect_BasicEffectColorPS));
-		AddPermutation(BasicEffect_BasicEffectTextureVS, sizeof(BasicEffect_BasicEffectTextureVS),
+		hlslEffect->AddPermutation(BasicEffect_BasicEffectTextureVS, sizeof(BasicEffect_BasicEffectTextureVS),
 			BasicEffect_BasicEffectTexturePS, sizeof(BasicEffect_BasicEffectTexturePS));
-		AddPermutation(BasicEffect_BasicEffectVS, sizeof(BasicEffect_BasicEffectVS),
+		hlslEffect->AddPermutation(BasicEffect_BasicEffectVS, sizeof(BasicEffect_BasicEffectVS),
 			BasicEffect_BasicEffectPS, sizeof(BasicEffect_BasicEffectPS));
 
 		// create the parameters
-		EffectParameter* modelViewProjection = new EffectParameter(this, EffectParameterType::Single, 16, 0, "ModelViewProjection");
-		AddParameter(modelViewProjection);
-
-		EffectParameter* diffuse = new EffectParameter(this, EffectParameterType::Texture2D, 1, 0, "Diffuse");
-		AddParameter(diffuse);
+		hlslEffect->AddParameter(EffectParameterType::Single, 16, 0, "ModelViewProjection");
+		hlslEffect->AddParameter(EffectParameterType::Texture2D, 1, 0, "Diffuse");
 
 		int indices[] = {0, 1};
 		int offsets[] = {0, 0};
-		ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, 16 * sizeof(float), indices, offsets, 1));
+		ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, false, 16 * sizeof(float), indices, offsets, 1));
 		//ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, 16 * sizeof(float), indices, offsets, 1));
-		m_cbuffers.push_back(cbuffer);
-	}
-
-	void HlslBasicEffect::SetTexture(Texture2D* texture)
-	{
-		GetParameter("Diffuse")->SetValue(texture);
+		hlslEffect->GetConstantBuffers().push_back(cbuffer);
 	}
 
 	void HlslBasicEffect::Apply()
@@ -66,16 +56,16 @@ namespace Direct3D11
 		Matrix::Multiply(m_world, m_view, worldView);
 		Matrix::Multiply(worldView, m_projection, worldViewProjection);
 
-		GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
+		m_hlslEffect->GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
 
 		if (m_isVertexColorEnabled && m_isTextureEnabled)
-			static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, 0);
+			m_device->SetCurrentEffect(m_hlslEffect, 0);
 		else if (m_isVertexColorEnabled)
-			static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, 1);
+			m_device->SetCurrentEffect(m_hlslEffect, 1);
 		else if (m_isTextureEnabled)
-			static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, 2);
+			m_device->SetCurrentEffect(m_hlslEffect, 2);
 		else
-			static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, 3);
+			m_device->SetCurrentEffect(m_hlslEffect, 3);
 	}
 }
 }

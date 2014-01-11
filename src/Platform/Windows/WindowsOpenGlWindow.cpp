@@ -53,14 +53,14 @@ namespace Windows
 	{
 	}
 
-	void WindowsOpenGlWindow::SetScreenSize(int width, int height, bool fullscreen)
+	void WindowsOpenGlWindow::SetScreenSize(const Graphics::PresentationParameters& pp)
 	{
 		assert(m_device != nullptr);
 
-		m_window = CreateGameWindow(width, height, fullscreen);
+		m_window = CreateGameWindow(pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
 
-        PreferredBackBufferWidth(width);
-        PreferredBackBufferHeight(height);
+        PreferredBackBufferWidth(pp.BackBufferWidth);
+        PreferredBackBufferHeight(pp.BackBufferHeight);
 
 		// now create the OpenGL context
 		static PIXELFORMATDESCRIPTOR pfd=				// pfd Tells Windows How We Want Things To Be
@@ -118,13 +118,13 @@ namespace Windows
 		SetFocus((HWND)m_window);
 
 		static_cast<Nxna::Graphics::OpenGl::OpenGlDevice*>(m_device)->OnContextCreated();
-		static_cast<Nxna::Graphics::OpenGl::OpenGlDevice*>(m_device)->UpdateScreenSize(PreferredBackBufferWidth(), PreferredBackBufferHeight());
+		static_cast<Nxna::Graphics::OpenGl::OpenGlDevice*>(m_device)->UpdatePresentationParameters(pp);
 
 		m_device->SetViewport(Nxna::Graphics::Viewport(0, 0, PreferredBackBufferWidth(), PreferredBackBufferHeight()));
 
 		// tell the touch panel the display size
-		Input::Touch::TouchPanel::SetDisplayWidth(width);
-		Input::Touch::TouchPanel::SetDisplayHeight(height);
+		Input::Touch::TouchPanel::SetDisplayWidth(pp.BackBufferWidth);
+		Input::Touch::TouchPanel::SetDisplayHeight(pp.BackBufferHeight);
 	}
 
 	

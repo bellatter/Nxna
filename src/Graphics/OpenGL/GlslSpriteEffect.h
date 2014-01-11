@@ -2,6 +2,7 @@
 #define GRAPHICS_GLSLSPRITEEFFECT_H
 
 #include "../SpriteEffect.h"
+#include "../SpriteEffectPimpl.h"
 #include "GlslEffect.h"
 
 // VC++ gives a stupid warning that doesn't
@@ -17,10 +18,13 @@ namespace Graphics
 {
 namespace OpenGl
 {
-	class GlslSpriteEffect : public SpriteEffect, public GlslEffect
+	class GlslSpriteEffect : public Pvt::SpriteEffectPimpl
 	{
+		GlslEffect* m_glslEffect;
+
 	public:
-		GlslSpriteEffect(OpenGlDevice* device);
+		GlslSpriteEffect(OpenGlDevice* device, GlslEffect* glslEffect);
+		virtual ~GlslSpriteEffect() { }
 	};
 }
 }

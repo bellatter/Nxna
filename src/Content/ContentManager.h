@@ -84,7 +84,7 @@ namespace Content
 				return resource;
 			}
 
-			return nullptr;
+			throw ContentException("Don't know how to load this content");
 		}
 
 		void Unload();

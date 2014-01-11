@@ -5,6 +5,7 @@
 #include <string>
 #include "../../NxnaConfig.h"
 #include "../Effect.h"
+#include "../IEffectPimpl.h"
 #include "../VertexDeclaration.h"
 
 NXNA_DISABLE_OVERRIDE_WARNING
@@ -28,7 +29,7 @@ namespace OpenGl
 		Nxna::Graphics::VertexElementUsage Usage;
 	};
 
-	class GlslEffect : virtual public Effect
+	class GlslEffect : public Pvt::IEffectPimpl
 	{
 		friend class OpenGlDevice;
 
@@ -72,6 +73,7 @@ namespace OpenGl
 		std::vector<GlslProgram> m_programs;
 		std::vector<GlslAttribute> m_attributes;
 		std::vector<EffectParameter*> m_parameterList;
+		OpenGlDevice* m_device;
 		
 	protected:
 		std::vector<EffectParameter*> m_textureParams;
@@ -82,7 +84,8 @@ namespace OpenGl
 		static int m_boundProgramIndex;
 
 	public:
-		GlslEffect(OpenGlDevice* device, const char* vertexSource, const char* fragmentSource);
+		GlslEffect(OpenGlDevice* device, Effect* parent, const char* vertexSource, const char* fragmentSource);
+		GlslEffect(OpenGlDevice* device, Effect* parent);
 		virtual ~GlslEffect();
 
 		virtual void Apply() override;
@@ -110,9 +113,6 @@ namespace OpenGl
 
 		const GlslAttribute* GetAttribute(VertexElementUsage usage, int index);
 
-	protected:
-		GlslEffect(OpenGlDevice* device);
-
 		void ProcessSource(const char* vertexSource, const char* fragmentSource, std::string& vertexResult, std::string& fragResult);
 		void CreateProgram(const std::string& vertexSource, const std::string& fragSource, const char* defines[], int numDefines);
 
@@ -121,6 +121,8 @@ namespace OpenGl
 		void ApplyProgram(int programIndex);
 
 		void ApplySamplerStates(SamplerStateCollection* samplerStates);
+
+		std::vector<EffectParameter*>& GetTextureParams() { return m_textureParams; }
 
 	private:
 		int compile(const char* source[], int numSource, bool vertex);

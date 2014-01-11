@@ -5,6 +5,7 @@
 #include <string>
 #include "../../NxnaConfig.h"
 #include "../Effect.h"
+#include "../IEffectPimpl.h"
 #include "../VertexDeclaration.h"
 #include "../ConstantBuffer.h"
 
@@ -18,7 +19,7 @@ namespace Direct3D11
 {
 	class Direct3D11Device;
 
-	class HlslEffect : virtual public Effect
+	class HlslEffect : public Pvt::IEffectPimpl
 	{
 		friend class Direct3D11Device;
 
@@ -58,12 +59,13 @@ namespace Direct3D11
 		static const int MAX_ATTRIB_SIZE = 256;
 		static char m_attribNameBuffer[MAX_ATTRIB_SIZE];
 		static int m_boundProgramIndex;
+		Direct3D11Device* m_device;
 
 	protected:
 		std::vector<ConstantBuffer> m_cbuffers;
 
 	public:
-		HlslEffect(Direct3D11Device* device);
+		HlslEffect(Direct3D11Device* device, Effect* parent);
 		virtual ~HlslEffect();
 
 		void AddPermutation(const byte* vertexBytecode, int vertexBytecodeLength,
@@ -97,15 +99,11 @@ namespace Direct3D11
 
 		void SetConstantBuffers();
 
-	protected:
-
 		void ApplyProgram(int programIndex);
-		void AddParameter(EffectParameter* parameter)
-		{
-			m_parameters.insert(ParamMap::value_type(parameter->Name.c_str(), parameter));
 
-			m_parameterList.push_back(parameter);
-		}
+		EffectParameter* AddParameter(EffectParameterType type, int numElements, void* handle, const char* name);
+
+		std::vector<ConstantBuffer>& GetConstantBuffers() { return m_cbuffers; }
 
 	private:
 		int compile(const std::string& source, const char* defines, bool vertex);

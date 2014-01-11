@@ -8,6 +8,7 @@
 #include "GlslDualTextureEffect.h"
 #include "GlslAlphaTestEffect.h"
 #include "GlTexture2D.h"
+#include "GlRenderTarget2D.h"
 #include "GlVertexBuffer.h"
 #include "GlIndexBuffer.h"
 
@@ -25,6 +26,16 @@ namespace OpenGl
 		m_effect = nullptr;
 		m_caps = new GraphicsDeviceCapabilities();
 	}
+
+#ifndef USING_OPENGLES
+// FIXME: It looks like the next version of GLEW (1.10.1) will fix this. But for now we have to do it ourselves.
+#define GLEWAPIENTRY __stdcall
+
+	void GLEWAPIENTRY errorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, void* param)
+	{
+		printf("OpenGL Error: %s\n", message);
+	}
+#endif
 
 	void OpenGlDevice::OnContextCreated()
 	{
@@ -48,6 +59,20 @@ namespace OpenGl
 		if (GLEW_ARB_texture_non_power_of_two)
 		{
 			m_caps->SupportsFullNonPowerOfTwoTextures = true;
+		}
+
+		if (GLEW_ARB_debug_output)
+		{
+			glDebugMessageCallbackARB(errorCallback, nullptr);
+			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
+
+			GLuint unusedIds;
+			glDebugMessageControlARB(GL_DONT_CARE,
+				GL_DONT_CARE,
+				GL_DONT_CARE,
+				0,
+				&unusedIds,
+				true);
 		}
 
 #endif
@@ -83,10 +108,9 @@ namespace OpenGl
 #endif
 	}
 
-	void OpenGlDevice::UpdateScreenSize(int screenWidth, int screenHeight)
+	void OpenGlDevice::UpdatePresentationParameters(const PresentationParameters& pp)
 	{
-		m_screenWidth = screenWidth;
-		m_screenHeight = screenHeight;
+		m_presentationParameters = pp;
 	}
 
 	CullMode OpenGlDevice::GetRasterizerState()
@@ -169,7 +193,7 @@ namespace OpenGl
 
 		glStencilFunc(convertCompareFunction(state->StencilFunction), state->ReferenceStencil, 0xffffffff);
 
-		glStencilOp(GL_KEEP, convertStencilOperation(state->StencilPass), convertStencilOperation(state->StencilPass));
+		glStencilOp(convertStencilOperation(state->StencilFail), convertStencilOperation(state->StencilDepthBufferFail), convertStencilOperation(state->StencilPass));
 	}
 
 	void OpenGlDevice::SetIndices(const IndexBuffer* indices)
@@ -241,7 +265,7 @@ namespace OpenGl
 
 		// OpenGL stores the bottom-left corner, but XNA
 		// stores the upper-left corner, so we have to convert.
-		int y = m_screenHeight - (viewport.Height + viewport.Y);
+		int y = m_presentationParameters.BackBufferHeight - (viewport.Height + viewport.Y);
 
 		glViewport(viewport.X, y, viewport.Width, viewport.Height);
         
@@ -357,55 +381,21 @@ namespace OpenGl
 		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 
+	void OpenGlDevice::SetRenderTarget(RenderTarget2D* renderTarget)
+	{
+		if (renderTarget == nullptr)
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		}
+		else
+		{
+			GlRenderTarget2D* target = static_cast<GlRenderTarget2D*>(renderTarget->GetPimpl());
+
+			glBindFramebuffer(GL_FRAMEBUFFER, target->GetFBO());
+		}
+	}
+
 	void OpenGlDevice::Present() {}
-
-	BasicEffect* OpenGlDevice::CreateBasicEffect()
-	{
-		try
-		{
-			return new GlslBasicEffect(this);
-		}
-		catch(Exception& ex)
-		{
-			throw Exception("Error while creating Basic Effect: " + ex.GetMessage());
-		}
-	}
-
-	SpriteEffect* OpenGlDevice::CreateSpriteEffect()
-	{
-		try
-		{
-			return new GlslSpriteEffect(this);
-		}
-		catch(Exception& ex)
-		{
-			throw Exception("Error while creating Sprite Effect: " + ex.GetMessage());
-		}
-	}
-
-	DualTextureEffect* OpenGlDevice::CreateDualTextureEffect()
-	{
-		try
-		{
-			return new GlslDualTextureEffect(this);
-		}
-		catch(Exception& ex)
-		{
-			throw Exception("Error while creating Dual Texture Effect: " + ex.GetMessage());
-		}
-	}
-
-	AlphaTestEffect* OpenGlDevice::CreateAlphaTestEffect()
-	{
-		try
-		{
-			return new GlslAlphaTestEffect(this);
-		}
-		catch(Exception& ex)
-		{
-			throw Exception("Error while creating Alpha Test Effect: " + ex.GetMessage());
-		}
-	}
 
 	void OpenGlDevice::GetBackBufferData(void* data)
 	{
@@ -413,7 +403,7 @@ namespace OpenGl
 		glReadBuffer(GL_FRONT);
 #endif
  
-		glReadPixels(0, 0, m_screenWidth, m_screenHeight, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glReadPixels(0, 0, m_presentationParameters.BackBufferWidth, m_presentationParameters.BackBufferHeight, GL_RGB, GL_UNSIGNED_BYTE, data);
 	}
 
 	const char* OpenGlDevice::GetVendor()
@@ -436,6 +426,13 @@ namespace OpenGl
 		return new GlTexture2D(this, width, height, format);
 	}
 
+	Pvt::IRenderTarget2DPimpl* OpenGlDevice::CreateRenderTarget2DPimpl(RenderTarget2D* parentRenderTarget, int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+	{
+		GlTexture2D* glTexture = static_cast<GlTexture2D*>(static_cast<Texture2D*>(parentRenderTarget)->GetPimpl());
+
+		return new GlRenderTarget2D(this, glTexture, width, height, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage);
+	}
+
 	Pvt::IIndexBufferPimpl* OpenGlDevice::CreateIndexBufferPimpl(IndexElementSize size)
 	{
 		return new GlIndexBuffer(size);
@@ -444,6 +441,31 @@ namespace OpenGl
 	Pvt::IVertexBufferPimpl* OpenGlDevice::CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)
 	{
 		return new GlVertexBuffer(dynamic, this, vertexDeclaration, vertexCount, usage);
+	}
+
+	Pvt::IEffectPimpl* OpenGlDevice::CreateEffectPimpl(Effect* parent)
+	{
+		return new GlslEffect(this, parent);
+	}
+
+	Pvt::BasicEffectPimpl* OpenGlDevice::CreateBasicEffectPimpl(BasicEffect* effect, Pvt::IEffectPimpl* pimpl)
+	{
+		return new GlslBasicEffect(this, static_cast<GlslEffect*>(pimpl));
+	}
+
+	Pvt::SpriteEffectPimpl* OpenGlDevice::CreateSpriteEffectPimpl(SpriteEffect* effect, Pvt::IEffectPimpl* pimpl)
+	{
+		return new GlslSpriteEffect(this, static_cast<GlslEffect*>(pimpl));
+	}
+
+	Pvt::DualTextureEffectPimpl* OpenGlDevice::CreateDualTextureEffectPimpl(DualTextureEffect* effect, Pvt::IEffectPimpl* pimpl)
+	{
+		return new GlslDualTextureEffect(this, static_cast<GlslEffect*>(pimpl));
+	}
+
+	Pvt::AlphaTestEffectPimpl* OpenGlDevice::CreateAlphaTestEffectPimpl(AlphaTestEffect* effect, Pvt::IEffectPimpl* pimpl)
+	{
+		return new GlslAlphaTestEffect(this, static_cast<GlslEffect*>(pimpl));
 	}
 
 	void OpenGlDevice::setClearColor(const Color& c)

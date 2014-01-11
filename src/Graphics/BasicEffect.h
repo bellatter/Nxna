@@ -12,23 +12,33 @@ namespace Graphics
 	class GraphicsDevice;
 	class Texture2D;
 
-	class BasicEffect : public virtual Effect
+	namespace Pvt
 	{
+		class BasicEffectPimpl;
+	}
+
+	class BasicEffect : public Effect
+	{
+		Pvt::BasicEffectPimpl* m_bePimpl; 
+
 	public:
 
+		BasicEffect(GraphicsDevice* device);
 		virtual ~BasicEffect() {}
 
-		virtual bool IsTextureEnabled() = 0;
-		virtual void IsTextureEnabled(bool enabled) = 0;
+		bool IsTextureEnabled();
+		void IsTextureEnabled(bool enabled);
 
-		virtual bool IsVertexColorEnabled() = 0;
-		virtual void IsVertexColorEnabled(bool enabled) = 0;
+		bool IsVertexColorEnabled();
+		void IsVertexColorEnabled(bool enabled);
 
-		virtual void SetWorld(const Matrix& matrix) = 0;
-		virtual void SetView(const Matrix& matrix) = 0;
-		virtual void SetProjection(const Matrix& matrix) = 0;
+		void SetWorld(const Matrix& matrix);
+		void SetView(const Matrix& matrix);
+		void SetProjection(const Matrix& matrix);
 
-		virtual void SetTexture(Texture2D* texture) = 0;
+		void SetTexture(Texture2D* texture);
+
+		virtual void Apply() override;
 	};
 }
 }

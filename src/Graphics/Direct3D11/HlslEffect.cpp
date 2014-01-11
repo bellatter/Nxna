@@ -16,7 +16,8 @@ namespace Graphics
 {
 namespace Direct3D11
 {
-	HlslEffect::HlslEffect(Direct3D11Device* device)
+	HlslEffect::HlslEffect(Direct3D11Device* device, Effect* parent)
+		: Pvt::IEffectPimpl(parent)
 	{
 		m_device = device;
 	}
@@ -105,6 +106,17 @@ namespace Direct3D11
 				}
 			}
 		}
+	}
+
+	EffectParameter* HlslEffect::AddParameter(EffectParameterType type, int numElements, void* handle, const char* name)
+	{
+		EffectParameter* parameter = CreateParameter(m_parent, type, numElements, nullptr, name);
+
+		m_parameters.insert(ParamMap::value_type(parameter->Name.c_str(), parameter));
+
+		m_parameterList.push_back(parameter);
+
+		return parameter;
 	}
 }
 }

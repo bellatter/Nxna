@@ -7,10 +7,11 @@ namespace Nxna
 {
 namespace Content
 {
-	XnbReader::XnbReader(Stream* stream, const char* name, ContentManager* contentManager)
+	XnbReader::XnbReader(Stream* stream, const char* name, const char* fullPath, ContentManager* contentManager)
 	{
 		m_stream = stream;
 		m_name = name;
+		m_fullPath = fullPath;
 		m_content = contentManager;
 
 		readHeader();

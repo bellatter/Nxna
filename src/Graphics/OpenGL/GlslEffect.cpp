@@ -17,7 +17,8 @@ namespace OpenGl
 	char GlslEffect::m_attribNameBuffer[];
 	int GlslEffect::m_boundProgramIndex = -1;
 
-	GlslEffect::GlslEffect(OpenGlDevice* device, const char* vertexSource, const char* fragmentSource)
+	GlslEffect::GlslEffect(OpenGlDevice* device, Effect* parent, const char* vertexSource, const char* fragmentSource)
+		: Pvt::IEffectPimpl(parent)
 	{
 		m_device = device;
 
@@ -28,7 +29,8 @@ namespace OpenGl
 		CreateProgram(vertexResult, fragResult, nullptr, 0);
 	}
 
-	GlslEffect::GlslEffect(OpenGlDevice* device)
+	GlslEffect::GlslEffect(OpenGlDevice* device, Effect* parent)
+		: Pvt::IEffectPimpl(parent)
 	{
 		assert(device != nullptr);
 		m_device = device;
@@ -66,7 +68,7 @@ namespace OpenGl
 	{
 		glGetError();
 
-		GlslSource source(vertexSource.c_str(), fragSource.c_str(), static_cast<OpenGlDevice*>(GetGraphicsDevice())->GetGlslVersion());
+		GlslSource source(vertexSource.c_str(), fragSource.c_str(), m_device->GetGlslVersion());
 
 		GlslProgram program;
 		program.Program = source.Build(defines, numDefines);
@@ -79,7 +81,7 @@ namespace OpenGl
 
 	EffectParameter* GlslEffect::AddParameter(EffectParameterType type, int numElements, void* handle, const char* name)
 	{
-		EffectParameter* param = new EffectParameter(this, type, numElements, nullptr, name);
+		EffectParameter* param = CreateParameter(m_parent, type, numElements, nullptr, name);
 
 		m_parameters.insert(ParamMap::value_type(param->Name.c_str(), param));
 
@@ -156,7 +158,7 @@ namespace OpenGl
 	{
 		// bind the effect
 		glUseProgram(m_programs[programIndex].Program);
-		static_cast<OpenGlDevice*>(GetGraphicsDevice())->SetCurrentEffect(this);
+		m_device->SetCurrentEffect(this);
 		m_boundProgramIndex = programIndex;
 
 		// go through the cached values and send them to OpenGL

@@ -13,19 +13,11 @@ namespace OpenGl
 #include "ShaderSource/BasicEffect.vert.inc"
 #include "ShaderSource/BasicEffect.frag.inc"
 
-	GlslBasicEffect::GlslBasicEffect(OpenGlDevice* device)
-		: GlslEffect(device)
+	GlslBasicEffect::GlslBasicEffect(OpenGlDevice* device, GlslEffect* glslEffect)
+		: Pvt::BasicEffectPimpl(glslEffect), m_glslEffect(glslEffect)
 	{
-		m_finalTransformDirty = true;
-		m_isTextureEnabled = false;
-		m_isVertexColorEnabled = false;
-
-		Matrix::GetIdentity(m_world);
-		Matrix::GetIdentity(m_view);
-		Matrix::GetIdentity(m_projection);
-
 		std::string vertexResult, fragResult;
-		ProcessSource(BasicEffect_vert, BasicEffect_frag, vertexResult, fragResult);
+		glslEffect->ProcessSource(BasicEffect_vert, BasicEffect_frag, vertexResult, fragResult);
 
 		char buffer[100];
 		sprintf(buffer, "#version %d\n", device->GetGlslVersion());
@@ -35,15 +27,10 @@ namespace OpenGl
 		const char* color[] = { "#define VERTEXCOLORENABLED\n" };
 		const char* texture[] = { "#define TEXTUREENABLED\n" };
 
-		CreateProgram(vertexResult, fragResult, colorAndTexture, 2);
-		CreateProgram(vertexResult, fragResult, color, 1);
-		CreateProgram(vertexResult, fragResult, texture, 1);
-		CreateProgram(vertexResult, fragResult, nullptr, 0);
-	}
-
-	void GlslBasicEffect::SetTexture(Texture2D* texture)
-	{
-		GetParameter("Diffuse")->SetValue(texture);
+		glslEffect->CreateProgram(vertexResult, fragResult, colorAndTexture, 2);
+		glslEffect->CreateProgram(vertexResult, fragResult, color, 1);
+		glslEffect->CreateProgram(vertexResult, fragResult, texture, 1);
+		glslEffect->CreateProgram(vertexResult, fragResult, nullptr, 0);
 	}
 
 	void GlslBasicEffect::Apply()
@@ -54,17 +41,17 @@ namespace OpenGl
 		Matrix::Multiply(m_world, m_view, worldView);
 		Matrix::Multiply(worldView, m_projection, worldViewProjection);
 
-		GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
+		m_glslEffect->GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
 
 		// figure out which program to use
 		if (m_isVertexColorEnabled && m_isTextureEnabled)
-			ApplyProgram(0);
+			m_glslEffect->ApplyProgram(0);
 		else if (m_isVertexColorEnabled)
-			ApplyProgram(1);
+			m_glslEffect->ApplyProgram(1);
 		else if (m_isTextureEnabled)
-			ApplyProgram(2);
+			m_glslEffect->ApplyProgram(2);
 		else
-			ApplyProgram(3);
+			m_glslEffect->ApplyProgram(3);
 	}
 }
 }

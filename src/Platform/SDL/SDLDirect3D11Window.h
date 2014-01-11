@@ -25,7 +25,7 @@ namespace SDL
 		virtual void ShowWindow() override;
 		virtual void DestroyWindow() override;
 
-		virtual void SetScreenSize(int width, int height, bool fullscreen) override;
+		virtual void SetScreenSize(const Graphics::PresentationParameters& pp) override;
 	};
 }
 }

@@ -11,11 +11,11 @@ sampler DiffuseSampler : register(s0);
 
 cbuffer Parameters : register(b0)
 {
+	row_major float4x4 WorldViewProj;
 	float4 DiffuseColor;
     float4 AlphaTest;
     float3 FogColor;
     float4 FogVector;
-   row_major float4x4 WorldViewProj;
 };
 
 

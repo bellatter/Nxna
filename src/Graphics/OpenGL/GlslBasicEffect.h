@@ -2,6 +2,7 @@
 #define GRAPHICS_OPENGL_GLSLBASICEFFECT_H
 
 #include "../BasicEffect.h"
+#include "../BasicEffectPimpl.h"
 #include "GlslEffect.h"
 
 // VC++ gives a stupid warning that doesn't
@@ -19,43 +20,14 @@ namespace Graphics
 {
 namespace OpenGl
 {
-	class GlslBasicEffect : public GlslEffect, public BasicEffect
+	class GlslBasicEffect : public Pvt::BasicEffectPimpl
 	{
-		Matrix m_world;
-		Matrix m_view;
-		Matrix m_projection;
-		Matrix m_finalTransform;
-		bool m_finalTransformDirty;
-
-		bool m_isTextureEnabled;
-		bool m_isVertexColorEnabled;
+		GlslEffect* m_glslEffect;
 
 	public:
 
-		GlslBasicEffect(OpenGlDevice* device);
-
-		virtual bool IsTextureEnabled() override { return m_isTextureEnabled; }
-		virtual void IsTextureEnabled(bool enabled) override { m_isTextureEnabled = enabled; }
-
-		virtual bool IsVertexColorEnabled() override { return m_isVertexColorEnabled; }
-		virtual void IsVertexColorEnabled(bool enabled) override { m_isVertexColorEnabled = enabled; }
-
-		virtual void SetWorld(const Matrix& matrix) override
-		{
-			m_world = matrix; m_finalTransformDirty = true;
-		};
-
-		virtual void SetView(const Matrix& matrix) override
-		{
-			m_view = matrix; m_finalTransformDirty = true;
-		};
-
-		virtual void SetProjection(const Matrix& matrix) override
-		{
-			m_projection = matrix; m_finalTransformDirty = true;
-		};
-
-		virtual void SetTexture(Texture2D* texture) override;
+		GlslBasicEffect(OpenGlDevice* device, GlslEffect* glslEffect);
+		virtual ~GlslBasicEffect() { }
 
 		virtual void Apply() override;
 	};

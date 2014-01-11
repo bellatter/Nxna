@@ -1,6 +1,6 @@
 #include <cassert>
-#include "../PlatformDefs.h"
-#if defined NXNA_PLATFORM_WIN32
+#include "../../NxnaConfig.h"
+#if !defined NXNA_DISABLE_D3D11
 
 #include "SDLDirect3D11Window.h"
 #include "../../Graphics/Direct3D11/Direct3D11Device.h"
@@ -49,18 +49,18 @@ namespace SDL
 		SDL_Quit();
 	}
 
-	void SDLDirect3D11Window::SetScreenSize(int width, int height, bool fullscreen)
+	void SDLDirect3D11Window::SetScreenSize(const Graphics::PresentationParameters& pp)
 	{
 		assert(m_device != nullptr);
 
         SDL_SetHint( "SDL_HINT_ORIENTATIONS", "LandscapeLeft LandscapeRight" );
 
-        PreferredBackBufferWidth(width);
-		PreferredBackBufferHeight(height);
+        PreferredBackBufferWidth(pp.BackBufferWidth);
+		PreferredBackBufferHeight(pp.BackBufferHeight);
         
         int flags = SDL_WINDOW_SHOWN;
 
-		if (fullscreen)
+		if (pp.IsFullScreen)
 			flags |= SDL_WINDOW_FULLSCREEN;
         
 		m_window = SDL_CreateWindow("CNK", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
@@ -69,6 +69,7 @@ namespace SDL
 		if (m_window == nullptr)
 			throw Exception(SDL_GetError());
         
+		int width, height;
         SDL_GetWindowSize((SDL_Window*)m_window, &width, &height);
         
         PreferredBackBufferWidth(width);
@@ -89,4 +90,4 @@ namespace SDL
 }
 }
 
-#endif // NXNA_PLATFORM_WIN32
+#endif // NXNA_DISABLE_D3D11

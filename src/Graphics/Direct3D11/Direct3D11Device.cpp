@@ -217,7 +217,7 @@ namespace Direct3D11
 
 	DepthStencilState Direct3D11Device::GetDepthStencilState()
 	{
-		return *DepthStencilState::GetDefault();
+		return m_depthState;
 	}
 
 	void Direct3D11Device::SetDepthStencilState(const DepthStencilState* state)
@@ -325,32 +325,15 @@ namespace Direct3D11
 		m_blendStateDirty = true;
 	}
 
+	void Direct3D11Device::SetRenderTarget(RenderTarget2D* renderTarget)
+	{
+		// TODO
+	}
+
 	void Direct3D11Device::Present()
 	{
 		m_swapChain->Present(0, 0);
 	}
-
-	BasicEffect* Direct3D11Device::CreateBasicEffect()
-	{
-		return new HlslBasicEffect(this);
-	}
-
-	SpriteEffect* Direct3D11Device::CreateSpriteEffect() 
-	{
-		return new HlslSpriteEffect(this);
-	}
-
-	DualTextureEffect* Direct3D11Device::CreateDualTextureEffect()
-	{
-		return new HlslDualTextureEffect(this);
-	}
-
-	AlphaTestEffect* Direct3D11Device::CreateAlphaTestEffect()
-	{
-		return new HlslAlphaTestEffect(this);
-	}
-
-	
 
 	void Direct3D11Device::GetBackBufferData(void* data) { }
 
@@ -405,6 +388,12 @@ namespace Direct3D11
 	{
 		return new D3D11Texture2D(this, width, height, format);
 	}
+
+	Pvt::IRenderTarget2DPimpl* Direct3D11Device::CreateRenderTarget2DPimpl(RenderTarget2D* parentRenderTarget, int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+	{
+		return nullptr;
+		//return new D3D11RenderTarget2D(this, width, height, foramt);
+	}
 	
 	Pvt::IIndexBufferPimpl* Direct3D11Device::CreateIndexBufferPimpl(IndexElementSize elementSize)
 	{
@@ -414,6 +403,31 @@ namespace Direct3D11
 	Pvt::IVertexBufferPimpl* Direct3D11Device::CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)
 	{
 		return new D3D11VertexBuffer(dynamic, this, vertexDeclaration, vertexCount, usage);
+	}
+
+	Pvt::IEffectPimpl* Direct3D11Device::CreateEffectPimpl(Effect* parent)
+	{
+		return new HlslEffect(this, parent);
+	}
+
+	Pvt::BasicEffectPimpl* Direct3D11Device::CreateBasicEffectPimpl(BasicEffect* effect, Pvt::IEffectPimpl* pimpl)
+	{
+		return new HlslBasicEffect(this, static_cast<HlslEffect*>(pimpl));
+	}
+
+	Pvt::SpriteEffectPimpl* Direct3D11Device::CreateSpriteEffectPimpl(SpriteEffect* effect, Pvt::IEffectPimpl* pimpl)
+	{
+		return new HlslSpriteEffect(this, static_cast<HlslEffect*>(pimpl));
+	}
+
+	Pvt::DualTextureEffectPimpl* Direct3D11Device::CreateDualTextureEffectPimpl(DualTextureEffect* effect, Pvt::IEffectPimpl* pimpl)
+	{
+		return new HlslDualTextureEffect(this, static_cast<HlslEffect*>(pimpl));
+	}
+
+	Pvt::AlphaTestEffectPimpl* Direct3D11Device::CreateAlphaTestEffectPimpl(AlphaTestEffect* effect, Pvt::IEffectPimpl* pimpl)
+	{
+		return new HlslAlphaTestEffect(this, static_cast<HlslEffect*>(pimpl));
 	}
 
 	void Direct3D11Device::applyDirtyStates()
@@ -468,22 +482,22 @@ namespace Direct3D11
 				depthStencilDesc.StencilWriteMask = 0xFF;
 
 				// Stencil operations if pixel is front-facing.
-				depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-				depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-				depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-				depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+				depthStencilDesc.FrontFace.StencilFailOp = D3D11Utils::ConvertStencilOperation(m_depthState.StencilFail);
+				depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11Utils::ConvertStencilOperation(m_depthState.StencilDepthBufferFail);
+				depthStencilDesc.FrontFace.StencilPassOp = D3D11Utils::ConvertStencilOperation(m_depthState.StencilPass);
+				depthStencilDesc.FrontFace.StencilFunc = D3D11Utils::ConvertComparisonFunc(m_depthState.StencilFunction);
 
 				// Stencil operations if pixel is back-facing.
-				depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-				depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-				depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-				depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+				depthStencilDesc.BackFace.StencilFailOp = depthStencilDesc.FrontFace.StencilFailOp;
+				depthStencilDesc.BackFace.StencilDepthFailOp = depthStencilDesc.FrontFace.StencilDepthFailOp;
+				depthStencilDesc.BackFace.StencilPassOp = depthStencilDesc.FrontFace.StencilPassOp;
+				depthStencilDesc.BackFace.StencilFunc = depthStencilDesc.FrontFace.StencilFunc;
 
 				if (FAILED(m_device->CreateDepthStencilState(&depthStencilDesc, (ID3D11DepthStencilState**)internalHandle)))
 					throw GraphicsException("Unable to create D3D11 depth/stencil state", __FILE__, __LINE__);
 			}
 			
-			m_deviceContext->OMSetDepthStencilState((ID3D11DepthStencilState*)*internalHandle, 1);
+			m_deviceContext->OMSetDepthStencilState((ID3D11DepthStencilState*)*internalHandle, m_depthState.ReferenceStencil);
 
 			m_depthStencilStateDirty = false;
 		}
