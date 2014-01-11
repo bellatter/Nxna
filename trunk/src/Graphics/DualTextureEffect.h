@@ -9,20 +9,30 @@ namespace Nxna
 {
 namespace Graphics
 {
-	class DualTextureEffect : public virtual Effect
+	namespace Pvt
 	{
+		class DualTextureEffectPimpl;
+	}
+
+	class DualTextureEffect : public Effect
+	{
+		Pvt::DualTextureEffectPimpl* m_dtePimpl; 
+
 	public:
+		DualTextureEffect(GraphicsDevice* device);
 		virtual ~DualTextureEffect() {}
 
-		virtual bool IsVertexColorEnabled() = 0;
-		virtual void IsVertexColorEnabled(bool enabled) = 0;
+		bool IsVertexColorEnabled();
+		void IsVertexColorEnabled(bool enabled);
 
-		virtual void SetWorld(const Matrix& matrix) = 0;
-		virtual void SetView(const Matrix& matrix) = 0;
-		virtual void SetProjection(const Matrix& matrix) = 0;
+		void SetWorld(const Matrix& matrix);
+		void SetView(const Matrix& matrix);
+		void SetProjection(const Matrix& matrix);
 
-		virtual void SetTexture(Texture2D* texture) = 0;
-		virtual void SetTexture2(Texture2D* texture) = 0;
+		void SetTexture(Texture2D* texture);
+		void SetTexture2(Texture2D* texture);
+
+		virtual void Apply() override;
 	};
 }
 }

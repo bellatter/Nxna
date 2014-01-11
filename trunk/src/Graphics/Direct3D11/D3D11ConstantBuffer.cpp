@@ -13,11 +13,12 @@ namespace Graphics
 {
 namespace Direct3D11
 {
-	D3D11ConstantBuffer::D3D11ConstantBuffer(Direct3D11Device* device, bool vertex, int sizeInBytes,
+	D3D11ConstantBuffer::D3D11ConstantBuffer(Direct3D11Device* device, bool vertex, bool pixel, int sizeInBytes,
 		int* parameterIndices, int* parameterOffsets, int numParameters)
 	{
 		m_device = device;
 		m_vertex = vertex;
+		m_pixel = pixel;
 
 		D3D11_BUFFER_DESC desc;
 		desc.ByteWidth = sizeInBytes;
@@ -73,7 +74,8 @@ namespace Direct3D11
 
 		if (m_vertex)
 			context->VSSetConstantBuffers(slot, 1, &m_buffer);
-		else
+
+		if (m_pixel)
 			context->PSSetConstantBuffers(slot, 1, &m_buffer);
 	}
 

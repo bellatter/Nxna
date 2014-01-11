@@ -6,6 +6,7 @@ namespace Nxna
 	namespace Graphics
 	{
 		class GraphicsDevice;
+		class PresentationParameters;
 	}
 
 	class IGraphicsDeviceManager
@@ -48,7 +49,7 @@ namespace Nxna
 		// TODO: don't bother with any of the other methods, like ApplyChanges().
 		// Those don't work properly yet. This is the only method currently guaranteed
 		// (more or less) to work, though you can only call it ONCE.
-		virtual void SetScreenSize(int width, int height, bool fullscreen) = 0;
+		virtual void SetScreenSize(const Graphics::PresentationParameters& pp) = 0;
 	};
 }
 

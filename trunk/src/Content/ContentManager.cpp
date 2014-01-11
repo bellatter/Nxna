@@ -74,7 +74,7 @@ namespace Content
 		if (fs == nullptr || fs->IsOpen() == false)
 			throw ContentException(std::string("Unable to open file: ") + fullName);
 
-		return new XnbReader(fs, name, this);
+		return new XnbReader(fs, name, fullName.c_str(), this);
 	}
 }
 }

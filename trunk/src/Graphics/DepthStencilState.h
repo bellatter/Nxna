@@ -53,6 +53,8 @@ namespace Graphics
 			StencilEnable = false;
 			StencilFunction = CompareFunction::Always;
 			StencilPass = StencilOperation::Keep;
+			StencilFail = StencilOperation::Keep;
+			StencilDepthBufferFail = StencilOperation::Keep;
 
 			m_handle = nullptr;
 		}
@@ -65,6 +67,8 @@ namespace Graphics
 		bool StencilEnable;
 		CompareFunction StencilFunction;
 		StencilOperation StencilPass;
+		StencilOperation StencilFail;
+		StencilOperation StencilDepthBufferFail;
 
 		static const DepthStencilState* GetDefault()
 		{

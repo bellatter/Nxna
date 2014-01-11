@@ -9,7 +9,9 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Texture2D.h"
+#include "RenderTarget2D.h"
 #include "SamplerStateCollection.h"
+#include "PresentationParameters.h"
 #include "../Vector3.h"
 #include "../Rectangle.h"
 
@@ -88,6 +90,7 @@ namespace Graphics
 	class VertexBuffer;
 	class IndexBuffer;
 	class Texture2D;
+	class RenderTarget2D;
 	class BasicEffect;
 	class SpriteEffect;
 	class DualTextureEffect;
@@ -99,15 +102,28 @@ namespace Graphics
 	namespace Pvt
 	{
 		class ITexture2DPimpl;
+		class IRenderTarget2DPimpl;
 		class IIndexBufferPimpl;
+
+		class IEffectPimpl;
+		class BasicEffectPimpl;
+		class SpriteEffectPimpl;
+		class DualTextureEffectPimpl;
+		class AlphaTestEffectPimpl;
 	}
 
 	class GraphicsDevice
 	{
 		friend class Texture2D;
+		friend class RenderTarget2D;
 		friend class IndexBuffer;
 		friend class VertexBuffer;
 		friend class DynamicVertexBuffer;
+		friend class Effect;
+		friend class BasicEffect;
+		friend class SpriteEffect;
+		friend class DualTextureEffect;
+		friend class AlphaTestEffect;
 
 	protected:
 		static GraphicsDevice* m_instance;
@@ -116,6 +132,8 @@ namespace Graphics
 
 	public:
 		virtual ~GraphicsDevice();
+
+		virtual PresentationParameters GetPresentationParameters() = 0;
 
 		virtual CullMode GetRasterizerState() = 0;
 		virtual void SetRasterizerState(const RasterizerState* state) = 0;
@@ -139,16 +157,16 @@ namespace Graphics
 		virtual void SetVertexBuffer(const VertexBuffer* vertexBuffer) = 0;
 		virtual void SetBlendState(const BlendState* blendState) = 0;
 
-		virtual void Present() = 0;
+		virtual void SetRenderTarget(RenderTarget2D* renderTarget) = 0;
 
-		virtual BasicEffect* CreateBasicEffect() = 0;
-		virtual SpriteEffect* CreateSpriteEffect() = 0;
-		virtual DualTextureEffect* CreateDualTextureEffect() = 0;
-		virtual AlphaTestEffect* CreateAlphaTestEffect() = 0;
+		virtual void Present() = 0;
 
 		SamplerStateCollection& GetSamplerStates() { return m_samplers; }
 
 		virtual void GetBackBufferData(void* data) = 0;
+
+		// Gets the renderer name. Will be "Direct3D" for Direct3D and "OpenGL" for OpenGL.
+		virtual const char* GetRendererName() = 0;
 
 		GraphicsDeviceCapabilities* GetCaps() { return m_caps; }
 
@@ -163,8 +181,16 @@ namespace Graphics
 		virtual void SetSamplers() = 0;
 
 		virtual Pvt::ITexture2DPimpl* CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format) = 0;
+		virtual Pvt::IRenderTarget2DPimpl* CreateRenderTarget2DPimpl(RenderTarget2D* parentRenderTarget, int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage) = 0;
 		virtual Pvt::IIndexBufferPimpl* CreateIndexBufferPimpl(IndexElementSize elementSize) = 0;
 		virtual Pvt::IVertexBufferPimpl* CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) = 0;
+		
+		virtual Pvt::IEffectPimpl* CreateEffectPimpl(Effect* parent) = 0;
+		virtual Pvt::BasicEffectPimpl* CreateBasicEffectPimpl(BasicEffect* effect, Pvt::IEffectPimpl* pimpl) = 0;
+		virtual Pvt::SpriteEffectPimpl* CreateSpriteEffectPimpl(SpriteEffect* effect, Pvt::IEffectPimpl* pimpl) = 0;
+		virtual Pvt::DualTextureEffectPimpl* CreateDualTextureEffectPimpl(DualTextureEffect* effect, Pvt::IEffectPimpl* pimpl) = 0;
+		virtual Pvt::AlphaTestEffectPimpl* CreateAlphaTestEffectPimpl(AlphaTestEffect* effect, Pvt::IEffectPimpl* pimpl) = 0;
+		
 	};
 
 	class GraphicsException : public Exception

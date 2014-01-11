@@ -1,5 +1,6 @@
 #include <cstdio>
 #include "GlslAlphaTestEffect.h"
+#include "../AlphaTestEffectPimpl.h"
 #include "OpenGLDevice.h"
 
 namespace Nxna
@@ -12,21 +13,11 @@ namespace OpenGl
 #include "ShaderSource/AlphaTestEffect.vert.inc"
 #include "ShaderSource/AlphaTestEffect.frag.inc"
 
-	GlslAlphaTestEffect::GlslAlphaTestEffect(OpenGlDevice* device)
-		: GlslEffect(device)
+	GlslAlphaTestEffect::GlslAlphaTestEffect(OpenGlDevice* device, GlslEffect* glslEffect)
+		: Pvt::AlphaTestEffectPimpl(glslEffect), m_glslEffect(glslEffect)
 	{
-		m_finalTransformDirty = true;
-		m_isVertexColorEnabled = false;
-		m_alpha = 0;
-		m_referenceAlpha = 0;
-		m_compareFunction = CompareFunction::Greater;
-
-		Matrix::GetIdentity(m_world);
-		Matrix::GetIdentity(m_view);
-		Matrix::GetIdentity(m_projection);
-
 		std::string vertexResult, fragResult;
-		ProcessSource(AlphaTestEffect_vert, AlphaTestEffect_frag, vertexResult, fragResult);
+		glslEffect->ProcessSource(AlphaTestEffect_vert, AlphaTestEffect_frag, vertexResult, fragResult);
 
 		char buffer[100];
 		sprintf(buffer, "#version %d\n", device->GetGlslVersion());
@@ -36,15 +27,10 @@ namespace OpenGl
 		const char* color[] = { "#define VERTEXCOLORENABLED\n" };
 		const char* less[] = { "#define LESSGREATER\n" };
 
-		CreateProgram(vertexResult, fragResult, colorAndLess, 2);
-		CreateProgram(vertexResult, fragResult, color, 1);
-		CreateProgram(vertexResult, fragResult, less, 1);
-		CreateProgram(vertexResult, fragResult, nullptr, 0);
-	}
-
-	void GlslAlphaTestEffect::SetTexture(Texture2D* texture)
-	{
-		GetParameter("Diffuse")->SetValue(texture);
+		glslEffect->CreateProgram(vertexResult, fragResult, colorAndLess, 2);
+		glslEffect->CreateProgram(vertexResult, fragResult, color, 1);
+		glslEffect->CreateProgram(vertexResult, fragResult, less, 1);
+		glslEffect->CreateProgram(vertexResult, fragResult, nullptr, 0);
 	}
 
 	void GlslAlphaTestEffect::Apply()
@@ -55,7 +41,7 @@ namespace OpenGl
 		Matrix::Multiply(m_world, m_view, worldView);
 		Matrix::Multiply(worldView, m_projection, worldViewProjection);
 
-		GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
+		m_glslEffect->GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
 
 		// calculate the AlphaTest parameter
 		const float threshold = 0.5f / 255.0f;
@@ -109,24 +95,24 @@ namespace OpenGl
 			alphaTest.W = -1.0f;
 		}
 
-		GetParameter("AlphaTest")->SetValue(alphaTest);
+		m_glslEffect->GetParameter("AlphaTest")->SetValue(alphaTest);
 
 		// figure out which program to use
 		if (m_isVertexColorEnabled)
 		{
 			if (m_compareFunction == CompareFunction::Equal ||
 				m_compareFunction == CompareFunction::NotEqual)
-				ApplyProgram(1);
+				m_glslEffect->ApplyProgram(1);
 			else
-				ApplyProgram(0);
+				m_glslEffect->ApplyProgram(0);
 		}
 		else
 		{
 			if (m_compareFunction == CompareFunction::Equal ||
 				m_compareFunction == CompareFunction::NotEqual)
-				ApplyProgram(3);
+				m_glslEffect->ApplyProgram(3);
 			else
-				ApplyProgram(2);
+				m_glslEffect->ApplyProgram(2);
 		}
 	}
 }

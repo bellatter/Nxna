@@ -43,7 +43,7 @@ namespace Graphics
 
 		if (m_effect == nullptr)
 		{
-			m_effect = device->CreateSpriteEffect();
+			m_effect = new SpriteEffect(device);
 		}
 	}
 
@@ -512,11 +512,6 @@ namespace Graphics
 		float o6 = (1 - adjustedOriginY) * height;
 		float o7 = (0 - adjustedOriginX) * width;
 		float o8 = (1 - adjustedOriginY) * height;
-
-		float r = s.SpriteColor.R / 255.0f;
-		float g = s.SpriteColor.G / 255.0f;
-		float b = s.SpriteColor.B / 255.0f;
-		float a = s.SpriteColor.A / 255.0f;
 
 		float texTLX = s.Source.X * inverseTextureWidth;
 		float texTLY = s.Source.Y * inverseTextureHeight;

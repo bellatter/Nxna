@@ -30,6 +30,7 @@ namespace Nxna
 #include "Graphics/GraphicsAdapter.h"
 #include "Graphics/VertexDeclaration.h"
 #include "Graphics/SpriteBatch.h"
+#include "Graphics/RenderTarget2D.h"
 #include "Graphics/Texture2D.h"
 #include "Graphics/BasicEffect.h"
 #include "Graphics/DualTextureEffect.h"

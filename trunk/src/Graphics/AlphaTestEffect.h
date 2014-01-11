@@ -9,29 +9,39 @@ namespace Nxna
 {
 namespace Graphics
 {
-	class AlphaTestEffect : public virtual Effect
+	namespace Pvt
 	{
+		class AlphaTestEffectPimpl;
+	}
+
+	class AlphaTestEffect : public Effect
+	{
+		Pvt::AlphaTestEffectPimpl* m_atePimpl; 
+
 	public:
 
+		AlphaTestEffect(GraphicsDevice* device);
 		virtual ~AlphaTestEffect() {}
 
-		virtual bool IsVertexColorEnabled() = 0;
-		virtual void IsVertexColorEnabled(bool enabled) = 0;
+		bool IsVertexColorEnabled();
+		void IsVertexColorEnabled(bool enabled);
 
-		virtual void SetWorld(const Matrix& matrix) = 0;
-		virtual void SetView(const Matrix& matrix) = 0;
-		virtual void SetProjection(const Matrix& matrix) = 0;
+		void SetWorld(const Matrix& matrix);
+		void SetView(const Matrix& matrix);
+		void SetProjection(const Matrix& matrix);
 
-		virtual void SetTexture(Texture2D* texture) = 0;
+		void SetTexture(Texture2D* texture);
 
-		virtual void SetReferenceAlpha(float alpha) = 0;
-		virtual float GetReferenceAlpha() = 0;
+		void SetReferenceAlpha(float alpha);
+		float GetReferenceAlpha();
 
-		virtual void SetAlpha(float alpha) = 0;
-		virtual float GetAlpha() = 0;
+		void SetAlpha(float alpha);
+		float GetAlpha();
 
-		virtual void SetAlphaFunction(CompareFunction function) = 0;
-		virtual CompareFunction GetAlphaFunction() = 0;
+		void SetAlphaFunction(CompareFunction function);
+		CompareFunction GetAlphaFunction();
+
+		virtual void Apply() override;
 	};
 }
 }

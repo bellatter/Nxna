@@ -7,8 +7,19 @@ namespace Nxna
 {
 namespace Graphics
 {
-	class SpriteEffect : public virtual Effect
+	namespace Pvt
 	{
+		class SpriteEffectPimpl;
+	}
+
+	class SpriteEffect : public Effect
+	{
+		Pvt::SpriteEffectPimpl* m_sePimpl;
+
+	public:
+
+		SpriteEffect(GraphicsDevice* device);
+		virtual ~SpriteEffect() {}
 	};
 }
 }

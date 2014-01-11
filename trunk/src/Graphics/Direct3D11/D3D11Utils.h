@@ -110,6 +110,32 @@ namespace Direct3D11
 			// we should never get here
 			return D3D11_TEXTURE_ADDRESS_CLAMP;
 		}
+
+		static D3D11_STENCIL_OP ConvertStencilOperation(StencilOperation op)
+		{
+			switch(op)
+			{
+			case StencilOperation::Decrement:
+				return D3D11_STENCIL_OP_DECR;
+			case StencilOperation::DecrementSaturation:
+				return D3D11_STENCIL_OP_DECR_SAT;
+			case StencilOperation::Increment:
+				return D3D11_STENCIL_OP_INCR;
+			case StencilOperation::IncrementSaturation:
+				return D3D11_STENCIL_OP_INCR_SAT;
+			case StencilOperation::Invert:
+				return D3D11_STENCIL_OP_INVERT;
+			case StencilOperation::Keep:
+				return D3D11_STENCIL_OP_KEEP;
+			case StencilOperation::Replace:
+				return D3D11_STENCIL_OP_REPLACE;
+			case StencilOperation::Zero:
+				return D3D11_STENCIL_OP_ZERO;
+			}
+
+			// we should never get here
+			return D3D11_STENCIL_OP_KEEP;
+		}
 	};
 }
 }

@@ -272,11 +272,18 @@
     <ClInclude Include="Graphics\IIndexBufferPimpl.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\IEffectPimpl.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\GraphicsAdapter.h" />
     <ClInclude Include="Platform\SDL\SDLDirect3D11Window.h" />
+    <ClInclude Include="Graphics\PresentationParameters.h" />
+    <ClInclude Include="Graphics\DepthFormat.h" />
+    <ClInclude Include="Graphics\RenderTarget2D.h" />
+    <ClInclude Include="Graphics\IRenderTarget2DPimpl.h" />
+    <ClInclude Include="Graphics\OpenGL\GlRenderTarget2D.h" />
+    <ClInclude Include="Graphics\IEffectPimpl.h" />
+    <ClInclude Include="Graphics\BasicEffectPimpl.h" />
+    <ClInclude Include="Graphics\SpriteEffectPimpl.h" />
+    <ClInclude Include="Graphics\DualTextureEffectPimpl.h" />
+    <ClInclude Include="Graphics\AlphaTestEffectPimpl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -474,7 +481,14 @@
     </ClCompile>
     <ClCompile Include="Graphics\GraphicsAdapter.cpp" />
     <ClCompile Include="Platform\SDL\SDLDirect3D11Window.cpp" />
+    <ClCompile Include="Graphics\RenderTarget2D.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlRenderTarget2D.cpp" />
+    <ClCompile Include="Graphics\BasicEffect.cpp" />
+    <ClCompile Include="Graphics\IEffectPimpl.cpp" />
+    <ClCompile Include="Graphics\DualTextureEffect.cpp" />
+    <ClCompile Include="Graphics\AlphaTestEffect.cpp" />
+    <ClCompile Include="Graphics\SpriteEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\Direct3D11\ShaderSource\AlphaTestEffect.fx" />

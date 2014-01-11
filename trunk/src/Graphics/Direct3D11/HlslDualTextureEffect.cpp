@@ -19,41 +19,28 @@ namespace Graphics
 {
 namespace Direct3D11
 {
-	HlslDualTextureEffect::HlslDualTextureEffect(Direct3D11Device* device)
-		: HlslEffect(device)
+	HlslDualTextureEffect::HlslDualTextureEffect(Direct3D11Device* device, HlslEffect* hlslEffect)
+		: Pvt::DualTextureEffectPimpl(hlslEffect), m_hlslEffect(hlslEffect)
 	{
+		m_device = device;
+
 		m_isVertexColorEnabled = false;
 
-		AddPermutation(DualTextureEffect_DualTextureVS, sizeof(DualTextureEffect_DualTextureVS),
+		hlslEffect->AddPermutation(DualTextureEffect_DualTextureVS, sizeof(DualTextureEffect_DualTextureVS),
 			DualTextureEffect_DualTexturePS, sizeof(DualTextureEffect_DualTexturePS));
-		AddPermutation(DualTextureEffect_DualTextureNoColorVS, sizeof(DualTextureEffect_DualTextureNoColorVS),
+		hlslEffect->AddPermutation(DualTextureEffect_DualTextureNoColorVS, sizeof(DualTextureEffect_DualTextureNoColorVS),
 			DualTextureEffect_DualTextureNoColorPS, sizeof(DualTextureEffect_DualTextureNoColorPS));
 
 		// create the parameters
-		EffectParameter* modelViewProjection = new EffectParameter(this, EffectParameterType::Single, 16, 0, "ModelViewProjection");
-		AddParameter(modelViewProjection);
-
-		EffectParameter* diffuse = new EffectParameter(this, EffectParameterType::Texture2D, 1, 0, "Diffuse");
-		AddParameter(diffuse);
-
-		EffectParameter* diffuse2 = new EffectParameter(this, EffectParameterType::Texture2D, 1, 0, "Diffuse2");
-		AddParameter(diffuse2);
+		hlslEffect->AddParameter(EffectParameterType::Single, 16, 0, "ModelViewProjection");
+		hlslEffect->AddParameter(EffectParameterType::Texture2D, 1, 0, "Diffuse");
+		hlslEffect->AddParameter(EffectParameterType::Texture2D, 1, 0, "Diffuse2");
 
 		int indices[] = {0, 1};
 		int offsets[] = {0, 0};
-		ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, 16 * sizeof(float), indices, offsets, 1));
+		ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, false, 16 * sizeof(float), indices, offsets, 1));
 		//ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, 16 * sizeof(float), indices, offsets, 1));
-		m_cbuffers.push_back(cbuffer);
-	}
-
-	void HlslDualTextureEffect::SetTexture(Texture2D* texture)
-	{
-		GetParameter("Diffuse")->SetValue(texture);
-	}
-
-	void HlslDualTextureEffect::SetTexture2(Texture2D* texture)
-	{
-		GetParameter("Diffuse2")->SetValue(texture);
+		hlslEffect->GetConstantBuffers().push_back(cbuffer);
 	}
 
 	void HlslDualTextureEffect::Apply()
@@ -64,12 +51,12 @@ namespace Direct3D11
 		Matrix::Multiply(m_world, m_view, worldView);
 		Matrix::Multiply(worldView, m_projection, worldViewProjection);
 
-		GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
+		m_hlslEffect->GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
 
 		if (m_isVertexColorEnabled)
-			static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, 0);
+			m_device->SetCurrentEffect(m_hlslEffect, 0);
 		else
-			static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, 1);
+			m_device->SetCurrentEffect(m_hlslEffect, 1);
 	}
 }
 }

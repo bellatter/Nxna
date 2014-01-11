@@ -58,6 +58,8 @@ namespace Direct3D11
 		Direct3D11Device();
 		void OnWindowCreated(void* window, int width, int height);
 
+		virtual PresentationParameters GetPresentationParameters() override { return PresentationParameters(); }
+
 		virtual CullMode GetRasterizerState() override;
 		virtual void SetRasterizerState(const RasterizerState* state) override;
 
@@ -80,14 +82,13 @@ namespace Direct3D11
 		virtual void SetVertexBuffer(const VertexBuffer* vertexBuffer) override;
 		virtual void SetBlendState(const BlendState* blendState) override;
 
+		virtual void SetRenderTarget(RenderTarget2D* renderTarget) override;
+
 		virtual void Present() override;
 
-		virtual BasicEffect* CreateBasicEffect() override;
-		virtual SpriteEffect* CreateSpriteEffect() override;
-		virtual DualTextureEffect* CreateDualTextureEffect() override;
-		virtual AlphaTestEffect* CreateAlphaTestEffect() override;
-
 		virtual void GetBackBufferData(void* data) override;
+
+		virtual const char* GetRendererName() override { return "Direct3D 11"; }
 
 		void* GetDevice() { return m_device; }
 		void* GetDeviceContext() { return m_deviceContext; }
@@ -101,8 +102,14 @@ namespace Direct3D11
 	protected:
 		virtual void SetSamplers() override;
 		virtual Pvt::ITexture2DPimpl* CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format) override;
+		virtual Pvt::IRenderTarget2DPimpl* CreateRenderTarget2DPimpl(RenderTarget2D* parentRenderTarget, int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage) override;
 		virtual Pvt::IIndexBufferPimpl* CreateIndexBufferPimpl(IndexElementSize elementSize) override;
 		virtual Pvt::IVertexBufferPimpl* CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) override;
+		virtual Pvt::IEffectPimpl* CreateEffectPimpl(Effect* parent) override;
+		virtual Pvt::BasicEffectPimpl* CreateBasicEffectPimpl(BasicEffect* effect, Pvt::IEffectPimpl* pimpl) override;
+		virtual Pvt::SpriteEffectPimpl* CreateSpriteEffectPimpl(SpriteEffect* effect, Pvt::IEffectPimpl* pimpl) override;
+		virtual Pvt::DualTextureEffectPimpl* CreateDualTextureEffectPimpl(DualTextureEffect* effect, Pvt::IEffectPimpl* pimpl) override;
+		virtual Pvt::AlphaTestEffectPimpl* CreateAlphaTestEffectPimpl(AlphaTestEffect* effect, Pvt::IEffectPimpl* pimpl) override;
 
 	private:
 		void applyDirtyStates();

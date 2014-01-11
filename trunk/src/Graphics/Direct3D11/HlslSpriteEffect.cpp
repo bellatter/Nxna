@@ -16,24 +16,21 @@ namespace Graphics
 {
 namespace Direct3D11
 {
-	HlslSpriteEffect::HlslSpriteEffect(Direct3D11Device* device)
-		: HlslEffect(device)
+	HlslSpriteEffect::HlslSpriteEffect(Direct3D11Device* device, HlslEffect* hlslEffect)
+		: Pvt::SpriteEffectPimpl(hlslEffect), m_hlslEffect(hlslEffect)
 	{
-		AddPermutation(SpriteEffect_SpriteVertexShader, sizeof(SpriteEffect_SpriteVertexShader),
+		hlslEffect->AddPermutation(SpriteEffect_SpriteVertexShader, sizeof(SpriteEffect_SpriteVertexShader),
 			SpriteEffect_SpritePixelShader, sizeof(SpriteEffect_SpritePixelShader));
 
 		// create the parameters
-		EffectParameter* modelViewProjection = new EffectParameter(this, EffectParameterType::Single, 16, 0, "ModelViewProjection");
-		AddParameter(modelViewProjection);
-
-		EffectParameter* diffuse = new EffectParameter(this, EffectParameterType::Texture2D, 1, 0, "Diffuse");
-		AddParameter(diffuse);
+		hlslEffect->AddParameter(EffectParameterType::Single, 16, 0, "ModelViewProjection");
+		hlslEffect->AddParameter(EffectParameterType::Texture2D, 1, 0, "Diffuse");
 
 		int indices[] = {0, 1};
 		int offsets[] = {0, 0};
-		ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, 16 * sizeof(float), indices, offsets, 1));
+		ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, false, 16 * sizeof(float), indices, offsets, 1));
 		//ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, 16 * sizeof(float), indices, offsets, 1));
-		m_cbuffers.push_back(cbuffer);
+		hlslEffect->GetConstantBuffers().push_back(cbuffer);
 	}
 }
 }

@@ -34,32 +34,36 @@ namespace Graphics
 
 	class GraphicsDevice;
 
+	namespace Pvt
+	{
+		class IEffectPimpl;
+	}
+
 	class Effect
 	{
-		friend class EffectParameter;
-
 	public:
 
-		virtual void Apply() = 0;
+		virtual void Apply();
 
-		virtual EffectParameter* GetParameter(const char* name) = 0;
-		virtual EffectParameter* GetParameter(int index) = 0;
-		virtual int GetNumParameters() = 0;
+		EffectParameter* GetParameter(const char* name);
+		EffectParameter* GetParameter(int index);
+		int GetNumParameters();
 		
 		GraphicsDevice* GetGraphicsDevice() { return m_device; }
 
 	protected:
 
+		Effect(GraphicsDevice* device);
+		Effect(GraphicsDevice* device, Pvt::IEffectPimpl* pimpl);
 		virtual ~Effect() { }
 
 		GraphicsDevice* m_device;
-
-		int* GetRawValue(EffectParameter* parameter);
+		Pvt::IEffectPimpl* m_pimpl;
 	};
 
 	class EffectParameter
 	{
-		friend class Effect;
+		friend class Pvt::IEffectPimpl;
 
 		Effect* m_parent;
 		EffectParameterType m_type;
@@ -68,8 +72,6 @@ namespace Graphics
 
 		int m_value[16];
 		Texture2D* m_textureValue;
-
-	public:
 
 		EffectParameter(Effect* parent, EffectParameterType type, int numElements, void* handle, const char* name)
 		{
@@ -83,6 +85,8 @@ namespace Graphics
 			m_textureValue = nullptr;
 		}
 
+	public:
+
 		std::string Name;
 
 		EffectParameterType GetType() { return m_type; }
@@ -91,6 +95,11 @@ namespace Graphics
 		void SetValue(Texture2D* texture)
 		{
 			m_textureValue = texture;
+		}
+
+		void SetValue(float value)
+		{
+			memcpy(m_value, &value, sizeof(float));
 		}
 
 		void SetValue(const Vector4& value) 
