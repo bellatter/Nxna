@@ -71,6 +71,8 @@ namespace Graphics
 
 		void Begin();
 		void Begin(SpriteSortMode sortMode, const BlendState* blendState, 
+			const DepthStencilState* depthStencilState, const RasterizerState* rasterizerState);
+		void Begin(SpriteSortMode sortMode, const BlendState* blendState, 
 			const DepthStencilState* depthStencilState, const RasterizerState* rasterizerState, Effect* effect);
 		void Begin(SpriteSortMode sortMode, const BlendState* blendState, 
 			const DepthStencilState* depthStencilState, const RasterizerState* rasterizerState, Effect* effect, const Matrix& transform);
@@ -93,6 +95,10 @@ namespace Graphics
 		void DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color);
 		void DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color,
 			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth);
+		void DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color);
+		void DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color,
+			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth); 
+
 
 		void End();
 

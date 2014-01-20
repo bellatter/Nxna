@@ -8,6 +8,7 @@
 #include "IndexBuffer.h"
 #include "VertexDeclaration.h"
 #include "../MathHelper.h"
+#include "../Utils.h"
 
 namespace Nxna
 {
@@ -51,6 +52,12 @@ namespace Graphics
 	{
 		Begin(SpriteSortMode::Texture, nullptr, nullptr, 
 			nullptr, nullptr, Nxna::Matrix::Identity);
+	}
+
+	void SpriteBatch::Begin(SpriteSortMode sortMode, const BlendState* blendState, 
+		const DepthStencilState* depthStencilState, const RasterizerState* rasterizerState)
+	{
+		Begin(sortMode, blendState, depthStencilState, rasterizerState, nullptr, Matrix::Identity);
 	}
 
 	void SpriteBatch::Begin(SpriteSortMode sortMode, const BlendState* blendState, 
@@ -271,6 +278,11 @@ namespace Graphics
 		DrawString(spriteFont, text, position, color, 0, Nxna::Vector2(0, 0), 1.0f, SpriteEffects::None, 0);
 	}
 
+	void SpriteBatch::DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color)
+	{
+		DrawStringUTF8(spriteFont, text, position, color, 0, Nxna::Vector2(0, 0), 1.0f, SpriteEffects::None, 0);
+	}
+
 	void SpriteBatch::DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color,
 		float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth)
 	{
@@ -344,6 +356,44 @@ namespace Graphics
 			cursor.X += (kerning.Y + kerning.Z) * scale;
 
 			ignoreSpacing = false;
+		}
+	}
+
+	void SpriteBatch::DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color,
+		float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth)
+	{
+		Matrix rotationMatrix;
+		Matrix::CreateRotationZ(rotation, rotationMatrix);
+		Matrix translationMatrix;
+		Matrix::CreateTranslation(-origin.X * scale, -origin.Y * scale, 0, translationMatrix);
+		Matrix transform;
+		Matrix::Multiply(translationMatrix, rotationMatrix, transform);
+
+		// TODO: do the sprite effects
+
+		Vector2 cursor(position.X, position.Y);
+
+		int pos = 0;
+		int charsRead;
+		unsigned int c;
+		while ((charsRead = Utils::GetUTF8Character(text, pos, &c)) != 0)
+		{
+			pos += charsRead;
+
+			Rectangle glyph, cropping;
+			Vector3 kerning;
+
+			spriteFont->GetCharacterInfo(c, &glyph, &cropping, &kerning);
+
+			cursor.X += kerning.X * scale;
+
+			Vector2 position = cursor;
+			position.X += cropping.X * scale;
+			position.Y += cropping.Y * scale;
+
+			Draw(spriteFont->m_texture, position, &glyph, color, rotation, Vector2(0,0), scale, effects, layerDepth); 
+
+			cursor.X += (kerning.Y + kerning.Z) * scale;
 		}
 	}
 

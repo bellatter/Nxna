@@ -38,7 +38,7 @@ namespace Graphics
 		int m_numKerning;
 		float* m_kerning;
 
-		std::map<unsigned short, int> m_characters;
+		std::map<unsigned int, int> m_characters;
 
 		int m_lineHeight;
 		float m_spacing;
@@ -55,6 +55,7 @@ namespace Graphics
 
 		Nxna::Vector2 MeasureString(const char* text);
 		Nxna::Vector2 MeasureString(const wchar_t* text);
+		Nxna::Vector2 MeasureStringUTF8(const char* text);
 
 		float GetSpacing() { return m_spacing; }
 		int GetLineSpacing() { return m_lineHeight; }
@@ -63,7 +64,7 @@ namespace Graphics
 
 	protected:
 
-		bool GetCharacterInfo(unsigned short c, Rectangle* glyph, Rectangle* cropping, Vector3* kerning);
+		bool GetCharacterInfo(unsigned int c, Rectangle* glyph, Rectangle* cropping, Vector3* kerning);
 		
 	private:
 		static int convertUTF8Character(const char* string, unsigned short* result);
