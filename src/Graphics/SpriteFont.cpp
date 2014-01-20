@@ -6,6 +6,7 @@
 #include "../Content/XnbReader.h"
 #include "../Rectangle.h"
 #include "../Vector3.h"
+#include "../Utils.h"
 
 namespace Nxna
 {
@@ -104,6 +105,35 @@ namespace Graphics
 		return size;
 	}
 
+	Nxna::Vector2 SpriteFont::MeasureStringUTF8(const char* text)
+	{
+		Nxna::Vector2 size(0, 0);
+
+		int pos = 0;
+		int charsRead;
+		unsigned int c;
+		while ((charsRead = Utils::GetUTF8Character(text, pos, &c)) != 0)
+		{
+			pos += charsRead;
+
+			Rectangle glyph, cropping;
+			Vector3 kerning;
+
+			GetCharacterInfo(c, &glyph, &cropping, &kerning);
+
+			size.X += kerning.X;
+
+			size.X += kerning.Y + kerning.Z;
+
+			if (size.Y < glyph.Height)
+			{
+				size.Y = (float)glyph.Height;
+			}
+		}
+
+		return size;
+	}
+
 	SpriteFont* SpriteFont::LoadFrom(Content::XnbReader* stream)
 	{
 		int typeID = stream->ReadTypeID();
@@ -168,10 +198,10 @@ namespace Graphics
 		return result;
 	}
 
-	bool SpriteFont::GetCharacterInfo(unsigned short c, Rectangle* glyph, Rectangle* cropping, Vector3* kerning)
+	bool SpriteFont::GetCharacterInfo(unsigned int c, Rectangle* glyph, Rectangle* cropping, Vector3* kerning)
 	{
 		// find the character
-		std::map<unsigned short,int>::iterator itr = m_characters.find(c);
+		std::map<unsigned int,int>::iterator itr = m_characters.find(c);
 		if (itr != m_characters.end())
 		{
 			*glyph = m_glyphs[(*itr).second];

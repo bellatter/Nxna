@@ -26,7 +26,7 @@ namespace Nxna
 			return hash;
 		}
 
-		static unsigned int GetUTF8Character(const char* string, int position, int* result)
+		static unsigned int GetUTF8Character(const char* string, int position, unsigned int* result)
 		{
 			unsigned int firstByte = (unsigned char)string[position];
 			int totalBytesToRead;
