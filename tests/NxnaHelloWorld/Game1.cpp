@@ -6,16 +6,7 @@
 
 Game1::Game1()
 {
-#if defined NXNA_PLATFORM_WIN32
-#if defined NXNA_PLATFORM_WIN32_SDL
 	m_graphics = new Nxna::Platform::SDL::SDLOpenGlWindow(this);
-#else
-	m_graphics = new Nxna::Platform::Windows::WindowsOpenGlWindow(this);
-	//m_graphics = new Nxna::Platform::Windows::WindowsDirect3D11Window(this);
-#endif
-#else
-	m_graphics = new Nxna::Platform::SDL::SDLOpenGlWindow(this);
-#endif
 }
 
 Nxna::Vector2 pos;
@@ -27,7 +18,11 @@ const float height = 32;
 
 void Game1::Initialize()
 {
-	m_graphics->SetScreenSize(320, 240, false);
+	Nxna::Graphics::PresentationParameters pp;
+	pp.BackBufferWidth = 320;
+	pp.BackBufferHeight = 240;
+
+	m_graphics->SetScreenSize(pp);
 
 	Game::Initialize();
 }
