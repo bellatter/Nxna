@@ -27,13 +27,15 @@ namespace OpenGl
 		const char* color[] = { "#define VERTEXCOLORENABLED\n" };
 		const char* texture[] = { "#define TEXTUREENABLED\n" };
 
-		glslEffect->CreateProgram(vertexResult, fragResult, colorAndTexture, 2);
-		glslEffect->CreateProgram(vertexResult, fragResult, color, 1);
-		glslEffect->CreateProgram(vertexResult, fragResult, texture, 1);
-		glslEffect->CreateProgram(vertexResult, fragResult, nullptr, 0);
+		glslEffect->CreateProgram("ColorAndTexture", true, vertexResult, fragResult, colorAndTexture, 2);
+		glslEffect->CreateProgram("Color", true, vertexResult, fragResult, color, 1);
+		glslEffect->CreateProgram("Texture", true, vertexResult, fragResult, texture, 1);
+		glslEffect->CreateProgram("Nothing", true, vertexResult, fragResult, nullptr, 0);
+
+		glslEffect->CreateDummyTechnique();
 	}
 
-	void GlslBasicEffect::Apply()
+	void GlslBasicEffect::Apply(int programIndex)
 	{
 		Matrix worldView;
 		Matrix worldViewProjection;
@@ -43,15 +45,7 @@ namespace OpenGl
 
 		m_glslEffect->GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
 
-		// figure out which program to use
-		if (m_isVertexColorEnabled && m_isTextureEnabled)
-			m_glslEffect->ApplyProgram(0);
-		else if (m_isVertexColorEnabled)
-			m_glslEffect->ApplyProgram(1);
-		else if (m_isTextureEnabled)
-			m_glslEffect->ApplyProgram(2);
-		else
-			m_glslEffect->ApplyProgram(3);
+		m_glslEffect->ApplyProgram(programIndex);
 	}
 }
 }

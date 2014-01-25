@@ -26,10 +26,12 @@ namespace Direct3D11
 
 		m_isVertexColorEnabled = false;
 
-		hlslEffect->AddPermutation(DualTextureEffect_DualTextureVS, sizeof(DualTextureEffect_DualTextureVS),
+		hlslEffect->AddPermutation("ColorEnabled", true, DualTextureEffect_DualTextureVS, sizeof(DualTextureEffect_DualTextureVS),
 			DualTextureEffect_DualTexturePS, sizeof(DualTextureEffect_DualTexturePS));
-		hlslEffect->AddPermutation(DualTextureEffect_DualTextureNoColorVS, sizeof(DualTextureEffect_DualTextureNoColorVS),
+		hlslEffect->AddPermutation("NoColor", true, DualTextureEffect_DualTextureNoColorVS, sizeof(DualTextureEffect_DualTextureNoColorVS),
 			DualTextureEffect_DualTextureNoColorPS, sizeof(DualTextureEffect_DualTextureNoColorPS));
+
+		hlslEffect->CreateDummyTechnique();
 
 		// create the parameters
 		hlslEffect->AddParameter(EffectParameterType::Single, 16, 0, "ModelViewProjection");
@@ -43,7 +45,7 @@ namespace Direct3D11
 		hlslEffect->GetConstantBuffers().push_back(cbuffer);
 	}
 
-	void HlslDualTextureEffect::Apply()
+	void HlslDualTextureEffect::Apply(int programIndex)
 	{
 		Matrix worldView;
 		Matrix worldViewProjection;
@@ -53,10 +55,7 @@ namespace Direct3D11
 
 		m_hlslEffect->GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
 
-		if (m_isVertexColorEnabled)
-			m_device->SetCurrentEffect(m_hlslEffect, 0);
-		else
-			m_device->SetCurrentEffect(m_hlslEffect, 1);
+		m_device->SetCurrentEffect(m_hlslEffect, programIndex);
 	}
 }
 }

@@ -18,6 +18,7 @@ namespace Graphics
 {
 	class Texture2D;
 	class EffectParameter;
+	class EffectTechnique;
 
 	NXNA_ENUM(EffectParameterType)
 		Bool,
@@ -39,15 +40,32 @@ namespace Graphics
 		class IEffectPimpl;
 	}
 
+	class EffectTechnique;
+
 	class Effect
 	{
+		friend class EffectTechnique;
+		friend class Pvt::IEffectPimpl;
+
+		std::vector<EffectTechnique*> m_techniques;
+		std::vector<EffectTechnique*> m_hiddenTechniques;
+
+		int m_currentTechniqueIndex;
+	
 	public:
 
-		virtual void Apply();
+		Effect(GraphicsDevice* device, const byte* effectCode, int effectCodeLength);
 
 		EffectParameter* GetParameter(const char* name);
 		EffectParameter* GetParameter(int index);
 		int GetNumParameters();
+
+		EffectTechnique* GetTechnique(const char* name);
+		EffectTechnique* GetTechnique(int index);
+		int GetNumTechniques();
+
+		void SetCurrentTechnique(EffectTechnique* technique);
+		EffectTechnique* GetCurrentTechnique();
 		
 		GraphicsDevice* GetGraphicsDevice() { return m_device; }
 
@@ -55,7 +73,13 @@ namespace Graphics
 
 		Effect(GraphicsDevice* device);
 		Effect(GraphicsDevice* device, Pvt::IEffectPimpl* pimpl);
-		virtual ~Effect() { }
+		virtual ~Effect();
+
+		// called by EffectTechniques when they're applied
+		virtual void OnApply();
+
+		// called by IEffectPimpl
+		EffectTechnique* CreateTechnique(const char* name, bool hidden);
 
 		GraphicsDevice* m_device;
 		Pvt::IEffectPimpl* m_pimpl;
@@ -155,6 +179,29 @@ namespace Graphics
 		Texture2D* GetValueTexture2D() { return m_textureValue; }
 
 		void* GetHandle() { return m_handle; }
+	};
+
+	class EffectTechnique
+	{
+		friend class Effect;
+		friend class Pvt::IEffectPimpl;
+
+		Effect* m_parentEffect;
+		int m_index;
+		bool m_hidden;
+
+		EffectTechnique(Effect* parent, const char* name, int index, bool hidden)
+		{
+			m_parentEffect = parent;
+			Name = name;
+			m_index = index;
+			m_hidden = hidden;
+		}
+
+	public:
+		std::string Name;
+
+		void Apply();
 	};
 }
 }

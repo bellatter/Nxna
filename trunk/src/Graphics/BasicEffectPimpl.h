@@ -55,7 +55,7 @@ namespace Pvt
 			m_pimpl->GetParameter("Diffuse")->SetValue(texture);
 		}
 
-		virtual void Apply() = 0;
+		virtual void Apply(int programIndex) = 0;
 
 	protected:
 		BasicEffectPimpl(IEffectPimpl* pimpl)

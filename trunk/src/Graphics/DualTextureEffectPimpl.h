@@ -58,7 +58,7 @@ namespace Pvt
 			m_pimpl->GetParameter("Diffuse2")->SetValue(texture);
 		}
 
-		virtual void Apply() = 0;
+		virtual void Apply(int programIndex) = 0;
 
 	protected:
 		DualTextureEffectPimpl(IEffectPimpl* pimpl)

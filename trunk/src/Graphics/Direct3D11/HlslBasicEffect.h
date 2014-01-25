@@ -29,7 +29,7 @@ namespace Direct3D11
 		HlslBasicEffect(Direct3D11Device* device, HlslEffect* hlslEffect);
 		virtual ~HlslBasicEffect() { }
 
-		virtual void Apply() override;
+		virtual void Apply(int programIndex) override;
 	};
 }
 }

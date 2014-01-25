@@ -512,7 +512,8 @@ namespace Graphics
 				}
 
 				diffuse->SetValue(m_sprites[i].Texture);
-				effect->Apply();
+
+				effect->GetCurrentTechnique()->Apply();
 
 				lastTexture = m_sprites[i].Texture;
 			}

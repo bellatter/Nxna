@@ -27,13 +27,15 @@ namespace OpenGl
 		const char* color[] = { "#define VERTEXCOLORENABLED\n" };
 		const char* less[] = { "#define LESSGREATER\n" };
 
-		glslEffect->CreateProgram(vertexResult, fragResult, colorAndLess, 2);
-		glslEffect->CreateProgram(vertexResult, fragResult, color, 1);
-		glslEffect->CreateProgram(vertexResult, fragResult, less, 1);
-		glslEffect->CreateProgram(vertexResult, fragResult, nullptr, 0);
+		glslEffect->CreateProgram("ColorLessGreater", true, vertexResult, fragResult, colorAndLess, 2);
+		glslEffect->CreateProgram("Color", true, vertexResult, fragResult, color, 1);
+		glslEffect->CreateProgram("LessGreater", true, vertexResult, fragResult, less, 1);
+		glslEffect->CreateProgram("Equal", true, vertexResult, fragResult, nullptr, 0);
+
+		glslEffect->CreateDummyTechnique();
 	}
 
-	void GlslAlphaTestEffect::Apply()
+	void GlslAlphaTestEffect::Apply(int programIndex)
 	{
 		Matrix worldView;
 		Matrix worldViewProjection;
@@ -97,23 +99,7 @@ namespace OpenGl
 
 		m_glslEffect->GetParameter("AlphaTest")->SetValue(alphaTest);
 
-		// figure out which program to use
-		if (m_isVertexColorEnabled)
-		{
-			if (m_compareFunction == CompareFunction::Equal ||
-				m_compareFunction == CompareFunction::NotEqual)
-				m_glslEffect->ApplyProgram(1);
-			else
-				m_glslEffect->ApplyProgram(0);
-		}
-		else
-		{
-			if (m_compareFunction == CompareFunction::Equal ||
-				m_compareFunction == CompareFunction::NotEqual)
-				m_glslEffect->ApplyProgram(3);
-			else
-				m_glslEffect->ApplyProgram(2);
-		}
+		m_glslEffect->ApplyProgram(programIndex);
 	}
 }
 }

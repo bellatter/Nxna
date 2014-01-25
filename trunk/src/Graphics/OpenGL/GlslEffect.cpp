@@ -25,8 +25,7 @@ namespace OpenGl
 		std::string vertexResult, fragResult;
 		ProcessSource(vertexSource, fragmentSource, vertexResult, fragResult);
 
-
-		CreateProgram(vertexResult, fragResult, nullptr, 0);
+		CreateProgram("default", false, vertexResult, fragResult, nullptr, 0);
 	}
 
 	GlslEffect::GlslEffect(OpenGlDevice* device, Effect* parent)
@@ -64,7 +63,7 @@ namespace OpenGl
 		processSource(fragResult, false);
 	}
 
-	void GlslEffect::CreateProgram(const std::string& vertexSource, const std::string& fragSource, const char* defines[], int numDefines)
+	void GlslEffect::CreateProgram(const char* name, bool hidden, const std::string& vertexSource, const std::string& fragSource, const char* defines[], int numDefines)
 	{
 		glGetError();
 
@@ -77,6 +76,13 @@ namespace OpenGl
 		loadAttributeInfo(program);
 
 		m_programs.push_back(program);
+
+		IEffectPimpl::CreateTechnique(m_parent, name, hidden);
+	}
+
+	void GlslEffect::CreateDummyTechnique()
+	{
+		IEffectPimpl::CreateTechnique(m_parent, "default", false);
 	}
 
 	EffectParameter* GlslEffect::AddParameter(EffectParameterType type, int numElements, void* handle, const char* name)
@@ -144,15 +150,6 @@ namespace OpenGl
 		cache.CachedValueSize = 16;
 		memcpy(&cache.CachedValue, matrix.C, sizeof(float) * 16);
 	}*/
-
-	void GlslEffect::Apply()
-	{
-		// which program do we use?
-		assert(m_programs.empty() == false);
-		assert(m_programs.size() == 1);
-
-		ApplyProgram(0);
-	}
 
 	void GlslEffect::ApplyProgram(int programIndex)
 	{
@@ -254,6 +251,15 @@ namespace OpenGl
 		}
 
 		return nullptr;
+	}
+
+	void GlslEffect::Apply(int techniqueIndex)
+	{
+		// which program do we use?
+		assert(m_programs.empty() == false);
+		assert(m_programs.size() == 1);
+
+		ApplyProgram(techniqueIndex);
 	}
 
 	int GlslEffect::compile(const char* source[], int numSource, bool vertex)

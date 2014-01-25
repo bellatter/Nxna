@@ -21,9 +21,12 @@ namespace Graphics
 	void DualTextureEffect::SetTexture(Texture2D* texture) { m_dtePimpl->SetTexture(texture); }
 	void DualTextureEffect::SetTexture2(Texture2D* texture) { m_dtePimpl->SetTexture2(texture); }
 
-	void DualTextureEffect::Apply()
+	void DualTextureEffect::OnApply()
 	{
-		m_dtePimpl->Apply();
+		if (m_dtePimpl->IsVertexColorEnabled())
+			m_dtePimpl->Apply(0);
+		else
+			m_dtePimpl->Apply(1);
 	}
 }
 }

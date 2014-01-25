@@ -19,7 +19,7 @@ namespace Direct3D11
 	HlslSpriteEffect::HlslSpriteEffect(Direct3D11Device* device, HlslEffect* hlslEffect)
 		: Pvt::SpriteEffectPimpl(hlslEffect), m_hlslEffect(hlslEffect)
 	{
-		hlslEffect->AddPermutation(SpriteEffect_SpriteVertexShader, sizeof(SpriteEffect_SpriteVertexShader),
+		hlslEffect->AddPermutation("default", false, SpriteEffect_SpriteVertexShader, sizeof(SpriteEffect_SpriteVertexShader),
 			SpriteEffect_SpritePixelShader, sizeof(SpriteEffect_SpritePixelShader));
 
 		// create the parameters

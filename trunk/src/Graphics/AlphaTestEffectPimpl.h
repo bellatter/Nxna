@@ -64,7 +64,7 @@ namespace Pvt
 		void SetAlphaFunction(CompareFunction function) { m_compareFunction = function; }
 		CompareFunction GetAlphaFunction() { return m_compareFunction; }
 
-		virtual void Apply() = 0;
+		virtual void Apply(int programIndex) = 0;
 
 	protected:
 		AlphaTestEffectPimpl(IEffectPimpl* pimpl)

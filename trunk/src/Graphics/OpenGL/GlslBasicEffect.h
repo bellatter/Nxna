@@ -29,7 +29,7 @@ namespace OpenGl
 		GlslBasicEffect(OpenGlDevice* device, GlslEffect* glslEffect);
 		virtual ~GlslBasicEffect() { }
 
-		virtual void Apply() override;
+		virtual void Apply(int programIndex) override;
 	};
 }
 }

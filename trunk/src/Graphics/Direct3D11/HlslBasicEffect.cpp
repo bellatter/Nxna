@@ -28,14 +28,16 @@ namespace Direct3D11
 	{
 		m_device = device;
 
-		hlslEffect->AddPermutation(BasicEffect_BasicEffectColorTextureVS, sizeof(BasicEffect_BasicEffectColorTextureVS),
+		hlslEffect->AddPermutation("ColorTexture", true, BasicEffect_BasicEffectColorTextureVS, sizeof(BasicEffect_BasicEffectColorTextureVS),
 			BasicEffect_BasicEffectColorTexturePS, sizeof(BasicEffect_BasicEffectColorTexturePS));
-		hlslEffect->AddPermutation(BasicEffect_BasicEffectColorVS, sizeof(BasicEffect_BasicEffectColorVS),
+		hlslEffect->AddPermutation("Color", true, BasicEffect_BasicEffectColorVS, sizeof(BasicEffect_BasicEffectColorVS),
 			BasicEffect_BasicEffectColorPS, sizeof(BasicEffect_BasicEffectColorPS));
-		hlslEffect->AddPermutation(BasicEffect_BasicEffectTextureVS, sizeof(BasicEffect_BasicEffectTextureVS),
+		hlslEffect->AddPermutation("Texture", true, BasicEffect_BasicEffectTextureVS, sizeof(BasicEffect_BasicEffectTextureVS),
 			BasicEffect_BasicEffectTexturePS, sizeof(BasicEffect_BasicEffectTexturePS));
-		hlslEffect->AddPermutation(BasicEffect_BasicEffectVS, sizeof(BasicEffect_BasicEffectVS),
+		hlslEffect->AddPermutation("Other", true, BasicEffect_BasicEffectVS, sizeof(BasicEffect_BasicEffectVS),
 			BasicEffect_BasicEffectPS, sizeof(BasicEffect_BasicEffectPS));
+
+		hlslEffect->CreateDummyTechnique();
 
 		// create the parameters
 		hlslEffect->AddParameter(EffectParameterType::Single, 16, 0, "ModelViewProjection");
@@ -48,7 +50,7 @@ namespace Direct3D11
 		hlslEffect->GetConstantBuffers().push_back(cbuffer);
 	}
 
-	void HlslBasicEffect::Apply()
+	void HlslBasicEffect::Apply(int programIndex)
 	{
 		Matrix worldView;
 		Matrix worldViewProjection;
@@ -58,14 +60,7 @@ namespace Direct3D11
 
 		m_hlslEffect->GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
 
-		if (m_isVertexColorEnabled && m_isTextureEnabled)
-			m_device->SetCurrentEffect(m_hlslEffect, 0);
-		else if (m_isVertexColorEnabled)
-			m_device->SetCurrentEffect(m_hlslEffect, 1);
-		else if (m_isTextureEnabled)
-			m_device->SetCurrentEffect(m_hlslEffect, 2);
-		else
-			m_device->SetCurrentEffect(m_hlslEffect, 3);
+		m_device->SetCurrentEffect(m_hlslEffect, programIndex);
 	}
 }
 }
