@@ -5,6 +5,8 @@
 #include "GraphicsDevice.h"
 #include "../Matrix.h"
 
+NXNA_DISABLE_OVERRIDE_WARNING
+
 namespace Nxna
 {
 namespace Graphics
@@ -38,9 +40,13 @@ namespace Graphics
 
 		void SetTexture(Texture2D* texture);
 
-		virtual void Apply() override;
+	protected:
+
+		virtual void OnApply() override;
 	};
 }
 }
+
+NXNA_ENABLE_OVERRIDE_WARNING
 
 #endif // GRAPHICS_BASICEFFECT_H

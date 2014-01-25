@@ -22,8 +22,10 @@ namespace OpenGl
 
 		const char* color[] = { "#define VERTEXCOLORENABLED\n" };
 
-		glslEffect->CreateProgram(vertexResult, fragResult, color, 1);
-		glslEffect->CreateProgram(vertexResult, fragResult, nullptr, 0);
+		glslEffect->CreateProgram("ColorEnabled", true, vertexResult, fragResult, color, 1);
+		glslEffect->CreateProgram("ColorDisabled", true, vertexResult, fragResult, nullptr, 0);
+
+		glslEffect->CreateDummyTechnique();
 		
 		// HACK: sometimes OpenGL reports the sampler uniforms in a different
 		// order than they exist in the shader source, which breaks this effect.
@@ -37,7 +39,7 @@ namespace OpenGl
 		}
 	}
 
-	void GlslDualTextureEffect::Apply()
+	void GlslDualTextureEffect::Apply(int programIndex)
 	{
 		Matrix worldView;
 		Matrix worldViewProjection;
@@ -47,10 +49,7 @@ namespace OpenGl
 
 		m_glslEffect->GetParameter("ModelViewProjection")->SetValue(worldViewProjection.C);
 
-		if (m_isVertexColorEnabled)
-			m_glslEffect->ApplyProgram(0);
-		else
-			m_glslEffect->ApplyProgram(1);
+		m_glslEffect->ApplyProgram(programIndex);
 	}
 }
 }

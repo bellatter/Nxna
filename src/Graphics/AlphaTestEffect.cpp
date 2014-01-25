@@ -20,9 +20,12 @@ namespace Graphics
 
 	void AlphaTestEffect::SetTexture(Texture2D* texture) { m_atePimpl->SetTexture(texture); }
 
-	void AlphaTestEffect::Apply()
+	void AlphaTestEffect::OnApply()
 	{
-		m_atePimpl->Apply();
+		if (m_atePimpl->IsVertexColorEnabled())
+			m_atePimpl->Apply(0);
+		else
+			m_atePimpl->Apply(1);
 	}
 }
 }

@@ -21,7 +21,7 @@ namespace OpenGl
 		GlslAlphaTestEffect(OpenGlDevice* device, GlslEffect* glslEffect);
 		virtual ~GlslAlphaTestEffect() { }
 
-		virtual void Apply() override;
+		virtual void Apply(int programIndex) override;
 	};
 }
 }

@@ -37,8 +37,8 @@ namespace Direct3D11
 			unsigned int Hash;
 			byte* VertexBytecode;
 			int VertexBytecodeLength;
-			int* CBuffers;
-			int NumCBuffers;
+			//int* CBuffers;
+			//int NumCBuffers;
 		};
 
 		struct strcmpop
@@ -68,10 +68,9 @@ namespace Direct3D11
 		HlslEffect(Direct3D11Device* device, Effect* parent);
 		virtual ~HlslEffect();
 
-		void AddPermutation(const byte* vertexBytecode, int vertexBytecodeLength,
+		void AddPermutation(const char* name, bool hidden, const byte* vertexBytecode, int vertexBytecodeLength,
 			const byte* pixelBytecode, int pixelBytecodeLength);
-
-		virtual void Apply() override;
+		void CreateDummyTechnique();
 
 		virtual EffectParameter* GetParameter(const char* name) override
 		{
@@ -106,6 +105,8 @@ namespace Direct3D11
 		std::vector<ConstantBuffer>& GetConstantBuffers() { return m_cbuffers; }
 
 	private:
+		virtual void Apply(int techniqueIndex) override;
+
 		int compile(const std::string& source, const char* defines, bool vertex);
 		void processSource(std::string& source, bool vertex);
 		std::string extractAttribInfo(const char* vertexShaderSource);

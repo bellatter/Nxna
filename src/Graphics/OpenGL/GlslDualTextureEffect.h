@@ -28,7 +28,7 @@ namespace OpenGl
 		GlslDualTextureEffect(OpenGlDevice* device, GlslEffect* glslEffect);
 		virtual ~GlslDualTextureEffect() { }
 
-		virtual void Apply() override;
+		virtual void Apply(int programIndex) override;
 	};
 }
 }

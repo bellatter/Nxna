@@ -27,7 +27,7 @@ namespace Direct3D11
 		// TODO: release all the shader permutations
 	}
 
-	void HlslEffect::AddPermutation(const byte* vertexBytecode, int vertexBytecodeLength,
+	void HlslEffect::AddPermutation(const char* name, bool hidden, const byte* vertexBytecode, int vertexBytecodeLength,
 		const byte* pixelBytecode, int pixelBytecodeLength)
 	{
 		ID3D11Device* d3d11Device = static_cast<ID3D11Device*>(static_cast<Direct3D11Device*>(m_device)->GetDevice());
@@ -48,12 +48,13 @@ namespace Direct3D11
 		permutation.VertexBytecodeLength = vertexBytecodeLength;
 
 		m_permutations.push_back(permutation);
+
+		IEffectPimpl::CreateTechnique(m_parent, name, hidden);
 	}
 
-	void HlslEffect::Apply()
+	void HlslEffect::CreateDummyTechnique()
 	{
-		// TODO: determine which program to use
-		static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, 0);
+		IEffectPimpl::CreateTechnique(m_parent, "default", false);
 	}
 
 	unsigned int HlslEffect::GetHash(int program)
@@ -117,6 +118,12 @@ namespace Direct3D11
 		m_parameterList.push_back(parameter);
 
 		return parameter;
+	}
+
+	void HlslEffect::Apply(int techniqueIndex)
+	{
+		// TODO: determine which program to use
+		static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, techniqueIndex);
 	}
 }
 }

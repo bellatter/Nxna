@@ -27,23 +27,25 @@ namespace Direct3D11
 	{
 		m_device = device;
 
-		hlslEffect->AddPermutation(AlphaTestEffect_VSAlphaTestVcNoFog, sizeof(AlphaTestEffect_VSAlphaTestVcNoFog),
+		hlslEffect->AddPermutation("ColorNoFogLTGT", true, AlphaTestEffect_VSAlphaTestVcNoFog, sizeof(AlphaTestEffect_VSAlphaTestVcNoFog),
 			AlphaTestEffect_PSAlphaTestLtGtNoFog , sizeof(AlphaTestEffect_PSAlphaTestLtGtNoFog));
-		hlslEffect->AddPermutation(AlphaTestEffect_VSAlphaTestVcNoFog, sizeof(AlphaTestEffect_VSAlphaTestVcNoFog),
+		hlslEffect->AddPermutation("ColorNoFogEqNe", true, AlphaTestEffect_VSAlphaTestVcNoFog, sizeof(AlphaTestEffect_VSAlphaTestVcNoFog),
 			AlphaTestEffect_PSAlphaTestEqNeNoFog, sizeof(AlphaTestEffect_PSAlphaTestEqNeNoFog));
-		hlslEffect->AddPermutation(AlphaTestEffect_VSAlphaTestNoFog, sizeof(AlphaTestEffect_VSAlphaTestNoFog),
+		hlslEffect->AddPermutation("NoFogLtGt", true, AlphaTestEffect_VSAlphaTestNoFog, sizeof(AlphaTestEffect_VSAlphaTestNoFog),
 			AlphaTestEffect_PSAlphaTestLtGtNoFog , sizeof(AlphaTestEffect_PSAlphaTestLtGtNoFog));
-		hlslEffect->AddPermutation(AlphaTestEffect_VSAlphaTestNoFog, sizeof(AlphaTestEffect_VSAlphaTestNoFog),
+		hlslEffect->AddPermutation("NoFogEqNe", true, AlphaTestEffect_VSAlphaTestNoFog, sizeof(AlphaTestEffect_VSAlphaTestNoFog),
 			AlphaTestEffect_PSAlphaTestEqNeNoFog, sizeof(AlphaTestEffect_PSAlphaTestEqNeNoFog));
 
-		hlslEffect->AddPermutation(AlphaTestEffect_VSAlphaTestVc, sizeof(AlphaTestEffect_VSAlphaTestVc),
+		hlslEffect->AddPermutation("ColorLTGT", true, AlphaTestEffect_VSAlphaTestVc, sizeof(AlphaTestEffect_VSAlphaTestVc),
 			AlphaTestEffect_PSAlphaTestLtGt , sizeof(AlphaTestEffect_PSAlphaTestLtGt));
-		hlslEffect->AddPermutation(AlphaTestEffect_VSAlphaTestVc, sizeof(AlphaTestEffect_VSAlphaTestVc),
+		hlslEffect->AddPermutation("ColorEqNe", true, AlphaTestEffect_VSAlphaTestVc, sizeof(AlphaTestEffect_VSAlphaTestVc),
 			AlphaTestEffect_PSAlphaTestEqNe, sizeof(AlphaTestEffect_PSAlphaTestEqNe));
-		hlslEffect->AddPermutation(AlphaTestEffect_VSAlphaTest, sizeof(AlphaTestEffect_VSAlphaTest),
+		hlslEffect->AddPermutation("LtGt", true, AlphaTestEffect_VSAlphaTest, sizeof(AlphaTestEffect_VSAlphaTest),
 			AlphaTestEffect_PSAlphaTestLtGt, sizeof(AlphaTestEffect_PSAlphaTestLtGt));
-		hlslEffect->AddPermutation(AlphaTestEffect_VSAlphaTest, sizeof(AlphaTestEffect_VSAlphaTest),
+		hlslEffect->AddPermutation("EqNe", true, AlphaTestEffect_VSAlphaTest, sizeof(AlphaTestEffect_VSAlphaTest),
 			AlphaTestEffect_PSAlphaTestEqNe , sizeof(AlphaTestEffect_PSAlphaTestEqNe ));
+
+		hlslEffect->CreateDummyTechnique();
 
 		// create the parameters
 		hlslEffect->AddParameter(EffectParameterType::Single, 16, 0, "ModelViewProjection");
@@ -57,7 +59,7 @@ namespace Direct3D11
 		hlslEffect->GetConstantBuffers().push_back(cbuffer);
 	}
 
-	void HlslAlphaTestEffect::Apply()
+	void HlslAlphaTestEffect::Apply(int programIndex)
 	{
 		Matrix worldView;
 		Matrix worldViewProjection;
@@ -122,23 +124,7 @@ namespace Direct3D11
 
 		m_hlslEffect->GetParameter("AlphaTest")->SetValue(alphaTest);
 
-		// figure out which program to use
-		if (m_isVertexColorEnabled)
-		{
-			if (m_compareFunction == CompareFunction::Equal ||
-				m_compareFunction == CompareFunction::NotEqual)
-				m_device->SetCurrentEffect(m_hlslEffect, 1);
-			else
-				m_device->SetCurrentEffect(m_hlslEffect, 0);
-		}
-		else
-		{
-			if (m_compareFunction == CompareFunction::Equal ||
-				m_compareFunction == CompareFunction::NotEqual)
-				m_device->SetCurrentEffect(m_hlslEffect, 3);
-			else
-				m_device->SetCurrentEffect(m_hlslEffect, 2);
-		}
+		m_device->SetCurrentEffect(m_hlslEffect, programIndex);
 	}
 }
 }

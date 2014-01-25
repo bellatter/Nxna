@@ -31,7 +31,7 @@ namespace Direct3D11
 		HlslAlphaTestEffect(Direct3D11Device* device, HlslEffect* hlslEffect);
 		virtual ~HlslAlphaTestEffect() { }
 
-		virtual void Apply() override;
+		virtual void Apply(int programIndex) override;
 	};
 }
 }

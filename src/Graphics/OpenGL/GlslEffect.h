@@ -88,8 +88,6 @@ namespace OpenGl
 		GlslEffect(OpenGlDevice* device, Effect* parent);
 		virtual ~GlslEffect();
 
-		virtual void Apply() override;
-
 		virtual EffectParameter* GetParameter(const char* name) override
 		{
 			ParamMap::iterator itr = m_parameters.find(name);
@@ -114,7 +112,8 @@ namespace OpenGl
 		const GlslAttribute* GetAttribute(VertexElementUsage usage, int index);
 
 		void ProcessSource(const char* vertexSource, const char* fragmentSource, std::string& vertexResult, std::string& fragResult);
-		void CreateProgram(const std::string& vertexSource, const std::string& fragSource, const char* defines[], int numDefines);
+		void CreateProgram(const char* name, bool hidden, const std::string& vertexSource, const std::string& fragSource, const char* defines[], int numDefines);
+		void CreateDummyTechnique();
 
 		EffectParameter* AddParameter(EffectParameterType type, int numElements, void* handle, const char* name);
 
@@ -123,6 +122,9 @@ namespace OpenGl
 		void ApplySamplerStates(SamplerStateCollection* samplerStates);
 
 		std::vector<EffectParameter*>& GetTextureParams() { return m_textureParams; }
+
+	protected:
+		virtual void Apply(int techniqueIndex) override;
 
 	private:
 		int compile(const char* source[], int numSource, bool vertex);

@@ -23,9 +23,20 @@ namespace Graphics
 
 	void BasicEffect::SetTexture(Texture2D* texture) { m_bePimpl->SetTexture(texture); }
 
-	void BasicEffect::Apply()
+	void BasicEffect::OnApply()
 	{
-		m_bePimpl->Apply();
+		// determine which to apply
+		bool colorEnabled = m_bePimpl->IsVertexColorEnabled();
+		bool textureEnabled = m_bePimpl->IsTextureEnabled();
+
+		if (colorEnabled && textureEnabled)
+			m_bePimpl->Apply(0);
+		else if (colorEnabled)
+			m_bePimpl->Apply(1);
+		else if (textureEnabled)
+			m_bePimpl->Apply(2);
+		else
+			m_bePimpl->Apply(3);
 	}
 }
 }
