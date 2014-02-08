@@ -91,6 +91,7 @@ namespace Graphics
 	class IndexBuffer;
 	class Texture2D;
 	class RenderTarget2D;
+	class Effect;
 	class BasicEffect;
 	class SpriteEffect;
 	class DualTextureEffect;
