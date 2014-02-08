@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7E803E80-802E-4C5E-9A6C-D54BDA7F5563}</ProjectGuid>
+    <RootNamespace>nxna</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\lib\vorbis\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..\lib\SDL_13\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <TreatSpecificWarningsAsErrors>4244;4715;4150;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\lib\OggVorbis\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>libvorbisfile_static.lib;libogg_static.lib;libvorbis_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib\OggVorbis\lib\Win32\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\lib\OggVorbis\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>libvorbisfile_static.lib;libogg_static.lib;libvorbis_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib\OggVorbis\lib\Win32\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Audio\ADPCM\ADPCMDecoder.h" />
+    <ClInclude Include="Audio\AudioEmitter.h" />
+    <ClInclude Include="Audio\AudioListener.h" />
+    <ClInclude Include="Audio\AudioManager.h" />
+    <ClInclude Include="Audio\OggVorbis\OggVorbisDecoder.h" />
+    <ClInclude Include="Audio\SoundEffect.h" />
+    <ClInclude Include="Audio\SoundState.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Content\ContentManager.h" />
+    <ClInclude Include="Content\FileStream.h" />
+    <ClInclude Include="Content\XnbReader.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameTime.h" />
+    <ClInclude Include="Graphics\AlphaTestEffect.h" />
+    <ClInclude Include="Graphics\AlphaTestEffectPimpl.h" />
+    <ClInclude Include="Graphics\BasicEffect.h" />
+    <ClInclude Include="Graphics\BasicEffectPimpl.h" />
+    <ClInclude Include="Graphics\BlendState.h" />
+    <ClInclude Include="Graphics\ConstantBuffer.h" />
+    <ClInclude Include="Graphics\DepthFormat.h" />
+    <ClInclude Include="Graphics\DepthStencilState.h" />
+    <ClInclude Include="Graphics\Direct3D11\D3D11ConstantBuffer.h" />
+    <ClInclude Include="Graphics\Direct3D11\D3D11IndexBuffer.h" />
+    <ClInclude Include="Graphics\Direct3D11\D3D11Texture2D.h" />
+    <ClInclude Include="Graphics\Direct3D11\D3D11Utils.h" />
+    <ClInclude Include="Graphics\Direct3D11\D3D11VertexBuffer.h" />
+    <ClInclude Include="Graphics\Direct3D11\Direct3D11Device.h" />
+    <ClInclude Include="Graphics\Direct3D11\HlslAlphaTestEffect.h" />
+    <ClInclude Include="Graphics\Direct3D11\HlslBasicEffect.h" />
+    <ClInclude Include="Graphics\Direct3D11\HlslDualTextureEffect.h" />
+    <ClInclude Include="Graphics\Direct3D11\HlslEffect.h" />
+    <ClInclude Include="Graphics\Direct3D11\HlslSpriteEffect.h" />
+    <ClInclude Include="Graphics\DualTextureEffect.h" />
+    <ClInclude Include="Graphics\DualTextureEffectPimpl.h" />
+    <ClInclude Include="Graphics\Effect.h" />
+    <ClInclude Include="Graphics\GraphicsAdapter.h" />
+    <ClInclude Include="Graphics\GraphicsDevice.h" />
+    <ClInclude Include="Graphics\GraphicsDeviceCapabilities.h" />
+    <ClInclude Include="Graphics\IContantBufferPmpl.h" />
+    <ClInclude Include="Graphics\IEffectPimpl.h" />
+    <ClInclude Include="Graphics\IIndexBufferPimpl.h" />
+    <ClInclude Include="Graphics\IndexBuffer.h" />
+    <ClInclude Include="Graphics\IRenderTarget2DPimpl.h" />
+    <ClInclude Include="Graphics\ITexture2DPimpl.h" />
+    <ClInclude Include="Graphics\libsquish\squish.h" />
+    <ClInclude Include="Graphics\OpenGL\GlIndexBuffer.h" />
+    <ClInclude Include="Graphics\OpenGL\GlRenderTarget2D.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslAlphaTestEffect.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslBasicEffect.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslDualTextureEffect.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslEffect.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslSource.h" />
+    <ClInclude Include="Graphics\OpenGL\GlslSpriteEffect.h" />
+    <ClInclude Include="Graphics\OpenGL\GlTexture2D.h" />
+    <ClInclude Include="Graphics\OpenGL\GlVertexBuffer.h" />
+    <ClInclude Include="Graphics\OpenGL\OpenGL.h" />
+    <ClInclude Include="Graphics\OpenGL\OpenGLDevice.h" />
+    <ClInclude Include="Graphics\PresentationParameters.h" />
+    <ClInclude Include="Graphics\RasterizerState.h" />
+    <ClInclude Include="Graphics\RenderTarget2D.h" />
+    <ClInclude Include="Graphics\SamplerState.h" />
+    <ClInclude Include="Graphics\SamplerStateCollection.h" />
+    <ClInclude Include="Graphics\SpriteBatch.h" />
+    <ClInclude Include="Graphics\SpriteEffect.h" />
+    <ClInclude Include="Graphics\SpriteEffectPimpl.h" />
+    <ClInclude Include="Graphics\SpriteFont.h" />
+    <ClInclude Include="Graphics\SpriteSheet.h" />
+    <ClInclude Include="Graphics\Texture2D.h" />
+    <ClInclude Include="Graphics\VertexBuffer.h" />
+    <ClInclude Include="Graphics\VertexDeclaration.h" />
+    <ClInclude Include="Graphics\VertexPositionTexture.h" />
+    <ClInclude Include="IGraphicsDeviceManager.h" />
+    <ClInclude Include="Input\Buttons.h" />
+    <ClInclude Include="Input\GamePad.h" />
+    <ClInclude Include="Input\Keyboard.h" />
+    <ClInclude Include="Input\Keys.h" />
+    <ClInclude Include="Input\Mouse.h" />
+    <ClInclude Include="Input\Touch\TouchPanel.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="MathHelper.h" />
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Media\MediaPlayer.h" />
+    <ClInclude Include="Media\OggMediaPlayer.h" />
+    <ClInclude Include="Media\Song.h" />
+    <ClInclude Include="Nxna.h" />
+    <ClInclude Include="NxnaConfig.h" />
+    <ClInclude Include="Platform\iOS\IOSOpenGlWindow.h" />
+    <ClInclude Include="Platform\PlatformDefs.h" />
+    <ClInclude Include="Platform\SDL\SDLDirect3D11Window.h" />
+    <ClInclude Include="Platform\SDL\SDLGame.h" />
+    <ClInclude Include="Platform\SDL\SDLOpenGlWindow.h" />
+    <ClInclude Include="Platform\Windows\WindowsCommon.h" />
+    <ClInclude Include="Platform\Windows\WindowsDirect3D11Window.h" />
+    <ClInclude Include="Platform\Windows\WindowsGame.h" />
+    <ClInclude Include="Platform\Windows\WindowsOpenGlWindow.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Vector4.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Audio\ADPCM\ADPCMDecoder.cpp" />
+    <ClCompile Include="Audio\AudioManager.cpp" />
+    <ClCompile Include="Audio\OggVorbis\OggVorbisDecoder.cpp" />
+    <ClCompile Include="Audio\SoundEffect.cpp" />
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Content\ContentManager.cpp" />
+    <ClCompile Include="Content\FileStream.cpp" />
+    <ClCompile Include="Content\XnbReader.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Graphics\AlphaTestEffect.cpp" />
+    <ClCompile Include="Graphics\BasicEffect.cpp" />
+    <ClCompile Include="Graphics\BlendState.cpp" />
+    <ClCompile Include="Graphics\DepthStencilState.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\D3D11ConstantBuffer.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\D3D11IndexBuffer.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\D3D11Texture2D.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\D3D11VertexBuffer.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\Direct3D11Device.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\HlslAlphaTestEffect.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\HlslBasicEffect.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\HlslDualTextureEffect.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\HlslSpriteEffect.cpp" />
+    <ClCompile Include="Graphics\DualTextureEffect.cpp" />
+    <ClCompile Include="Graphics\GraphicsAdapter.cpp" />
+    <ClCompile Include="Graphics\IEffectPimpl.cpp" />
+    <ClCompile Include="Graphics\IndexBuffer.cpp" />
+    <ClCompile Include="Graphics\ITexture2DPimpl.cpp" />
+    <ClCompile Include="Graphics\libsquish\alpha.cpp" />
+    <ClCompile Include="Graphics\libsquish\clusterfit.cpp" />
+    <ClCompile Include="Graphics\libsquish\colourblock.cpp" />
+    <ClCompile Include="Graphics\libsquish\colourfit.cpp" />
+    <ClCompile Include="Graphics\libsquish\colourset.cpp" />
+    <ClCompile Include="Graphics\libsquish\maths.cpp" />
+    <ClCompile Include="Graphics\libsquish\rangefit.cpp" />
+    <ClCompile Include="Graphics\libsquish\singlecolourfit.cpp" />
+    <ClCompile Include="Graphics\libsquish\squish.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlRenderTarget2D.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslAlphaTestEffect.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslSource.cpp" />
+    <ClCompile Include="Graphics\RasterizerState.cpp" />
+    <ClCompile Include="Graphics\RenderTarget2D.cpp" />
+    <ClCompile Include="Graphics\SamplerState.cpp" />
+    <ClCompile Include="Graphics\SamplerStateCollection.cpp" />
+    <ClCompile Include="Graphics\SpriteEffect.cpp" />
+    <ClCompile Include="Graphics\VertexDeclaration.cpp" />
+    <ClCompile Include="Graphics\VertexPositionTexture.cpp" />
+    <ClCompile Include="IGraphicsDeviceManager.cpp" />
+    <ClCompile Include="Input\GamePad.cpp" />
+    <ClCompile Include="Input\Keyboard.cpp" />
+    <ClCompile Include="Input\Touch\TouchPanel.cpp" />
+    <ClCompile Include="MathHelper.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Media\MediaPlayer.cpp" />
+    <ClCompile Include="Media\OggMediaPlayer.cpp" />
+    <ClCompile Include="Media\Song.cpp" />
+    <ClCompile Include="Platform\iOS\IOSOpenGlWindow.cpp" />
+    <ClCompile Include="Platform\NaClMain.cpp" />
+    <ClCompile Include="Platform\SdlMain.cpp" />
+    <ClCompile Include="Platform\SDL\SDLDirect3D11Window.cpp" />
+    <ClCompile Include="Platform\SDL\SDLGame.cpp" />
+    <ClCompile Include="Platform\SDL\SDLOpenGlWindow.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsCommon.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsDirect3D11Window.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsGame.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsMain.cpp" />
+    <ClCompile Include="Platform\Windows\WindowsOpenGlWindow.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Vector4.cpp" />
+    <ClInclude Include="Exception.h" />
+    <ClCompile Include="Graphics\Effect.cpp" />
+    <ClCompile Include="Graphics\GraphicsDevice.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlIndexBuffer.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslBasicEffect.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslDualTextureEffect.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslEffect.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlslSpriteEffect.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlTexture2D.cpp" />
+    <ClCompile Include="Graphics\OpenGL\GlVertexBuffer.cpp" />
+    <ClCompile Include="Graphics\OpenGL\OpenGlDevice.cpp" />
+    <ClCompile Include="Graphics\SpriteBatch.cpp" />
+    <ClCompile Include="Graphics\SpriteFont.cpp" />
+    <ClCompile Include="Graphics\SpriteSheet.cpp" />
+    <ClCompile Include="Graphics\Texture2D.cpp" />
+    <ClCompile Include="Graphics\VertexBuffer.cpp" />
+    <ClCompile Include="Input\Mouse.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\Direct3D11\ShaderSource\AlphaTestEffect.fx" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Common.fxh" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestEqNe.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestEqNeNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestLtGt.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestLtGtNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTest.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVc.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVcNoFog.inc" />
+    <None Include="Graphics\Direct3D11\ShaderSource\Structures.fx" />
+    <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.frag" />
+    <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.vert" />
+    <None Include="Graphics\OpenGL\ShaderSource\BasicEffect.frag" />
+    <None Include="Graphics\OpenGL\ShaderSource\BasicEffect.vert" />
+    <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.frag" />
+    <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.vert" />
+    <None Include="Graphics\OpenGL\ShaderSource\SpriteEffect.frag" />
+    <None Include="Graphics\OpenGL\ShaderSource\SpriteEffect.vert" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
