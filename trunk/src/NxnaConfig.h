@@ -35,6 +35,7 @@ typedef unsigned char byte;
 // allow typesafe enums
 #if _MSC_VER >= 1700
 #define NXNA_ENUM(e) enum class e {
+#define NXNA_BITWISE_ENUM(e) enum e {
 #define END_NXNA_ENUM(e) };
 #else
 #define NXNA_CLASS_ENUMS_NOT_SUPPORTED 1
@@ -59,6 +60,7 @@ public:
 };
 
 #define NXNA_ENUM(e) struct e##_def { enum type {
+#define NXNA_BITWISE_ENUM(e) struct e##_def { enum type {
 #define END_NXNA_ENUM(e) }; }; typedef safe_enum<e##_def> e;
 #endif
 
