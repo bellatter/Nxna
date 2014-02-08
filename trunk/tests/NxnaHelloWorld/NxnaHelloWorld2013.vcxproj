@@ -40,11 +40,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../../src;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\lib\OpenAL\libs\Win32\;..\..\lib\SDL_13\VisualC\SDL\Win32\Debug\;..\..\lib\SDL_13\VisualC\SDLMain\Win32\Debug\;..\..\lib\Glew\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\lib\OpenAL\libs\Win32\;..\..\lib\Glew\lib;..\..\lib\SDL2\Windows\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\lib\SDL_13\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\lib\SDL_13\VisualC\SDL\Win32\Release\;..\lib\SDL_13\VisualC\SDLMain\Win32\Release\;..\lib\Glew\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>../../src;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\lib\OpenAL\libs\Win32\;..\..\lib\Glew\lib;..\..\lib\SDL2\Windows\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -68,7 +68,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>SDL.lib;SDLmain.lib;glew32.lib;OpenGl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;OpenGl32.lib;OpenAL32.lib;dxgi.lib;d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -37,10 +37,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\lib\vorbis\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\lib\vorbis\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;..\lib\SDL2\Windows\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\lib\SDL_13\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\lib\vorbis\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;..\lib\SDL2\Windows\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
