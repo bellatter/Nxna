@@ -28,8 +28,13 @@ namespace OpenGl
 	}
 
 #ifndef USING_OPENGLES
+	
+#if defined NXNA_PLATFORM_WIN32
 // FIXME: It looks like the next version of GLEW (1.10.1) will fix this. But for now we have to do it ourselves.
 #define GLEWAPIENTRY __stdcall
+#else
+#define GLEWAPIENTRY
+#endif
 
 	void GLEWAPIENTRY errorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, void* param)
 	{
