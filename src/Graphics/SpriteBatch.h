@@ -20,7 +20,7 @@ namespace Graphics
 		Texture
 	END_NXNA_ENUM(SpriteSortMode)
 
-	NXNA_ENUM(SpriteEffects)
+	NXNA_BITWISE_ENUM(SpriteEffects)
 		None = 0,
 		FlipHorizontally = 2,
 		FlipVertically = 4
