@@ -1,4 +1,5 @@
 #include <fstream>
+#include <cstring>
 #include "EffectCompiler.h"
 #include "EffectXml.h"
 #include "EffectToolException.h"
