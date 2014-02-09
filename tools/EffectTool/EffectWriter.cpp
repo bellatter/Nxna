@@ -43,7 +43,7 @@ void EffectWriter::Write(const EffectXml& effect, ResizableBuffer* stream)
 
 			stream->WriteByte((*itr2).Type);
 			stream->WriteByte((*itr2).NumElements);
-			stream->WriteByte((*itr2).Semantic);
+			stream->WriteByte((*itr2).SemanticType);
 			stream->WriteByte((*itr2).Index);
 		}
 	}
@@ -88,7 +88,7 @@ void EffectWriter::Write(const EffectXml& effect, ResizableBuffer* stream)
 		assert(vertexShader >= 0);
 		assert(pixelShader >= 0);
 
-		stream->WriteShort((*itr).Profile);
+		stream->WriteShort((*itr).ProfileType);
 		stream->WriteShort(techniqueIndex);
 		stream->WriteShort(vertexShader);
 		stream->WriteShort(pixelShader);
