@@ -90,7 +90,7 @@ struct AttributeXml
 	std::string Name;
 	ElementType::eElementType Type;
 	int NumElements;
-	Semantic::eSemantic Semantic;
+	Semantic::eSemantic SemanticType;
 	int Index;
 };
 
@@ -123,7 +123,7 @@ struct ShaderXml
 struct TechniqueMapXml
 {
 	std::string Name;
-	Profile::eProfile Profile;
+	Profile::eProfile ProfileType;
 	std::string VertexShader;
 	std::string PixelShader;
 };

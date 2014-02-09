@@ -17,12 +17,12 @@ void EffectCompiler::Compile(EffectXml* effect)
 
 		if (vertexShader >= 0 && shaders[vertexShader].SourceFile.empty() == false)
 		{
-			loadExternalCode((*itr).Profile, shaders[vertexShader].SourceFile, shaders[vertexShader].SourceCode);
+			loadExternalCode((*itr).ProfileType, shaders[vertexShader].SourceFile, shaders[vertexShader].SourceCode);
 		}
 
 		if (pixelShader >= 0 && shaders[pixelShader].SourceFile.empty() == false)
 		{
-			loadExternalCode((*itr).Profile, shaders[vertexShader].SourceFile, shaders[vertexShader].SourceCode);
+			loadExternalCode((*itr).ProfileType, shaders[vertexShader].SourceFile, shaders[vertexShader].SourceCode);
 		}
 	}
 }

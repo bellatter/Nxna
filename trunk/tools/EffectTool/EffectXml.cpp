@@ -115,7 +115,7 @@ EffectXml::EffectXml(const std::string& xml)
 	tinyxml2::XMLDocument doc;
 	auto err = doc.Parse(xml.c_str());
 	if (err != tinyxml2::XML_SUCCESS)
-		throw std::exception("Error while parsing XML input");
+		throw EffectToolException("Error while parsing XML input");
 
 	auto effect = doc.FirstChildElement("effect");
 	auto techniques = effect->FirstChildElement("techniques");
@@ -153,7 +153,7 @@ EffectXml::EffectXml(const std::string& xml)
 					attributeXml.Name = name;
 					attributeXml.Type = ElementType::Parse(type);
 					attributeXml.NumElements = attribute->IntAttribute("numElements");
-					attributeXml.Semantic = Semantic::Parse(semantic);
+					attributeXml.SemanticType = Semantic::Parse(semantic);
 					attributeXml.Index = attribute->IntAttribute("index");
 					techniqueXml.Attributes.push_back(attributeXml);
 
@@ -239,7 +239,7 @@ EffectXml::EffectXml(const std::string& xml)
 		{
 			TechniqueMapXml techniqueMapXml;
 			techniqueMapXml.Name = technique->Attribute("name");
-			techniqueMapXml.Profile = Profile::Parse(technique->Attribute("profile"));
+			techniqueMapXml.ProfileType = Profile::Parse(technique->Attribute("profile"));
 			techniqueMapXml.VertexShader = technique->Attribute("vertexShader");
 			techniqueMapXml.PixelShader = technique->Attribute("pixelShader");
 
@@ -282,7 +282,7 @@ void EffectXml::RemoveProfile(Profile::eProfile profile)
 {
 	for (auto itr = m_techniqueMaps.begin(); itr != m_techniqueMaps.end(); )
 	{
-		if ((*itr).Profile == profile
+		if ((*itr).ProfileType == profile
 			|| (profile == Profile::ANY_GLSL && (profile & Profile::ANY_GLSL) == Profile::ANY_GLSL)
 			|| (profile == Profile::ANY_GLSL_ES && (profile & Profile::ANY_GLSL_ES) == Profile::ANY_GLSL_ES)
 			|| (profile == Profile::ANY_HLSL && (profile & Profile::ANY_HLSL) == Profile::ANY_HLSL))
