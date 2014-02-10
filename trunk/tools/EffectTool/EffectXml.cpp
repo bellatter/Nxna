@@ -314,10 +314,12 @@ void EffectXml::RemoveUnusedShaders()
 
 	// remove any shaders that aren't being used
 	int i = 0;
-	for (auto itr = m_shaders.begin(); itr != m_shaders.end(); itr++)
+	for (auto itr = m_shaders.begin(); itr != m_shaders.end(); )
 	{
 		if (isShaderUsed[i] == false)
-			m_shaders.erase(itr);
+			itr = m_shaders.erase(itr);
+		else
+			itr++;
 
 		i++;
 	}
