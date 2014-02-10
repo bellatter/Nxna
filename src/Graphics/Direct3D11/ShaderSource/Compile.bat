@@ -47,7 +47,7 @@ endlocal
 exit /b
 
 :CompileShader
-set fxc=fxc /nologo %1.fx /T%2_4_0_level_9_1 /Zpc /Qstrip_reflect /Qstrip_debug /E%3 /FhCompiled\%1_%3.inc /Vn%1_%3
+set fxc=fxc /nologo %1.fx /T%2_4_0_level_9_1 /Zpc /Qstrip_reflect /Qstrip_debug /E%3 /FoCompiled\%1_%3.o /Vn%1_%3
 echo.
 echo %fxc%
 %fxc% || set error=1

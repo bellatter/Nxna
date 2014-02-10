@@ -106,10 +106,10 @@ namespace Direct3D11
 		virtual Pvt::IIndexBufferPimpl* CreateIndexBufferPimpl(IndexElementSize elementSize) override;
 		virtual Pvt::IVertexBufferPimpl* CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) override;
 		virtual Pvt::IEffectPimpl* CreateEffectPimpl(Effect* parent) override;
-		virtual Pvt::BasicEffectPimpl* CreateBasicEffectPimpl(BasicEffect* effect, Pvt::IEffectPimpl* pimpl) override;
-		virtual Pvt::SpriteEffectPimpl* CreateSpriteEffectPimpl(SpriteEffect* effect, Pvt::IEffectPimpl* pimpl) override;
-		virtual Pvt::DualTextureEffectPimpl* CreateDualTextureEffectPimpl(DualTextureEffect* effect, Pvt::IEffectPimpl* pimpl) override;
-		virtual Pvt::AlphaTestEffectPimpl* CreateAlphaTestEffectPimpl(AlphaTestEffect* effect, Pvt::IEffectPimpl* pimpl) override;
+		//virtual Pvt::BasicEffectPimpl* CreateBasicEffectPimpl(BasicEffect* effect, Pvt::IEffectPimpl* pimpl) override;
+		//virtual Pvt::SpriteEffectPimpl* CreateSpriteEffectPimpl(SpriteEffect* effect, Pvt::IEffectPimpl* pimpl) override;
+		//virtual Pvt::DualTextureEffectPimpl* CreateDualTextureEffectPimpl(DualTextureEffect* effect, Pvt::IEffectPimpl* pimpl) override;
+		//virtual Pvt::AlphaTestEffectPimpl* CreateAlphaTestEffectPimpl(AlphaTestEffect* effect, Pvt::IEffectPimpl* pimpl) override;
 
 	private:
 		void applyDirtyStates();

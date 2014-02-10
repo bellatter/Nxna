@@ -26,23 +26,20 @@ namespace Direct3D11
 
 		m_isVertexColorEnabled = false;
 
-		hlslEffect->AddPermutation("ColorEnabled", true, DualTextureEffect_DualTextureVS, sizeof(DualTextureEffect_DualTextureVS),
+		hlslEffect->CreateProgram("ColorEnabled", true, DualTextureEffect_DualTextureVS, sizeof(DualTextureEffect_DualTextureVS),
 			DualTextureEffect_DualTexturePS, sizeof(DualTextureEffect_DualTexturePS));
-		hlslEffect->AddPermutation("NoColor", true, DualTextureEffect_DualTextureNoColorVS, sizeof(DualTextureEffect_DualTextureNoColorVS),
+		hlslEffect->CreateProgram("NoColor", true, DualTextureEffect_DualTextureNoColorVS, sizeof(DualTextureEffect_DualTextureNoColorVS),
 			DualTextureEffect_DualTextureNoColorPS, sizeof(DualTextureEffect_DualTextureNoColorPS));
 
-		hlslEffect->CreateDummyTechnique();
+		hlslEffect->CreateProgram("default", false, nullptr, 0, nullptr, 0);
+
+		// create the cbuffer
+		hlslEffect->AddConstantBuffer(true, false, 16 * sizeof(float), 1);
 
 		// create the parameters
-		hlslEffect->AddParameter(EffectParameterType::Single, 16, 0, "ModelViewProjection");
-		hlslEffect->AddParameter(EffectParameterType::Texture2D, 1, 0, "Diffuse");
-		hlslEffect->AddParameter(EffectParameterType::Texture2D, 1, 0, "Diffuse2");
-
-		int indices[] = {0, 1};
-		int offsets[] = {0, 0};
-		ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, false, 16 * sizeof(float), indices, offsets, 1));
-		//ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, 16 * sizeof(float), indices, offsets, 1));
-		hlslEffect->GetConstantBuffers().push_back(cbuffer);
+		hlslEffect->AddParameter("ModelViewProjection", EffectParameterType::Single, 16, 0, 0, 0);
+		hlslEffect->AddParameter("Diffuse", EffectParameterType::Texture2D, 1, 0, 0, 0);
+		hlslEffect->AddParameter("Diffuse2", EffectParameterType::Texture2D, 1, 0, 0, 0);
 	}
 
 	void HlslDualTextureEffect::Apply(int programIndex)

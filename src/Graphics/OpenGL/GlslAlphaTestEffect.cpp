@@ -27,12 +27,13 @@ namespace OpenGl
 		const char* color[] = { "#define VERTEXCOLORENABLED\n" };
 		const char* less[] = { "#define LESSGREATER\n" };
 
-		glslEffect->CreateProgram("ColorLessGreater", true, vertexResult, fragResult, colorAndLess, 2);
-		glslEffect->CreateProgram("Color", true, vertexResult, fragResult, color, 1);
-		glslEffect->CreateProgram("LessGreater", true, vertexResult, fragResult, less, 1);
-		glslEffect->CreateProgram("Equal", true, vertexResult, fragResult, nullptr, 0);
+		glslEffect->CreateProgram("ColorLessGreater", true, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
+		glslEffect->CreateProgram("Color", true, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
+		glslEffect->CreateProgram("LessGreater", true, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
+		glslEffect->CreateProgram("Equal", true, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
 
-		glslEffect->CreateDummyTechnique();
+		// create the dummy technique
+		glslEffect->CreateProgram("default", false, nullptr, 0, nullptr, 0);
 	}
 
 	void GlslAlphaTestEffect::Apply(int programIndex)

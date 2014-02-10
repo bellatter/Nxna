@@ -19,18 +19,15 @@ namespace Direct3D11
 	HlslSpriteEffect::HlslSpriteEffect(Direct3D11Device* device, HlslEffect* hlslEffect)
 		: Pvt::SpriteEffectPimpl(hlslEffect), m_hlslEffect(hlslEffect)
 	{
-		hlslEffect->AddPermutation("default", false, SpriteEffect_SpriteVertexShader, sizeof(SpriteEffect_SpriteVertexShader),
+		hlslEffect->CreateProgram("default", false, SpriteEffect_SpriteVertexShader, sizeof(SpriteEffect_SpriteVertexShader),
 			SpriteEffect_SpritePixelShader, sizeof(SpriteEffect_SpritePixelShader));
 
-		// create the parameters
-		hlslEffect->AddParameter(EffectParameterType::Single, 16, 0, "ModelViewProjection");
-		hlslEffect->AddParameter(EffectParameterType::Texture2D, 1, 0, "Diffuse");
+		// create the cbuffer
+		hlslEffect->AddConstantBuffer(true, false, 16 * sizeof(float), 1);
 
-		int indices[] = {0, 1};
-		int offsets[] = {0, 0};
-		ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, false, 16 * sizeof(float), indices, offsets, 1));
-		//ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, 16 * sizeof(float), indices, offsets, 1));
-		hlslEffect->GetConstantBuffers().push_back(cbuffer);
+		// create the parameters
+		hlslEffect->AddParameter("ModelViewProjection", EffectParameterType::Single, 16, 0, 0, 0);
+		hlslEffect->AddParameter("Diffuse", EffectParameterType::Texture2D, 1, 0, 0, 0);
 	}
 }
 }

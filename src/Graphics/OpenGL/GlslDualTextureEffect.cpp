@@ -22,11 +22,12 @@ namespace OpenGl
 
 		const char* color[] = { "#define VERTEXCOLORENABLED\n" };
 
-		glslEffect->CreateProgram("ColorEnabled", true, vertexResult, fragResult, color, 1);
-		glslEffect->CreateProgram("ColorDisabled", true, vertexResult, fragResult, nullptr, 0);
-
-		glslEffect->CreateDummyTechnique();
+		glslEffect->CreateProgram("ColorEnabled", true, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
+		glslEffect->CreateProgram("ColorDisabled", true, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
 		
+		// create the dummy technique
+		glslEffect->CreateProgram("default", false, nullptr, 0, nullptr, 0);
+
 		// HACK: sometimes OpenGL reports the sampler uniforms in a different
 		// order than they exist in the shader source, which breaks this effect.
 		// Go back and make sure the order is correct.

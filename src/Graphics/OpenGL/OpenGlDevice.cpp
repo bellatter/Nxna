@@ -3,10 +3,11 @@
 #include "../VertexDeclaration.h"
 #include "../GraphicsDeviceCapabilities.h"
 #include "OpenGLDevice.h"
-#include "GlslBasicEffect.h"
-#include "GlslSpriteEffect.h"
-#include "GlslDualTextureEffect.h"
-#include "GlslAlphaTestEffect.h"
+#include "GlslEffect.h"
+//#include "GlslBasicEffect.h"
+//#include "GlslSpriteEffect.h"
+//#include "GlslDualTextureEffect.h"
+//#include "GlslAlphaTestEffect.h"
 #include "GlTexture2D.h"
 #include "GlRenderTarget2D.h"
 #include "GlVertexBuffer.h"
@@ -453,7 +454,7 @@ namespace OpenGl
 		return new GlslEffect(this, parent);
 	}
 
-	Pvt::BasicEffectPimpl* OpenGlDevice::CreateBasicEffectPimpl(BasicEffect* effect, Pvt::IEffectPimpl* pimpl)
+	/*Pvt::BasicEffectPimpl* OpenGlDevice::CreateBasicEffectPimpl(BasicEffect* effect, Pvt::IEffectPimpl* pimpl)
 	{
 		return new GlslBasicEffect(this, static_cast<GlslEffect*>(pimpl));
 	}
@@ -471,7 +472,7 @@ namespace OpenGl
 	Pvt::AlphaTestEffectPimpl* OpenGlDevice::CreateAlphaTestEffectPimpl(AlphaTestEffect* effect, Pvt::IEffectPimpl* pimpl)
 	{
 		return new GlslAlphaTestEffect(this, static_cast<GlslEffect*>(pimpl));
-	}
+	}*/
 
 	void OpenGlDevice::setClearColor(const Color& c)
 	{

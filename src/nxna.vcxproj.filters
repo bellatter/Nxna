@@ -107,16 +107,7 @@
     <ClInclude Include="Graphics\OpenGL\GlIndexBuffer.h">
       <Filter>Graphics\OpenGl</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\OpenGL\GlslBasicEffect.h">
-      <Filter>Graphics\OpenGl</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\OpenGL\GlslDualTextureEffect.h">
-      <Filter>Graphics\OpenGl</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\OpenGL\GlslEffect.h">
-      <Filter>Graphics\OpenGl</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\OpenGL\GlslSpriteEffect.h">
       <Filter>Graphics\OpenGl</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\OpenGL\GlTexture2D.h">
@@ -154,9 +145,6 @@
     </ClInclude>
     <ClInclude Include="Graphics\AlphaTestEffect.h">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\OpenGl\GlslAlphaTestEffect.h">
-      <Filter>Graphics\OpenGl</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\RasterizerState.h">
       <Filter>Graphics</Filter>
@@ -225,12 +213,6 @@
     <ClInclude Include="Graphics\Direct3D11\D3D11Utils.h">
       <Filter>Graphics\Direct3D11</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Direct3D11\HlslSpriteEffect.h">
-      <Filter>Graphics\Direct3D11</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Direct3D11\HlslBasicEffect.h">
-      <Filter>Graphics\Direct3D11</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Direct3D11\HlslDualTextureEffect.h">
       <Filter>Graphics\Direct3D11</Filter>
     </ClInclude>
@@ -263,7 +245,6 @@
     </ClInclude>
     <ClInclude Include="Graphics\libsquish\squish.h" />
     <ClInclude Include="Audio\SoundState.h" />
-    <ClInclude Include="Graphics\Direct3D11\HlslAlphaTestEffect.h" />
     <ClInclude Include="Graphics\VertexPositionTexture.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Graphics\ITexture2DPimpl.h">
@@ -284,6 +265,8 @@
     <ClInclude Include="Graphics\SpriteEffectPimpl.h" />
     <ClInclude Include="Graphics\DualTextureEffectPimpl.h" />
     <ClInclude Include="Graphics\AlphaTestEffectPimpl.h" />
+    <ClInclude Include="Graphics\ShaderProfile.h" />
+    <ClInclude Include="Graphics\Semantic.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -319,16 +302,7 @@
     <ClCompile Include="Graphics\OpenGL\GlIndexBuffer.cpp">
       <Filter>Graphics\OpenGl</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\OpenGL\GlslBasicEffect.cpp">
-      <Filter>Graphics\OpenGl</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\OpenGL\GlslDualTextureEffect.cpp">
-      <Filter>Graphics\OpenGl</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GlslEffect.cpp">
-      <Filter>Graphics\OpenGl</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\OpenGL\GlslSpriteEffect.cpp">
       <Filter>Graphics\OpenGl</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GlTexture2D.cpp">
@@ -350,9 +324,6 @@
       <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Graphics\OpenGl\GlslAlphaTestEffect.cpp">
-      <Filter>Graphics\OpenGl</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\BlendState.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -423,16 +394,7 @@
     <ClCompile Include="Graphics\Direct3D11\D3D11VertexBuffer.cpp">
       <Filter>Graphics\Direct3D11</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Direct3D11\HlslBasicEffect.cpp">
-      <Filter>Graphics\Direct3D11</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Direct3D11\HlslDualTextureEffect.cpp">
-      <Filter>Graphics\Direct3D11</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp">
-      <Filter>Graphics\Direct3D11</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Direct3D11\HlslSpriteEffect.cpp">
       <Filter>Graphics\Direct3D11</Filter>
     </ClCompile>
     <ClCompile Include="Media\MediaPlayer.cpp">
@@ -471,7 +433,6 @@
     <ClCompile Include="Graphics\libsquish\colourset.cpp" />
     <ClCompile Include="Graphics\libsquish\singlecolourfit.cpp" />
     <ClCompile Include="Graphics\libsquish\maths.cpp" />
-    <ClCompile Include="Graphics\Direct3D11\HlslAlphaTestEffect.cpp" />
     <ClCompile Include="Graphics\VertexPositionTexture.cpp" />
     <ClCompile Include="Graphics\ITexture2DPimpl.cpp">
       <Filter>Graphics</Filter>
@@ -510,5 +471,11 @@
     <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.frag" />
     <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.vert" />
     <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Graphics\Effects\AlphaTestEffect.nxfx" />
+    <CustomBuild Include="Graphics\Effects\BasicEffect.nxfx" />
+    <CustomBuild Include="Graphics\Effects\DualTextureEffect.nxfx" />
+    <CustomBuild Include="Graphics\Effects\SpriteEffect.nxfx" />
   </ItemGroup>
 </Project>

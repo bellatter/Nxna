@@ -25,7 +25,7 @@ namespace OpenGl
 		std::string vertexResult, fragResult;
 		ProcessSource(vertexSource, fragmentSource, vertexResult, fragResult);
 
-		CreateProgram("default", false, vertexResult, fragResult, nullptr, 0);
+		CreateProgram("default", false, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
 	}
 
 	GlslEffect::GlslEffect(OpenGlDevice* device, Effect* parent)
@@ -63,37 +63,59 @@ namespace OpenGl
 		processSource(fragResult, false);
 	}
 
-	void GlslEffect::CreateProgram(const char* name, bool hidden, const std::string& vertexSource, const std::string& fragSource, const char* defines[], int numDefines)
+	EffectTechnique* GlslEffect::CreateProgram(const char* name, bool hidden, const byte* vertexSource, int vertexSourceLength, const byte* fragSource, int fragSourceLength)
 	{
-		glGetError();
+		if (hidden != false || vertexSource != nullptr || fragSource != nullptr)
+		{
+			glGetError();
 
-		GlslSource source(vertexSource.c_str(), fragSource.c_str(), m_device->GetGlslVersion());
+			GlslSource source((const char*)vertexSource, (const char*)fragSource, m_device->GetGlslVersion());
 
-		GlslProgram program;
-		program.Program = source.Build(defines, numDefines);
+			const char* defines[] = {"#define ", name, "\n" };
 
-		loadUniformInfo(program);
-		loadAttributeInfo(program);
+			GlslProgram program;
+			program.Program = source.Build(defines, 3);
 
-		m_programs.push_back(program);
+			loadUniformInfo(program);
+			loadAttributeInfo(program);
 
-		IEffectPimpl::CreateTechnique(m_parent, name, hidden);
+			m_programs.push_back(program);
+		}
+
+		return CreateTechnique(name, hidden);
 	}
 
-	void GlslEffect::CreateDummyTechnique()
+	void GlslEffect::AddAttributeToProgram(int programIndex, const char* name, EffectParameterType type, int numElements, Semantic semantic, int usageIndex)
 	{
-		IEffectPimpl::CreateTechnique(m_parent, "default", false);
+		GlslAttribute attrib;
+		attrib.Name = name;
+		attrib.Index = usageIndex;
+		attrib.GlHandle = glGetAttribLocation(m_programs[programIndex].Program, name);
+
+		if (attrib.GlHandle < 0)
+			throw GraphicsException("Unable to find OpenGL shader attribute");
+		
+		switch(semantic)
+		{
+		case Semantic::Position:
+			attrib.Usage = VertexElementUsage::Position;
+			break;
+		case Semantic::TexCoord:
+			attrib.Usage = VertexElementUsage::TextureCoordinate;
+			break;
+		case Semantic::Color:
+			attrib.Usage = VertexElementUsage::Color;
+		}
+
+		m_programs[programIndex].Attributes.push_back(attrib);
 	}
 
-	EffectParameter* GlslEffect::AddParameter(EffectParameterType type, int numElements, void* handle, const char* name)
+	int GlslEffect::ScoreProfile(ShaderProfile profile)
 	{
-		EffectParameter* param = CreateParameter(m_parent, type, numElements, nullptr, name);
+		if (profile == ShaderProfile::GLSL_130)
+			return 1;
 
-		m_parameters.insert(ParamMap::value_type(param->Name.c_str(), param));
-
-		m_parameterList.push_back(param);
-
-		return param;
+		return 0;
 	}
 
 	/*void GlslEffect::SetParameter(EffectParameter* param, Texture2D* texture)
@@ -158,6 +180,8 @@ namespace OpenGl
 		m_device->SetCurrentEffect(this);
 		m_boundProgramIndex = programIndex;
 
+		int usedTextureUnits = 0;
+
 		// go through the cached values and send them to OpenGL
 		for (std::vector<GlslUniform>::iterator itr = m_programs[programIndex].Uniforms.begin();
 			itr != m_programs[programIndex].Uniforms.end(); itr++)
@@ -197,9 +221,11 @@ namespace OpenGl
 						}
 					}
 
-					glActiveTexture(GL_TEXTURE0 + texindex);
+					glActiveTexture(GL_TEXTURE0 + usedTextureUnits);
 					glBindTexture(GL_TEXTURE_2D, static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D()->GetPimpl())->GetGlTexture());
-					glUniform1iv((*itr).Uniform, 1, &texindex);
+					glUniform1i((*itr).Uniform, usedTextureUnits);
+
+					usedTextureUnits++;
 				}
 			}
 
@@ -209,6 +235,8 @@ namespace OpenGl
 
 	void GlslEffect::ApplySamplerStates(SamplerStateCollection* samplerStates)
 	{
+		int usedTextureUnits = 0;
+
 		for (std::vector<GlslUniform>::iterator itr = m_programs[m_boundProgramIndex].Uniforms.begin();
 			itr != m_programs[m_boundProgramIndex].Uniforms.end(); itr++)
 		{
@@ -231,13 +259,31 @@ namespace OpenGl
 						}
 					}
 
-					glActiveTexture(GL_TEXTURE0 + texindex);
+					glActiveTexture(GL_TEXTURE0 + usedTextureUnits);
 					glBindTexture(GL_TEXTURE_2D, glTex->GetGlTexture());
 					
-					glTex->SetSamplerState(samplerStates->Get(texindex));
+					glTex->SetSamplerState(samplerStates->Get(usedTextureUnits));
+
+					usedTextureUnits++;
 				}
 			}
 		}
+	}
+
+	void GlslEffect::AddConstantBuffer(bool vertex, bool pixel, int sizeInBytes, int numParameters)
+	{
+		// nothing... not using cbuffers (yet)
+	}
+
+	EffectParameter* GlslEffect::AddParameter(const char* name, EffectParameterType type, int numElements, int constantBufferIndex, int constantBufferConstantIndex, int constantBufferOffset)
+	{
+		EffectParameter* param = CreateParameter(m_parent, type, numElements, nullptr, name);
+
+		m_parameters.insert(ParamMap::value_type(param->Name.c_str(), param));
+
+		m_parameterList.push_back(param);
+
+		return param;
 	}
 
 	const GlslAttribute* GlslEffect::GetAttribute(VertexElementUsage usage, int index)
@@ -257,7 +303,6 @@ namespace OpenGl
 	{
 		// which program do we use?
 		assert(m_programs.empty() == false);
-		assert(m_programs.size() == 1);
 
 		ApplyProgram(techniqueIndex);
 	}
@@ -372,7 +417,7 @@ namespace OpenGl
 					numElements = 16;
 
 				// add the parameter, with the handle being the index of this parameter
-				param = this->AddParameter(pType, numElements, nullptr, nameBuffer);
+				param = this->AddParameter(nameBuffer, pType, numElements, 0, 0, 0);
 
 				// if this is a texture param then add it to the list of
 				// texture parameters
@@ -412,6 +457,9 @@ namespace OpenGl
 				{
 					GlslAttribute attr = m_attributes[j];
 					attr.GlHandle = glGetAttribLocation(program.Program, m_attribNameBuffer);
+
+					if (attr.GlHandle < 0)
+						throw GraphicsException("Unable to find OpenGL handle of attribute");
 
 					program.Attributes.push_back(attr);
 

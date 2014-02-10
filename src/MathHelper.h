@@ -84,6 +84,14 @@ namespace Nxna
 			return value;
 		}
 
+		static int Clampi(int value, int min, int max)
+		{
+			if (value < min) return min;
+			if (value > max) return max;
+
+			return value;
+		}
+
 		static float ToRadians(float degrees)
 		{
 			return degrees * 0.0174532925f;

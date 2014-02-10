@@ -1,0 +1,132 @@
+<effect>
+	<techniques>
+		<technique name="DualTextureColorEnabled" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoords1"
+					type="float"
+					numElements="2"
+					semantic="texcoord"
+					index="0" />
+				<attribute name="texCoords2"
+					type="float"
+					numElements="2"
+					semantic="texcoord" 
+					index="1" />
+				<attribute name="color"
+					type="float"
+					numElements="4"
+					semantic="color" />
+			</attributes>
+		</technique>
+		<technique name="DualTextureNoColor" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoords1"
+					type="float"
+					numElements="2"
+					semantic="texcoord"
+					index="0" />
+				<attribute name="texCoords2"
+					type="float"
+					numElements="2"
+					semantic="texcoord"
+					index="2" />
+			</attributes>
+		</technique>
+		<technique name="default" />
+	</techniques>
+	<cbuffers>
+		<cbuffer>
+			<constant name="ModelViewProjection"
+				type="float"
+				numElements="16" />
+		</cbuffer>
+	</cbuffers>
+	<textures>
+		<texture name="Diffuse" />
+		<texture name="Diffuse2" />
+	</textures>
+	<shaders>
+		<shader name="DualTextureColorEnabled_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/DualTextureEffect_DualTextureVS.o" />
+		<shader name="DualTextureColorEnabled_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/DualTextureEffect_DualTexturePS.o" />
+		<shader name="DualTextureNoColor_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/DualTextureEffect_DualTextureNoColorVS.o" />
+		<shader name="DualTextureNoColor_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/DualTextureEffect_DualTextureNoColorPS.o" />
+		<shader name="DualTextureEffect_vs_glsl">
+<![CDATA[
+uniform HIGHP mat4 ModelViewProjection;
+
+in vec4 position;
+in vec2 texCoords1;
+in vec2 texCoords2;
+out vec2 o_diffuseCoords1;
+out vec2 o_diffuseCoords2;
+#if defined DualTextureColorEnabled
+in vec4 color;
+out vec4 o_color;
+#endif
+
+void main()
+{
+	gl_Position = ModelViewProjection * position;
+	o_diffuseCoords1 = texCoords1;
+	o_diffuseCoords2 = texCoords2;
+#if defined DualTextureColorEnabled
+	o_color = color;
+#endif
+}
+]]>
+		</shader>
+		<shader name="DualTextureEffect_ps_glsl">
+<![CDATA[
+uniform sampler2D Diffuse;
+uniform sampler2D Diffuse2;
+
+in HIGHP vec2 o_diffuseCoords1;
+in HIGHP vec2 o_diffuseCoords2;
+
+#if defined DualTextureColorEnabled
+in HIGHP vec4 o_color;
+#endif
+
+#if __VERSION__ >= 130
+out HIGHP vec4 outputColor;
+#endif
+void main()
+{
+	HIGHP vec4 finalColor;
+#if __VERSION__ < 130
+	HIGHP vec4 color1 = texture2D(Diffuse, o_diffuseCoords1);
+	HIGHP vec4 color2 = texture2D(Diffuse2, o_diffuseCoords2);
+#else
+	vec4 color1 = texture(Diffuse, o_diffuseCoords1);
+	vec4 color2 = texture(Diffuse2, o_diffuseCoords2);
+#endif
+#if defined DualTextureColorEnabled
+	finalColor = vec4(color1.rgb * color2.rgb * 2.0, color1.a * color2.a) * o_color;
+#else
+	finalColor = vec4(color1.rgb * color2.rgb * 2.0, color1.a * color2.a);
+#endif
+#if __VERSION__ < 130
+	gl_FragColor = finalColor;
+#else
+	outputColor = finalColor;
+#endif
+}
+]]>
+		</shader>
+	</shaders>
+	<shaderMap>
+		<technique name="DualTextureColorEnabled" profile="glsl_130" vertexShader="DualTextureEffect_vs_glsl" pixelShader="DualTextureEffect_ps_glsl"/>
+		<technique name="DualTextureColorEnabled" profile="hlsl_4_0_level_9_1" vertexShader="DualTextureColorEnabled_vs_hlsl" pixelShader="DualTextureColorEnabled_ps_hlsl" />
+		
+		<technique name="DualTextureNoColor" profile="glsl_130" vertexShader="DualTextureEffect_vs_glsl" pixelShader="DualTextureEffect_ps_glsl"/>
+		<technique name="DualTextureNoColor" profile="hlsl_4_0_level_9_1" vertexShader="DualTextureNoColor_vs_hlsl" pixelShader="DualTextureNoColor_ps_hlsl" />
+	</shaderMap>
+</effect>

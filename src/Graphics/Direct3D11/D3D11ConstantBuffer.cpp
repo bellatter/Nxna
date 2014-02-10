@@ -13,8 +13,7 @@ namespace Graphics
 {
 namespace Direct3D11
 {
-	D3D11ConstantBuffer::D3D11ConstantBuffer(Direct3D11Device* device, bool vertex, bool pixel, int sizeInBytes,
-		int* parameterIndices, int* parameterOffsets, int numParameters)
+	D3D11ConstantBuffer::D3D11ConstantBuffer(Direct3D11Device* device, bool vertex, bool pixel, int sizeInBytes, int numParameters)
 	{
 		m_device = device;
 		m_vertex = vertex;
@@ -36,8 +35,6 @@ namespace Direct3D11
 		m_parameterIndices = new int[numParameters];
 		m_parameterOffsets = new int[numParameters];
 		m_numParameters = numParameters;
-		memcpy(m_parameterIndices, parameterIndices, sizeof(int) * numParameters);
-		memcpy(m_parameterOffsets, parameterOffsets, sizeof(int) * numParameters);
 	}
 
 	D3D11ConstantBuffer::~D3D11ConstantBuffer()
@@ -77,6 +74,16 @@ namespace Direct3D11
 
 		if (m_pixel)
 			context->PSSetConstantBuffers(slot, 1, &m_buffer);
+	}
+
+	void D3D11ConstantBuffer::SetParameterOffset(int parameterIndex, int offset)
+	{
+		if (parameterIndex < 0 || parameterIndex >= m_numParameters)
+			throw ArgumentException("parameterIndex");
+		if (offset < 0 || offset >= m_sizeInBytes)
+			throw ArgumentException("offset");
+
+		m_parameterOffsets[parameterIndex] = offset;
 	}
 
 	void D3D11ConstantBuffer::setParameter(int offset, EffectParameter* param)

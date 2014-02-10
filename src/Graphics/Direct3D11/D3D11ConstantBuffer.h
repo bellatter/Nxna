@@ -31,13 +31,13 @@ namespace Direct3D11
 
 
 	public:
-		D3D11ConstantBuffer(Direct3D11Device* device, bool vertex, bool pixel, int sizeInBytes,
-			int* parameterIndices, int* parameterOffsets, int numParameters);
+		D3D11ConstantBuffer(Direct3D11Device* device, bool vertex, bool pixel, int sizeInBytes, int numParameters);
 		virtual ~D3D11ConstantBuffer();
 
 		void InjectParameterValuesIntoBuffer(std::vector<EffectParameter*>& parameters);
 		void Apply(int slot);
 
+		void SetParameterOffset(int parameterIndex, int offset);
 
 	private:
 		void setParameter(int offset, EffectParameter* param);

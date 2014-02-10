@@ -27,34 +27,70 @@ namespace Direct3D11
 		// TODO: release all the shader permutations
 	}
 
-	void HlslEffect::AddPermutation(const char* name, bool hidden, const byte* vertexBytecode, int vertexBytecodeLength,
+	EffectTechnique* HlslEffect::CreateProgram(const char* name, bool hidden, const byte* vertexBytecode, int vertexBytecodeLength,
 		const byte* pixelBytecode, int pixelBytecodeLength)
 	{
-		ID3D11Device* d3d11Device = static_cast<ID3D11Device*>(static_cast<Direct3D11Device*>(m_device)->GetDevice());
-
-		HlslPermutation permutation;
-		if (FAILED(d3d11Device->CreateVertexShader(vertexBytecode, vertexBytecodeLength, nullptr, (ID3D11VertexShader**)&permutation.D3DVertexShader)))
-			throw GraphicsException("Unable to add permutation to HLSL effect", __FILE__, __LINE__);
-
-		if (FAILED(d3d11Device->CreatePixelShader(pixelBytecode, pixelBytecodeLength, nullptr, (ID3D11PixelShader**)&permutation.D3DPixelShader)))
+		if (vertexBytecode != nullptr || pixelBytecode != nullptr)
 		{
-			static_cast<ID3D11VertexShader*>(permutation.D3DVertexShader)->Release();
-			throw GraphicsException("Unable to add permutation to HLSL effect", __FILE__, __LINE__);
+			ID3D11Device* d3d11Device = static_cast<ID3D11Device*>(static_cast<Direct3D11Device*>(m_device)->GetDevice());
+
+			HlslPermutation permutation;
+			auto r = d3d11Device->CreateVertexShader(vertexBytecode, vertexBytecodeLength, nullptr, (ID3D11VertexShader**)&permutation.D3DVertexShader);
+			if (FAILED(r))
+				throw GraphicsException("Unable to add permutation to HLSL effect", __FILE__, __LINE__);
+
+			if (FAILED(d3d11Device->CreatePixelShader(pixelBytecode, pixelBytecodeLength, nullptr, (ID3D11PixelShader**)&permutation.D3DPixelShader)))
+			{
+				static_cast<ID3D11VertexShader*>(permutation.D3DVertexShader)->Release();
+				throw GraphicsException("Unable to add permutation to HLSL effect", __FILE__, __LINE__);
+			}
+
+			permutation.Hash = Utils::CalcHash(vertexBytecode, vertexBytecodeLength);
+			permutation.VertexBytecode = new byte[vertexBytecodeLength];
+			memcpy(permutation.VertexBytecode, vertexBytecode, vertexBytecodeLength);
+			permutation.VertexBytecodeLength = vertexBytecodeLength;
+
+			m_permutations.push_back(permutation);
 		}
 
-		permutation.Hash = Utils::CalcHash(vertexBytecode, vertexBytecodeLength);
-		permutation.VertexBytecode = new byte[vertexBytecodeLength];
-		memcpy(permutation.VertexBytecode, vertexBytecode, vertexBytecodeLength);
-		permutation.VertexBytecodeLength = vertexBytecodeLength;
-
-		m_permutations.push_back(permutation);
-
-		IEffectPimpl::CreateTechnique(m_parent, name, hidden);
+		return CreateTechnique(name, hidden);
 	}
 
-	void HlslEffect::CreateDummyTechnique()
+	void HlslEffect::AddAttributeToProgram(int programIndex, const char* name, EffectParameterType type, int numElements, Semantic semantic, int usageIndex)
 	{
-		IEffectPimpl::CreateTechnique(m_parent, "default", false);
+		// nothing to do. All the attributes are already automagically set up for us. 
+	}
+
+	void HlslEffect::AddConstantBuffer(bool vertex, bool pixel, int sizeInBytes, int numParameters)
+	{
+		ConstantBuffer cbuffer(new D3D11ConstantBuffer(m_device, vertex, pixel, sizeInBytes, numParameters));
+		GetConstantBuffers().push_back(cbuffer);
+	}
+
+	EffectParameter* HlslEffect::AddParameter(const char* name, EffectParameterType type, int numElements, int constantBufferIndex, int constantBufferConstantIndex, int constantBufferOffset)
+	{
+		EffectParameter* parameter = CreateParameter(m_parent, type, numElements, nullptr, name);
+
+		m_parameters.insert(ParamMap::value_type(parameter->Name.c_str(), parameter));
+
+		m_parameterList.push_back(parameter);
+
+		if (type != EffectParameterType::Texture
+			&& type != EffectParameterType::Texture1D
+			&& type != EffectParameterType::Texture2D
+			&& type != EffectParameterType::Texture3D
+			&& type != EffectParameterType::TextureCube)
+			static_cast<D3D11ConstantBuffer*>(GetConstantBuffers()[constantBufferIndex].GetPmpl())->SetParameterOffset(constantBufferConstantIndex, constantBufferOffset);
+
+		return parameter;
+	}
+
+	int HlslEffect::ScoreProfile(ShaderProfile profile)
+	{
+		if (profile == ShaderProfile::HLSL_4_0_level_9_1)
+			return 1;
+
+		return 0;
 	}
 
 	unsigned int HlslEffect::GetHash(int program)
@@ -107,17 +143,6 @@ namespace Direct3D11
 				}
 			}
 		}
-	}
-
-	EffectParameter* HlslEffect::AddParameter(EffectParameterType type, int numElements, void* handle, const char* name)
-	{
-		EffectParameter* parameter = CreateParameter(m_parent, type, numElements, nullptr, name);
-
-		m_parameters.insert(ParamMap::value_type(parameter->Name.c_str(), parameter));
-
-		m_parameterList.push_back(parameter);
-
-		return parameter;
 	}
 
 	void HlslEffect::Apply(int techniqueIndex)

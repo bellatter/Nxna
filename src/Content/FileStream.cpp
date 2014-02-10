@@ -1,6 +1,8 @@
 #include <cstdio>
 #include <cassert>
+#include <cstring>
 #include "FileStream.h"
+#include "../MathHelper.h"
 
 namespace Nxna
 {
@@ -122,5 +124,97 @@ namespace Content
 	{
 		// nothing... for now...
 	}
+
+
+	MemoryStream::MemoryStream(const byte* memory, int length)
+	{
+		m_memory = memory;
+		m_length = length;
+		m_position = 0;
+	}
+
+	int MemoryStream::Read(byte* destination, int length)
+	{
+		int bytesToRead = Math::Min(length, m_length - m_position);
+
+		if (bytesToRead > 0)
+		{
+			memcpy(destination, &m_memory[m_position], bytesToRead);
+
+			m_position += bytesToRead;
+		}
+
+		return bytesToRead;
+	}
+
+	byte MemoryStream::ReadByte()
+	{
+		byte r;
+		Read(&r, 1);
+
+		return r;
+	}
+
+	short MemoryStream::ReadInt16()
+	{
+		short r;
+		Read((byte*)&r, sizeof(short));
+
+		swapLE(&r, sizeof(short));
+
+		return r;
+	}
+
+	int MemoryStream::ReadInt32()
+	{
+		int r;
+		Read((byte*)&r, sizeof(int));
+
+		swapLE(&r, sizeof(int));
+
+		return r;
+	}
+
+	float MemoryStream::ReadFloat()
+	{
+		float r;
+		Read((byte*)&r, sizeof(float));
+
+		swapLE(&r, sizeof(float));
+
+		return r;
+	}
+
+	void MemoryStream::Seek(int offset, SeekOrigin origin)
+	{
+		if (origin == SeekOrigin::Begin)
+			m_position = MathHelper::Clampi(offset, 0, m_length);
+		else if (origin == SeekOrigin::End)
+			m_position = MathHelper::Clampi(m_length + offset, 0, m_length);
+		else
+			m_position = MathHelper::Clampi(m_position + offset, 0, m_length);
+	}
+
+	int MemoryStream::Position()
+	{
+		return m_position;
+	}
+
+	int MemoryStream::Length()
+	{
+		return m_length;
+	}
+	
+	bool MemoryStream::Eof()
+	{
+		return m_position >= m_length;
+	}
+
+	void MemoryStream::swapLE(void* /* data */, int /* length */)
+	{
+		// nothing... for now...
+	}
+
+	
 }
 }

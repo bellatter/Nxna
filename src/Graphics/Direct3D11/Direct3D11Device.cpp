@@ -6,10 +6,11 @@
 #include "D3D11Texture2D.h"
 #include "D3D11VertexBuffer.h"
 #include "D3D11IndexBuffer.h"
-#include "HlslBasicEffect.h"
-#include "HlslSpriteEffect.h"
-#include "HlslDualTextureEffect.h"
-#include "HlslAlphaTestEffect.h"
+#include "HlslEffect.h"
+//#include "HlslBasicEffect.h"
+//#include "HlslSpriteEffect.h"
+//#include "HlslDualTextureEffect.h"
+//#include "HlslAlphaTestEffect.h"
 #include "D3D11Utils.h"
 #include "../GraphicsDeviceCapabilities.h"
 #include "../../Utils.h"
@@ -410,7 +411,7 @@ namespace Direct3D11
 		return new HlslEffect(this, parent);
 	}
 
-	Pvt::BasicEffectPimpl* Direct3D11Device::CreateBasicEffectPimpl(BasicEffect* effect, Pvt::IEffectPimpl* pimpl)
+	/*Pvt::BasicEffectPimpl* Direct3D11Device::CreateBasicEffectPimpl(BasicEffect* effect, Pvt::IEffectPimpl* pimpl)
 	{
 		return new HlslBasicEffect(this, static_cast<HlslEffect*>(pimpl));
 	}
@@ -428,7 +429,7 @@ namespace Direct3D11
 	Pvt::AlphaTestEffectPimpl* Direct3D11Device::CreateAlphaTestEffectPimpl(AlphaTestEffect* effect, Pvt::IEffectPimpl* pimpl)
 	{
 		return new HlslAlphaTestEffect(this, static_cast<HlslEffect*>(pimpl));
-	}
+	}*/
 
 	void Direct3D11Device::applyDirtyStates()
 	{

@@ -11,28 +11,49 @@ namespace Nxna
 {
 namespace Graphics
 {
-	namespace Pvt
-	{
-		class DualTextureEffectPimpl;
-	}
-
 	class DualTextureEffect : public Effect
 	{
-		Pvt::DualTextureEffectPimpl* m_dtePimpl; 
+		bool m_vertexColorEnabled;
+		Matrix m_world;
+		Matrix m_view;
+		Matrix m_projection;
+		Matrix m_finalTransform;
+		bool m_finalTransformDirty;
 
 	public:
 		DualTextureEffect(GraphicsDevice* device);
 		virtual ~DualTextureEffect() {}
 
-		bool IsVertexColorEnabled();
-		void IsVertexColorEnabled(bool enabled);
+		bool IsVertexColorEnabled() { return m_vertexColorEnabled; }
+		void IsVertexColorEnabled(bool enabled) { m_vertexColorEnabled = enabled; }
 
-		void SetWorld(const Matrix& matrix);
-		void SetView(const Matrix& matrix);
-		void SetProjection(const Matrix& matrix);
+		void SetWorld(const Matrix& matrix)
+		{
+			m_world = matrix;
+			m_finalTransformDirty = true;
+		}
 
-		void SetTexture(Texture2D* texture);
-		void SetTexture2(Texture2D* texture);
+		void SetView(const Matrix& matrix)
+		{
+			m_view = matrix;
+			m_finalTransformDirty = true;
+		}
+
+		void SetProjection(const Matrix& matrix)
+		{
+			m_projection = matrix;
+			m_finalTransformDirty = true;
+		}
+
+		void SetTexture(Texture2D* texture)
+		{
+			GetParameter("Diffuse")->SetValue(texture);
+		}
+
+		void SetTexture2(Texture2D* texture)
+		{
+			GetParameter("Diffuse2")->SetValue(texture);
+		}
 	
 	protected:
 
