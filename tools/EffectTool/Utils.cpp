@@ -9,15 +9,20 @@
 #include <stdlib.h>
 #endif
 
-void Utils::GetFullPath(const char* file, char* result, int maxLength)
+bool Utils::GetFullPath(const char* file, char* result, int maxLength)
 {
 #ifdef _WIN32
 	GetFullPathName(file, maxLength, result, nullptr);
 #else
 	char* path = realpath(file, nullptr);
+	if (path == nullptr)
+		return false;
+
 	strncpy(result, path, maxLength);
 	free(path);
 #endif
+
+	return true;
 }
 
 bool Utils::ResolvePathRelativeTo(const char* relativePath, const char* originalPath, char* result, int maxLength)
@@ -28,7 +33,5 @@ bool Utils::ResolvePathRelativeTo(const char* relativePath, const char* original
 		fullPath += '/';
 	fullPath += relativePath;
 
-	GetFullPath(fullPath.c_str(), result, maxLength);
-
-	return true;
+	return GetFullPath(fullPath.c_str(), result, maxLength);
 }

@@ -4,7 +4,7 @@
 class Utils
 {
 public:
-	static void GetFullPath(const char* file, char* result, int maxLength);
+	static bool GetFullPath(const char* file, char* result, int maxLength);
 
 	static bool ResolvePathRelativeTo(const char* relativePath, const char* originalPath, char* result, int maxLength);
 };
