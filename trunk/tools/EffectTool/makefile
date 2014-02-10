@@ -1,6 +1,6 @@
 COMPILER = g++
 LINKER = g++
-COMPILER_FLAGS = -std=c++11
+COMPILER_FLAGS = -std=c++11 -g
 LINKER_FLAGS = 
 EXECUTABLE = effecttool
 
