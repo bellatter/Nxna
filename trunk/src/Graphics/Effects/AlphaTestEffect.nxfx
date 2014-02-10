@@ -1,0 +1,241 @@
+<effect>
+	<techniques>
+		<technique name="AlphaTestColorNoFogLessGreater" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoords"
+					type="float"
+					numElements="2"
+					semantic="texcoord" />
+				<attribute name="color"
+					type="float"
+					numElements="4"
+					semantic="color" />
+			</attributes>
+		</technique>
+		<technique name="AlphaTestColorNoFogEqual" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoords"
+					type="float"
+					numElements="2"
+					semantic="texcoord" />
+				<attribute name="color"
+					type="float"
+					numElements="4"
+					semantic="color" />
+			</attributes>
+		</technique>
+		<technique name="AlphaTestNoFogLessGreater" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoords"
+					type="float"
+					numElements="2"
+					semantic="texcoord" />
+			</attributes>
+		</technique>
+		<technique name="AlphaTestNoFogEqual" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoords"
+					type="float"
+					numElements="2"
+					semantic="texcoord" />
+			</attributes>
+		</technique>
+		<technique name="AlphaTestColorLessGreater" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoords"
+					type="float"
+					numElements="2"
+					semantic="texcoord" />
+				<attribute name="color"
+					type="float"
+					numElements="4"
+					semantic="color" />
+			</attributes>
+		</technique>
+		<technique name="AlphaTestColorEqual" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoords"
+					type="float"
+					numElements="2"
+					semantic="texcoord" />
+				<attribute name="color"
+					type="float"
+					numElements="4"
+					semantic="color" />
+			</attributes>
+		</technique>
+		<technique name="AlphaTestLessGreater" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoords"
+					type="float"
+					numElements="2"
+					semantic="texcoord" />
+			</attributes>
+		</technique>
+		<technique name="AlphaTestEqual" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoords"
+					type="float"
+					numElements="2"
+					semantic="texcoord" />
+			</attributes>
+		</technique>
+		<technique name="default" />
+	</techniques>
+	<cbuffers>
+		<cbuffer>
+			<constant name="ModelViewProjection"
+				type="float"
+				numElements="16" />
+			<constant name="DiffuseColor"
+				type="float"
+				numElements="4" />
+			<constant name="AlphaTest"
+				type="float"
+				numElements="4" />
+			<constant name="FogColor"
+				type="float"
+				numElements="3" />
+			<constant name="FogVector"
+				type="float"
+				numElements="4" />
+		</cbuffer>
+	</cbuffers>
+	<textures>
+		<texture name="Diffuse" />
+	</textures>
+	<shaders>
+		<shader name="AlphaTest_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_VSAlphaTest.o" />
+		<shader name="AlphaTestNoFog_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_VSAlphaTestNoFog.o" />
+		<shader name="AlphaTestVc_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_VSAlphaTestVc.o" />
+		<shader name="AlphaTestVcNoFog_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_VSAlphaTestVcNoFog.o" />
+		<shader name="AlphaTestEqNe_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_PSAlphaTestEqNe.o" />
+		<shader name="AlphaTestEqNeNoFog_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_PSAlphaTestEqNeNoFog.o" />
+		<shader name="AlphaTestLtGt_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_PSAlphaTestLtGt.o" />
+		<shader name="AlphaTestLtGtNoFog_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_PSAlphaTestLtGtNoFog.o" />
+		<shader name="AlphaTestEffect_vs_glsl">
+<![CDATA[
+uniform HIGHP mat4 ModelViewProjection;
+
+in vec4 position;
+in vec2 texCoords;
+#if defined AlphaTestColorNoFogLessGreater || defined AlphaTestColorNoFogEqual || defined AlphaTestColorLessGreater || defined AlphaTestColorEqual
+in vec4 color;
+out vec4 o_color;
+#endif
+out vec2 o_diffuseCoords;
+
+void main()
+{
+	gl_Position = ModelViewProjection * position;
+	o_diffuseCoords = texCoords;
+#if defined AlphaTestColorNoFogLessGreater || defined AlphaTestColorNoFogEqual || defined AlphaTestColorLessGreater || defined AlphaTestColorEqual
+	o_color = color;
+#endif
+}
+]]>
+		</shader>
+		<shader name="AlphaTestEffect_ps_glsl">
+<![CDATA[
+uniform HIGHP vec4 AlphaTest;
+uniform sampler2D Diffuse;
+
+in HIGHP vec2 o_diffuseCoords;
+#if defined AlphaTestColorNoFogLessGreater || defined AlphaTestColorNoFogEqual || defined AlphaTestColorLessGreater || defined AlphaTestColorEqual
+in HIGHP vec4 o_color;
+#endif
+#if __VERSION__ >= 130
+out vec4 outputColor;
+#endif
+
+void clip(HIGHP float a)
+{
+	if (a < 0.0) discard;
+}
+
+void main()
+{
+	HIGHP vec4 finalColor;
+#if __VERSION__ < 130
+	finalColor = texture2D(Diffuse, o_diffuseCoords);
+#else
+	finalColor = texture(Diffuse, o_diffuseCoords);
+#endif
+#if defined AlphaTestColorNoFogLessGreater || defined AlphaTestColorNoFogEqual || defined AlphaTestColorLessGreater || defined AlphaTestColorEqual
+	finalColor *= o_color;
+#endif
+
+#if defined AlphaTestColorNoFogLessGreater || defined AlphaTestNoFogLessGreater || defined AlphaTestColorLessGreater || defined AlphaTestLessGreater
+	clip((finalColor.a < AlphaTest.x) ? AlphaTest.z : AlphaTest.w);
+#else
+	clip((abs(finalColor.a - AlphaTest.x) < AlphaTest.y) ? AlphaTest.z : AlphaTest.w);
+#endif
+		
+#if __VERSION__ < 130
+	gl_FragColor = finalColor;
+#else
+	outputColor = finalColor;
+#endif
+
+}
+]]>
+		</shader>
+	</shaders>
+	<shaderMap>
+		<technique name="AlphaTestColorNoFogLessGreater" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
+		<technique name="AlphaTestColorNoFogLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestVcNoFog_vs_hlsl" pixelShader="AlphaTestLtGtNoFog_ps_hlsl" />
+		
+		<technique name="AlphaTestColorNoFogEqual" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
+		<technique name="AlphaTestColorNoFogEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestVcNoFog_vs_hlsl" pixelShader="AlphaTestEqNeNoFog_ps_hlsl" />
+		
+		<technique name="AlphaTestNoFogLessGreater" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
+		<technique name="AlphaTestNoFogLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestNoFog_vs_hlsl" pixelShader="AlphaTestLtGtNoFog_ps_hlsl" />
+		
+		<technique name="AlphaTestNoFogEqual" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
+		<technique name="AlphaTestNoFogEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestNoFog_vs_hlsl" pixelShader="AlphaTestEqNeNoFog_ps_hlsl" />
+	
+		<technique name="AlphaTestColorLessGreater" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
+		<technique name="AlphaTestColorLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestVc_vs_hlsl" pixelShader="AlphaTestLtGt_ps_hlsl" />
+		
+		<technique name="AlphaTestColorEqual" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
+		<technique name="AlphaTestColorEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestVc_vs_hlsl" pixelShader="AlphaTestEqNe_ps_hlsl" />
+		
+		<technique name="AlphaTestLessGreater" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
+		<technique name="AlphaTestLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_vs_hlsl" pixelShader="AlphaTestLtGt_ps_hlsl" />
+		
+		<technique name="AlphaTestEqual" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
+		<technique name="AlphaTestEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_vs_hlsl" pixelShader="AlphaTestEqNe_ps_hlsl" />
+	</shaderMap>
+</effect>

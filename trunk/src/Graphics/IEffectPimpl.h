@@ -3,6 +3,8 @@
 
 #include <vector>
 #include "Effect.h"
+#include "ShaderProfile.h"
+#include "Semantic.h"
 
 namespace Nxna
 {
@@ -25,11 +27,20 @@ namespace Pvt
 		virtual EffectParameter* GetParameter(int index) = 0;
 		virtual int GetNumParameters() = 0;
 
-		static EffectParameter* CreateParameter(Effect* parent, EffectParameterType type, int numElements, void* handle, const char* name);
-		static EffectTechnique* CreateTechnique(Effect* parent, const char* name, bool hidden);
+		virtual void AddConstantBuffer(bool vertex, bool pixel, int sizeInBytes, int numParameters) = 0;
+		virtual EffectParameter* AddParameter(const char* name, EffectParameterType type, int numElements, int constantBufferIndex, int constantBufferConstantIndex, int constantBufferOffset) = 0;
 
+		virtual EffectTechnique* CreateProgram(const char* name, bool hidden, const byte* vertexSource, int vertexSourceLength, const byte* pixelSource, int pixelSourceLength) = 0;
+		virtual void AddAttributeToProgram(int programIndex, const char* name, EffectParameterType type, int numElements, Semantic semantic, int usageIndex) = 0;
+		
+		virtual int ScoreProfile(ShaderProfile profile) = 0;
+
+		static EffectParameter* CreateParameter(Effect* parent, EffectParameterType type, int numElements, void* handle, const char* name);
+	
 	protected:
 		int* GetRawValue(EffectParameter* parameter);
+
+		EffectTechnique* CreateTechnique(const char* name, bool hidden);
 	};
 }
 }

@@ -13,14 +13,14 @@ namespace Pvt
 		return new EffectParameter(parent, type, numElements, handle, name);
 	}
 
-	EffectTechnique* IEffectPimpl::CreateTechnique(Effect* parent, const char* name, bool hidden)
-	{
-		return parent->CreateTechnique(name, hidden);
-	}
-
 	int* IEffectPimpl::GetRawValue(EffectParameter* parameter)
 	{
 		return parameter->m_value;
+	}
+
+	EffectTechnique* IEffectPimpl::CreateTechnique(const char* name, bool hidden)
+	{
+		return m_parent->CreateTechnique(name, hidden);
 	}
 }
 }

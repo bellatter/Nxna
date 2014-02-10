@@ -1,42 +1,44 @@
 #include "BasicEffect.h"
-#include "BasicEffectPimpl.h"
+#include "IEffectPimpl.h"
+
+#include "Effects/BasicEffect.inc"
 
 namespace Nxna
 {
 namespace Graphics
 {
 	BasicEffect::BasicEffect(GraphicsDevice* device)
-		: Effect(device)
+		: Effect(device, (byte*)BasicEffect_bytecode, sizeof(BasicEffect_bytecode))
 	{
-		m_bePimpl = device->CreateBasicEffectPimpl(this, m_pimpl);
+		m_textureEnabled = false;
+		m_vertexColorEnabled = false;
+		m_finalTransformDirty = true;
 	}
-
-	bool BasicEffect::IsTextureEnabled() { return m_bePimpl->IsTextureEnabled(); }
-	void BasicEffect::IsTextureEnabled(bool enabled) { m_bePimpl->IsTextureEnabled(enabled); }
-
-	bool BasicEffect::IsVertexColorEnabled() { return m_bePimpl->IsVertexColorEnabled(); }
-	void BasicEffect::IsVertexColorEnabled(bool enabled) { m_bePimpl->IsVertexColorEnabled(enabled); }
-
-	void BasicEffect::SetWorld(const Matrix& matrix) { m_bePimpl->SetWorld(matrix); }
-	void BasicEffect::SetView(const Matrix& matrix) { m_bePimpl->SetView(matrix); }
-	void BasicEffect::SetProjection(const Matrix& matrix) { m_bePimpl->SetProjection(matrix); }
-
-	void BasicEffect::SetTexture(Texture2D* texture) { m_bePimpl->SetTexture(texture); }
 
 	void BasicEffect::OnApply()
 	{
-		// determine which to apply
-		bool colorEnabled = m_bePimpl->IsVertexColorEnabled();
-		bool textureEnabled = m_bePimpl->IsTextureEnabled();
+		if (m_finalTransformDirty)
+		{
+			Matrix worldView;
+			Matrix worldViewProjection;
 
-		if (colorEnabled && textureEnabled)
-			m_bePimpl->Apply(0);
-		else if (colorEnabled)
-			m_bePimpl->Apply(1);
-		else if (textureEnabled)
-			m_bePimpl->Apply(2);
+			Matrix::Multiply(m_world, m_view, worldView);
+			Matrix::Multiply(worldView, m_projection, m_finalTransform);
+
+			m_finalTransformDirty = false;
+		}
+
+		GetParameter("ModelViewProjection")->SetValue(m_finalTransform.C);
+
+		// determine which to apply
+		if (m_vertexColorEnabled && m_textureEnabled)
+			m_pimpl->Apply(3);
+		else if (m_vertexColorEnabled)
+			m_pimpl->Apply(2);
+		else if (m_textureEnabled)
+			m_pimpl->Apply(1);
 		else
-			m_bePimpl->Apply(3);
+			m_pimpl->Apply(0);
 	}
 }
 }

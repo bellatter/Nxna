@@ -27,12 +27,13 @@ namespace OpenGl
 		const char* color[] = { "#define VERTEXCOLORENABLED\n" };
 		const char* texture[] = { "#define TEXTUREENABLED\n" };
 
-		glslEffect->CreateProgram("ColorAndTexture", true, vertexResult, fragResult, colorAndTexture, 2);
-		glslEffect->CreateProgram("Color", true, vertexResult, fragResult, color, 1);
-		glslEffect->CreateProgram("Texture", true, vertexResult, fragResult, texture, 1);
-		glslEffect->CreateProgram("Nothing", true, vertexResult, fragResult, nullptr, 0);
+		glslEffect->CreateProgram("ColorAndTexture", true, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
+		glslEffect->CreateProgram("Color", true, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
+		glslEffect->CreateProgram("Texture", true, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
+		glslEffect->CreateProgram("Nothing", true, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
 
-		glslEffect->CreateDummyTechnique();
+		// create the dummy technique
+		glslEffect->CreateProgram("default", false, nullptr, 0, nullptr, 0);
 	}
 
 	void GlslBasicEffect::Apply(int programIndex)

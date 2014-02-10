@@ -21,6 +21,7 @@ namespace Graphics
 	class EffectTechnique;
 
 	NXNA_ENUM(EffectParameterType)
+		Void = 0,
 		Bool,
 		Int32,
 		Single,
@@ -29,8 +30,7 @@ namespace Graphics
 		Texture1D,
 		Texture2D,
 		Texture3D,
-		TextureCube,
-		Void
+		TextureCube
 	END_NXNA_ENUM(EffectParameterType)
 
 	class GraphicsDevice;

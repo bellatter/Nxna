@@ -15,7 +15,7 @@ namespace OpenGl
 	{
 		std::string vertexResult, fragResult;
 		glslEffect->ProcessSource(SpriteEffect_vert, SpriteEffect_frag, vertexResult, fragResult);
-		glslEffect->CreateProgram("default", false, vertexResult, fragResult, nullptr, 0);
+		glslEffect->CreateProgram("default", false, (const byte*)vertexResult.c_str(), vertexResult.length(), (const byte*)fragResult.c_str(), fragResult.length());
 	}
 }
 }

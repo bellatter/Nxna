@@ -68,9 +68,8 @@ namespace Direct3D11
 		HlslEffect(Direct3D11Device* device, Effect* parent);
 		virtual ~HlslEffect();
 
-		void AddPermutation(const char* name, bool hidden, const byte* vertexBytecode, int vertexBytecodeLength,
-			const byte* pixelBytecode, int pixelBytecodeLength);
-		void CreateDummyTechnique();
+		virtual EffectTechnique* CreateProgram(const char* name, bool hidden, const byte* vertexSource, int vertexSourceLength, const byte* pixelSource, int pixelSourceLength) override;
+		virtual void AddAttributeToProgram(int programIndex, const char* name, EffectParameterType type, int numElements, Semantic semantic, int usageIndex) override;
 
 		virtual EffectParameter* GetParameter(const char* name) override
 		{
@@ -93,14 +92,17 @@ namespace Direct3D11
 			return m_parameterList.size();
 		}
 
+		virtual void AddConstantBuffer(bool vertex, bool pixel, int sizeInBytes, int numParameters) override;
+		virtual EffectParameter* AddParameter(const char* name, EffectParameterType type, int numElements, int constantBufferIndex, int constantBufferConstantIndex, int constantBufferOffset) override;
+
+		virtual int ScoreProfile(ShaderProfile profile) override;
+
 		unsigned int GetHash(int program);
 		void GetBytecode(int program, byte** bytecode, int* length);
 
 		void SetConstantBuffers();
 
 		void ApplyProgram(int programIndex);
-
-		EffectParameter* AddParameter(EffectParameterType type, int numElements, void* handle, const char* name);
 
 		std::vector<ConstantBuffer>& GetConstantBuffers() { return m_cbuffers; }
 

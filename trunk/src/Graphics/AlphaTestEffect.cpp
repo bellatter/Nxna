@@ -1,31 +1,109 @@
 #include "AlphaTestEffect.h"
-#include "AlphaTestEffectPimpl.h"
+#include "IEffectPimpl.h"
+
+#include "Effects/AlphaTestEffect.inc"
 
 namespace Nxna
 {
 namespace Graphics
 {
 	AlphaTestEffect::AlphaTestEffect(GraphicsDevice* device)
-		: Effect(device)
+		: Effect(device, (byte*)AlphaTestEffect_bytecode, sizeof(AlphaTestEffect_bytecode))
 	{
-		m_atePimpl = device->CreateAlphaTestEffectPimpl(this, m_pimpl);
+		m_vertexColorEnabled = false;
+		m_finalTransformDirty = true;
+
+		Matrix::GetIdentity(m_world);
+		Matrix::GetIdentity(m_view);
+		Matrix::GetIdentity(m_projection);
+
+		m_transform = GetParameter("ModelViewProjection");
+		m_diffuse = GetParameter("Diffuse");
+		m_diffuseColor = GetParameter("DiffuseColor");
+		m_alphaTest = GetParameter("AlphaTest");
+
+		m_compareFunction = CompareFunction::Greater;
+		m_alpha = 1.0f;
+		m_referenceAlpha = 0;
 	}
-
-	bool AlphaTestEffect::IsVertexColorEnabled() { return m_atePimpl->IsVertexColorEnabled(); }
-	void AlphaTestEffect::IsVertexColorEnabled(bool enabled) { m_atePimpl->IsVertexColorEnabled(enabled); }
-
-	void AlphaTestEffect::SetWorld(const Matrix& matrix) { m_atePimpl->SetWorld(matrix); }
-	void AlphaTestEffect::SetView(const Matrix& matrix) { m_atePimpl->SetView(matrix); }
-	void AlphaTestEffect::SetProjection(const Matrix& matrix) { m_atePimpl->SetProjection(matrix); }
-
-	void AlphaTestEffect::SetTexture(Texture2D* texture) { m_atePimpl->SetTexture(texture); }
 
 	void AlphaTestEffect::OnApply()
 	{
-		if (m_atePimpl->IsVertexColorEnabled())
-			m_atePimpl->Apply(0);
+		if (m_finalTransformDirty)
+		{
+			Matrix worldView;
+			Matrix worldViewProjection;
+
+			Matrix::Multiply(m_world, m_view, worldView);
+			Matrix::Multiply(worldView, m_projection, worldViewProjection);
+
+			m_transform->SetValue(worldViewProjection.C);
+
+			m_finalTransformDirty = false;
+		}
+
+		m_diffuseColor->SetValue(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+		float fRefAlpha = (float)m_referenceAlpha / 255.0f;
+
+		// calculate the AlphaTest parameter
+		const float threshold = 0.5f / 255.0f;
+		Vector4 alphaTest;
+		if (m_compareFunction == CompareFunction::Less)
+		{
+			alphaTest.X = fRefAlpha - threshold;
+			alphaTest.Z = 1.0f;
+			alphaTest.W = -1.0f;
+		}
+		else if (m_compareFunction == CompareFunction::LessEqual)
+		{
+			alphaTest.X = fRefAlpha + threshold;
+			alphaTest.Z = 1.0f;
+			alphaTest.W = -1.0f;
+		}
+		else if (m_compareFunction == CompareFunction::GreaterEqual)
+		{
+			alphaTest.X = fRefAlpha - threshold;
+			alphaTest.Z = -1.0f;
+			alphaTest.W = 1.0f;
+		}
+		else if (m_compareFunction == CompareFunction::Greater)
+		{
+			alphaTest.X = fRefAlpha + threshold;
+			alphaTest.Z = -1.0f;
+			alphaTest.W = 1.0f;
+		}
+		else if (m_compareFunction == CompareFunction::Equal)
+		{
+			alphaTest.X = fRefAlpha;
+			alphaTest.Y = threshold;
+			alphaTest.Z = 1.0f;
+			alphaTest.W = -1.0f;
+		}
+		else if (m_compareFunction == CompareFunction::NotEqual)
+		{
+			alphaTest.X = fRefAlpha;
+			alphaTest.Y = threshold;
+			alphaTest.Z = -1.0f;
+			alphaTest.W = 1.0f;
+		}
+		else if (m_compareFunction == CompareFunction::Never)
+		{
+			alphaTest.Z = -1.0f;
+			alphaTest.W = -1.0f;
+		}
+		else if (m_compareFunction == CompareFunction::Always)
+		{
+			alphaTest.Z = 1.0f;
+			alphaTest.W = -1.0f;
+		}
+
+		m_alphaTest->SetValue(alphaTest);
+
+		if (m_vertexColorEnabled)
+			m_pimpl->Apply(0);
 		else
-			m_atePimpl->Apply(1);
+			m_pimpl->Apply(1);
 	}
 }
 }

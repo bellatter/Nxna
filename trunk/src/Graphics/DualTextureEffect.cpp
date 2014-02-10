@@ -1,32 +1,38 @@
 #include "DualTextureEffect.h"
-#include "DualTextureEffectPimpl.h"
+#include "IEffectPimpl.h"
+
+#include "Effects/DualTextureEffect.inc"
 
 namespace Nxna
 {
 namespace Graphics
 {
 	DualTextureEffect::DualTextureEffect(GraphicsDevice* device)
-		: Effect(device)
+		: Effect(device, (byte*)DualTextureEffect_bytecode, sizeof(DualTextureEffect_bytecode))
 	{
-		m_dtePimpl = device->CreateDualTextureEffectPimpl(this, m_pimpl);
+		m_vertexColorEnabled = false;
+		m_finalTransformDirty = true;
 	}
-
-	bool DualTextureEffect::IsVertexColorEnabled() { return m_dtePimpl->IsVertexColorEnabled(); }
-	void DualTextureEffect::IsVertexColorEnabled(bool enabled) { m_dtePimpl->IsVertexColorEnabled(enabled); }
-
-	void DualTextureEffect::SetWorld(const Matrix& matrix) { m_dtePimpl->SetWorld(matrix); }
-	void DualTextureEffect::SetView(const Matrix& matrix) { m_dtePimpl->SetView(matrix); }
-	void DualTextureEffect::SetProjection(const Matrix& matrix) { m_dtePimpl->SetProjection(matrix); }
-
-	void DualTextureEffect::SetTexture(Texture2D* texture) { m_dtePimpl->SetTexture(texture); }
-	void DualTextureEffect::SetTexture2(Texture2D* texture) { m_dtePimpl->SetTexture2(texture); }
 
 	void DualTextureEffect::OnApply()
 	{
-		if (m_dtePimpl->IsVertexColorEnabled())
-			m_dtePimpl->Apply(0);
+		if (m_finalTransformDirty)
+		{
+			Matrix worldView;
+			Matrix worldViewProjection;
+
+			Matrix::Multiply(m_world, m_view, worldView);
+			Matrix::Multiply(worldView, m_projection, m_finalTransform);
+
+			m_finalTransformDirty = false;
+		}
+
+		GetParameter("ModelViewProjection")->SetValue(m_finalTransform.C);
+
+		if (m_vertexColorEnabled)
+			m_pimpl->Apply(0);
 		else
-			m_dtePimpl->Apply(1);
+			m_pimpl->Apply(1);
 	}
 }
 }

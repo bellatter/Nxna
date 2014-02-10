@@ -1,0 +1,73 @@
+<effect>
+	<techniques>
+		<technique name="default">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoord"
+					type="float"
+					numElements="2"
+					semantic="texcoord" />
+				<attribute name="color"
+					type="float"
+					numElements="4"
+					semantic="color"/>
+			</attributes>
+		</technique>
+	</techniques>
+	<cbuffers>
+		<cbuffer>
+			<constant name="ModelViewProjection"
+				type="float"
+				numElements="16" />
+		</cbuffer>
+	</cbuffers>
+	<textures>
+		<texture name="Diffuse" />
+	</textures>
+	<shaders>
+		<shader name="default_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/SpriteEffect_SpriteVertexShader.o" />
+		<shader name="default_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/SpriteEffect_SpritePixelShader.o" />
+		<shader name="default_vs_glsl">
+		<![CDATA[
+uniform HIGHP mat4 ModelViewProjection;
+in vec3 position;
+in vec2 texCoord;
+in vec4 color;
+out vec2 o_diffuseCoords;
+out vec4 o_color;
+void main()
+{
+	gl_Position = ModelViewProjection * vec4(position, 1.0);
+	o_diffuseCoords = texCoord;
+	o_color = color;
+}
+		]]>
+		</shader>
+		<shader name="default_ps_glsl">
+		<![CDATA[
+uniform sampler2D Diffuse;
+in HIGHP vec2 o_diffuseCoords;
+in HIGHP vec4 o_color;
+#if VERSION >= 130
+out vec4 outputColor;
+#endif
+
+void main()
+{
+#if VERSION < 130
+	gl_FragColor = texture2D(Diffuse, o_diffuseCoords) * o_color;
+#else
+	outputColor = texture(Diffuse, o_diffuseCoords) * o_color;
+#endif
+}
+		]]>
+		</shader>
+	</shaders>
+	<shaderMap>
+		<technique name="default" profile="glsl_130" vertexShader="default_vs_glsl" pixelShader="default_ps_glsl"/>
+		<technique name="default" profile="hlsl_4_0_level_9_1" vertexShader="default_vs_hlsl" pixelShader="default_ps_hlsl" />
+	</shaderMap>
+</effect>

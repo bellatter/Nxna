@@ -109,13 +109,16 @@ namespace OpenGl
 			return m_parameterList.size();
 		}
 
+		virtual void AddConstantBuffer(bool vertex, bool pixel, int sizeInBytes, int numParameters) override;
+		virtual EffectParameter* AddParameter(const char* name, EffectParameterType type, int numElements, int constantBufferIndex, int constantBufferConstantIndex, int constantBufferOffset) override;
+
 		const GlslAttribute* GetAttribute(VertexElementUsage usage, int index);
 
 		void ProcessSource(const char* vertexSource, const char* fragmentSource, std::string& vertexResult, std::string& fragResult);
-		void CreateProgram(const char* name, bool hidden, const std::string& vertexSource, const std::string& fragSource, const char* defines[], int numDefines);
-		void CreateDummyTechnique();
+		virtual EffectTechnique* CreateProgram(const char* name, bool hidden, const byte* vertexSource, int vertexSourceLength, const byte* fragSource, int fragSourceLength) override;
+		virtual void AddAttributeToProgram(int programIndex, const char* name, EffectParameterType type, int numElements, Semantic semantic, int usageIndex) override;
 
-		EffectParameter* AddParameter(EffectParameterType type, int numElements, void* handle, const char* name);
+		virtual int ScoreProfile(ShaderProfile profile) override;
 
 		void ApplyProgram(int programIndex);
 

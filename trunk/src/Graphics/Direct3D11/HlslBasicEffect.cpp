@@ -28,26 +28,24 @@ namespace Direct3D11
 	{
 		m_device = device;
 
-		hlslEffect->AddPermutation("ColorTexture", true, BasicEffect_BasicEffectColorTextureVS, sizeof(BasicEffect_BasicEffectColorTextureVS),
+		hlslEffect->CreateProgram("ColorTexture", true, BasicEffect_BasicEffectColorTextureVS, sizeof(BasicEffect_BasicEffectColorTextureVS),
 			BasicEffect_BasicEffectColorTexturePS, sizeof(BasicEffect_BasicEffectColorTexturePS));
-		hlslEffect->AddPermutation("Color", true, BasicEffect_BasicEffectColorVS, sizeof(BasicEffect_BasicEffectColorVS),
+		hlslEffect->CreateProgram("Color", true, BasicEffect_BasicEffectColorVS, sizeof(BasicEffect_BasicEffectColorVS),
 			BasicEffect_BasicEffectColorPS, sizeof(BasicEffect_BasicEffectColorPS));
-		hlslEffect->AddPermutation("Texture", true, BasicEffect_BasicEffectTextureVS, sizeof(BasicEffect_BasicEffectTextureVS),
+		hlslEffect->CreateProgram("Texture", true, BasicEffect_BasicEffectTextureVS, sizeof(BasicEffect_BasicEffectTextureVS),
 			BasicEffect_BasicEffectTexturePS, sizeof(BasicEffect_BasicEffectTexturePS));
-		hlslEffect->AddPermutation("Other", true, BasicEffect_BasicEffectVS, sizeof(BasicEffect_BasicEffectVS),
+		hlslEffect->CreateProgram("Other", true, BasicEffect_BasicEffectVS, sizeof(BasicEffect_BasicEffectVS),
 			BasicEffect_BasicEffectPS, sizeof(BasicEffect_BasicEffectPS));
 
-		hlslEffect->CreateDummyTechnique();
+		// create the non-hidden dummy technique
+		hlslEffect->CreateProgram("default", false, nullptr, 0, nullptr, 0);
+
+		// create the cbuffer
+		hlslEffect->AddConstantBuffer(true, false, 16 * sizeof(float), 1);
 
 		// create the parameters
-		hlslEffect->AddParameter(EffectParameterType::Single, 16, 0, "ModelViewProjection");
-		hlslEffect->AddParameter(EffectParameterType::Texture2D, 1, 0, "Diffuse");
-
-		int indices[] = {0, 1};
-		int offsets[] = {0, 0};
-		ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, false, 16 * sizeof(float), indices, offsets, 1));
-		//ConstantBuffer cbuffer(new D3D11ConstantBuffer(device, true, 16 * sizeof(float), indices, offsets, 1));
-		hlslEffect->GetConstantBuffers().push_back(cbuffer);
+		hlslEffect->AddParameter("ModelViewProjection", EffectParameterType::Single, 16, 0, 0, 0);
+		hlslEffect->AddParameter("Diffuse", EffectParameterType::Texture2D, 1, 0, 0, 0);
 	}
 
 	void HlslBasicEffect::Apply(int programIndex)

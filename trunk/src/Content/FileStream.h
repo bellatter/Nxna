@@ -63,6 +63,32 @@ namespace Content
 	private:
 		void swapLE(void* data, int length);
 	};
+
+	class MemoryStream : public Stream
+	{
+		const byte* m_memory;
+		int m_length;
+		int m_position;
+
+	public:
+		MemoryStream(const byte* memory, int length);
+		virtual ~MemoryStream() { }
+
+		virtual int Read(byte* destination, int length) override;
+		virtual int ReadInt32() override;
+		virtual short ReadInt16() override;
+		virtual float ReadFloat() override;
+		virtual byte ReadByte() override;
+
+		virtual void Seek(int offset, SeekOrigin origin) override;
+
+		virtual int Position() override;
+		virtual int Length() override;
+		bool Eof();
+
+	private:
+		void swapLE(void* data, int length);
+	};
 }
 }
 

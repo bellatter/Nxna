@@ -11,37 +11,85 @@ namespace Nxna
 {
 namespace Graphics
 {
-	namespace Pvt
-	{
-		class AlphaTestEffectPimpl;
-	}
-
 	class AlphaTestEffect : public Effect
 	{
-		Pvt::AlphaTestEffectPimpl* m_atePimpl; 
+		bool m_vertexColorEnabled;
+
+		Matrix m_world;
+		Matrix m_view;
+		Matrix m_projection;
+		Matrix m_finalTransform;
+		bool m_finalTransformDirty;
+
+		EffectParameter* m_transform;
+		EffectParameter* m_diffuse;
+		EffectParameter* m_diffuseColor;
+		EffectParameter* m_alphaTest;
+
+		CompareFunction m_compareFunction;
+		int m_referenceAlpha;
+		float m_alpha;
 
 	public:
 
 		AlphaTestEffect(GraphicsDevice* device);
 		virtual ~AlphaTestEffect() {}
 
-		bool IsVertexColorEnabled();
-		void IsVertexColorEnabled(bool enabled);
+		bool IsVertexColorEnabled() { return m_vertexColorEnabled; }
+		void IsVertexColorEnabled(bool enabled) { m_vertexColorEnabled = enabled; }
 
-		void SetWorld(const Matrix& matrix);
-		void SetView(const Matrix& matrix);
-		void SetProjection(const Matrix& matrix);
+		void SetWorld(const Matrix& matrix)
+		{
+			m_world = matrix;
+			m_finalTransformDirty = true;
+		}
 
-		void SetTexture(Texture2D* texture);
+		void SetView(const Matrix& matrix)
+		{
+			m_view = matrix;
+			m_finalTransformDirty = true;
+		}
 
-		void SetReferenceAlpha(float alpha);
-		float GetReferenceAlpha();
+		void SetProjection(const Matrix& matrix)
+		{
+			m_projection = matrix;
+			m_finalTransformDirty = true;
+		}
 
-		void SetAlpha(float alpha);
-		float GetAlpha();
+		void SetTexture(Texture2D* texture)
+		{
+			m_diffuse->SetValue(texture);
+		}
 
-		void SetAlphaFunction(CompareFunction function);
-		CompareFunction GetAlphaFunction();
+		void SetReferenceAlpha(int alpha)
+		{
+			m_referenceAlpha = alpha;
+		}
+
+		int GetReferenceAlpha()
+		{
+			return m_referenceAlpha;
+		}
+
+		void SetAlpha(float alpha)
+		{
+			m_alpha = alpha;
+		}
+
+		float GetAlpha()
+		{
+			return m_alpha;
+		}
+
+		void SetAlphaFunction(CompareFunction function)
+		{
+			m_compareFunction = function;
+		}
+
+		CompareFunction GetAlphaFunction()
+		{
+			return m_compareFunction;
+		}
 
 	protected:
 		virtual void OnApply() override;
