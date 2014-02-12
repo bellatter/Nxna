@@ -243,6 +243,11 @@ EffectXml::EffectXml(const std::string& xml)
 			techniqueMapXml.VertexShader = technique->Attribute("vertexShader");
 			techniqueMapXml.PixelShader = technique->Attribute("pixelShader");
 
+			if (technique->Attribute("vertexShaderEntryPoint") != nullptr)
+				techniqueMapXml.VertexShaderEntryPoint = technique->Attribute("vertexShaderEntryPoint");
+			if (technique->Attribute("pixelShaderEntryPoint") != nullptr)
+				techniqueMapXml.PixelShaderEntryPoint = technique->Attribute("pixelShaderEntryPoint");
+
 			m_techniqueMaps.push_back(techniqueMapXml);
 
 			technique = technique->NextSiblingElement("technique");
@@ -276,6 +281,16 @@ int EffectXml::FindShaderByName(const char* name) const
 	}
 
 	return -1;
+}
+
+void EffectXml::AddShader(const char* name, const unsigned char* code, int codeLength)
+{
+	ShaderXml shader;
+	shader.Name = name;
+	shader.SourceCode.resize(codeLength);
+	memcpy(shader.SourceCode.data(), code, codeLength);
+
+	m_shaders.push_back(shader);
 }
 
 void EffectXml::RemoveProfile(Profile::eProfile profile)
