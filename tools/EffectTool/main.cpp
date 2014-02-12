@@ -5,6 +5,7 @@
 #include "EffectXml.h"
 #include "EffectWriter.h"
 #include "XnbWriter.h"
+#include "EffectCompiler.h"
 #include "EffectToolException.h"
 #include "HeaderConverter.h"
 #include "CommandLineArgs.h"
@@ -222,7 +223,11 @@ int main(int argc, char** argv)
 		else
 			pathToBlah = options.InputFile.substr(0, lastSlash);
 
-		effect.LoadExternalShaders(pathToBlah.c_str());
+		//effect.LoadExternalShaders();
+		EffectCompiler::Compile(&effect, pathToBlah.c_str());
+
+		// remove any shaders orphaned by the compilation process
+		effect.RemoveUnusedShaders();
 
 		ResizableBuffer buffer;
 

@@ -125,7 +125,9 @@ struct TechniqueMapXml
 	std::string Name;
 	Profile::eProfile ProfileType;
 	std::string VertexShader;
+	std::string VertexShaderEntryPoint;
 	std::string PixelShader;
+	std::string PixelShaderEntryPoint;
 };
 
 class EffectXml
@@ -152,6 +154,8 @@ public:
 
 	int FindTechniqueByName(const char* name) const;
 	int FindShaderByName(const char* name) const;
+
+	void AddShader(const char* name, const unsigned char* code, int codeLength);
 
 	void RemoveProfile(Profile::eProfile profile);
 	void RemoveUnusedShaders();
