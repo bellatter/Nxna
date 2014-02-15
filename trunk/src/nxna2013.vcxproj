@@ -63,6 +63,12 @@
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
+    <PreBuildEvent>
+      <Command>"$(OutputPath)\EffectTool.exe" -h -hn AlphaTestEffect_bytecode "$(ProjectDir)\Graphics\Effects\AlphaTestEffect.nxfx" "$(ProjectDir)\Graphics\Effects\AlphaTestEffect.inc"
+"$(OutputPath)\EffectTool.exe" -h -hn BasicEffect_bytecode "$(ProjectDir)\Graphics\Effects\BasicEffect.nxfx" "$(ProjectDir)\Graphics\Effects\BasicEffect.inc"
+"$(OutputPath)\EffectTool.exe" -h -hn DualTextureEffect_bytecode "$(ProjectDir)\Graphics\Effects\DualTextureEffect.nxfx" "$(ProjectDir)\Graphics\Effects\DualTextureEffect.inc"
+"$(OutputPath)\EffectTool.exe" -h -hn SpriteEffect_bytecode "$(ProjectDir)\Graphics\Effects\SpriteEffect.nxfx" "$(ProjectDir)\Graphics\Effects\SpriteEffect.inc"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -110,11 +116,7 @@
     <ClInclude Include="Graphics\Direct3D11\D3D11Utils.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11VertexBuffer.h" />
     <ClInclude Include="Graphics\Direct3D11\Direct3D11Device.h" />
-    <ClInclude Include="Graphics\Direct3D11\HlslAlphaTestEffect.h" />
-    <ClInclude Include="Graphics\Direct3D11\HlslBasicEffect.h" />
-    <ClInclude Include="Graphics\Direct3D11\HlslDualTextureEffect.h" />
     <ClInclude Include="Graphics\Direct3D11\HlslEffect.h" />
-    <ClInclude Include="Graphics\Direct3D11\HlslSpriteEffect.h" />
     <ClInclude Include="Graphics\DualTextureEffect.h" />
     <ClInclude Include="Graphics\DualTextureEffectPimpl.h" />
     <ClInclude Include="Graphics\Effect.h" />
@@ -130,12 +132,8 @@
     <ClInclude Include="Graphics\libsquish\squish.h" />
     <ClInclude Include="Graphics\OpenGL\GlIndexBuffer.h" />
     <ClInclude Include="Graphics\OpenGL\GlRenderTarget2D.h" />
-    <ClInclude Include="Graphics\OpenGL\GlslAlphaTestEffect.h" />
-    <ClInclude Include="Graphics\OpenGL\GlslBasicEffect.h" />
-    <ClInclude Include="Graphics\OpenGL\GlslDualTextureEffect.h" />
     <ClInclude Include="Graphics\OpenGL\GlslEffect.h" />
     <ClInclude Include="Graphics\OpenGL\GlslSource.h" />
-    <ClInclude Include="Graphics\OpenGL\GlslSpriteEffect.h" />
     <ClInclude Include="Graphics\OpenGL\GlTexture2D.h" />
     <ClInclude Include="Graphics\OpenGL\GlVertexBuffer.h" />
     <ClInclude Include="Graphics\OpenGL\OpenGL.h" />
@@ -205,11 +203,7 @@
     <ClCompile Include="Graphics\Direct3D11\D3D11Texture2D.cpp" />
     <ClCompile Include="Graphics\Direct3D11\D3D11VertexBuffer.cpp" />
     <ClCompile Include="Graphics\Direct3D11\Direct3D11Device.cpp" />
-    <ClCompile Include="Graphics\Direct3D11\HlslAlphaTestEffect.cpp" />
-    <ClCompile Include="Graphics\Direct3D11\HlslBasicEffect.cpp" />
-    <ClCompile Include="Graphics\Direct3D11\HlslDualTextureEffect.cpp" />
     <ClCompile Include="Graphics\Direct3D11\HlslEffect.cpp" />
-    <ClCompile Include="Graphics\Direct3D11\HlslSpriteEffect.cpp" />
     <ClCompile Include="Graphics\DualTextureEffect.cpp" />
     <ClCompile Include="Graphics\GraphicsAdapter.cpp" />
     <ClCompile Include="Graphics\IEffectPimpl.cpp" />
@@ -225,7 +219,6 @@
     <ClCompile Include="Graphics\libsquish\singlecolourfit.cpp" />
     <ClCompile Include="Graphics\libsquish\squish.cpp" />
     <ClCompile Include="Graphics\OpenGL\GlRenderTarget2D.cpp" />
-    <ClCompile Include="Graphics\OpenGL\GlslAlphaTestEffect.cpp" />
     <ClCompile Include="Graphics\OpenGL\GlslSource.cpp" />
     <ClCompile Include="Graphics\RasterizerState.cpp" />
     <ClCompile Include="Graphics\RenderTarget2D.cpp" />
@@ -262,10 +255,7 @@
     <ClCompile Include="Graphics\Effect.cpp" />
     <ClCompile Include="Graphics\GraphicsDevice.cpp" />
     <ClCompile Include="Graphics\OpenGL\GlIndexBuffer.cpp" />
-    <ClCompile Include="Graphics\OpenGL\GlslBasicEffect.cpp" />
-    <ClCompile Include="Graphics\OpenGL\GlslDualTextureEffect.cpp" />
     <ClCompile Include="Graphics\OpenGL\GlslEffect.cpp" />
-    <ClCompile Include="Graphics\OpenGL\GlslSpriteEffect.cpp" />
     <ClCompile Include="Graphics\OpenGL\GlTexture2D.cpp" />
     <ClCompile Include="Graphics\OpenGL\GlVertexBuffer.cpp" />
     <ClCompile Include="Graphics\OpenGL\OpenGlDevice.cpp" />
@@ -288,7 +278,9 @@
     <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVc.inc" />
     <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVcNoFog.inc" />
     <None Include="Graphics\Direct3D11\ShaderSource\Structures.fx" />
-    <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.frag" />
+    <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.frag">
+      <FileType>Document</FileType>
+    </None>
     <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.vert" />
     <None Include="Graphics\OpenGL\ShaderSource\BasicEffect.frag" />
     <None Include="Graphics\OpenGL\ShaderSource\BasicEffect.vert" />

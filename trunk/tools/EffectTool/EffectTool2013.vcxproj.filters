@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="HLSLCrossCompiler">
+      <UniqueIdentifier>{27890467-0438-43b4-a207-ec11df01ebd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSLCrossCompiler\cjson">
+      <UniqueIdentifier>{295ed60a-f6cc-4c80-81cf-808a9204e64b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSLCrossCompiler\src">
+      <UniqueIdentifier>{92315935-b9a0-43a8-a6f9-736b49078431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSLCrossCompiler\src\cbstring">
+      <UniqueIdentifier>{a0b943a1-f43c-4bb0-947c-645d39c32bd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSLCrossCompiler\offline">
+      <UniqueIdentifier>{7e51590d-af02-4b12-83c5-fec944f7e91a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="tinyxml2\tinyxml2.h" />
+    <ClInclude Include="EffectXml.h" />
+    <ClInclude Include="EffectWriter.h" />
+    <ClInclude Include="EffectToolException.h" />
+    <ClInclude Include="XnbWriter.h" />
+    <ClInclude Include="CommandLineArgs.h" />
+    <ClInclude Include="ResizableBuffer.h" />
+    <ClInclude Include="HeaderConverter.h" />
+    <ClInclude Include="EffectCompiler.h" />
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="HLSLIncluder.h" />
+    <ClInclude Include="FilePaths.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="EffectXml.cpp" />
+    <ClCompile Include="EffectWriter.cpp" />
+    <ClCompile Include="XnbWriter.cpp" />
+    <ClCompile Include="EffectCompiler.cpp" />
+    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="HLSLIncluder.cpp" />
+    <ClCompile Include="FilePaths.cpp" />
+  </ItemGroup>
+</Project>

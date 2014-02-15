@@ -105,9 +105,9 @@ namespace Graphics
 				a.Name.resize(nameLen + 1);
 				code.Read((byte*)a.Name.c_str(), nameLen);
 
-				a.Type = code.ReadByte();
+				a.Type = (EffectParameterType)code.ReadByte();
 				a.NumElements = code.ReadByte();
-				a.Sem = code.ReadByte();
+				a.Sem = (Semantic)code.ReadByte();
 				a.Index = code.ReadByte();
 
 				t.Attributes.push_back(a);
@@ -130,7 +130,7 @@ namespace Graphics
 				byte nameLen = code.ReadByte();
 				e.Name.resize(nameLen + 1);
 				code.Read((byte*)e.Name.c_str(), nameLen);
-				e.Type = code.ReadByte();
+				e.Type = (EffectParameterType)code.ReadByte();
 				e.NumElements = code.ReadByte();
 
 				b.Elements.push_back(e);
@@ -167,7 +167,7 @@ namespace Graphics
 			ProfileShaderMap psm;
 				
 			short profile = code.ReadInt16();
-			psm.ProfileScore = m_pimpl->ScoreProfile(profile);
+			psm.ProfileScore = m_pimpl->ScoreProfile((ShaderProfile)profile);
 			psm.TechniqueIndex = code.ReadInt16();
 			psm.VertexShaderIndex = code.ReadInt16();
 			psm.PixelShaderIndex = code.ReadInt16();
