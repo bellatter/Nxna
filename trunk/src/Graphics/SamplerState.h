@@ -31,6 +31,7 @@ namespace Graphics
 
 		static SamplerState m_linearClamp;
 		static SamplerState m_linearWrap;
+		static SamplerState m_pointClamp;
 
 		void* m_handle;
 
@@ -71,6 +72,14 @@ namespace Graphics
 				init();
 
 			return &m_linearWrap;
+		}
+
+		static const SamplerState* GetPointClamp()
+		{
+			if (m_isInitialized == false)
+				init();
+
+			return &m_pointClamp;
 		}
 
 	private:

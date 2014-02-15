@@ -15,6 +15,7 @@ namespace Nxna
 	const Color Color::Gold(255, 215, 0);
 	const Color Color::Goldenrod(218, 165, 32);
 	const Color Color::IndianRed(205, 92, 92);
+	const Color Color::LightBlue(173, 216, 230);
 	const Color Color::Red(255, 0, 0);
 	const Color Color::SaddleBrown(139, 69, 19);
 	const Color Color::SandyBrown(244, 164, 96);
