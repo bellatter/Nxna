@@ -80,7 +80,7 @@
     <ClInclude Include="Game1.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\nxna.vcxproj">
+    <ProjectReference Include="..\..\src\nxna2013.vcxproj">
       <Project>{7e803e80-802e-4c5e-9a6c-d54bda7f5563}</Project>
     </ProjectReference>
   </ItemGroup>

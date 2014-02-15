@@ -40,6 +40,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>..\lib\vorbis\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;..\lib\SDL2\Windows\include;$(IncludePath)</IncludePath>
+    <TargetName>nxna</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>..\lib\vorbis\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;..\lib\SDL2\Windows\include;$(IncludePath)</IncludePath>
