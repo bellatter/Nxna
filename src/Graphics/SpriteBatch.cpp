@@ -569,14 +569,14 @@ namespace Graphics
 		float texBRX = (s.Source.X + s.Source.Z) * inverseTextureWidth;
 		float texBRY = (s.Source.Y + s.Source.W) * inverseTextureHeight;
 
-		if ((s.Effects & SpriteEffects::FlipHorizontally) != 0)
+		if ((s.Effects & (int)SpriteEffects::FlipHorizontally) != 0)
 		{
 			float tmp = texTLX;
 			texTLX = texBRX;
 			texBRX = tmp;
 		}
 
-		if ((s.Effects & SpriteEffects::FlipVertically) != 0)
+		if ((s.Effects & (int)SpriteEffects::FlipVertically) != 0)
 		{
 			float tmp = texTLY;
 			texTLY = texBRY;

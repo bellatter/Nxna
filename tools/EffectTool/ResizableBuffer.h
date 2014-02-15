@@ -4,6 +4,7 @@
 #include <cassert>
 #include <fstream>
 #include <memory.h>
+#include <algorithm>
 
 class ResizableBuffer
 {
