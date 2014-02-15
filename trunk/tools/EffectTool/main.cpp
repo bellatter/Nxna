@@ -9,7 +9,14 @@
 #include "EffectToolException.h"
 #include "HeaderConverter.h"
 #include "CommandLineArgs.h"
+#include "FilePaths.h"
 
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <direct.h>
+#else
+#include <unistd.h>
+#endif
 
 struct RunOptions
 {
@@ -166,6 +173,16 @@ bool parseCommandLine(int argc, char** argv, RunOptions* result, char* errorMess
 
 int main(int argc, char** argv)
 {
+	char buffer[512];
+#ifdef _WIN32
+	_getcwd(buffer, 512);
+#else
+	getcwd(buffer, 512);
+#endif
+	buffer[511] = 0;
+	AbsoluteFilePath currentWorkingDirectory(buffer);
+
+
 	// usage: EffectTool.exe effect.xml output.xnb
 	RunOptions options;
 	char errorBuffer[256];
@@ -192,8 +209,19 @@ int main(int argc, char** argv)
 
 	try
 	{
+		// find the absolute path of the input file
+		AbsoluteFilePath inputFile;
+		if (AbsoluteFilePath::IsAbsolutePath(options.InputFile.c_str()))
+		{
+			inputFile = AbsoluteFilePath(options.InputFile.c_str());
+		}
+		else
+		{
+			inputFile = AbsoluteFilePath::ConvertRelativePath(currentWorkingDirectory, options.InputFile.c_str());
+		}
+
 		std::ifstream input;
-		input.open(options.InputFile.c_str());
+		input.open(inputFile.GetPath().c_str());
 		if (input.is_open() == false)
 			throw EffectToolException("Unable to open input file", options.InputFile.c_str());
 
@@ -216,15 +244,11 @@ int main(int argc, char** argv)
 		effect.RemoveUnusedShaders();
 
 
-		std::string pathToBlah;
-		auto lastSlash = options.InputFile.find_last_of("/\\");
-		if (lastSlash == std::string::npos)
-			pathToBlah = ".";
-		else
-			pathToBlah = options.InputFile.substr(0, lastSlash);
+		AbsoluteFilePath pathToNxfxFolder = AbsoluteFilePath::GetDirectoryName(inputFile);
 
 		//effect.LoadExternalShaders();
-		EffectCompiler::Compile(&effect, pathToBlah.c_str());
+		auto nxfxDirectory = AbsoluteFilePath::GetDirectoryName(inputFile);
+		EffectCompiler::Compile(&effect, nxfxDirectory);
 
 		// remove any shaders orphaned by the compilation process
 		effect.RemoveUnusedShaders();

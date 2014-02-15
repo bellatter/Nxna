@@ -54,10 +54,7 @@
 		<texture name="Diffuse2" />
 	</textures>
 	<shaders>
-		<shader name="DualTextureColorEnabled_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/DualTextureEffect_DualTextureVS.o" />
-		<shader name="DualTextureColorEnabled_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/DualTextureEffect_DualTexturePS.o" />
-		<shader name="DualTextureNoColor_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/DualTextureEffect_DualTextureNoColorVS.o" />
-		<shader name="DualTextureNoColor_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/DualTextureEffect_DualTextureNoColorPS.o" />
+		<shader name="DualTextureEffect_hlsl" sourceFile="../Direct3D11/ShaderSource/DualTextureEffect.fx" />
 		<shader name="DualTextureEffect_vs_glsl">
 <![CDATA[
 uniform HIGHP mat4 ModelViewProjection;
@@ -124,9 +121,9 @@ void main()
 	</shaders>
 	<shaderMap>
 		<technique name="DualTextureColorEnabled" profile="glsl_130" vertexShader="DualTextureEffect_vs_glsl" pixelShader="DualTextureEffect_ps_glsl"/>
-		<technique name="DualTextureColorEnabled" profile="hlsl_4_0_level_9_1" vertexShader="DualTextureColorEnabled_vs_hlsl" pixelShader="DualTextureColorEnabled_ps_hlsl" />
+		<technique name="DualTextureColorEnabled" profile="hlsl_4_0_level_9_1" vertexShader="DualTextureEffect_hlsl" vertexShaderEntryPoint="DualTextureVS" pixelShader="DualTextureEffect_hlsl" pixelShaderEntryPoint="DualTexturePS" />
 		
 		<technique name="DualTextureNoColor" profile="glsl_130" vertexShader="DualTextureEffect_vs_glsl" pixelShader="DualTextureEffect_ps_glsl"/>
-		<technique name="DualTextureNoColor" profile="hlsl_4_0_level_9_1" vertexShader="DualTextureNoColor_vs_hlsl" pixelShader="DualTextureNoColor_ps_hlsl" />
+		<technique name="DualTextureNoColor" profile="hlsl_4_0_level_9_1" vertexShader="DualTextureEffect_hlsl" vertexShaderEntryPoint="DualTextureNoColorVS" pixelShader="DualTextureEffect_hlsl" pixelShaderEntryPoint="DualTextureNoColorPS" />
 	</shaderMap>
 </effect>

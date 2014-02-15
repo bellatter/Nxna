@@ -132,7 +132,7 @@ float4 PSAlphaTestEqNeNoFog(VSOutputTxNoFog pin) : SV_Target0
 
 // NOTE: The order of the techniques here are
 // defined to match the indexing in AlphaTestEffect.cs.
-
+/*
 #define TECHNIQUE(name, vsname, psname ) \
 technique name { pass { VertexShader = compile vs_4_0_level_9_1 vsname (); PixelShader = compile ps_4_0_level_9_1 psname(); } }
 
@@ -145,4 +145,4 @@ TECHNIQUE( AlphaTestEffect_LTGT_VertexColor_NoFog, VSAlphaTestVcNoFog, PSAlphaTe
 TECHNIQUE( AlphaTestEffect_EQNE, VSAlphaTest, PSAlphaTestEqNe );
 TECHNIQUE( AlphaTestEffect_EQNE_NoFog, VSAlphaTestNoFog, PSAlphaTestEqNeNoFog );
 TECHNIQUE( AlphaTestEffect_EQNE_VertexColor, VSAlphaTestVc, PSAlphaTestEqNe );
-TECHNIQUE( AlphaTestEffect_EQNE_VertexColor_NoFog, VSAlphaTestVcNoFog, PSAlphaTestEqNeNoFog );
+TECHNIQUE( AlphaTestEffect_EQNE_VertexColor_NoFog, VSAlphaTestVcNoFog, PSAlphaTestEqNeNoFog );*/

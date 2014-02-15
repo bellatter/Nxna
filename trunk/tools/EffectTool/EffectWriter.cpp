@@ -3,6 +3,7 @@
 #include "EffectWriter.h"
 #include "EffectXml.h"
 #include "ResizableBuffer.h"
+#include "EffectToolException.h"
 
 #define WRITE_INT(v) {int val = v; stream.write((char*)&val, 4); }
 #define WRITE_BYTE(b) { unsigned char val = b; stream.write((char*)&val, 1); }
@@ -85,8 +86,11 @@ void EffectWriter::Write(const EffectXml& effect, ResizableBuffer* stream)
 		// find the shader with the given name
 		int vertexShader = effect.FindShaderByName((*itr).VertexShader.c_str());
 		int pixelShader = effect.FindShaderByName((*itr).PixelShader.c_str());
-		assert(vertexShader >= 0);
-		assert(pixelShader >= 0);
+
+		if (vertexShader < 0)
+			throw EffectToolException("Unable to find vertex shader: ", (*itr).VertexShader.c_str());
+		if (pixelShader < 0)
+			throw EffectToolException("Unable to find pixel shader: ", (*itr).VertexShader.c_str());
 
 		stream->WriteShort((*itr).ProfileType);
 		stream->WriteShort(techniqueIndex);

@@ -472,10 +472,4 @@
     <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.vert" />
     <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.frag" />
   </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="Graphics\Effects\AlphaTestEffect.nxfx" />
-    <CustomBuild Include="Graphics\Effects\BasicEffect.nxfx" />
-    <CustomBuild Include="Graphics\Effects\DualTextureEffect.nxfx" />
-    <CustomBuild Include="Graphics\Effects\SpriteEffect.nxfx" />
-  </ItemGroup>
 </Project>

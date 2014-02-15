@@ -38,6 +38,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>..\lib\vorbis\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;..\lib\SDL2\Windows\include;$(IncludePath)</IncludePath>
+    <CustomBuildBeforeTargets>
+    </CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>..\lib\vorbis\include;..\lib\OpenAL\include\windows;..\lib\Glew\include;..\lib\SDL2\Windows\include;$(IncludePath)</IncludePath>
@@ -61,6 +63,16 @@
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
+    <PreBuildEvent>
+      <Command>"$(OutputPath)\EffectTool.exe" -h -hn AlphaTestEffect_bytecode "$(ProjectDir)\Graphics\Effects\AlphaTestEffect.nxfx" "$(ProjectDir)\Graphics\Effects\AlphaTestEffect.inc"
+"$(OutputPath)\EffectTool.exe" -h -hn BasicEffect_bytecode "$(ProjectDir)\Graphics\Effects\BasicEffect.nxfx" "$(ProjectDir)\Graphics\Effects\BasicEffect.inc"
+"$(OutputPath)\EffectTool.exe" -h -hn DualTextureEffect_bytecode "$(ProjectDir)\Graphics\Effects\DualTextureEffect.nxfx" "$(ProjectDir)\Graphics\Effects\DualTextureEffect.inc"
+"$(OutputPath)\EffectTool.exe" -h -hn SpriteEffect_bytecode "$(ProjectDir)\Graphics\Effects\SpriteEffect.nxfx" "$(ProjectDir)\Graphics\Effects\SpriteEffect.inc"</Command>
+    </PreBuildEvent>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -273,26 +285,6 @@
     <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVc.inc" />
     <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVcNoFog.inc" />
     <None Include="Graphics\Direct3D11\ShaderSource\Structures.fx" />
-    <CustomBuild Include="Graphics\Effects\AlphaTestEffect.nxfx">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutputPath)\EffectTool.exe" -h -hn %(Filename)_bytecode "%(FullPath)" %(Filename).inc</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\%(Filename).inc</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="Graphics\Effects\BasicEffect.nxfx">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutputPath)\EffectTool.exe" -h -hn %(Filename)_bytecode "%(FullPath)" %(Filename).inc</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\%(Filename).inc</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="Graphics\Effects\DualTextureEffect.nxfx">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutputPath)\EffectTool.exe" -h -hn %(Filename)_bytecode "%(FullPath)" %(Filename).inc</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\%(Filename).inc</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="Graphics\Effects\SpriteEffect.nxfx">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutputPath)\EffectTool.exe" -h -hn %(Filename)_bytecode "%(FullPath)" %(Filename).inc</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\%(Filename).inc</Outputs>
-    </CustomBuild>
     <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.frag" />
     <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.vert" />
     <None Include="Graphics\OpenGL\ShaderSource\BasicEffect.frag" />
