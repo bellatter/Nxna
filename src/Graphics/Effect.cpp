@@ -179,7 +179,7 @@ namespace Graphics
 		// create parameters and cbuffers
 		for (int i = 0; i < cbuffers.size(); i++)
 		{
-			m_pimpl->AddConstantBuffer(true, false, 128, cbuffers[i].Elements.size());
+			m_pimpl->AddConstantBuffer(true, true, 128, cbuffers[i].Elements.size());
 
 			int offset = 0;
 			for (int j = 0; j < cbuffers[i].Elements.size(); j++)

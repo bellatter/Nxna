@@ -101,9 +101,21 @@ namespace Graphics
 		m_alphaTest->SetValue(alphaTest);
 
 		if (m_vertexColorEnabled)
-			m_pimpl->Apply(0);
+		{
+			if (m_compareFunction == CompareFunction::Equal ||
+				m_compareFunction == CompareFunction::NotEqual)
+				m_pimpl->Apply(1);
+			else
+				m_pimpl->Apply(0);
+		}
 		else
-			m_pimpl->Apply(1);
+		{
+			if (m_compareFunction == CompareFunction::Equal ||
+				m_compareFunction == CompareFunction::NotEqual)
+				m_pimpl->Apply(3);
+			else
+				m_pimpl->Apply(2);
+		}
 	}
 }
 }

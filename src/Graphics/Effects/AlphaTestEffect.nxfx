@@ -137,14 +137,7 @@
 		<texture name="Diffuse" />
 	</textures>
 	<shaders>
-		<shader name="AlphaTest_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_VSAlphaTest.o" />
-		<shader name="AlphaTestNoFog_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_VSAlphaTestNoFog.o" />
-		<shader name="AlphaTestVc_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_VSAlphaTestVc.o" />
-		<shader name="AlphaTestVcNoFog_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_VSAlphaTestVcNoFog.o" />
-		<shader name="AlphaTestEqNe_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_PSAlphaTestEqNe.o" />
-		<shader name="AlphaTestEqNeNoFog_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_PSAlphaTestEqNeNoFog.o" />
-		<shader name="AlphaTestLtGt_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_PSAlphaTestLtGt.o" />
-		<shader name="AlphaTestLtGtNoFog_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/AlphaTestEffect_PSAlphaTestLtGtNoFog.o" />
+		<shader name="AlphaTest_hlsl" sourceFile="../Direct3D11/ShaderSource/AlphaTestEffect.fx" />
 		<shader name="AlphaTestEffect_vs_glsl">
 <![CDATA[
 uniform HIGHP mat4 ModelViewProjection;
@@ -215,27 +208,27 @@ void main()
 	</shaders>
 	<shaderMap>
 		<technique name="AlphaTestColorNoFogLessGreater" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
-		<technique name="AlphaTestColorNoFogLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestVcNoFog_vs_hlsl" pixelShader="AlphaTestLtGtNoFog_ps_hlsl" />
+		<technique name="AlphaTestColorNoFogLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_hlsl" vertexShaderEntryPoint="VSAlphaTestVcNoFog" pixelShader="AlphaTest_hlsl" pixelShaderEntryPoint="PSAlphaTestLtGtNoFog" />
 		
 		<technique name="AlphaTestColorNoFogEqual" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
-		<technique name="AlphaTestColorNoFogEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestVcNoFog_vs_hlsl" pixelShader="AlphaTestEqNeNoFog_ps_hlsl" />
+		<technique name="AlphaTestColorNoFogEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_hlsl" vertexShaderEntryPoint="VSAlphaTestVcNoFog" pixelShader="AlphaTest_hlsl" pixelShaderEntryPoint="PSAlphaTestEqNeNoFog" />
 		
 		<technique name="AlphaTestNoFogLessGreater" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
-		<technique name="AlphaTestNoFogLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestNoFog_vs_hlsl" pixelShader="AlphaTestLtGtNoFog_ps_hlsl" />
+		<technique name="AlphaTestNoFogLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_hlsl" vertexShaderEntryPoint="VSAlphaTestNoFog" pixelShader="AlphaTest_hlsl" pixelShaderEntryPoint="PSAlphaTestLtGtNoFog" />
 		
 		<technique name="AlphaTestNoFogEqual" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
-		<technique name="AlphaTestNoFogEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestNoFog_vs_hlsl" pixelShader="AlphaTestEqNeNoFog_ps_hlsl" />
+		<technique name="AlphaTestNoFogEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_hlsl" vertexShaderEntryPoint="VSAlphaTestNoFog" pixelShader="AlphaTest_hlsl" pixelShaderEntryPoint="PSAlphaTestEqNeNoFog" />
 	
 		<technique name="AlphaTestColorLessGreater" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
-		<technique name="AlphaTestColorLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestVc_vs_hlsl" pixelShader="AlphaTestLtGt_ps_hlsl" />
+		<technique name="AlphaTestColorLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_hlsl" vertexShaderEntryPoint="VSAlphaTestVc" pixelShader="AlphaTest_hlsl" pixelShaderEntryPoint="PSAlphaTestLtGt" />
 		
 		<technique name="AlphaTestColorEqual" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
-		<technique name="AlphaTestColorEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTestVc_vs_hlsl" pixelShader="AlphaTestEqNe_ps_hlsl" />
+		<technique name="AlphaTestColorEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_hlsl" vertexShaderEntryPoint="VSAlphaTestVc" pixelShader="AlphaTest_hlsl" pixelShaderEntryPoint="PSAlphaTestEqNe" />
 		
 		<technique name="AlphaTestLessGreater" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
-		<technique name="AlphaTestLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_vs_hlsl" pixelShader="AlphaTestLtGt_ps_hlsl" />
+		<technique name="AlphaTestLessGreater" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_hlsl" vertexShaderEntryPoint="VSAlphaTest" pixelShader="AlphaTest_hlsl" pixelShaderEntryPoint="PSAlphaTestLtGt" />
 		
 		<technique name="AlphaTestEqual" profile="glsl_130" vertexShader="AlphaTestEffect_vs_glsl" pixelShader="AlphaTestEffect_ps_glsl"/>
-		<technique name="AlphaTestEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_vs_hlsl" pixelShader="AlphaTestEqNe_ps_hlsl" />
+		<technique name="AlphaTestEqual" profile="hlsl_4_0_level_9_1" vertexShader="AlphaTest_hlsl" vertexShaderEntryPoint="VSAlphaTest" pixelShader="AlphaTest_hlsl" pixelShaderEntryPoint="PSAlphaTestEqNe" />
 	</shaderMap>
 </effect>

@@ -61,14 +61,7 @@
 		<texture name="Diffuse" />
 	</textures>
 	<shaders>
-		<shader name="BasicEffect_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/BasicEffect_BasicEffectVS.o" />
-		<shader name="BasicEffect_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/BasicEffect_BasicEffectPS.o" />
-		<shader name="BasicEffectTexture_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/BasicEffect_BasicEffectTextureVS.o" />
-		<shader name="BasicEffectTexture_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/BasicEffect_BasicEffectTexturePS.o" />
-		<shader name="BasicEffectColor_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/BasicEffect_BasicEffectColorVS.o" />
-		<shader name="BasicEffectColor_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/BasicEffect_BasicEffectColorPS.o" />
-		<shader name="BasicEffectColorTexture_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/BasicEffect_BasicEffectColorTextureVS.o" />
-		<shader name="BasicEffectColorTexture_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/BasicEffect_BasicEffectColorTexturePS.o" />
+		<shader name="BasicEffect_hlsl" sourceFile="../Direct3D11/ShaderSource/BasicEffect.fx" />
 		<shader name="BasicEffect_vs_glsl">
 <![CDATA[
 uniform HIGHP mat4 ModelViewProjection;
@@ -138,15 +131,15 @@ void main()
 	</shaders>
 	<shaderMap>
 		<technique name="BasicEffect" profile="glsl_130" vertexShader="BasicEffect_vs_glsl" pixelShader="BasicEffect_ps_glsl"/>
-		<technique name="BasicEffect" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffect_vs_hlsl" pixelShader="BasicEffect_ps_hlsl" />
+		<technique name="BasicEffect" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffect_hlsl" vertexShaderEntryPoint="BasicEffectVS" pixelShader="BasicEffect_hlsl" pixelShaderEntryPoint="BasicEffectPS" />
 		
 		<technique name="BasicEffectTexture" profile="glsl_130" vertexShader="BasicEffect_vs_glsl" pixelShader="BasicEffect_ps_glsl"/>
-		<technique name="BasicEffectTexture" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffectTexture_vs_hlsl" pixelShader="BasicEffectTexture_ps_hlsl" />
+		<technique name="BasicEffectTexture" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffect_hlsl" vertexShaderEntryPoint="BasicEffectTextureVS" pixelShader="BasicEffect_hlsl" pixelShaderEntryPoint="BasicEffectTexturePS"/>
 		
 		<technique name="BasicEffectColor" profile="glsl_130" vertexShader="BasicEffect_vs_glsl" pixelShader="BasicEffect_ps_glsl"/>
-		<technique name="BasicEffectColor" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffectColor_vs_hlsl" pixelShader="BasicEffectColor_ps_hlsl" />
+		<technique name="BasicEffectColor" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffect_hlsl" vertexShaderEntryPoint="BasicEffectColorVS" pixelShader="BasicEffect_hlsl" pixelShaderEntryPoint="BasicEffectColorPS" />
 		
 		<technique name="BasicEffectColorTexture" profile="glsl_130" vertexShader="BasicEffect_vs_glsl" pixelShader="BasicEffect_ps_glsl"/>
-		<technique name="BasicEffectColorTexture" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffectColorTexture_vs_hlsl" pixelShader="BasicEffectColorTexture_ps_hlsl" />
+		<technique name="BasicEffectColorTexture" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffect_hlsl" vertexShaderEntryPoint="BasicEffectColorTextureVS" pixelShader="BasicEffect_hlsl" pixelShaderEntryPoint="BasicEffectColorTexturePS" />
 	</shaderMap>
 </effect>

@@ -28,8 +28,7 @@
 		<texture name="Diffuse" />
 	</textures>
 	<shaders>
-		<shader name="default_vs_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/SpriteEffect_SpriteVertexShader.o" />
-		<shader name="default_ps_hlsl" sourceFile="../Direct3D11/ShaderSource/Compiled/SpriteEffect_SpritePixelShader.o" />
+		<shader name="default_hlsl" sourceFile="../Direct3D11/ShaderSource/SpriteEffect.fx" />
 		<shader name="default_vs_glsl">
 		<![CDATA[
 uniform HIGHP mat4 ModelViewProjection;
@@ -68,6 +67,6 @@ void main()
 	</shaders>
 	<shaderMap>
 		<technique name="default" profile="glsl_130" vertexShader="default_vs_glsl" pixelShader="default_ps_glsl"/>
-		<technique name="default" profile="hlsl_4_0_level_9_1" vertexShader="default_vs_hlsl" pixelShader="default_ps_hlsl" />
+		<technique name="default" profile="hlsl_4_0_level_9_1" vertexShader="default_hlsl" vertexShaderEntryPoint="SpriteVertexShader" pixelShader="default_hlsl" pixelShaderEntryPoint="SpritePixelShader" />
 	</shaderMap>
 </effect>

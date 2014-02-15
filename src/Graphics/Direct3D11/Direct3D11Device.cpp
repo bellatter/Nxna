@@ -497,7 +497,7 @@ namespace Direct3D11
 				if (FAILED(m_device->CreateDepthStencilState(&depthStencilDesc, (ID3D11DepthStencilState**)internalHandle)))
 					throw GraphicsException("Unable to create D3D11 depth/stencil state", __FILE__, __LINE__);
 			}
-			
+
 			m_deviceContext->OMSetDepthStencilState((ID3D11DepthStencilState*)*internalHandle, m_depthState.ReferenceStencil);
 
 			m_depthStencilStateDirty = false;
