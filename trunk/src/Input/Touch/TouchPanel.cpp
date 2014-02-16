@@ -22,7 +22,7 @@ namespace Touch
 		state.clear();
 		state.reserve(m_touches.size());
 
-		for (int i = 0; i < m_touches.size(); i++)
+		for (unsigned int i = 0; i < m_touches.size(); i++)
 		{
 			// ignore released touch points that have already been read
 			if (m_touches[i].Current.State == TouchLocationState::Released &&
@@ -69,7 +69,7 @@ namespace Touch
 	void TouchPanel::InjectFingerMove(int64_t id, float x, float y)
 	{
 		// find the existing touch
-		for (int i = 0; i < m_touches.size(); i++)
+		for (unsigned int i = 0; i < m_touches.size(); i++)
 		{
 			if (m_touches[i].Current._internalID == id)
 			{
@@ -87,7 +87,7 @@ namespace Touch
 	void TouchPanel::InjectFingerUp(int64_t id, float x, float y)
 	{
 		// find the existing touch
-		for (int i = 0; i < m_touches.size(); i++)
+		for (unsigned int i = 0; i < m_touches.size(); i++)
 		{
 			if (m_touches[i].Current._internalID == id)
 			{

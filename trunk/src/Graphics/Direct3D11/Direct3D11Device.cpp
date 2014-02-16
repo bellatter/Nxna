@@ -74,7 +74,7 @@ namespace Direct3D11
 		}
 
 		int numerator = 0, denominator = 0;
-		for(int i = 0; i < numModes; i++)
+		for (unsigned int i = 0; i < numModes; i++)
 		{
 			if(displayModeList[i].Width == (unsigned int)width)
 			{
