@@ -93,17 +93,17 @@ namespace Direct3D11
 		return 0;
 	}
 
-	unsigned int HlslEffect::GetHash(int program)
+	unsigned int HlslEffect::GetHash(unsigned int program)
 	{
-		if (program >= 0 && program < m_permutations.size())
+		if (program < m_permutations.size())
 			return m_permutations[program].Hash;
 
 		return 0;
 	}
 
-	void HlslEffect::GetBytecode(int program, byte** bytecode, int* length)
+	void HlslEffect::GetBytecode(unsigned int program, byte** bytecode, int* length)
 	{
-		if (program >= 0 && program < m_permutations.size())
+		if (program < m_permutations.size())
 		{
 			*bytecode = m_permutations[program].VertexBytecode;
 			*length = m_permutations[program].VertexBytecodeLength;
@@ -112,7 +112,7 @@ namespace Direct3D11
 
 	void HlslEffect::SetConstantBuffers()
 	{
-		for (int i = 0; i < m_cbuffers.size(); i++)
+		for (unsigned int i = 0; i < m_cbuffers.size(); i++)
 		{
 			static_cast<D3D11ConstantBuffer*>(m_cbuffers[i].GetPmpl())->InjectParameterValuesIntoBuffer(m_parameterList);
 			static_cast<D3D11ConstantBuffer*>(m_cbuffers[i].GetPmpl())->Apply(i);
@@ -130,7 +130,7 @@ namespace Direct3D11
 
 		// while we're at it, let's set the textures
 		int textureCount = 0;
-		for (int i = 0; i < m_parameterList.size(); i++)
+		for (unsigned int i = 0; i < m_parameterList.size(); i++)
 		{
 			if (m_parameterList[i]->GetType() == EffectParameterType::Texture2D)
 			{

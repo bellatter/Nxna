@@ -47,7 +47,7 @@ namespace Direct3D11
 
 	void D3D11ConstantBuffer::InjectParameterValuesIntoBuffer(std::vector<EffectParameter*>& parameters)
 	{
-		for (int i = 0; i < parameters.size(); i++)
+		for (unsigned int i = 0; i < parameters.size(); i++)
 		{
 			int index = m_parameterIndices[i];
 			int offset = m_parameterOffsets[i];

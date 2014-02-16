@@ -177,30 +177,30 @@ namespace Graphics
 
 
 		// create parameters and cbuffers
-		for (int i = 0; i < cbuffers.size(); i++)
+		for (unsigned int i = 0; i < cbuffers.size(); i++)
 		{
 			m_pimpl->AddConstantBuffer(true, true, 128, cbuffers[i].Elements.size());
 
 			int offset = 0;
-			for (int j = 0; j < cbuffers[i].Elements.size(); j++)
+			for (unsigned int j = 0; j < cbuffers[i].Elements.size(); j++)
 			{
 				m_pimpl->AddParameter(cbuffers[i].Elements[j].Name.c_str(), EffectParameterType::Single, cbuffers[i].Elements[j].NumElements, i, j, offset);
 				offset += cbuffers[i].Elements[j].NumElements * sizeof(float);
 			}
 		}
 
-		for (int i = 0; i < textures.size(); i++)
+		for (unsigned int i = 0; i < textures.size(); i++)
 		{
 			m_pimpl->AddParameter(textures[i].c_str(), EffectParameterType::Texture2D, 1, 0, 0, 0);
 		}
 
 		// create a program for each technique
-		for (int i = 0; i < techniques.size(); i++)
+		for (unsigned int i = 0; i < techniques.size(); i++)
 		{
 			// find best profile
 			int bestProfileIndex = -1;
 			int bestProfileScore = -1;
-			for (int j = 0; j < profileShaderMap.size(); j++)
+			for (unsigned int j = 0; j < profileShaderMap.size(); j++)
 			{
 				if (profileShaderMap[j].TechniqueIndex == i && profileShaderMap[j].ProfileScore > bestProfileScore)
 				{
@@ -230,7 +230,7 @@ namespace Graphics
 
 			m_pimpl->CreateProgram(techniques[i].Name.c_str(), false, vertexCodeBuffer.data(), vertexCodeLength, pixelCodeBuffer.data(), pixelCodeLength);
 
-			for (int j = 0; j < techniques[i].Attributes.size(); j++)
+			for (unsigned int j = 0; j < techniques[i].Attributes.size(); j++)
 			{
 				m_pimpl->AddAttributeToProgram(i, techniques[i].Attributes[j].Name.c_str(), techniques[i].Attributes[j].Type, techniques[i].Attributes[j].NumElements, techniques[i].Attributes[j].Sem, techniques[i].Attributes[j].Index);
 			}

@@ -97,8 +97,8 @@ namespace Direct3D11
 
 		virtual int ScoreProfile(ShaderProfile profile) override;
 
-		unsigned int GetHash(int program);
-		void GetBytecode(int program, byte** bytecode, int* length);
+		unsigned int GetHash(unsigned int program);
+		void GetBytecode(unsigned int program, byte** bytecode, int* length);
 
 		void SetConstantBuffers();
 

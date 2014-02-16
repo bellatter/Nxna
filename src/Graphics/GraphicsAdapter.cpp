@@ -129,7 +129,7 @@ namespace Graphics
 
 	void insertIfUnique(std::vector<DisplayMode>& modes, DisplayMode mode)
 	{
-		for (int i = 0; i < modes.size(); i++)
+		for (unsigned int i = 0; i < modes.size(); i++)
 		{
 			if (modes[i].Width == mode.Width &&
 				modes[i].Height == mode.Height &&
