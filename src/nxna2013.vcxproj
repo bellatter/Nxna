@@ -65,10 +65,8 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
     <PreBuildEvent>
-      <Command>"$(OutputPath)\EffectTool.exe" -h -hn AlphaTestEffect_bytecode "$(ProjectDir)\Graphics\Effects\AlphaTestEffect.nxfx" "$(ProjectDir)\Graphics\Effects\AlphaTestEffect.inc"
-"$(OutputPath)\EffectTool.exe" -h -hn BasicEffect_bytecode "$(ProjectDir)\Graphics\Effects\BasicEffect.nxfx" "$(ProjectDir)\Graphics\Effects\BasicEffect.inc"
-"$(OutputPath)\EffectTool.exe" -h -hn DualTextureEffect_bytecode "$(ProjectDir)\Graphics\Effects\DualTextureEffect.nxfx" "$(ProjectDir)\Graphics\Effects\DualTextureEffect.inc"
-"$(OutputPath)\EffectTool.exe" -h -hn SpriteEffect_bytecode "$(ProjectDir)\Graphics\Effects\SpriteEffect.nxfx" "$(ProjectDir)\Graphics\Effects\SpriteEffect.inc"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

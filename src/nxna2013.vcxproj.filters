@@ -440,11 +440,19 @@
     <ClCompile Include="Graphics\RenderTarget2D.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Graphics\OpenGL\GlRenderTarget2D.cpp" />
-    <ClCompile Include="Graphics\BasicEffect.cpp" />
     <ClCompile Include="Graphics\IEffectPimpl.cpp" />
-    <ClCompile Include="Graphics\DualTextureEffect.cpp" />
-    <ClCompile Include="Graphics\AlphaTestEffect.cpp" />
-    <ClCompile Include="Graphics\SpriteEffect.cpp" />
+    <ClCompile Include="Graphics\BasicEffect.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\AlphaTestEffect.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DualTextureEffect.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\SpriteEffect.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\Direct3D11\ShaderSource\AlphaTestEffect.fx" />

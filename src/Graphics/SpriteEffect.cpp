@@ -1,7 +1,11 @@
 #include "SpriteEffect.h"
 #include "GraphicsDevice.h"
 
+#ifdef NXNA_PLATFORM_WIN32
 #include "Effects/SpriteEffect.inc"
+#else
+#include "Effects/SpriteEffect_nohlsl.inc"
+#endif
 
 namespace Nxna
 {

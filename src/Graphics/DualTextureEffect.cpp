@@ -1,7 +1,11 @@
 #include "DualTextureEffect.h"
 #include "IEffectPimpl.h"
 
+#ifdef NXNA_PLATFORM_WIN32
 #include "Effects/DualTextureEffect.inc"
+#else
+#include "Effects/DualTextureEffect_nohlsl.inc"
+#endif
 
 namespace Nxna
 {
