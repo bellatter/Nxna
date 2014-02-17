@@ -1,7 +1,11 @@
 #include "AlphaTestEffect.h"
 #include "IEffectPimpl.h"
 
+#ifdef NXNA_PLATFORM_WIN32
 #include "Effects/AlphaTestEffect.inc"
+#else
+#include "Effects/AlphaTestEffect_nohlsl.inc"
+#endif
 
 namespace Nxna
 {

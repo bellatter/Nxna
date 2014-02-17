@@ -1,7 +1,11 @@
 #include "BasicEffect.h"
 #include "IEffectPimpl.h"
 
+#ifdef NXNA_PLATFORM_WIN32
 #include "Effects/BasicEffect.inc"
+#else
+#include "Effects/BasicEffect_nohlsl.inc"
+#endif
 
 namespace Nxna
 {
