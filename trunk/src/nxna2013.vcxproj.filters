@@ -199,8 +199,6 @@
       <Filter>Graphics\Direct3D11</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h" />
-    <ClInclude Include="Graphics\ConstantBuffer.h" />
-    <ClInclude Include="Graphics\IContantBufferPmpl.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11VertexBuffer.h">
       <Filter>Graphics\Direct3D11</Filter>
     </ClInclude>
@@ -240,9 +238,6 @@
     <ClInclude Include="Platform\Windows\WindowsOpenGlWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\libsquish\squish.h" />
-    <ClInclude Include="Audio\SoundState.h" />
-    <ClInclude Include="Graphics\VertexPositionTexture.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Graphics\ITexture2DPimpl.h">
       <Filter>Graphics</Filter>
@@ -250,18 +245,57 @@
     <ClInclude Include="Graphics\IIndexBufferPimpl.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\GraphicsAdapter.h" />
-    <ClInclude Include="Platform\SDL\SDLDirect3D11Window.h" />
-    <ClInclude Include="Graphics\PresentationParameters.h" />
-    <ClInclude Include="Graphics\DepthFormat.h" />
-    <ClInclude Include="Graphics\RenderTarget2D.h" />
-    <ClInclude Include="Graphics\IRenderTarget2DPimpl.h" />
-    <ClInclude Include="Graphics\OpenGL\GlRenderTarget2D.h" />
-    <ClInclude Include="Graphics\IEffectPimpl.h" />
-    <ClInclude Include="Graphics\BasicEffectPimpl.h" />
-    <ClInclude Include="Graphics\SpriteEffectPimpl.h" />
-    <ClInclude Include="Graphics\DualTextureEffectPimpl.h" />
-    <ClInclude Include="Graphics\AlphaTestEffectPimpl.h" />
+    <ClInclude Include="Graphics\libsquish\squish.h">
+      <Filter>Graphics\libsquish</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ConstantBuffer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DepthFormat.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\IEffectPimpl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\IRenderTarget2DPimpl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\RenderTarget2D.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\PresentationParameters.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\SDL\SDLDirect3D11Window.h">
+      <Filter>Platform\SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GraphicsAdapter.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\VertexPositionTexture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\SpriteEffectPimpl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\IContantBufferPmpl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\AlphaTestEffectPimpl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BasicEffectPimpl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DualTextureEffectPimpl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\SoundState.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGL\GlRenderTarget2D.h">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -419,28 +453,13 @@
     <ClCompile Include="Platform\Windows\WindowsOpenGlWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\libsquish\squish.cpp" />
-    <ClCompile Include="Graphics\libsquish\colourblock.cpp" />
-    <ClCompile Include="Graphics\libsquish\alpha.cpp" />
-    <ClCompile Include="Graphics\libsquish\clusterfit.cpp" />
-    <ClCompile Include="Graphics\libsquish\rangefit.cpp" />
-    <ClCompile Include="Graphics\libsquish\colourfit.cpp" />
-    <ClCompile Include="Graphics\libsquish\colourset.cpp" />
-    <ClCompile Include="Graphics\libsquish\singlecolourfit.cpp" />
-    <ClCompile Include="Graphics\libsquish\maths.cpp" />
-    <ClCompile Include="Graphics\VertexPositionTexture.cpp" />
     <ClCompile Include="Graphics\ITexture2DPimpl.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\IndexBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\GraphicsAdapter.cpp" />
-    <ClCompile Include="Platform\SDL\SDLDirect3D11Window.cpp" />
-    <ClCompile Include="Graphics\RenderTarget2D.cpp" />
     <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Graphics\OpenGL\GlRenderTarget2D.cpp" />
-    <ClCompile Include="Graphics\IEffectPimpl.cpp" />
     <ClCompile Include="Graphics\BasicEffect.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -453,26 +472,50 @@
     <ClCompile Include="Graphics\SpriteEffect.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Graphics\Direct3D11\ShaderSource\AlphaTestEffect.fx" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Common.fxh" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestEqNe.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestEqNeNoFog.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestLtGt.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestLtGtNoFog.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTest.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestNoFog.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVc.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVcNoFog.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Structures.fx" />
-    <None Include="Graphics\OpenGL\ShaderSource\BasicEffect.vert" />
-    <None Include="Graphics\OpenGL\ShaderSource\BasicEffect.frag" />
-    <None Include="Graphics\OpenGL\ShaderSource\SpriteEffect.vert" />
-    <None Include="Graphics\OpenGL\ShaderSource\SpriteEffect.frag" />
-    <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.vert" />
-    <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.vert" />
-    <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.frag" />
-    <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.frag" />
+    <ClCompile Include="Graphics\libsquish\alpha.cpp">
+      <Filter>Graphics\libsquish</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\libsquish\clusterfit.cpp">
+      <Filter>Graphics\libsquish</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\libsquish\colourset.cpp">
+      <Filter>Graphics\libsquish</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\libsquish\colourfit.cpp">
+      <Filter>Graphics\libsquish</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\libsquish\colourblock.cpp">
+      <Filter>Graphics\libsquish</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\libsquish\maths.cpp">
+      <Filter>Graphics\libsquish</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\libsquish\squish.cpp">
+      <Filter>Graphics\libsquish</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\libsquish\singlecolourfit.cpp">
+      <Filter>Graphics\libsquish</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\libsquish\rangefit.cpp">
+      <Filter>Graphics\libsquish</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\IEffectPimpl.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\RenderTarget2D.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\SDL\SDLDirect3D11Window.cpp">
+      <Filter>Platform\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\GraphicsAdapter.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\VertexPositionTexture.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGL\GlRenderTarget2D.cpp">
+      <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

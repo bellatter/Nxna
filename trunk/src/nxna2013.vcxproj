@@ -265,29 +265,6 @@
     <ClCompile Include="Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Graphics\Direct3D11\ShaderSource\AlphaTestEffect.fx" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Common.fxh" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestEqNe.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestEqNeNoFog.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestLtGt.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_PSAlphaTestLtGtNoFog.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTest.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestNoFog.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVc.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Compiled\AlphaTestEffect_VSAlphaTestVcNoFog.inc" />
-    <None Include="Graphics\Direct3D11\ShaderSource\Structures.fx" />
-    <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.frag">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Graphics\OpenGL\ShaderSource\AlphaTestEffect.vert" />
-    <None Include="Graphics\OpenGL\ShaderSource\BasicEffect.frag" />
-    <None Include="Graphics\OpenGL\ShaderSource\BasicEffect.vert" />
-    <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.frag" />
-    <None Include="Graphics\OpenGL\ShaderSource\DualTextureEffect.vert" />
-    <None Include="Graphics\OpenGL\ShaderSource\SpriteEffect.frag" />
-    <None Include="Graphics\OpenGL\ShaderSource\SpriteEffect.vert" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
