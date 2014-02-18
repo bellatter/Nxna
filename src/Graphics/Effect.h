@@ -55,6 +55,7 @@ namespace Graphics
 	public:
 
 		Effect(GraphicsDevice* device, const byte* effectCode, int effectCodeLength);
+		virtual ~Effect();
 
 		EffectParameter* GetParameter(const char* name);
 		EffectParameter* GetParameter(int index);
@@ -73,7 +74,7 @@ namespace Graphics
 
 		Effect(GraphicsDevice* device);
 		Effect(GraphicsDevice* device, Pvt::IEffectPimpl* pimpl);
-		virtual ~Effect();
+		
 
 		// called by EffectTechniques when they're applied
 		virtual void OnApply();
@@ -124,6 +125,11 @@ namespace Graphics
 		void SetValue(float value)
 		{
 			memcpy(m_value, &value, sizeof(float));
+		}
+
+		void SetValue(const Vector2& value)
+		{
+			memcpy(m_value, &value, sizeof(value));
 		}
 
 		void SetValue(const Vector4& value) 
