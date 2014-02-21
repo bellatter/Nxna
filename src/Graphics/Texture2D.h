@@ -32,6 +32,7 @@ namespace Graphics
 
 	class GraphicsDevice;
 	class SamplerState;
+	class RenderTarget2D;
 
 	namespace Pvt
 	{
@@ -40,6 +41,8 @@ namespace Graphics
 
 	class Texture2D 
 	{
+		friend class RenderTarget2D;
+
 	protected:
 		int m_width;
 		int m_height;
@@ -79,6 +82,12 @@ namespace Graphics
 		static Texture2D* LoadFrom(Content::XnbReader* stream);
 
 	private:
+		
+		// special constructor used by the RenderTarget2D
+		Texture2D(GraphicsDevice* device, int width, int height, bool mipMap, SurfaceFormat format, bool isRenderTarget);
+
+		void init(GraphicsDevice* device, int width, int height, bool mipMap, SurfaceFormat format, bool isRenderTarget);
+
 		static byte* convert(byte* pixels, int length, int format);
 		static void convert565(unsigned short pixel, byte* r, byte* g, byte* b);
 	};

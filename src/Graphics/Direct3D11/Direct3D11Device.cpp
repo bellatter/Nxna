@@ -6,6 +6,7 @@
 #include "D3D11Texture2D.h"
 #include "D3D11VertexBuffer.h"
 #include "D3D11IndexBuffer.h"
+#include "D3D11RenderTarget2D.h"
 #include "HlslEffect.h"
 //#include "HlslBasicEffect.h"
 //#include "HlslSpriteEffect.h"
@@ -35,13 +36,16 @@ namespace Direct3D11
 		m_vertexBufferDirty = true;
 		m_blendStateDirty = true;
 		m_rasterizerStateDirty = true;
+		m_currentRenderTarget = nullptr;
 
 		m_caps->SupportsFullNonPowerOfTwoTextures = true;
 		m_caps->SupportsShaders = true;
 	}
 
-	void Direct3D11Device::OnWindowCreated(void* window, int width, int height)
+	void Direct3D11Device::OnWindowCreated(void* window, const PresentationParameters& pp)
 	{
+		m_presentationParameters = pp;
+
 		const char* error = "Unable to initialize Direct3D";
 
 		IDXGIFactory* factory;
@@ -76,9 +80,9 @@ namespace Direct3D11
 		int numerator = 0, denominator = 0;
 		for (unsigned int i = 0; i < numModes; i++)
 		{
-			if(displayModeList[i].Width == (unsigned int)width)
+			if(displayModeList[i].Width == (unsigned int)pp.BackBufferWidth)
 			{
-				if(displayModeList[i].Height == (unsigned int)height)
+				if(displayModeList[i].Height == (unsigned int)pp.BackBufferHeight)
 				{
 					numerator = displayModeList[i].RefreshRate.Numerator;
 					denominator = displayModeList[i].RefreshRate.Denominator;
@@ -95,8 +99,8 @@ namespace Direct3D11
 		DXGI_SWAP_CHAIN_DESC swapChainDesc;
 		ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 		swapChainDesc.BufferCount = 1;
-		swapChainDesc.BufferDesc.Width = width;
-		swapChainDesc.BufferDesc.Height = height;
+		swapChainDesc.BufferDesc.Width = pp.BackBufferWidth;
+		swapChainDesc.BufferDesc.Height = pp.BackBufferHeight;
 		swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
 		swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -125,8 +129,8 @@ namespace Direct3D11
 
 		D3D11_TEXTURE2D_DESC depthBufferDesc;
 		ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
-		depthBufferDesc.Width = width;
-		depthBufferDesc.Height = height;
+		depthBufferDesc.Width = pp.BackBufferWidth;
+		depthBufferDesc.Height = pp.BackBufferHeight;
 		depthBufferDesc.MipLevels = 1;
 		depthBufferDesc.ArraySize = 1;
 		depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -248,7 +252,10 @@ namespace Direct3D11
 			color[2] = c.B / 255.0f;
 			color[3] = c.A / 255.0f;
 
-			m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
+			if (m_currentRenderTarget != nullptr)
+				m_deviceContext->ClearRenderTargetView(m_currentRenderTarget->GetRenderTargetView(), color);
+			else
+				m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
 		}
 
 		int flags = 0;
@@ -256,7 +263,11 @@ namespace Direct3D11
 			flags |= D3D11_CLEAR_DEPTH;
 		if ((options & ClearOptions::Stencil) == ClearOptions::Stencil)
 			flags |= D3D11_CLEAR_STENCIL;
-		m_deviceContext->ClearDepthStencilView(m_depthStencilView, flags, depth, (byte)stencil);
+
+		if (m_currentRenderTarget != nullptr)
+			m_deviceContext->ClearDepthStencilView(m_currentRenderTarget->GetDepthStencilView(), flags, depth, (byte)stencil);
+		else
+			m_deviceContext->ClearDepthStencilView(m_depthStencilView, flags, depth, (byte)stencil);
 	}
 
 	Viewport Direct3D11Device::GetViewport()
@@ -328,7 +339,20 @@ namespace Direct3D11
 
 	void Direct3D11Device::SetRenderTarget(RenderTarget2D* renderTarget)
 	{
-		// TODO
+		if (renderTarget == nullptr)
+		{
+			m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
+			m_currentRenderTarget = nullptr;
+		}
+		else
+		{
+			D3D11RenderTarget2D* pimpl = static_cast<D3D11RenderTarget2D*>(renderTarget->GetPimpl());
+			ID3D11RenderTargetView* rtv = pimpl->GetRenderTargetView();
+
+			m_deviceContext->OMSetRenderTargets(1, &rtv, pimpl->GetDepthStencilView());
+
+			m_currentRenderTarget = pimpl;
+		}
 	}
 
 	void Direct3D11Device::Present()
@@ -385,15 +409,16 @@ namespace Direct3D11
 		m_samplers.MakeClean();
 	}
 
-	Pvt::ITexture2DPimpl* Direct3D11Device::CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format)
+	Pvt::ITexture2DPimpl* Direct3D11Device::CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format, bool isRenderTarget)
 	{
 		return new D3D11Texture2D(this, width, height, format);
 	}
 
 	Pvt::IRenderTarget2DPimpl* Direct3D11Device::CreateRenderTarget2DPimpl(RenderTarget2D* parentRenderTarget, int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
 	{
-		return nullptr;
-		//return new D3D11RenderTarget2D(this, width, height, foramt);
+		D3D11Texture2D* d3d11Texture = static_cast<D3D11Texture2D*>(static_cast<Texture2D*>(parentRenderTarget)->GetPimpl());
+
+		return new D3D11RenderTarget2D(this, d3d11Texture, width, height, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage);
 	}
 	
 	Pvt::IIndexBufferPimpl* Direct3D11Device::CreateIndexBufferPimpl(IndexElementSize elementSize)

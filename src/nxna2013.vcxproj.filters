@@ -296,6 +296,9 @@
     <ClInclude Include="Graphics\OpenGL\GlRenderTarget2D.h">
       <Filter>Graphics\OpenGl</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Direct3D11\D3D11RenderTarget2D.h">
+      <Filter>Graphics\Direct3D11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -516,6 +519,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\OpenGL\GlRenderTarget2D.cpp">
       <Filter>Graphics\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Direct3D11\D3D11RenderTarget2D.cpp">
+      <Filter>Graphics\Direct3D11</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

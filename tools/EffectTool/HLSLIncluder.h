@@ -12,7 +12,8 @@ class HLSLIncluder : public ID3DInclude
 	std::vector<char*> m_buffers;
 
 public:
-	HLSLIncluder(const AbsoluteFilePath& pathToNxfx);
+	HLSLIncluder(const AbsoluteFilePath& pathToNxfxFile);
+	HLSLIncluder(const AbsoluteFilePath& pathToNxfx, bool isContainingFolder);
 
 	HRESULT __stdcall Open(D3D_INCLUDE_TYPE includeType, LPCSTR filename, LPCVOID parentData, LPCVOID* data, unsigned int* bytes);
 

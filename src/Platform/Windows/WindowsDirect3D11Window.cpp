@@ -65,7 +65,7 @@ namespace Windows
         PreferredBackBufferWidth(pp.BackBufferWidth);
         PreferredBackBufferHeight(pp.BackBufferHeight);
 
-		static_cast<Nxna::Graphics::Direct3D11::Direct3D11Device*>(m_device)->OnWindowCreated(m_window, PreferredBackBufferWidth(), PreferredBackBufferHeight());
+		static_cast<Nxna::Graphics::Direct3D11::Direct3D11Device*>(m_device)->OnWindowCreated(m_window, pp);
 
 		m_device->SetViewport(Nxna::Graphics::Viewport(0, 0, PreferredBackBufferWidth(), PreferredBackBufferHeight()));
 

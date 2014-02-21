@@ -9,6 +9,8 @@ namespace Pvt
 {
 	class IRenderTarget2DPimpl
 	{
+	public:
+		virtual bool FlipBeforeUse() = 0;
 	};
 }
 }
