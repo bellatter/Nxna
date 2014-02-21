@@ -4,6 +4,7 @@
 #include "../Texture2D.h"
 #include "../ITexture2DPimpl.h"
 #include "../SamplerState.h"
+#include <d3d11.h>
 
 NXNA_DISABLE_OVERRIDE_WARNING
 
@@ -21,7 +22,8 @@ namespace Direct3D11
 		int m_width;
 		int m_height;
 		SurfaceFormat m_format;
-		void* m_shaderResourceView;
+		ID3D11ShaderResourceView* m_shaderResourceView;
+		ID3D11Texture2D* m_texture;
 		bool m_hasMipmaps;
 		SamplerState m_samplerState;
 
@@ -32,9 +34,14 @@ namespace Direct3D11
 
 		virtual void SetData(int level, byte* pixels, int length) override;
 
-		void* GetHandle() { return m_shaderResourceView; }
+		void MakeRenderTarget();
+
+		ID3D11ShaderResourceView* GetShaderResourceView() { return m_shaderResourceView; }
+		ID3D11Texture2D* GetTexture() { return m_texture; }
 
 	private:
+		void createTexture(bool isRenderTarget, byte* pixels, int length);
+
 		static int convertAddressMode(TextureAddressMode mode);
 	};
 }

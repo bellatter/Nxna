@@ -111,6 +111,7 @@
     <ClInclude Include="Graphics\DepthStencilState.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11ConstantBuffer.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11IndexBuffer.h" />
+    <ClInclude Include="Graphics\Direct3D11\D3D11RenderTarget2D.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11Texture2D.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11Utils.h" />
     <ClInclude Include="Graphics\Direct3D11\D3D11VertexBuffer.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="Graphics\DepthStencilState.cpp" />
     <ClCompile Include="Graphics\Direct3D11\D3D11ConstantBuffer.cpp" />
     <ClCompile Include="Graphics\Direct3D11\D3D11IndexBuffer.cpp" />
+    <ClCompile Include="Graphics\Direct3D11\D3D11RenderTarget2D.cpp" />
     <ClCompile Include="Graphics\Direct3D11\D3D11Texture2D.cpp" />
     <ClCompile Include="Graphics\Direct3D11\D3D11VertexBuffer.cpp" />
     <ClCompile Include="Graphics\Direct3D11\Direct3D11Device.cpp" />

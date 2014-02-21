@@ -22,31 +22,49 @@ void EffectCompiler::Compile(EffectXml* effect, const AbsoluteFilePath& pathToNx
 		int vertexShader = effect->FindShaderByName((*itr).VertexShader.c_str());
 		int pixelShader = effect->FindShaderByName((*itr).PixelShader.c_str());
 
-		if (vertexShader >= 0 && shaders[vertexShader].SourceFile.empty() == false)
+		if (vertexShader >= 0)
 		{
-			AbsoluteFilePath pathToFile;
-			if (AbsoluteFilePath::IsAbsolutePath(shaders[vertexShader].SourceFile.c_str()))
-				pathToFile = AbsoluteFilePath(shaders[vertexShader].SourceFile.c_str());
-			else
-				pathToFile = AbsoluteFilePath::ConvertRelativePath(pathToNxfxFolder, shaders[vertexShader].SourceFile.c_str());
+			if (shaders[vertexShader].SourceFile.empty() == false)
+			{
+				AbsoluteFilePath pathToFile;
+				if (AbsoluteFilePath::IsAbsolutePath(shaders[vertexShader].SourceFile.c_str()))
+					pathToFile = AbsoluteFilePath(shaders[vertexShader].SourceFile.c_str());
+				else
+					pathToFile = AbsoluteFilePath::ConvertRelativePath(pathToNxfxFolder, shaders[vertexShader].SourceFile.c_str());
 
-			loadExternalCode(pathToFile, effect, &(*itr), true, (*itr).VertexShaderEntryPoint.c_str(), shaders[vertexShader].SourceCode);
+				loadExternalCode(pathToFile, shaders[vertexShader].SourceCode);
+				
+				compileIfNeeded(shaders[vertexShader].SourceCode, true, effect, *itr, pathToNxfxFolder, &pathToFile);
+			}
+			else
+			{
+				compileIfNeeded(shaders[vertexShader].SourceCode, true, effect, *itr, pathToNxfxFolder, nullptr);
+			}
 		}
 
-		if (pixelShader >= 0 && shaders[pixelShader].SourceFile.empty() == false)
+		if (pixelShader >= 0)
 		{
-			AbsoluteFilePath pathToFile;
-			if (AbsoluteFilePath::IsAbsolutePath(shaders[pixelShader].SourceFile.c_str()))
-				pathToFile = AbsoluteFilePath(shaders[pixelShader].SourceFile.c_str());
-			else
-				pathToFile = AbsoluteFilePath::ConvertRelativePath(pathToNxfxFolder, shaders[pixelShader].SourceFile.c_str());
+			if (shaders[pixelShader].SourceFile.empty() == false)
+			{
+				AbsoluteFilePath pathToFile;
+				if (AbsoluteFilePath::IsAbsolutePath(shaders[pixelShader].SourceFile.c_str()))
+					pathToFile = AbsoluteFilePath(shaders[pixelShader].SourceFile.c_str());
+				else
+					pathToFile = AbsoluteFilePath::ConvertRelativePath(pathToNxfxFolder, shaders[pixelShader].SourceFile.c_str());
 
-			loadExternalCode(pathToFile, effect, &(*itr), false, (*itr).PixelShaderEntryPoint.c_str(), shaders[pixelShader].SourceCode);
+				loadExternalCode(pathToFile, shaders[pixelShader].SourceCode);
+
+				compileIfNeeded(shaders[pixelShader].SourceCode, false, effect, *itr, pathToNxfxFolder, &pathToFile);
+			}
+			else
+			{
+				compileIfNeeded(shaders[pixelShader].SourceCode, false, effect, *itr, pathToNxfxFolder, nullptr);
+			}
 		}
 	}
 }
 
-void EffectCompiler::loadExternalCode(const AbsoluteFilePath& pathToFile, EffectXml* effect, TechniqueMapXml* technique, bool vertex, const char* entryPoint, std::vector<unsigned char>& result)
+void EffectCompiler::loadExternalCode(const AbsoluteFilePath& pathToFile, std::vector<unsigned char>& result)
 {
 	// maybe we loaded this shader earlier, so we can skip reading it again
 	if (result.empty())
@@ -68,31 +86,35 @@ void EffectCompiler::loadExternalCode(const AbsoluteFilePath& pathToFile, Effect
 		input.read((char*)result.data(), size);
 		input.close();
 	}
+}
 
-	if ((technique->ProfileType & Profile::ANY_HLSL) == Profile::ANY_HLSL)
+void EffectCompiler::compileIfNeeded(const std::vector<unsigned char>& source, bool vertex, EffectXml* effect, TechniqueMapXml& technique, const AbsoluteFilePath& pathToNxfxFolder, const AbsoluteFilePath* pathToFile)
+{
+	if ((technique.ProfileType & Profile::ANY_HLSL) == Profile::ANY_HLSL)
 	{
 		// this may be uncompiled HLSL. Check to see.
-		if (isValidHLSLBytecodeHeader(result) == false)
+		if (isValidHLSLBytecodeHeader(source) == false)
 		{
 			std::vector<unsigned char> codeBuffer;
 
 			// This doesn't seem to be HLSL bytecode. Must be source code. let's try compiling it...
-			compileHLSL(technique->ProfileType, vertex, pathToFile, result.data(), result.size(), entryPoint, codeBuffer);
+			compileHLSL(technique.ProfileType, vertex, pathToNxfxFolder, pathToFile, source.data(), source.size(),
+				vertex ? technique.VertexShaderEntryPoint.c_str() : technique.PixelShaderEntryPoint.c_str(), codeBuffer);
 
 			// add a new shader with the bytecode of this particular compiled permutation
-			std::string newShaderName = technique->Name + (vertex ? "VS" : "PS");
+			std::string newShaderName = technique.Name + (vertex ? "VS" : "PS");
 			effect->AddShader(newShaderName.c_str(), codeBuffer.data(), codeBuffer.size());
 
 			// update the technique to reference the new shader
 			if (vertex)
-				technique->VertexShader = newShaderName;
+				technique.VertexShader = newShaderName;
 			else
-				technique->PixelShader = newShaderName;
+				technique.PixelShader = newShaderName;
 		}
 	}
 }
 
-bool EffectCompiler::isValidHLSLBytecodeHeader(std::vector<unsigned char>& data)
+bool EffectCompiler::isValidHLSLBytecodeHeader(const std::vector<unsigned char>& data)
 {
 	if (data.size() >= 4)
 	{
@@ -111,7 +133,7 @@ bool EffectCompiler::isValidHLSLBytecodeHeader(std::vector<unsigned char>& data)
 	return false;
 }
 
-void EffectCompiler::compileHLSL(Profile::eProfile profile, bool vertex, const AbsoluteFilePath& pathToFile, const unsigned char* code, int codeLength, const char* entryPoint, std::vector<unsigned char>& result)
+void EffectCompiler::compileHLSL(Profile::eProfile profile, bool vertex, const AbsoluteFilePath& pathToNxfxFolder, const AbsoluteFilePath* pathToFile, const unsigned char* code, int codeLength, const char* entryPoint, std::vector<unsigned char>& result)
 {
 #ifdef _WIN32
 
@@ -184,8 +206,11 @@ void EffectCompiler::compileHLSL(Profile::eProfile profile, bool vertex, const A
 	}
 
 	ID3DBlob* output, *errors;
-	HLSLIncluder includer(pathToFile);
-	auto r = D3DCompile(code, codeLength, pathToFile.GetPath().c_str(), nullptr, &includer, entryPoint, target, 0, 0, &output, &errors);
+	AbsoluteFilePath includerPath = (pathToFile == nullptr ? pathToNxfxFolder : *pathToFile);
+	HLSLIncluder includer(includerPath, pathToFile == nullptr);
+	const char* filePath = (pathToFile == nullptr ? nullptr : pathToFile->GetPath().c_str());
+
+	auto r = D3DCompile(code, codeLength, filePath, nullptr, &includer, entryPoint, target, 0, 0, &output, &errors);
 
 	if (r != S_OK)
 	{

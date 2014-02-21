@@ -78,7 +78,7 @@ namespace SDL
 		SDL_SysWMinfo info;
 		SDL_VERSION(&info.version);
 		SDL_GetWindowWMInfo((SDL_Window*)m_window, &info);
-		static_cast<Nxna::Graphics::Direct3D11::Direct3D11Device*>(m_device)->OnWindowCreated(info.info.win.window, PreferredBackBufferWidth(), PreferredBackBufferHeight());
+		static_cast<Nxna::Graphics::Direct3D11::Direct3D11Device*>(m_device)->OnWindowCreated(info.info.win.window, pp);
 
 		m_device->SetViewport(Nxna::Graphics::Viewport(0, 0, PreferredBackBufferWidth(), PreferredBackBufferHeight()));
 

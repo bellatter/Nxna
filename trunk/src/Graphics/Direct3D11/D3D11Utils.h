@@ -136,6 +136,43 @@ namespace Direct3D11
 			// we should never get here
 			return D3D11_STENCIL_OP_KEEP;
 		}
+
+		static DXGI_FORMAT ConvertSurfaceFormat(SurfaceFormat format)
+		{
+			switch(format)
+			{
+			case SurfaceFormat::Color:
+				return DXGI_FORMAT_R8G8B8A8_UNORM;
+			case SurfaceFormat::Bgr565:
+				return DXGI_FORMAT_B5G6R5_UNORM;
+			case SurfaceFormat::Bgra5551:
+				return DXGI_FORMAT_B5G5R5A1_UNORM;
+			case SurfaceFormat::Bgra4444:
+				return DXGI_FORMAT_B4G4R4A4_UNORM;
+			case SurfaceFormat::Dxt1:
+				return DXGI_FORMAT_BC1_UNORM;
+			case SurfaceFormat::Dxt3:
+				return DXGI_FORMAT_BC2_UNORM;
+			case SurfaceFormat::Dxt5:
+				return DXGI_FORMAT_BC3_UNORM;
+			default:
+				throw ArgumentException("Unknown SurfaceFormat value", "format");
+			}
+		}
+
+		static DXGI_FORMAT ConvertDepthFormat(DepthFormat format)
+		{
+			switch(format)
+			{
+			case DepthFormat::Depth16:
+				return DXGI_FORMAT_D16_UNORM;
+			case DepthFormat::Depth24:
+			case DepthFormat::Depth24Stencil8:
+				return DXGI_FORMAT_D24_UNORM_S8_UINT;
+			default:
+				throw ArgumentException("Unknown DepthFormat value", "format");
+			}
+		}
 	};
 }
 }

@@ -27,6 +27,10 @@ namespace Graphics
 		RenderTarget2D(GraphicsDevice* device, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage);
 		virtual ~RenderTarget2D();
 
+		// this is a temporary hack. OpenGL stores textures upside down, so they must be flipped before use. D3D textures don't.
+		// eventually we should do something like MonoGame and just render upside down when using OpenGL and RTT.
+		bool FlipBeforeUse();
+
 		Pvt::IRenderTarget2DPimpl* GetPimpl() { return m_pimpl; }
 	};
 }

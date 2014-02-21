@@ -9,6 +9,14 @@ HLSLIncluder::HLSLIncluder(const AbsoluteFilePath& pathToParentFile)
 	m_baseDir = AbsoluteFilePath::GetDirectoryName(pathToParentFile);
 }
 
+HLSLIncluder::HLSLIncluder(const AbsoluteFilePath& pathToNxfx, bool isContainingFolder)
+{
+	if (isContainingFolder)
+		m_baseDir = pathToNxfx;
+	else
+		m_baseDir = AbsoluteFilePath::GetDirectoryName(pathToNxfx);
+}
+
 HRESULT HLSLIncluder::Open(D3D_INCLUDE_TYPE includeType, LPCSTR filename, LPCVOID parentData, LPCVOID* data, unsigned int* bytes)
 {
 	AbsoluteFilePath fileToOpen = AbsoluteFilePath::ConvertRelativePath(m_baseDir, filename);

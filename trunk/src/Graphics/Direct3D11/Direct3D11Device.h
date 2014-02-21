@@ -25,6 +25,7 @@ namespace Direct3D11
 {
 	class D3D11VertexBuffer;
 	class D3D11IndexBuffer;
+	class D3D11RenderTarget2D;
 	class HlslEffect;
 
 	class Direct3D11Device : public GraphicsDevice
@@ -35,6 +36,7 @@ namespace Direct3D11
 		ID3D11RenderTargetView* m_renderTargetView;
 		ID3D11Texture2D* m_depthStencilBuffer;
 		ID3D11DepthStencilView* m_depthStencilView;
+		D3D11RenderTarget2D* m_currentRenderTarget;
 
 		const VertexBuffer* m_vertices;
 		const D3D11IndexBuffer* m_indices;
@@ -54,11 +56,13 @@ namespace Direct3D11
 
 		std::map<uint64_t, ID3D11InputLayout*> m_layouts;
 
+		PresentationParameters m_presentationParameters;
+
 	public:
 		Direct3D11Device();
-		void OnWindowCreated(void* window, int width, int height);
+		void OnWindowCreated(void* window, const PresentationParameters& pp);
 
-		virtual PresentationParameters GetPresentationParameters() override { return PresentationParameters(); }
+		virtual PresentationParameters GetPresentationParameters() override { return m_presentationParameters; }
 
 		virtual CullMode GetRasterizerState() override;
 		virtual void SetRasterizerState(const RasterizerState* state) override;
@@ -101,7 +105,7 @@ namespace Direct3D11
 
 	protected:
 		virtual void SetSamplers() override;
-		virtual Pvt::ITexture2DPimpl* CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format) override;
+		virtual Pvt::ITexture2DPimpl* CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format, bool isRenderTarget) override;
 		virtual Pvt::IRenderTarget2DPimpl* CreateRenderTarget2DPimpl(RenderTarget2D* parentRenderTarget, int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage) override;
 		virtual Pvt::IIndexBufferPimpl* CreateIndexBufferPimpl(IndexElementSize elementSize) override;
 		virtual Pvt::IVertexBufferPimpl* CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) override;

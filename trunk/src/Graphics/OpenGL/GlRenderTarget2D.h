@@ -23,6 +23,8 @@ namespace OpenGl
 		GlRenderTarget2D(OpenGlDevice* device, GlTexture2D* texture, int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage);
 
 		unsigned int GetFBO() { return m_fbo; }
+
+		virtual bool FlipBeforeUse() override { return true; }
 	};
 }
 }

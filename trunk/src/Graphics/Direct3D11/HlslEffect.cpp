@@ -138,7 +138,7 @@ namespace Direct3D11
 				if (value != nullptr)
 				{
 					D3D11Texture2D* texture = static_cast<D3D11Texture2D*>(value->GetPimpl());
-					ID3D11ShaderResourceView* d3dTex = (ID3D11ShaderResourceView*)texture->GetHandle();
+					ID3D11ShaderResourceView* d3dTex = texture->GetShaderResourceView();
 					context->PSSetShaderResources(textureCount++, 1, &d3dTex);
 				}
 			}
@@ -147,8 +147,7 @@ namespace Direct3D11
 
 	void HlslEffect::Apply(int techniqueIndex)
 	{
-		// TODO: determine which program to use
-		static_cast<Direct3D11Device*>(m_device)->SetCurrentEffect(this, techniqueIndex);
+		m_device->SetCurrentEffect(this, techniqueIndex);
 	}
 }
 }

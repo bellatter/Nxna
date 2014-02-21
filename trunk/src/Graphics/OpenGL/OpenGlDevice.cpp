@@ -427,7 +427,7 @@ namespace OpenGl
 		m_effect->ApplySamplerStates(&m_samplers);
 	}
 
-	Pvt::ITexture2DPimpl* OpenGlDevice::CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format)
+	Pvt::ITexture2DPimpl* OpenGlDevice::CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format, bool isRenderTarget)
 	{
 		return new GlTexture2D(this, width, height, format);
 	}

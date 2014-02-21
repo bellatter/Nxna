@@ -23,20 +23,12 @@ namespace Graphics
 
 	Texture2D::Texture2D(GraphicsDevice* device, int width, int height)
 	{
-		m_device = device;
-		m_width = width;
-		m_height = height;
-
-		m_pimpl = device->CreateTexture2DPimpl(width, height, false, SurfaceFormat::Color);
+		init(device, width, height, false, SurfaceFormat::Color, false);
 	}
 
 	Texture2D::Texture2D(GraphicsDevice* device, int width, int height, bool mipMap, SurfaceFormat format)
 	{
-		m_device = device;
-		m_width = width;
-		m_height = height;
-
-		m_pimpl = device->CreateTexture2DPimpl(width, height, mipMap, format);
+		init(device, width, height, mipMap, format, false);
 	}
 
 	Texture2D::~Texture2D()
@@ -116,6 +108,20 @@ namespace Graphics
 		}
 
 		return texture;
+	}
+
+	Texture2D::Texture2D(GraphicsDevice* device, int width, int height, bool mipMap, SurfaceFormat format, bool isRenderTarget)
+	{
+		init(device, width, height, mipMap, format, isRenderTarget);
+	}
+
+	void Texture2D::init(GraphicsDevice* device, int width, int height, bool mipMap, SurfaceFormat format, bool isRenderTarget)
+	{
+		m_device = device;
+		m_width = width;
+		m_height = height;
+
+		m_pimpl = device->CreateTexture2DPimpl(width, height, mipMap, format, isRenderTarget);
 	}
 
 	byte* Texture2D::convert(byte* pixels, int length, int format)
