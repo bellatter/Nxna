@@ -121,8 +121,14 @@ namespace SDL
 			return Nxna::Input::Keys::Enter;
 		if (sdlk == SDLK_ESCAPE)
 			return Nxna::Input::Keys::Escape;
+		if (sdlk == SDLK_SPACE)
+			return Nxna::Input::Keys::Space;
 		if (sdlk == SDLK_BACKQUOTE)
 			return Nxna::Input::Keys::OemTilde;
+		if (sdlk == SDLK_LSHIFT)
+			return Nxna::Input::Keys::LeftShift;
+		if (sdlk == SDLK_RSHIFT)
+			return Nxna::Input::Keys::RightShift;
 		if (sdlk == SDLK_UP)
 			return Nxna::Input::Keys::Up;
 		if (sdlk == SDLK_DOWN)
@@ -131,6 +137,9 @@ namespace SDL
 			return Nxna::Input::Keys::Right;
 		if (sdlk == SDLK_LEFT)
 			return Nxna::Input::Keys::Left;
+
+		if (sdlk >= SDLK_a && sdlk <= SDLK_z)
+			return (Nxna::Input::Keys)((int)Nxna::Input::Keys::A + (sdlk - SDLK_a));
 
 		return Nxna::Input::Keys::None;
 	}

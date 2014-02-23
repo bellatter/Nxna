@@ -20,12 +20,15 @@ namespace Input
 		friend class Keyboard;
 
 	private:
-		unsigned int m_state1;
+
+		unsigned int m_states[8];
 
 	public:
-		KeyState GetState(Keys key);
-		bool IsKeyDown(Keys key) { return GetState(key) == KeyState::Down; }
-		bool IsKeyUp(Keys key) { return GetState(key) == KeyState::Up; }
+		KeyState GetState(Keys key) const;
+		bool IsKeyDown(Keys key) const { return GetState(key) == KeyState::Down; }
+		bool IsKeyUp(Keys key) const { return GetState(key) == KeyState::Up; }
+
+		void GetPressedKeys(Keys* destination, int* destinationLength, int maxLength) const;
 	};
 
 	class Keyboard

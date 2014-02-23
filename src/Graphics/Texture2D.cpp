@@ -95,7 +95,7 @@ namespace Graphics
 			stream->Read(pixels, size);
 			imageSize = size;
 
-			if (format == 1)
+			if (format == FormatBGR565)
 			{
 				byte* convertedPixels = convert(pixels, size / 2, format);
 				delete[] pixels;
