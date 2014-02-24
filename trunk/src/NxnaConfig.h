@@ -33,12 +33,11 @@ typedef unsigned char byte;
 #endif
 
 // allow typesafe enums
-#if _MSC_VER >= 1700
+#if !defined DISABLE_NXNA_CLASS_ENUMS
 #define NXNA_ENUM(e) enum class e {
 #define NXNA_BITWISE_ENUM(e) enum e {
 #define END_NXNA_ENUM(e) };
 #else
-#define NXNA_CLASS_ENUMS_NOT_SUPPORTED 1
 template<typename def, typename inner = typename def::type>
 class safe_enum : public def
 {
