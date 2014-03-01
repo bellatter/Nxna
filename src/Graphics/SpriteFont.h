@@ -1,7 +1,6 @@
 #ifndef GRAPHICS_SPRITEFONT_H
 #define GRAPHICS_SPRITEFONT_H
 
-#include <unordered_map>
 #include "../NxnaConfig.h"
 #include "../Vector2.h"
 #include "../Content/ContentManager.h"
@@ -29,16 +28,12 @@ namespace Graphics
 
 		Texture2D* m_texture;
 
-		int m_numGlyphs;
+		int m_numCharacters;
+
+		int* m_characters;
 		Rectangle* m_glyphs;
-
-		int m_numCropping;
 		Rectangle* m_cropping;
-
-		int m_numKerning;
 		float* m_kerning;
-
-		std::unordered_map<unsigned int, int> m_characters;
 
 		int m_lineHeight;
 		float m_spacing;

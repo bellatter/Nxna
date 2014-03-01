@@ -27,18 +27,21 @@ namespace Graphics
 	{
 		m_texture = texture;
 
-		m_numGlyphs = m_numCropping = m_numKerning = numCharacters;
+		m_numCharacters = numCharacters;
 
 		m_glyphs = new Rectangle[numCharacters];
 		m_cropping = new Rectangle[numCharacters];
 		m_kerning = new float[numCharacters * 3];
+		m_characters = new int[numCharacters];
 
 		memcpy(m_glyphs, glyphs, sizeof(Rectangle) * numCharacters);
 		memcpy(m_cropping, cropping, sizeof(Rectangle) * numCharacters);
 		memcpy(m_kerning, kerning, sizeof(Vector3) * numCharacters);
 
 		for (int i = 0; i < numCharacters; i++)
-			m_characters.insert(std::map<unsigned short,int>::value_type(charMap[i], i));
+		{
+			m_characters[i] = charMap[i];
+		}
 
 		m_lineHeight = lineSpacing;
 		m_spacing = spacing;
@@ -50,6 +53,7 @@ namespace Graphics
 		delete[] m_glyphs;
 		delete[] m_cropping;
 		delete[] m_kerning;
+		delete[] m_characters;
 	}
 
 	Nxna::Vector2 SpriteFont::MeasureString(const char* text)
@@ -143,10 +147,11 @@ namespace Graphics
 		result->m_texture = Texture2D::LoadFrom(stream);
 
 		typeID = stream->ReadTypeID();
-		result->m_numGlyphs = stream->GetStream()->ReadInt32();
-		result->m_glyphs = new Rectangle[result->m_numGlyphs];
+		result->m_numCharacters = stream->GetStream()->ReadInt32();
+		result->m_characters = new int[result->m_numCharacters];
+		result->m_glyphs = new Rectangle[result->m_numCharacters];
 
-		for (int i = 0; i < result->m_numGlyphs; i++)
+		for (int i = 0; i < result->m_numCharacters; i++)
 		{
 			result->m_glyphs[i].X = stream->GetStream()->ReadInt32();
 			result->m_glyphs[i].Y = stream->GetStream()->ReadInt32();
@@ -155,10 +160,12 @@ namespace Graphics
 		}
 
 		typeID = stream->ReadTypeID();
-		result->m_numCropping = stream->GetStream()->ReadInt32();
-		result->m_cropping = new Rectangle[result->m_numCropping];
+		int numCropping = stream->GetStream()->ReadInt32();
+		if (numCropping != result->m_numCharacters)
+			throw Content::ContentException("Invalid SpriteFont data found");
+		result->m_cropping = new Rectangle[result->m_numCharacters];
 
-		for (int i = 0; i < result->m_numGlyphs; i++)
+		for (int i = 0; i < result->m_numCharacters; i++)
 		{
 			result->m_cropping[i].X = stream->GetStream()->ReadInt32();
 			result->m_cropping[i].Y = stream->GetStream()->ReadInt32();
@@ -168,6 +175,8 @@ namespace Graphics
 
 		typeID = stream->ReadTypeID();
 		int numCharacters = stream->GetStream()->ReadInt32();
+		if (numCharacters != result->m_numCharacters)
+			throw Content::ContentException("Invalid SpriteFont data found");
 
 		for (int i = 0; i < numCharacters; i++)
 		{
@@ -179,16 +188,19 @@ namespace Graphics
 
 				c = ((c & 0x1F) << 6) + (b2 & 0x3F);
 			}
-			result->m_characters.insert(std::map<unsigned short,int>::value_type(c, i));
+			result->m_characters[i] = c;
 		}
 
 		result->m_lineHeight = stream->GetStream()->ReadInt32();
 		result->m_spacing = stream->GetStream()->ReadFloat();
 
 		typeID = stream->ReadTypeID();
-		result->m_numKerning = stream->GetStream()->ReadInt32();
-		result->m_kerning = new float[result->m_numKerning * 3];
-		for (int i = 0; i < result->m_numKerning; i++)
+		int numKerning = stream->GetStream()->ReadInt32();
+		if (numKerning != result->m_numCharacters)
+			throw Content::ContentException("Invalid SpriteFont data found");
+
+		result->m_kerning = new float[result->m_numCharacters * 3];
+		for (int i = 0; i < result->m_numCharacters; i++)
 		{
 			result->m_kerning[i * 3 + 0] = stream->GetStream()->ReadFloat();
 			result->m_kerning[i * 3 + 1] = stream->GetStream()->ReadFloat();
@@ -200,15 +212,28 @@ namespace Graphics
 
 	bool SpriteFont::GetCharacterInfo(unsigned int c, Rectangle* glyph, Rectangle* cropping, Vector3* kerning)
 	{
-		// find the character
-		auto itr = m_characters.find(c);
-		if (itr != m_characters.end())
+		// find the character by doing a binary search
+		int searchLength = m_numCharacters - 1;
+		int i = 0;
+		while (i <= searchLength)
 		{
-			*glyph = m_glyphs[(*itr).second];
-			*cropping = m_cropping[(*itr).second];
-			*kerning = Vector3(m_kerning[(*itr).second * 3 + 0], m_kerning[(*itr).second * 3 + 1], m_kerning[(*itr).second * 3 + 2]);
+			int currentIndex = i + (searchLength - i) / 2;
+			int character = m_characters[currentIndex];
 
-			return true;
+			if (character == c)
+			{
+				// we found it!
+				*glyph = m_glyphs[currentIndex];
+				*cropping = m_cropping[currentIndex];
+				*kerning = Vector3(m_kerning[currentIndex * 3 + 0], m_kerning[currentIndex * 3 + 1], m_kerning[currentIndex * 3 + 2]);
+
+				return true;
+			}
+
+			if (character < c)
+				i = currentIndex + 1;
+			else
+				searchLength = currentIndex - 1;
 		}
 
 		return false;
