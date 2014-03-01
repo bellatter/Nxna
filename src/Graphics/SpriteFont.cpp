@@ -201,7 +201,7 @@ namespace Graphics
 	bool SpriteFont::GetCharacterInfo(unsigned int c, Rectangle* glyph, Rectangle* cropping, Vector3* kerning)
 	{
 		// find the character
-		std::map<unsigned int,int>::iterator itr = m_characters.find(c);
+		auto itr = m_characters.find(c);
 		if (itr != m_characters.end())
 		{
 			*glyph = m_glyphs[(*itr).second];
