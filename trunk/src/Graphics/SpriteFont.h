@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_SPRITEFONT_H
 #define GRAPHICS_SPRITEFONT_H
 
-#include <map>
+#include <unordered_map>
 #include "../NxnaConfig.h"
 #include "../Vector2.h"
 #include "../Content/ContentManager.h"
@@ -38,7 +38,7 @@ namespace Graphics
 		int m_numKerning;
 		float* m_kerning;
 
-		std::map<unsigned int, int> m_characters;
+		std::unordered_map<unsigned int, int> m_characters;
 
 		int m_lineHeight;
 		float m_spacing;
