@@ -13,7 +13,7 @@ echo SDLMAIN_OBJECT =
 echo SDL_COMPILER_FLAGS = -I../lib/SDL_13/include
 echo endif
 
-echo 'COMPILER_FLAGS =-g -msse -Doverride= $(SDL_COMPILER_FLAGS) -I../../src'
+echo 'COMPILER_FLAGS =-g -msse -std=c++11 -Doverride= $(SDL_COMPILER_FLAGS) -I../../src'
 echo EXECUTABLE = NxnaHelloWorld
 
 echo -n 'SOURCES='
