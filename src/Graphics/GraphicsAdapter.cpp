@@ -81,17 +81,17 @@ namespace Graphics
 #else
 			// TODO: support the other platform engines (which atm means IOS)
 			m_adapters.push_back(GraphicsAdapter());
-			strncpy(m_adapters[i].m_name, "IOS Screen", NAME_MAX_LENGTH);
+			strncpy(m_adapters[0].m_name, "IOS Screen", NAME_MAX_LENGTH);
 
-			m_adapters[i].m_displayMode.Width = 0;
-			m_adapters[i].m_displayMode.Height = 0;
+			m_adapters[0].m_displayMode.Width = 0;
+			m_adapters[0].m_displayMode.Height = 0;
 
 			DisplayMode supportedMode;
 			supportedMode.Width = 0;
 			supportedMode.Height = 0;
 			supportedMode.Format = SurfaceFormat::Color;
 
-			m_adapters[i].m_displayModes.push_back(supportedMode);
+			m_adapters[0].m_displayModes.push_back(supportedMode);
 #endif
 		}
 	}
