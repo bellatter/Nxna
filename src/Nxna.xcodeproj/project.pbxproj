@@ -225,6 +225,24 @@
 		A2C631441735FC6400DB1FDB /* squish.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2C6311F1735FC6400DB1FDB /* squish.cpp */; };
 		A2C631451735FC6400DB1FDB /* squish.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631201735FC6400DB1FDB /* squish.h */; };
 		A2C631461735FC6400DB1FDB /* squish.h in Headers */ = {isa = PBXBuildFile; fileRef = A2C631201735FC6400DB1FDB /* squish.h */; };
+		A2FBA1FE18CBD5C00019B993 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA1FD18CBD5C00019B993 /* Color.cpp */; };
+		A2FBA1FF18CBD5C00019B993 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA1FD18CBD5C00019B993 /* Color.cpp */; };
+		A2FBA20618CBD6090019B993 /* AlphaTestEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20018CBD6090019B993 /* AlphaTestEffect.cpp */; };
+		A2FBA20718CBD6090019B993 /* AlphaTestEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20018CBD6090019B993 /* AlphaTestEffect.cpp */; };
+		A2FBA20818CBD6090019B993 /* BasicEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20118CBD6090019B993 /* BasicEffect.cpp */; };
+		A2FBA20918CBD6090019B993 /* BasicEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20118CBD6090019B993 /* BasicEffect.cpp */; };
+		A2FBA20A18CBD6090019B993 /* DualTextureEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20218CBD6090019B993 /* DualTextureEffect.cpp */; };
+		A2FBA20B18CBD6090019B993 /* DualTextureEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20218CBD6090019B993 /* DualTextureEffect.cpp */; };
+		A2FBA20C18CBD6090019B993 /* IEffectPimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20318CBD6090019B993 /* IEffectPimpl.cpp */; };
+		A2FBA20D18CBD6090019B993 /* IEffectPimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20318CBD6090019B993 /* IEffectPimpl.cpp */; };
+		A2FBA20E18CBD6090019B993 /* RenderTarget2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20418CBD6090019B993 /* RenderTarget2D.cpp */; };
+		A2FBA20F18CBD6090019B993 /* RenderTarget2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20418CBD6090019B993 /* RenderTarget2D.cpp */; };
+		A2FBA21018CBD6090019B993 /* SpriteEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20518CBD6090019B993 /* SpriteEffect.cpp */; };
+		A2FBA21118CBD6090019B993 /* SpriteEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA20518CBD6090019B993 /* SpriteEffect.cpp */; };
+		A2FBA21418CBD6420019B993 /* GlRenderTarget2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA21218CBD6420019B993 /* GlRenderTarget2D.cpp */; };
+		A2FBA21518CBD6420019B993 /* GlRenderTarget2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA21218CBD6420019B993 /* GlRenderTarget2D.cpp */; };
+		A2FBA21618CBD6420019B993 /* GlRenderTarget2D.h in Headers */ = {isa = PBXBuildFile; fileRef = A2FBA21318CBD6420019B993 /* GlRenderTarget2D.h */; };
+		A2FBA21718CBD6420019B993 /* GlRenderTarget2D.h in Headers */ = {isa = PBXBuildFile; fileRef = A2FBA21318CBD6420019B993 /* GlRenderTarget2D.h */; };
 		A2FC4B6A185965AF00258812 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FC4B69185965AF00258812 /* Vorbis.framework */; };
 		A2FC4B6C185965D300258812 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FC4B6B185965D300258812 /* Ogg.framework */; };
 		A2FC4B6E1859661400258812 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FC4B6D1859661400258812 /* SDL2.framework */; };
@@ -237,7 +255,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A228BBF01505B54200045911 /* libNxna.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libNxna.a; path = libNxna_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A228BBF01505B54200045911 /* libNxna_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNxna_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A228BBF31505B54200045911 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A28808D11512E54E005D983A /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = SOURCE_ROOT; };
 		A28808D21512E54E005D983A /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = SOURCE_ROOT; };
@@ -388,6 +406,15 @@
 		A2C6311E1735FC6400DB1FDB /* singlecolourfit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = singlecolourfit.h; path = Graphics/libsquish/singlecolourfit.h; sourceTree = SOURCE_ROOT; };
 		A2C6311F1735FC6400DB1FDB /* squish.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = squish.cpp; path = Graphics/libsquish/squish.cpp; sourceTree = SOURCE_ROOT; };
 		A2C631201735FC6400DB1FDB /* squish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = squish.h; path = Graphics/libsquish/squish.h; sourceTree = SOURCE_ROOT; };
+		A2FBA1FD18CBD5C00019B993 /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Color.cpp; sourceTree = SOURCE_ROOT; };
+		A2FBA20018CBD6090019B993 /* AlphaTestEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AlphaTestEffect.cpp; path = Graphics/AlphaTestEffect.cpp; sourceTree = SOURCE_ROOT; };
+		A2FBA20118CBD6090019B993 /* BasicEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BasicEffect.cpp; path = Graphics/BasicEffect.cpp; sourceTree = SOURCE_ROOT; };
+		A2FBA20218CBD6090019B993 /* DualTextureEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DualTextureEffect.cpp; path = Graphics/DualTextureEffect.cpp; sourceTree = SOURCE_ROOT; };
+		A2FBA20318CBD6090019B993 /* IEffectPimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IEffectPimpl.cpp; path = Graphics/IEffectPimpl.cpp; sourceTree = SOURCE_ROOT; };
+		A2FBA20418CBD6090019B993 /* RenderTarget2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderTarget2D.cpp; path = Graphics/RenderTarget2D.cpp; sourceTree = SOURCE_ROOT; };
+		A2FBA20518CBD6090019B993 /* SpriteEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SpriteEffect.cpp; path = Graphics/SpriteEffect.cpp; sourceTree = SOURCE_ROOT; };
+		A2FBA21218CBD6420019B993 /* GlRenderTarget2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GlRenderTarget2D.cpp; path = Graphics/OpenGL/GlRenderTarget2D.cpp; sourceTree = SOURCE_ROOT; };
+		A2FBA21318CBD6420019B993 /* GlRenderTarget2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlRenderTarget2D.h; path = Graphics/OpenGL/GlRenderTarget2D.h; sourceTree = SOURCE_ROOT; };
 		A2FC4B69185965AF00258812 /* Vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Vorbis.framework; sourceTree = "<group>"; };
 		A2FC4B6B185965D300258812 /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ogg.framework; sourceTree = "<group>"; };
 		A2FC4B6D1859661400258812 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDL2.framework; sourceTree = "<group>"; };
@@ -437,7 +464,7 @@
 		A228BBF11505B54200045911 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A228BBF01505B54200045911 /* libNxna.a */,
+				A228BBF01505B54200045911 /* libNxna_ios.a */,
 				A2963B4916ADF23600817CFC /* libNxna.a */,
 			);
 			name = Products;
@@ -454,6 +481,7 @@
 		A228BBF51505B54200045911 /* Nxna */ = {
 			isa = PBXGroup;
 			children = (
+				A2FBA1FD18CBD5C00019B993 /* Color.cpp */,
 				A28808D11512E54E005D983A /* Color.h */,
 				A28808D21512E54E005D983A /* Game.cpp */,
 				A28808D31512E54E005D983A /* Game.h */,
@@ -497,6 +525,12 @@
 		A228BC271505B5D000045911 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				A2FBA20018CBD6090019B993 /* AlphaTestEffect.cpp */,
+				A2FBA20118CBD6090019B993 /* BasicEffect.cpp */,
+				A2FBA20218CBD6090019B993 /* DualTextureEffect.cpp */,
+				A2FBA20318CBD6090019B993 /* IEffectPimpl.cpp */,
+				A2FBA20418CBD6090019B993 /* RenderTarget2D.cpp */,
+				A2FBA20518CBD6090019B993 /* SpriteEffect.cpp */,
 				A2FC4B9A185973CC00258812 /* GraphicsAdapter.cpp */,
 				A2FC4B9B185973CC00258812 /* IndexBuffer.cpp */,
 				A2FC4B9C185973CC00258812 /* ITexture2DPimpl.cpp */,
@@ -576,6 +610,8 @@
 		A228BC7F1505B6A700045911 /* OpenGl */ = {
 			isa = PBXGroup;
 			children = (
+				A2FBA21218CBD6420019B993 /* GlRenderTarget2D.cpp */,
+				A2FBA21318CBD6420019B993 /* GlRenderTarget2D.h */,
 				A2963CAA16B49D2500817CFC /* GlslSource.cpp */,
 				A2963CAB16B49D2500817CFC /* GlslSource.h */,
 				A28809831512E83C005D983A /* GlIndexBuffer.cpp */,
@@ -756,6 +792,7 @@
 				A288092F1512E5A1005D983A /* Texture2D.h in Headers */,
 				A28809311512E5A1005D983A /* VertexBuffer.h in Headers */,
 				A28809321512E5A1005D983A /* VertexDeclaration.h in Headers */,
+				A2FBA21618CBD6420019B993 /* GlRenderTarget2D.h in Headers */,
 				A28809361512E64C005D983A /* Nxna-Prefix.pch in Headers */,
 				A288093D1512E68C005D983A /* AudioEmitter.h in Headers */,
 				A288093E1512E68C005D983A /* AudioListener.h in Headers */,
@@ -820,6 +857,7 @@
 				A2C631241735FC6400DB1FDB /* alpha.h in Headers */,
 				A2C631281735FC6400DB1FDB /* clusterfit.h in Headers */,
 				A2C6312C1735FC6400DB1FDB /* colourblock.h in Headers */,
+				A2FBA21718CBD6420019B993 /* GlRenderTarget2D.h in Headers */,
 				A2C631301735FC6400DB1FDB /* colourfit.h in Headers */,
 				A2C631341735FC6400DB1FDB /* colourset.h in Headers */,
 				A2C631381735FC6400DB1FDB /* maths.h in Headers */,
@@ -847,7 +885,7 @@
 			);
 			name = Nxna_ios;
 			productName = Nxna;
-			productReference = A228BBF01505B54200045911 /* libNxna.a */;
+			productReference = A228BBF01505B54200045911 /* libNxna_ios.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		A2963B4816ADF23600817CFC /* Nxna */ = {
@@ -924,7 +962,9 @@
 				A288094B1512E6F8005D983A /* AppDelegate.m in Sources */,
 				A288094C1512E6F8005D983A /* main.m in Sources */,
 				A288094D1512E6F8005D983A /* NaClMain.cpp in Sources */,
+				A2FBA20E18CBD6090019B993 /* RenderTarget2D.cpp in Sources */,
 				A28809501512E6F8005D983A /* ViewController.m in Sources */,
+				A2FBA1FE18CBD5C00019B993 /* Color.cpp in Sources */,
 				A288095E1512E726005D983A /* IOSGame_c.mm in Sources */,
 				A288095F1512E726005D983A /* IOSGame.cpp in Sources */,
 				A28809611512E726005D983A /* IOSOpenGlWindow.cpp in Sources */,
@@ -932,6 +972,7 @@
 				A288096D1512E7AF005D983A /* ContentManager.cpp in Sources */,
 				A288096F1512E7AF005D983A /* FileStream.cpp in Sources */,
 				A28809711512E7AF005D983A /* XnbReader.cpp in Sources */,
+				A2FBA20C18CBD6090019B993 /* IEffectPimpl.cpp in Sources */,
 				A288097C1512E7EF005D983A /* GamePad.cpp in Sources */,
 				A288097E1512E7EF005D983A /* Keyboard.cpp in Sources */,
 				A28809811512E7EF005D983A /* Mouse.cpp in Sources */,
@@ -939,6 +980,7 @@
 				A28809981512E83C005D983A /* GlslAlphaTestEffect.cpp in Sources */,
 				A288099A1512E83C005D983A /* GlslBasicEffect.cpp in Sources */,
 				A288099C1512E83C005D983A /* GlslDualTextureEffect.cpp in Sources */,
+				A2FBA20A18CBD6090019B993 /* DualTextureEffect.cpp in Sources */,
 				A288099E1512E83C005D983A /* GlslEffect.cpp in Sources */,
 				A28809A01512E83C005D983A /* GlslSpriteEffect.cpp in Sources */,
 				A28809A21512E83C005D983A /* GlTexture2D.cpp in Sources */,
@@ -950,6 +992,7 @@
 				A2963C5E16AE04AE00817CFC /* SamplerStateCollection.cpp in Sources */,
 				A2963C6016AE04AE00817CFC /* VertexDeclaration.cpp in Sources */,
 				A2963C6516AE050F00817CFC /* OggVorbisDecoder.cpp in Sources */,
+				A2FBA21018CBD6090019B993 /* SpriteEffect.cpp in Sources */,
 				A2963CAC16B49D2600817CFC /* GlslSource.cpp in Sources */,
 				A2FC4B9F185973CC00258812 /* IndexBuffer.cpp in Sources */,
 				A2FC4BA1185973CC00258812 /* ITexture2DPimpl.cpp in Sources */,
@@ -962,6 +1005,9 @@
 				A2C631391735FC6400DB1FDB /* rangefit.cpp in Sources */,
 				A2C6313F1735FC6400DB1FDB /* singlecolourfit.cpp in Sources */,
 				A2C631431735FC6400DB1FDB /* squish.cpp in Sources */,
+				A2FBA21418CBD6420019B993 /* GlRenderTarget2D.cpp in Sources */,
+				A2FBA20618CBD6090019B993 /* AlphaTestEffect.cpp in Sources */,
+				A2FBA20818CBD6090019B993 /* BasicEffect.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -977,14 +1023,17 @@
 				A2963B5816ADF35F00817CFC /* Matrix.cpp in Sources */,
 				A2963B5D16ADF35F00817CFC /* Quaternion.cpp in Sources */,
 				A2963B6016ADF35F00817CFC /* Vector2.cpp in Sources */,
+				A2FBA20718CBD6090019B993 /* AlphaTestEffect.cpp in Sources */,
 				A2963B6216ADF35F00817CFC /* Vector3.cpp in Sources */,
 				A2963B6416ADF35F00817CFC /* Vector4.cpp in Sources */,
 				A2963B6916ADF35F00817CFC /* NaClMain.cpp in Sources */,
 				A2963B6F16ADF35F00817CFC /* IOSGame.cpp in Sources */,
 				A2963B7116ADF35F00817CFC /* IOSOpenGlWindow.cpp in Sources */,
 				A2963B7616ADF35F00817CFC /* GamePad.cpp in Sources */,
+				A2FBA21118CBD6090019B993 /* SpriteEffect.cpp in Sources */,
 				A2963B7816ADF35F00817CFC /* Keyboard.cpp in Sources */,
 				A2963B7B16ADF35F00817CFC /* Mouse.cpp in Sources */,
+				A2FBA20D18CBD6090019B993 /* IEffectPimpl.cpp in Sources */,
 				A2FC4B9E185973CC00258812 /* GraphicsAdapter.cpp in Sources */,
 				A2963B7D16ADF35F00817CFC /* TouchPanel.cpp in Sources */,
 				A2963B7F16ADF35F00817CFC /* ContentManager.cpp in Sources */,
@@ -1009,6 +1058,8 @@
 				A2963BAB16ADF35F00817CFC /* GlslAlphaTestEffect.cpp in Sources */,
 				A2963BAD16ADF35F00817CFC /* GlslBasicEffect.cpp in Sources */,
 				A2963BAF16ADF35F00817CFC /* GlslDualTextureEffect.cpp in Sources */,
+				A2FBA20918CBD6090019B993 /* BasicEffect.cpp in Sources */,
+				A2FBA20B18CBD6090019B993 /* DualTextureEffect.cpp in Sources */,
 				A2963BB116ADF35F00817CFC /* GlslEffect.cpp in Sources */,
 				A2963BB316ADF35F00817CFC /* GlslSpriteEffect.cpp in Sources */,
 				A2963BB516ADF35F00817CFC /* GlTexture2D.cpp in Sources */,
@@ -1016,8 +1067,10 @@
 				A2963BBA16ADF35F00817CFC /* OpenGlDevice.cpp in Sources */,
 				A2963C5F16AE04AE00817CFC /* SamplerStateCollection.cpp in Sources */,
 				A2963C6116AE04AE00817CFC /* VertexDeclaration.cpp in Sources */,
+				A2FBA21518CBD6420019B993 /* GlRenderTarget2D.cpp in Sources */,
 				A2963C6616AE050F00817CFC /* OggVorbisDecoder.cpp in Sources */,
 				A2963C7116AE3F3A00817CFC /* SDLGame.cpp in Sources */,
+				A2FBA20F18CBD6090019B993 /* RenderTarget2D.cpp in Sources */,
 				A2963C7516AE3F3A00817CFC /* SDLOpenGlWindow.cpp in Sources */,
 				A2963CA616AE510F00817CFC /* SdlMain.cpp in Sources */,
 				A2FC4BA2185973CC00258812 /* ITexture2DPimpl.cpp in Sources */,
@@ -1026,6 +1079,7 @@
 				A2C631221735FC6400DB1FDB /* alpha.cpp in Sources */,
 				A2C631261735FC6400DB1FDB /* clusterfit.cpp in Sources */,
 				A2C6312A1735FC6400DB1FDB /* colourblock.cpp in Sources */,
+				A2FBA1FF18CBD5C00019B993 /* Color.cpp in Sources */,
 				A2C6312E1735FC6400DB1FDB /* colourfit.cpp in Sources */,
 				A2C631321735FC6400DB1FDB /* colourset.cpp in Sources */,
 				A2C631361735FC6400DB1FDB /* maths.cpp in Sources */,
