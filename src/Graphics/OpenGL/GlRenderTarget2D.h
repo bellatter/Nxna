@@ -17,6 +17,7 @@ namespace OpenGl
 	{
 		unsigned int m_fbo;
 		unsigned int m_depthBuffer;
+		unsigned int m_stencilBuffer;
 
 	public:
 
