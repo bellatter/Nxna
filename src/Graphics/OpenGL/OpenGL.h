@@ -8,6 +8,7 @@
 #include <GLES2/gl2.h>
 #else
 #include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
 #endif
 #else
 #include <GL/glew.h> 
