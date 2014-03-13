@@ -298,9 +298,9 @@ void EffectXml::RemoveProfile(Profile::eProfile profile)
 	for (auto itr = m_techniqueMaps.begin(); itr != m_techniqueMaps.end(); )
 	{
 		if ((*itr).ProfileType == profile
-			|| (profile == Profile::ANY_GLSL && (profile & Profile::ANY_GLSL) == Profile::ANY_GLSL)
-			|| (profile == Profile::ANY_GLSL_ES && (profile & Profile::ANY_GLSL_ES) == Profile::ANY_GLSL_ES)
-			|| (profile == Profile::ANY_HLSL && (profile & Profile::ANY_HLSL) == Profile::ANY_HLSL))
+			|| (profile == Profile::ANY_GLSL && ((*itr).ProfileType & Profile::ANY_GLSL) == Profile::ANY_GLSL)
+			|| (profile == Profile::ANY_GLSL_ES && ((*itr).ProfileType & Profile::ANY_GLSL_ES) == Profile::ANY_GLSL_ES)
+			|| (profile == Profile::ANY_HLSL && ((*itr).ProfileType & Profile::ANY_HLSL) == Profile::ANY_HLSL))
 		{
 			itr = m_techniqueMaps.erase(itr);
 		}
