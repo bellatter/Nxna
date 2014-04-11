@@ -1,8 +1,10 @@
-#ifndef EXCEPTION_H
-#define EXCEPTION_H
+#ifndef NXNA_EXCEPTION_H
+#define NXNA_EXCEPTION_H
 
 #include <string>
 
+namespace Nxna
+{
 class Exception
 {
 protected:
@@ -67,9 +69,6 @@ public:
 	}
 };
 
-// TODO: move the rest of the exceptions into the Nxna namespace
-namespace Nxna
-{
 	class InvalidOperationException : public Exception
 	{
 	public:
@@ -90,4 +89,4 @@ namespace Nxna
 	};
 }
 
-#endif // EXCEPTION_H
+#endif // NXNA_EXCEPTION_H
