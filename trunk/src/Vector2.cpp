@@ -22,6 +22,14 @@ namespace Nxna
 		return r;
 	}
 
+	void Vector2::Normalize()
+	{
+		float len = Length();
+
+		X /= len;
+		Y /= len;
+	}
+
 	void Vector2::Transform(const Vector2& v, const Matrix& m, Vector2& result)
 	{
 		// put the results into temp variables in case v and result are the same

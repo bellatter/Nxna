@@ -115,6 +115,8 @@ namespace Nxna
 			return X * X + Y * Y;
 		}
 
+		void Normalize();
+
 		float X, Y;
 
 		static void Dot(const Vector2& v1, const Vector2& v2, float& result)
