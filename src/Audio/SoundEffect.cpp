@@ -244,7 +244,7 @@ namespace Audio
 		if (format.FormatTag == WAVE_FORMAT_PCM)
 		{
 			if ((format.BitsPerSample != 8 && format.BitsPerSample != 16) ||
-				(format.SamplesPerSec != 22050 && format.SamplesPerSec != 44100))
+				(format.SamplesPerSec != 22050 && format.SamplesPerSec != 44100 && format.SamplesPerSec != 48000))
 				throw Nxna::Content::ContentException("Sound Effect is not in a supported format.");
 		}
 		else
