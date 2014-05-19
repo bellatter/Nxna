@@ -8,16 +8,12 @@ namespace Nxna
 {
 namespace Audio
 {
-	std::vector<byte> AdpcmDecoder::m_workingData;
+	std::unique_ptr<Content::MemoryStream> AdpcmDecoder::m_workingData;
 
 	AdpcmDecoder::AdpcmDecoder()
 	{
-		m_bytesWritten = 0;
-
-		if (m_workingData.empty())
-		{
-			m_workingData.resize(1024 * 100); // start at 100 KB);
-		}
+		if (m_workingData == nullptr)
+			m_workingData.reset(new Content::MemoryStream(1024 * 100)); // start at 100 KB
 	}
 
 	struct AdpcmInfo
@@ -137,7 +133,7 @@ namespace Audio
 			samplesRead++;
 		}
 
-		return blockSize;
+		return bytesWritten;
 	}
 
 	void AdpcmDecoder::Decode(Content::Stream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock)
@@ -160,27 +156,24 @@ namespace Audio
 			int bytesRead = 0;
 			while(data->Length() - data->Position() >= blockSize)
 			{
-				bytesRead += decodeStereoBlock(&info, data, blockSize, output);
-
-				copyToWorkingMemory(output, outputSize);
+				int bytesRead = decodeStereoBlock(&info, data, blockSize, output);
+				m_workingData->Write(output, bytesRead);
 			}
 		}
 
 		delete[] output;
 	}
 
+	void AdpcmDecoder::GetOutput(const byte** output, int* outputSize)
+	{
+		*output = m_workingData->GetBuffer();
+		*outputSize = m_workingData->Length();
+	}
+
 	void AdpcmDecoder::copyToWorkingMemory(byte* data, unsigned int size)
 	{
 		// expand the working memory if needed
-		if (m_bytesWritten + size > m_workingData.capacity())
-		{
-			int newSize = (m_workingData.capacity() * 2 > m_bytesWritten + size ? m_workingData.capacity() * 2 : m_bytesWritten + size);
-			m_workingData.reserve(newSize);
-		}
-
-		byte* working = &m_workingData.front();
-		memcpy(working + m_bytesWritten, data, size);
-		m_bytesWritten += size;
+		m_workingData->Write(data, size);
 	}
 }
 }

@@ -2,13 +2,14 @@
 #define NXNA_AUDIO_ADPCMDECODER_H
 
 #include "../../NxnaConfig.h"
-#include <vector>
+#include <memory>
 
 namespace Nxna
 {
 	namespace Content
 	{
 		class FileStream;
+		class MemoryStream;
 	}
 
 namespace Audio
@@ -20,17 +21,11 @@ namespace Audio
 
 		void Decode(Content::Stream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock);
 
-		void GetOutput(byte** output, int* outputSize)
-		{
-			*output = &m_workingData.front();
-			*outputSize = m_bytesWritten;
-		}
+		void GetOutput(const byte** output, int* outputSize);
 
 	private:
-	
-		unsigned int m_bytesWritten;
 
-		static std::vector<byte> m_workingData;
+		static std::unique_ptr<Content::MemoryStream> m_workingData;
 
 		void copyToWorkingMemory(byte* data, unsigned int size);
 	};

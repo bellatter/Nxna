@@ -128,9 +128,26 @@ namespace Content
 
 	MemoryStream::MemoryStream(const byte* memory, int length)
 	{
-		m_memory = memory;
+		m_weOwnBuffer = false;
+		m_memory = const_cast<byte*>(memory);
 		m_length = length;
+		m_totalSize = length;
 		m_position = 0;
+	}
+
+	MemoryStream::MemoryStream(int size)
+	{
+		m_weOwnBuffer = true;
+		m_memory = new byte[size];
+		m_length = 0;
+		m_totalSize = size;
+		m_position = 0;
+	}
+
+	MemoryStream::~MemoryStream()
+	{
+		if (m_weOwnBuffer)
+			delete[] m_memory;
 	}
 
 	int MemoryStream::Read(byte* destination, int length)
@@ -208,6 +225,39 @@ namespace Content
 	bool MemoryStream::Eof()
 	{
 		return m_position >= m_length;
+	}
+
+	size_t MemoryStream::Write(const byte* buffer, size_t size)
+	{
+		// do we need to resize the buffer?
+		if (size + m_position >= m_totalSize)
+		{
+			if (m_weOwnBuffer)
+				increaseSize(Math::Max(m_totalSize + size, m_totalSize * 2));
+			else
+				return 0; // we don't own the buffer, so we can't expand it
+		}
+
+		memcpy(&m_memory[m_position], buffer, size);
+		m_position += size;
+
+		if (m_position > m_length)
+			m_length = m_position;
+
+		return size;
+	}
+
+	void MemoryStream::increaseSize(size_t amount)
+	{
+		m_totalSize += amount;
+
+		byte* tmp = new byte[m_totalSize];
+		memset(tmp, 0, m_totalSize);
+
+		memcpy(tmp, m_memory, m_length);
+
+		delete[] m_memory;
+		m_memory = tmp;
 	}
 
 	void MemoryStream::swapLE(void* /* data */, int /* length */)

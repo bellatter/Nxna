@@ -260,7 +260,7 @@ namespace Audio
 			AdpcmDecoder decoder;
 			decoder.Decode(stream, format.Channels == 2, format.BitsPerSample, format.BlockAlign, samplesPerBlock);
 
-			byte* output;
+			const byte* output;
 			decoder.GetOutput(&output, &dataSize);
 
 			if ((unsigned int)dataSize > m_workingData.capacity())
