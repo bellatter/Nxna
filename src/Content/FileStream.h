@@ -66,13 +66,16 @@ namespace Content
 
 	class MemoryStream : public Stream
 	{
-		const byte* m_memory;
-		int m_length;
-		int m_position;
+		byte* m_memory;
+		bool m_weOwnBuffer;
+		size_t m_length;
+		size_t m_totalSize;
+		size_t m_position;
 
 	public:
 		MemoryStream(const byte* memory, int length);
-		virtual ~MemoryStream() { }
+		MemoryStream(int size = 512);
+		virtual ~MemoryStream();
 
 		virtual int Read(byte* destination, int length) override;
 		virtual int ReadInt32() override;
@@ -86,7 +89,14 @@ namespace Content
 		virtual int Length() override;
 		bool Eof();
 
+		size_t Write(const byte* buffer, size_t size);
+
+		const byte* GetBuffer() { return m_memory; }
+
 	private:
+
+		void increaseSize(size_t amount);
+
 		void swapLE(void* data, int length);
 	};
 }
