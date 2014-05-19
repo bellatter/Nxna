@@ -233,7 +233,7 @@ namespace Content
 		if (size + m_position >= m_totalSize)
 		{
 			if (m_weOwnBuffer)
-				increaseSize(Math::Max(m_totalSize + size, m_totalSize * 2));
+				increaseSize(Math::Max((unsigned int)(m_totalSize + size), (unsigned int)(m_totalSize * 2)));
 			else
 				return 0; // we don't own the buffer, so we can't expand it
 		}
