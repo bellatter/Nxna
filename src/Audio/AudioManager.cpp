@@ -397,6 +397,14 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 #endif
 	}
 
+	void AudioSource::Reset()
+	{
+		SetGain(1.0f);
+		IsLooping(false);
+		SetBuffer(nullptr);
+		SetPosition(true, Nxna::Vector3::Zero);
+	}
+
 #if defined NXNA_AUDIOENGINE_OPENAL
 	void* AudioManager::m_device = nullptr;
 	void* AudioManager::m_context = nullptr;
@@ -517,6 +525,7 @@ const SLboolean req[] = { SL_BOOLEAN_TRUE };
 			if (m_sources[i].Source->IsAvailable())
 			{
 				m_sources[i].Owner = owner;
+				m_sources[i].Source->Reset();
 				return m_sources[i].Source;
 			}
 		}
