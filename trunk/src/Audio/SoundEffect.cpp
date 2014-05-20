@@ -100,13 +100,11 @@ namespace Audio
 
 	void SoundEffectInstance::Apply3D(const AudioListener* listener, const AudioEmitter* emitter)
 	{
+		m_positioned = true;
+		m_cachedPosition = emitter->GetPosition();
+
 		if (isSourceValid())
 			AudioManager::Apply3D(m_source, listener, emitter);
-		else
-		{
-			m_positioned = true;
-			m_cachedPosition = emitter->GetPosition();
-		}
 			
 /*
 #ifndef DISABLE_OPENAL

@@ -57,6 +57,8 @@ namespace Audio
 #if defined NXNA_AUDIOENGINE_OPENSL
 		void OnStop() { m_playing = false; }
 #endif
+
+		void Reset();
 	};
 
 	class AudioListener;
