@@ -109,6 +109,10 @@ namespace Nxna
 		static const Vector3 Zero;
 		static const Vector3 Right;
 
+		static const Vector3 UnitX;
+		static const Vector3 UnitY;
+		static const Vector3 UnitZ;
+
 		static void Multiply(const Vector3& v, float scaleFactor, Vector3& result)
 		{
 			result.X = v.X * scaleFactor;

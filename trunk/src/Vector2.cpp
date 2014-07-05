@@ -3,10 +3,12 @@
 
 namespace Nxna
 {
+	Vector2 Vector2::m_zero;
 	Vector2 Vector2::m_one(1.0f, 1.0f);
 	Vector2 Vector2::m_unitX(1.0f, 0);
 	Vector2 Vector2::m_unitY(0, 1.0f);
 
+	const Vector2& Vector2::Zero(Vector2::m_zero);
 	const Vector2& Vector2::One(Vector2::m_one);
 	const Vector2& Vector2::UnitX(Vector2::m_unitX);
 	const Vector2& Vector2::UnitY(Vector2::m_unitY);
