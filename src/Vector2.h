@@ -135,11 +135,13 @@ namespace Nxna
 		static float DistanceSquared(const Vector2& v1, const Vector2& v2);
 		static void DistanceSquared(const Vector2& v1, const Vector2& v2, float& result);
 
+		static const Vector2& Zero;
 		static const Vector2& One;
 		static const Vector2& UnitX;
 		static const Vector2& UnitY;
 
 	private:
+		static Vector2 m_zero;
 		static Vector2 m_one;
 		static Vector2 m_unitX;
 		static Vector2 m_unitY;

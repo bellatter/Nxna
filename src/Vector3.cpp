@@ -8,6 +8,9 @@ namespace Nxna
 	const Vector3 Vector3::Forward(0, 0, -1.0f);
 	const Vector3 Vector3::Zero(0, 0, 0);
 	const Vector3 Vector3::Right(1.0f, 0, 0);
+	const Vector3 Vector3::UnitX(1.0f, 0, 0);
+	const Vector3 Vector3::UnitY(0, 1.0f, 0);
+	const Vector3 Vector3::UnitZ(0, 0, 1.0f);
 
 	void Vector3::Normalize()
 	{
