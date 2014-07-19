@@ -54,6 +54,12 @@ namespace Graphics
 			nullptr, nullptr, Nxna::Matrix::Identity);
 	}
 
+	void SpriteBatch::Begin(SpriteSortMode sortMode, const BlendState* blendState)
+	{
+		Begin(sortMode, blendState, nullptr, 
+			nullptr, nullptr, Nxna::Matrix::Identity);
+	}
+
 	void SpriteBatch::Begin(SpriteSortMode sortMode, const BlendState* blendState, 
 		const DepthStencilState* depthStencilState, const RasterizerState* rasterizerState)
 	{

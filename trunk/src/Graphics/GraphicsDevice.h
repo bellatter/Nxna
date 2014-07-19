@@ -141,6 +141,10 @@ namespace Graphics
 
 		virtual DepthStencilState GetDepthStencilState() = 0;
 		virtual void SetDepthStencilState(const DepthStencilState* state) = 0;
+		void SetDepthStencilState(const DepthStencilState& state)
+		{
+			SetDepthStencilState(&state);
+		}
 
 		virtual void SetIndices(const IndexBuffer* indices) = 0;
 

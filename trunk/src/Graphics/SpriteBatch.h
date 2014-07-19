@@ -70,6 +70,7 @@ namespace Graphics
 		GraphicsDevice* GetGraphicsDevice() { return m_device; }
 
 		void Begin();
+		void Begin(SpriteSortMode sortMode, const BlendState* blendState);
 		void Begin(SpriteSortMode sortMode, const BlendState* blendState, 
 			const DepthStencilState* depthStencilState, const RasterizerState* rasterizerState);
 		void Begin(SpriteSortMode sortMode, const BlendState* blendState, 
