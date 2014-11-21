@@ -89,6 +89,7 @@ struct Color
 	static const Color SandyBrown;
 	static const Color Tomato;
 	static const Color White;
+	static const Color Yellow;
 
 	static Color Lerp(const Color& c1, const Color& c2, float amount)
 	{
