@@ -21,4 +21,5 @@ namespace Nxna
 	const Color Color::SandyBrown(244, 164, 96);
 	const Color Color::Tomato(255, 99, 71);
 	const Color Color::White(255, 255, 255);
+	const Color Color::Yellow(255, 255, 0);
 }
