@@ -134,6 +134,8 @@ namespace Nxna
 		static float Distance(const Vector2& v1, const Vector2& v2);
 		static float DistanceSquared(const Vector2& v1, const Vector2& v2);
 		static void DistanceSquared(const Vector2& v1, const Vector2& v2, float& result);
+		static Vector2 Lerp(const Vector2& v1, const Vector2& v2, float amount);
+		static void Lerp(const Vector2& v1, const Vector2& v2, float amount, Vector2& result);
 
 		static const Vector2& Zero;
 		static const Vector2& One;

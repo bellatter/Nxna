@@ -56,4 +56,14 @@ namespace Nxna
 	{
 		result = (v1.X - v2.X) * (v1.X - v2.X) + (v1.Y - v2.Y) * (v1.Y - v2.Y);
 	}
+
+	Vector2 Vector2::Lerp(const Vector2& v1, const Vector2& v2, float amount)
+	{
+		return v1 + (v2 - v1) * amount;
+	}
+
+	void Vector2::Lerp(const Vector2& v1, const Vector2& v2, float amount, Vector2& result)
+	{
+		result = v1 + (v2 - v1) * amount;
+	}
 }
