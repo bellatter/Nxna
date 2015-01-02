@@ -23,7 +23,7 @@ namespace SDL
 		SDL_Init(SDL_INIT_VIDEO);
 	}
 
-	void SDLGame::Init(int /* argc */, char** /* argv */)
+	void SDLGame::Init(int /* argc */, const char** /* argv */)
 	{
 		if (m_game->m_graphicsDeviceManager != nullptr)
 		{

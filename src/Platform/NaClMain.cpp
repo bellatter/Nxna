@@ -7,7 +7,7 @@
 #include <ppapi/cpp/module.h>
 
 
-int NxnaMain(int argc, char* argv[]);
+int NxnaMain(int argc, const char* argv[]);
 
 pp::Instance* g_Instance = nullptr;
 

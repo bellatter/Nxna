@@ -21,7 +21,7 @@ namespace SDL
 
 	public:
 		SDLGame(Game* game);
-		void Init(int argc, char** argv);
+		void Init(int argc, const char** argv);
 		void Run();
 		void Exit();
 

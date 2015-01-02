@@ -74,7 +74,7 @@ namespace Nxna
 		void SetTargetElapsedTime(float targetElapsedTime) { m_targetElapsedTime = targetElapsedTime; }
 
 		void Run();
-		void Run(int argc, char** argv);
+		void Run(int argc, const char** argv);
 		void Exit();
 		
 		bool IsActive();
