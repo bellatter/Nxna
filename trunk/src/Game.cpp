@@ -42,11 +42,11 @@ namespace Nxna
 
 	void Game::Run()
 	{
-		char* argv[] = {"\0"};
+		const char* argv[] = {"\0"};
 		Run(0, argv);
 	}
 	
-	void Game::Run(int argc, char** argv)
+	void Game::Run(int argc, const char** argv)
 	{
 
 #if defined NXNA_PLATFORM_APPLE_IOS

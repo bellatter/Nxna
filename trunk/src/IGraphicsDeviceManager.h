@@ -12,6 +12,7 @@ namespace Nxna
 	class IGraphicsDeviceManager
 	{
 	public:
+		virtual ~IGraphicsDeviceManager() {}
 		virtual void BeginDraw() = 0;
 		virtual void EndDraw() = 0;
 		virtual Nxna::Graphics::GraphicsDevice* CreateDevice() = 0;
@@ -31,6 +32,7 @@ namespace Nxna
 	public:
 
 		GraphicsDeviceManager(Game* game);
+		virtual ~GraphicsDeviceManager() {}
 
 		Graphics::GraphicsDevice* GetGraphicsDevice() { return m_device; }
 

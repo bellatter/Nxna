@@ -22,6 +22,7 @@ namespace OpenGl
 	public:
 
 		GlRenderTarget2D(OpenGlDevice* device, GlTexture2D* texture, int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage);
+		virtual ~GlRenderTarget2D() {}
 
 		unsigned int GetFBO() { return m_fbo; }
 

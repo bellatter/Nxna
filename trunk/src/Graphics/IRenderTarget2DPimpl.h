@@ -10,6 +10,7 @@ namespace Pvt
 	class IRenderTarget2DPimpl
 	{
 	public:
+		virtual ~IRenderTarget2DPimpl() {}
 		virtual bool FlipBeforeUse() = 0;
 	};
 }

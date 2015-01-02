@@ -27,7 +27,7 @@ namespace Graphics
 			return m_spriteRectangles[spriteIndex];
 		}
 
-		int GetNumSprites() { return m_spriteRectangles.size(); }
+		int GetNumSprites() { return (int)m_spriteRectangles.size(); }
 
 		virtual const char* GetTypeName() override { return typeid(SpriteSheet).name(); }
 		virtual void* Read(Content::XnbReader* stream) override;
