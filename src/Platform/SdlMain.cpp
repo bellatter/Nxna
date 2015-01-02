@@ -10,7 +10,7 @@
 
 extern int NxnaMain(int argc, const char* argv[]);
 
-int main(int argc, char* argv[])
+int main(int argc, const char* argv[])
 {
 	return NxnaMain(argc, argv);
 }
