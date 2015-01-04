@@ -487,8 +487,8 @@ namespace OpenGl
 				break;
 			}
 
-			const char* nameEnd = lastIndexNotSpace(cursor, colon - cursor - 1);
-			const char* nameStart = lastIndexOf(cursor, ' ', nameEnd - cursor - 1) + 1;
+			const char* nameEnd = lastIndexNotSpace(cursor, (int)(colon - cursor - 1));
+			const char* nameStart = lastIndexOf(cursor, ' ', (int)(nameEnd - cursor - 1)) + 1;
 #if defined NXNA_PLATFORM_WIN32
 			strncpy_s(nameBuffer, nameStart, nameEnd - nameStart + 1);
 #else
