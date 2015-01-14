@@ -5,6 +5,7 @@
 #include <SDL.h>
 #endif
 #include "../../Audio/AudioManager.h"
+#include "../../Utils/StopWatch.h"
 
 namespace Nxna
 {
@@ -42,37 +43,57 @@ namespace SDL
 
 	void SDLGame::Run()
 	{
-		float timeAtLastUpdate = 0;
+		double accumulatedElapsedTime = 0;
+
 		float timeAtLastDraw = 0;
+		double targetElapsedTime = m_targetElapsedTime * 1000.0f;
+
+		double freq = 1000.0 / (double)SDL_GetPerformanceFrequency();
+		uint64_t prevTimeNow = SDL_GetPerformanceCounter();
 
 		while(m_quitReceived == false)
 		{
-			handleEvents();
-			updateTime();
-
-			Media::MediaPlayer::Tick();
+			uint64_t timeNow = SDL_GetPerformanceCounter();
+			accumulatedElapsedTime += (timeNow - prevTimeNow) * freq;
+			prevTimeNow = timeNow;
 		
 			bool needToDraw = false;
 
 			if (m_isFixedTimeStep)
 			{
-				int timesToRun = (int)((m_realTime.TotalGameTime - timeAtLastUpdate) / m_targetElapsedTime);
-				if (timesToRun > 20)
-					timesToRun = 20;
-
-				for (int i = 0; i < timesToRun; i++)
+				if (accumulatedElapsedTime < targetElapsedTime)
 				{
-					m_gameTime.TotalGameTime += m_targetElapsedTime;
-					m_gameTime.ElapsedGameTime = m_targetElapsedTime;
+					unsigned int timeRemainder = (unsigned int)(targetElapsedTime - accumulatedElapsedTime);
+					if (timeRemainder > 0)
+						SDL_Delay(timeRemainder);
 
+					continue;
+				}
+
+				m_gameTime.ElapsedGameTime = m_targetElapsedTime;
+
+				handleEvents();
+				updateTime();
+
+				Media::MediaPlayer::Tick();
+
+				while (accumulatedElapsedTime >= targetElapsedTime)
+				{
+					accumulatedElapsedTime -= targetElapsedTime;
+
+					m_gameTime.TotalGameTime += m_targetElapsedTime;
 					m_game->Update(m_gameTime);
 
-					timeAtLastUpdate = m_realTime.TotalGameTime;
 					needToDraw = true;
 				}
 			}
 			else
 			{
+				handleEvents();
+				updateTime();
+
+				Media::MediaPlayer::Tick();
+
 				float elapsedtime = MathHelper::Min(0.1f, m_gameTime.ElapsedGameTime);
 
 				m_gameTime.TotalGameTime += elapsedtime;

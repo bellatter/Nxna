@@ -25,6 +25,9 @@ namespace Graphics
 		Matrix m_finalTransform;
 		bool m_finalTransformDirty;
 
+		EffectParameter* m_transformParameter;
+		EffectParameter* m_diffuseParameter;
+
 	public:
 
 		BasicEffect(GraphicsDevice* device);
@@ -54,10 +57,7 @@ namespace Graphics
 			m_finalTransformDirty = true;
 		}
 
-		void SetTexture(Texture2D* texture)
-		{
-			GetParameter("Diffuse")->SetValue(texture);
-		}
+		void SetTexture(Texture2D* texture);
 
 	protected:
 

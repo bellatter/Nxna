@@ -184,10 +184,11 @@ namespace OpenGl
 
 		// go through the cached values and send them to OpenGL
 		for (std::vector<GlslUniform>::iterator itr = m_programs[programIndex].Uniforms.begin();
-			itr != m_programs[programIndex].Uniforms.end(); itr++)
+			itr != m_programs[programIndex].Uniforms.end(); ++itr)
 		{
-			EffectParameterType type = (*itr).Param->GetType();
-			int numElements = (*itr).Param->GetNumElements();
+			EffectParameter* param = (*itr).Param;
+			EffectParameterType type = param->GetType();
+			int numElements = param->GetNumElements();
 
 			if (type == EffectParameterType::Int32)
 			{
@@ -204,7 +205,7 @@ namespace OpenGl
 				else if (numElements == 4)
 					glUniform4fv((*itr).Uniform, 1, (float*)GetRawValue((*itr).Param));
 				else if (numElements == 16)
-					glUniformMatrix4fv((*itr).Uniform, 1, GL_FALSE, (float*)GetRawValue((*itr).Param));
+					glUniformMatrix4fv((*itr).Uniform, 1, GL_FALSE, (float*)GetRawValue(param));
 			}
 			else if (type == EffectParameterType::Texture2D)
 			{
@@ -222,7 +223,7 @@ namespace OpenGl
 					}
 
 					glActiveTexture(GL_TEXTURE0 + usedTextureUnits);
-					glBindTexture(GL_TEXTURE_2D, static_cast<GlTexture2D*>((*itr).Param->GetValueTexture2D()->GetPimpl())->GetGlTexture());
+					glBindTexture(GL_TEXTURE_2D, static_cast<GlTexture2D*>(param->GetValueTexture2D()->GetPimpl())->GetGlTexture());
 					glUniform1i((*itr).Uniform, usedTextureUnits);
 
 					usedTextureUnits++;
@@ -238,7 +239,7 @@ namespace OpenGl
 		int usedTextureUnits = 0;
 
 		for (std::vector<GlslUniform>::iterator itr = m_programs[m_boundProgramIndex].Uniforms.begin();
-			itr != m_programs[m_boundProgramIndex].Uniforms.end(); itr++)
+			itr != m_programs[m_boundProgramIndex].Uniforms.end(); ++itr)
 		{
 			EffectParameterType type = (*itr).Param->GetType();
 
@@ -289,7 +290,7 @@ namespace OpenGl
 	const GlslAttribute* GlslEffect::GetAttribute(VertexElementUsage usage, int index)
 	{
 		for (std::vector<GlslAttribute>::iterator itr = m_programs[m_boundProgramIndex].Attributes.begin();
-			itr != m_programs[m_boundProgramIndex].Attributes.end(); itr++)
+			itr != m_programs[m_boundProgramIndex].Attributes.end(); ++itr)
 		{
 			if ((*itr).Index == index &&
 				(*itr).Usage == usage)
