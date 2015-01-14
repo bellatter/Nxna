@@ -152,7 +152,11 @@ namespace Windows
 	struct WinEvent
 	{
 		WinEventType Type;
+#ifdef NXNA_64_BIT
+		int64_t ParamA, ParamB, ParamC;
+#else
 		int ParamA, ParamB, ParamC;
+#endif
 	};
 	
 	const int MAX_EVENTS = 128;
@@ -201,19 +205,19 @@ namespace Windows
 				m_quitReceived = true;
 				break;
 			case WinEventType::MouseMotion:
-				Nxna::Input::Mouse::InjectMouseMove(e.ParamA, e.ParamB);
+				Nxna::Input::Mouse::InjectMouseMove((int)e.ParamA, (int)e.ParamB);
 				break;
 			case WinEventType::MouseButtonDown:
-				Nxna::Input::Mouse::InjectMouseButton(e.ParamA, true);
+				Nxna::Input::Mouse::InjectMouseButton((int)e.ParamA, true);
 				break;
 			case WinEventType::MouseButtonUp:
-				Nxna::Input::Mouse::InjectMouseButton(e.ParamA, false);
+				Nxna::Input::Mouse::InjectMouseButton((int)e.ParamA, false);
 				break;
 			case WinEventType::KeyDown:
-				Nxna::Input::Keyboard::InjectKeyDown(translateVirtualKey(e.ParamA));
+				Nxna::Input::Keyboard::InjectKeyDown(translateVirtualKey((int)e.ParamA));
 				break;
 			case WinEventType::KeyUp:
-				Nxna::Input::Keyboard::InjectKeyUp(translateVirtualKey(e.ParamA));
+				Nxna::Input::Keyboard::InjectKeyUp(translateVirtualKey((int)e.ParamA));
 				break;
 			}
 		}

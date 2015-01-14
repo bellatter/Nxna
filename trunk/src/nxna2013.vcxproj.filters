@@ -43,6 +43,9 @@
     <Filter Include="Graphics\libsquish">
       <UniqueIdentifier>{c1c1459f-458e-4ea5-8359-17961414b884}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{eeb12269-d46d-4887-b930-46b34c6dd50b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\GraphicsDevice.h">
@@ -299,6 +302,10 @@
     <ClInclude Include="Graphics\Direct3D11\D3D11RenderTarget2D.h">
       <Filter>Graphics\Direct3D11</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\StopWatch.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="NxnaUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -522,6 +529,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\Direct3D11\D3D11RenderTarget2D.cpp">
       <Filter>Graphics\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\StopWatch.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

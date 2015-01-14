@@ -17,6 +17,14 @@ namespace Graphics
 		m_textureEnabled = false;
 		m_vertexColorEnabled = false;
 		m_finalTransformDirty = true;
+
+		m_transformParameter = GetParameter("ModelViewProjection");
+		m_diffuseParameter = GetParameter("Diffuse");
+	}
+
+	void BasicEffect::SetTexture(Texture2D* texture)
+	{
+		m_diffuseParameter->SetValue(texture);
 	}
 
 	void BasicEffect::OnApply()
@@ -32,7 +40,7 @@ namespace Graphics
 			m_finalTransformDirty = false;
 		}
 
-		GetParameter("ModelViewProjection")->SetValue(m_finalTransform.C);
+		m_transformParameter->SetValue(m_finalTransform.C);
 
 		// determine which to apply
 		if (m_vertexColorEnabled && m_textureEnabled)
