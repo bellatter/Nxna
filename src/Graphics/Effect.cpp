@@ -253,17 +253,19 @@ namespace Graphics
 
 	Effect::~Effect()
 	{
-		for (auto itr = m_techniques.begin(); itr != m_techniques.end(); itr++)
+		for (auto itr = m_techniques.begin(); itr != m_techniques.end(); ++itr)
 		{
 			EffectTechnique* technique = (*itr);
 			delete technique;
 		}
 
-		for (auto itr = m_hiddenTechniques.begin(); itr != m_hiddenTechniques.end(); itr++)
+		for (auto itr = m_hiddenTechniques.begin(); itr != m_hiddenTechniques.end(); ++itr)
 		{
 			EffectTechnique* technique = (*itr);
 			delete technique;
 		}
+
+		delete m_pimpl;
 	}
 
 	EffectParameter* Effect::GetParameter(int index)
