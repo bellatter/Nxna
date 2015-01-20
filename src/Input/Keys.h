@@ -64,7 +64,10 @@ namespace Input
 
 		LeftShift = 160,
 		RightShift = 161,
+		LeftControl = 162,
+		RightControl = 163,
 
+		OemPeriod = 190,
 		OemOpenBrackets = 219,
 		OemPipe = 220,
 		OemCloseBrackets = 221

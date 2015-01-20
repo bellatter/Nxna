@@ -32,11 +32,19 @@ namespace Input
 	}
 
 	KeyboardState Keyboard::m_current;
+	Keys Keyboard::m_bufferedKeys[];
+	int Keyboard::m_bufferedKeyNext = 0;
 
 	void Keyboard::InjectKeyDown(Keys key)
 	{
 		unsigned int stateIndex = (unsigned int)key >> 5;
 		m_current.m_states[stateIndex] |= ((1 << (unsigned int)key) & 0xffffffffff);
+
+		if (m_bufferedKeyNext < 10)
+		{
+			m_bufferedKeys[m_bufferedKeyNext++] = key;
+			m_bufferedKeys[m_bufferedKeyNext] = Keys::None;
+		}
 	}
 
 	void Keyboard::InjectKeyUp(Keys key)
