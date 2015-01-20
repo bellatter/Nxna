@@ -150,6 +150,10 @@ namespace SDL
 			return Nxna::Input::Keys::LeftShift;
 		if (sdlk == SDLK_RSHIFT)
 			return Nxna::Input::Keys::RightShift;
+		if (sdlk == SDLK_LCTRL)
+			return Nxna::Input::Keys::LeftControl;
+		if (sdlk == SDLK_RCTRL)
+			return Nxna::Input::Keys::RightControl;
 		if (sdlk == SDLK_UP)
 			return Nxna::Input::Keys::Up;
 		if (sdlk == SDLK_DOWN)
@@ -158,9 +162,13 @@ namespace SDL
 			return Nxna::Input::Keys::Right;
 		if (sdlk == SDLK_LEFT)
 			return Nxna::Input::Keys::Left;
+		if (sdlk == SDLK_PERIOD)
+			return Nxna::Input::Keys::OemPeriod;
 
 		if (sdlk >= SDLK_a && sdlk <= SDLK_z)
 			return (Nxna::Input::Keys)((int)Nxna::Input::Keys::A + (sdlk - SDLK_a));
+		if (sdlk >= SDLK_0 && sdlk <= SDLK_9)
+			return (Nxna::Input::Keys)((int)Nxna::Input::Keys::D0 + (sdlk - SDLK_0));
 
 		return Nxna::Input::Keys::None;
 	}

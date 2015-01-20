@@ -34,12 +34,23 @@ namespace Input
 	class Keyboard
 	{
 		static KeyboardState m_current;
+		static Keys m_bufferedKeys[10];
+		static int m_bufferedKeyNext;
 
 	public:
 		static KeyboardState GetState() { return m_current; }
 
 		static void InjectKeyDown(Keys key);
 		static void InjectKeyUp(Keys key);
+
+		// The buffered stuff is not part of the official API, and
+		// may change or be removed at any time.
+		// The "best" way of allowing buffered input is probably to
+		// let code hook into the message pump. But not all platforms
+		// use a message pump. So whatever we do has to be flexible
+		// enough to work on all platforms.
+		static Keys* GetBufferedKeys() { return m_bufferedKeys; }
+		static void ResetBufferedKeys() { m_bufferedKeys[0] = Keys::None; m_bufferedKeyNext = 0; }
 	};
 }
 }
