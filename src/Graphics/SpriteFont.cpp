@@ -32,7 +32,7 @@ namespace Graphics
 		m_glyphs = new Rectangle[numCharacters];
 		m_cropping = new Rectangle[numCharacters];
 		m_kerning = new float[numCharacters * 3];
-		m_characters = new int[numCharacters];
+		m_characters = new unsigned int[numCharacters];
 
 		memcpy(m_glyphs, glyphs, sizeof(Rectangle) * numCharacters);
 		memcpy(m_cropping, cropping, sizeof(Rectangle) * numCharacters);
@@ -60,8 +60,36 @@ namespace Graphics
 	{
 		Nxna::Vector2 size(0, 0);
 
-		int len = strlen(text);
-		for (int i = 0; i < len; i++)
+		size_t len = strlen(text);
+		for (size_t i = 0; i < len; i++)
+		{
+			Rectangle glyph, cropping;
+			Vector3 kerning;
+
+			GetCharacterInfo(text[i], &glyph, &cropping, &kerning);
+
+			size.X += kerning.X;
+
+			size.X += kerning.Y + kerning.Z;
+
+			if (size.Y < glyph.Height)
+			{
+				size.Y = (float)glyph.Height;
+			}
+		}
+
+		return size;
+	}
+
+	Nxna::Vector2 SpriteFont::MeasureString(const char* text, size_t numChars)
+	{
+		Nxna::Vector2 size(0, 0);
+
+		size_t len = strlen(text);
+
+		len = len < numChars ? len : numChars;
+
+		for (size_t i = 0; i < len; i++)
 		{
 			Rectangle glyph, cropping;
 			Vector3 kerning;
@@ -85,12 +113,42 @@ namespace Graphics
 	{
 		Nxna::Vector2 size(0, 0);
 #if defined NXNA_PLATFORM_ANDROID
-		int len = wcslen(text);
+		size_t len = wcslen(text);
 #else
-		int len = wcsnlen(text, 10000);
+		size_t len = wcsnlen(text, 10000);
 #endif
 
-		for (int i = 0; i < len; i++)
+		for (size_t i = 0; i < len; i++)
+		{
+			Rectangle glyph, cropping;
+			Vector3 kerning;
+
+			GetCharacterInfo(text[i], &glyph, &cropping, &kerning);
+
+			size.X += kerning.X;
+			size.X += kerning.Y + kerning.Z;
+
+			if (size.Y < cropping.Height)
+			{
+				size.Y = (float)cropping.Height;
+			}
+		}
+
+		return size;
+	}
+
+	Nxna::Vector2 SpriteFont::MeasureString(const wchar_t* text, size_t numChars)
+	{
+		Nxna::Vector2 size(0, 0);
+#if defined NXNA_PLATFORM_ANDROID
+		size_t len = wcslen(text);
+#else
+		size_t len = wcsnlen(text, 10000);
+#endif
+
+		len = len < numChars ? len : numChars;
+
+		for (size_t i = 0; i < len; i++)
 		{
 			Rectangle glyph, cropping;
 			Vector3 kerning;
@@ -114,11 +172,42 @@ namespace Graphics
 		Nxna::Vector2 size(0, 0);
 
 		int pos = 0;
-		int charsRead;
+		int bytesRead;
 		unsigned int c;
-		while ((charsRead = Utils::GetUTF8Character(text, pos, &c)) != 0)
+		while ((bytesRead = Utils::GetUTF8Character(text, pos, &c)) != 0)
 		{
-			pos += charsRead;
+			pos += bytesRead;
+
+			Rectangle glyph, cropping;
+			Vector3 kerning;
+
+			GetCharacterInfo(c, &glyph, &cropping, &kerning);
+
+			size.X += kerning.X;
+
+			size.X += kerning.Y + kerning.Z;
+
+			if (size.Y < glyph.Height)
+			{
+				size.Y = (float)glyph.Height;
+			}
+		}
+
+		return size;
+	}
+
+	Nxna::Vector2 SpriteFont::MeasureStringUTF8(const char* text, size_t numChars)
+	{
+		Nxna::Vector2 size(0, 0);
+
+		int pos = 0;
+		int bytesRead;
+		size_t charsRead = 0;
+		unsigned int c;
+		while ((bytesRead = Utils::GetUTF8Character(text, pos, &c)) != 0 && charsRead < numChars)
+		{
+			pos += bytesRead;
+			charsRead++;
 
 			Rectangle glyph, cropping;
 			Vector3 kerning;
@@ -148,7 +237,7 @@ namespace Graphics
 
 		typeID = stream->ReadTypeID();
 		result->m_numCharacters = stream->GetStream()->ReadInt32();
-		result->m_characters = new int[result->m_numCharacters];
+		result->m_characters = new unsigned int[result->m_numCharacters];
 		result->m_glyphs = new Rectangle[result->m_numCharacters];
 
 		for (int i = 0; i < result->m_numCharacters; i++)
@@ -218,7 +307,7 @@ namespace Graphics
 		while (i <= searchLength)
 		{
 			int currentIndex = i + (searchLength - i) / 2;
-			int character = m_characters[currentIndex];
+			unsigned int character = m_characters[currentIndex];
 
 			if (character == c)
 			{
