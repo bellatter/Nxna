@@ -30,7 +30,7 @@ namespace Graphics
 
 		int m_numCharacters;
 
-		int* m_characters;
+		unsigned int* m_characters;
 		Rectangle* m_glyphs;
 		Rectangle* m_cropping;
 		float* m_kerning;
@@ -49,8 +49,11 @@ namespace Graphics
 		~SpriteFont();
 
 		Nxna::Vector2 MeasureString(const char* text);
+		Nxna::Vector2 MeasureString(const char* text, size_t numChars);
 		Nxna::Vector2 MeasureString(const wchar_t* text);
+		Nxna::Vector2 MeasureString(const wchar_t* text, size_t numChars);
 		Nxna::Vector2 MeasureStringUTF8(const char* text);
+		Nxna::Vector2 MeasureStringUTF8(const char* text, size_t numChars);
 
 		float GetSpacing() { return m_spacing; }
 		int GetLineSpacing() { return m_lineHeight; }
