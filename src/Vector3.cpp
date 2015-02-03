@@ -26,6 +26,15 @@ namespace Nxna
 		result = v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z;
 	}
 
+	Vector3 Vector3::Cross(const Vector3& v1, const Vector3& v2)
+	{
+		Vector3 result;
+		result.X = v1.Y * v2.Z - v1.Z * v2.Y;
+		result.Y = v1.Z * v2.X - v1.X * v2.Z;
+		result.Z = v1.X * v2.Y - v1.Y * v2.X;
+		return result;
+	}
+
 	void Vector3::Cross(const Vector3& v1, const Vector3& v2, Vector3& result)
 	{
 		result.X = v1.Y * v2.Z - v1.Z * v2.Y;
