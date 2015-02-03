@@ -121,6 +121,7 @@ namespace Nxna
 		}
 
 		static void Dot(const Vector3& v1, const Vector3& v2, float& result);
+		static Vector3 Cross(const Vector3& v1, const Vector3& v2);
 		static void Cross(const Vector3& v1, const Vector3& v2, Vector3& result);
 		static Vector3 Normalize(const Vector3& v);
 		static void Normalize(const Vector3& v, Vector3& result);

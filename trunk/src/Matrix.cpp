@@ -292,6 +292,32 @@ namespace Nxna
 		result.M44 = 1.0f;
 	}
 
+	Matrix Matrix::CreateWorld(const Nxna::Vector3& position, const Nxna::Vector3& forward, const Nxna::Vector3& up)
+	{
+		Vector3 normalizedForward = Vector3::Normalize(-forward);
+		Vector3 axis1 = Vector3::Normalize(Vector3::Cross(up, normalizedForward));
+		Vector3 axis2 = Vector3::Cross(normalizedForward, axis1);
+
+		Matrix result;
+		result.M11 = axis1.X;
+		result.M12 = axis1.Y;
+		result.M13 = axis1.Z;
+		result.M14 = 0.0f;
+		result.M21 = axis2.X;
+		result.M22 = axis2.Y;
+		result.M23 = axis2.Z;
+		result.M24 = 0.0f;
+		result.M31 = normalizedForward.X;
+		result.M32 = normalizedForward.Y;
+		result.M33 = normalizedForward.Z;
+		result.M34 = 0.0f;
+		result.M41 = position.X;
+		result.M42 = position.Y;
+		result.M43 = position.Z;
+		result.M44 = 1.0f;
+		return result;
+	}
+
 	void Matrix::Invert(const Matrix& matrix, Matrix& result)
 	{
 		// this is heavily based on the Mono Xna implementation
