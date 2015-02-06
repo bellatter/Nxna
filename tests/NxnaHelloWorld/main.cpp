@@ -1,7 +1,7 @@
 #include "Nxna.h"
 #include "Game1.h"
 
-int NxnaMain(int argc, char* argv[])
+int NxnaMain(int argc, const char* argv[])
 {
 	Game1* game = new Game1();
 	game->Run();
