@@ -1,0 +1,208 @@
+#include "OpenALWrapper.h"
+
+#ifdef NXNA_PLATFORM_WIN32
+#include <Windows.h>
+#endif
+
+#define LOAD_AL_FUNCTION(T,N) {N = (T)GetProcAddress(openAlDll, #N); if (N == nullptr) return false; }
+#define LOAD_ALC_FUNCTION(T,N) {N = (T)GetProcAddress(openAlDll, &(#N)[5]); if (N == nullptr) return false; }
+
+// OpenAL doesn't have a handy way of getting rid of the prototypes that it defines,
+// so we have to prefix all the alc calls with "nxna".
+LPALCCREATECONTEXT         nxna_alcCreateContext;
+LPALCMAKECONTEXTCURRENT    nxna_alcMakeContextCurrent;
+LPALCPROCESSCONTEXT        nxna_alcProcessContext;
+LPALCSUSPENDCONTEXT        nxna_alcSuspendContext;
+LPALCDESTROYCONTEXT        nxna_alcDestroyContext;
+LPALCGETCURRENTCONTEXT     nxna_alcGetCurrentContext;
+LPALCGETCONTEXTSDEVICE     nxna_alcGetContextsDevice;
+LPALCOPENDEVICE            nxna_alcOpenDevice;
+LPALCCLOSEDEVICE           nxna_alcCloseDevice;
+LPALCGETERROR              nxna_alcGetError;
+LPALCISEXTENSIONPRESENT    nxna_alcIsExtensionPresent;
+LPALCGETPROCADDRESS        nxna_alcGetProcAddress;
+LPALCGETENUMVALUE          nxna_alcGetEnumValue;
+LPALCGETSTRING             nxna_alcGetString;
+LPALCGETINTEGERV           nxna_alcGetIntegerv;
+LPALCCAPTUREOPENDEVICE     nxna_alcCaptureOpenDevice;
+LPALCCAPTURECLOSEDEVICE    nxna_alcCaptureCloseDevice;
+LPALCCAPTURESTART          nxna_alcCaptureStart;
+LPALCCAPTURESTOP           nxna_alcCaptureStop;
+LPALCCAPTURESAMPLES        nxna_alcCaptureSamples;
+
+LPALENABLE                 alEnable;
+LPALDISABLE                alDisable;
+LPALISENABLED              alIsEnabled;
+LPALGETSTRING              alGetString;
+LPALGETBOOLEANV            alGetBooleanv;
+LPALGETINTEGERV            alGetIntegerv;
+LPALGETFLOATV              alGetFloatv;
+LPALGETDOUBLEV             alGetDoublev;
+LPALGETBOOLEAN             alGetBoolean;
+LPALGETINTEGER             alGetInteger;
+LPALGETFLOAT               alGetFloat;
+LPALGETDOUBLE              alGetDouble;
+LPALGETERROR               alGetError;
+LPALISEXTENSIONPRESENT     alIsExtensionPresent;
+LPALGETPROCADDRESS         alGetProcAddress;
+LPALGETENUMVALUE           alGetEnumValue;
+LPALLISTENERF              alListenerf;
+LPALLISTENER3F             alListener3f;
+LPALLISTENERFV             alListenerfv;
+LPALLISTENERI              alListeneri;
+LPALLISTENER3I             alListener3i;
+LPALLISTENERIV             alListeneriv;
+LPALGETLISTENERF           alGetListenerf;
+LPALGETLISTENER3F          alGetListener3f;
+LPALGETLISTENERFV          alGetListenerfv;
+LPALGETLISTENERI           alGetListeneri;
+LPALGETLISTENER3I          alGetListener3i;
+LPALGETLISTENERIV          alGetListeneriv;
+LPALGENSOURCES             alGenSources;
+LPALDELETESOURCES          alDeleteSources;
+LPALISSOURCE               alIsSource;
+LPALSOURCEF                alSourcef;
+LPALSOURCE3F               alSource3f;
+LPALSOURCEFV               alSourcefv;
+LPALSOURCEI                alSourcei;
+LPALSOURCE3I               alSource3i;
+LPALSOURCEIV               alSourceiv;
+LPALGETSOURCEF             alGetSourcef;
+LPALGETSOURCE3F            alGetSource3f;
+LPALGETSOURCEFV            alGetSourcefv;
+LPALGETSOURCEI             alGetSourcei;
+LPALGETSOURCE3I            alGetSource3i;
+LPALGETSOURCEIV            alGetSourceiv;
+LPALSOURCEPLAYV            alSourcePlayv;
+LPALSOURCESTOPV            alSourceStopv;
+LPALSOURCEREWINDV          alSourceRewindv;
+LPALSOURCEPAUSEV           alSourcePausev;
+LPALSOURCEPLAY             alSourcePlay;
+LPALSOURCESTOP             alSourceStop;
+LPALSOURCEREWIND           alSourceRewind;
+LPALSOURCEPAUSE            alSourcePause;
+LPALSOURCEQUEUEBUFFERS     alSourceQueueBuffers;
+LPALSOURCEUNQUEUEBUFFERS   alSourceUnqueueBuffers;
+LPALGENBUFFERS             alGenBuffers;
+LPALDELETEBUFFERS          alDeleteBuffers;
+LPALISBUFFER               alIsBuffer;
+LPALBUFFERDATA             alBufferData;
+LPALBUFFERF                alBufferf;
+LPALBUFFER3F               alBuffer3f;
+LPALBUFFERFV               alBufferfv;
+LPALBUFFERI                alBufferi;
+LPALBUFFER3I               alBuffer3i;
+LPALBUFFERIV               alBufferiv;
+LPALGETBUFFERF             alGetBufferf;
+LPALGETBUFFER3F            alGetBuffer3f;
+LPALGETBUFFERFV            alGetBufferfv;
+LPALGETBUFFERI             alGetBufferi;
+LPALGETBUFFER3I            alGetBuffer3i;
+LPALGETBUFFERIV            alGetBufferiv;
+LPALDOPPLERFACTOR          alDopplerFactor;
+LPALDOPPLERVELOCITY        alDopplerVelocity;
+LPALSPEEDOFSOUND           alSpeedOfSound;
+LPALDISTANCEMODEL          alDistanceModel;
+
+bool InitOpenAL()
+{
+	HMODULE openAlDll = LoadLibrary("OpenAL32.dll");
+	if (openAlDll == nullptr)
+		return false;
+
+	LOAD_ALC_FUNCTION(LPALCCREATECONTEXT, nxna_alcCreateContext);
+	LOAD_ALC_FUNCTION(LPALCMAKECONTEXTCURRENT, nxna_alcMakeContextCurrent);
+	LOAD_ALC_FUNCTION(LPALCPROCESSCONTEXT, nxna_alcProcessContext);
+	LOAD_ALC_FUNCTION(LPALCSUSPENDCONTEXT, nxna_alcSuspendContext);
+	LOAD_ALC_FUNCTION(LPALCDESTROYCONTEXT, nxna_alcDestroyContext);
+	LOAD_ALC_FUNCTION(LPALCGETCURRENTCONTEXT, nxna_alcGetCurrentContext);
+	LOAD_ALC_FUNCTION(LPALCGETCONTEXTSDEVICE, nxna_alcGetContextsDevice);
+	LOAD_ALC_FUNCTION(LPALCOPENDEVICE, nxna_alcOpenDevice);
+	LOAD_ALC_FUNCTION(LPALCCLOSEDEVICE, nxna_alcCloseDevice);
+	LOAD_ALC_FUNCTION(LPALCGETERROR, nxna_alcGetError);
+	LOAD_ALC_FUNCTION(LPALCISEXTENSIONPRESENT, nxna_alcIsExtensionPresent);
+	LOAD_ALC_FUNCTION(LPALCGETPROCADDRESS, nxna_alcGetProcAddress);
+	LOAD_ALC_FUNCTION(LPALCGETSTRING, nxna_alcGetString);
+	LOAD_ALC_FUNCTION(LPALCGETINTEGERV, nxna_alcGetIntegerv);
+	LOAD_ALC_FUNCTION(LPALCCAPTUREOPENDEVICE, nxna_alcCaptureOpenDevice);
+	LOAD_ALC_FUNCTION(LPALCCAPTURECLOSEDEVICE, nxna_alcCaptureCloseDevice);
+	LOAD_ALC_FUNCTION(LPALCCAPTURESTART, nxna_alcCaptureStart);
+	LOAD_ALC_FUNCTION(LPALCCAPTURESTOP, nxna_alcCaptureStop);
+	LOAD_ALC_FUNCTION(LPALCCAPTURESAMPLES, nxna_alcCaptureSamples);
+
+	LOAD_AL_FUNCTION(LPALENABLE, alEnable);
+	LOAD_AL_FUNCTION(LPALDISABLE, alDisable);
+	LOAD_AL_FUNCTION(LPALISENABLED, alIsEnabled);
+	LOAD_AL_FUNCTION(LPALGETSTRING, alGetString);
+	LOAD_AL_FUNCTION(LPALGETBOOLEANV, alGetBooleanv);
+	LOAD_AL_FUNCTION(LPALGETINTEGERV, alGetIntegerv);
+	LOAD_AL_FUNCTION(LPALGETFLOATV, alGetFloatv);
+	LOAD_AL_FUNCTION(LPALGETDOUBLEV, alGetDoublev);
+	LOAD_AL_FUNCTION(LPALGETBOOLEAN, alGetBoolean);
+	LOAD_AL_FUNCTION(LPALGETINTEGER, alGetInteger);
+	LOAD_AL_FUNCTION(LPALGETFLOAT, alGetFloat);
+	LOAD_AL_FUNCTION(LPALGETDOUBLE, alGetDouble);
+	LOAD_AL_FUNCTION(LPALGETERROR, alGetError);
+	LOAD_AL_FUNCTION(LPALISEXTENSIONPRESENT, alIsExtensionPresent);
+	LOAD_AL_FUNCTION(LPALGETPROCADDRESS, alGetProcAddress);
+	LOAD_AL_FUNCTION(LPALGETENUMVALUE, alGetEnumValue);
+	LOAD_AL_FUNCTION(LPALLISTENERF, alListenerf);
+	LOAD_AL_FUNCTION(LPALLISTENER3F, alListener3f);
+	LOAD_AL_FUNCTION(LPALLISTENERFV, alListenerfv);
+	LOAD_AL_FUNCTION(LPALLISTENERI, alListeneri);
+	LOAD_AL_FUNCTION(LPALLISTENER3I, alListener3i);
+	LOAD_AL_FUNCTION(LPALLISTENERIV, alListeneriv);
+	LOAD_AL_FUNCTION(LPALGETLISTENERF, alGetListenerf);
+	LOAD_AL_FUNCTION(LPALGETLISTENER3F, alGetListener3f);
+	LOAD_AL_FUNCTION(LPALGETLISTENERFV, alGetListenerfv);
+	LOAD_AL_FUNCTION(LPALGETLISTENERI, alGetListeneri);
+	LOAD_AL_FUNCTION(LPALGETLISTENER3I, alGetListener3i);
+	LOAD_AL_FUNCTION(LPALGETLISTENERIV, alGetListeneriv);
+	LOAD_AL_FUNCTION(LPALGENSOURCES, alGenSources);
+	LOAD_AL_FUNCTION(LPALDELETESOURCES, alDeleteSources);
+	LOAD_AL_FUNCTION(LPALISSOURCE, alIsSource);
+	LOAD_AL_FUNCTION(LPALSOURCEF, alSourcef);
+	LOAD_AL_FUNCTION(LPALSOURCE3F, alSource3f);
+	LOAD_AL_FUNCTION(LPALSOURCEFV, alSourcefv);
+	LOAD_AL_FUNCTION(LPALSOURCEI, alSourcei);
+	LOAD_AL_FUNCTION(LPALSOURCE3I, alSource3i);
+	LOAD_AL_FUNCTION(LPALSOURCEIV, alSourceiv);
+	LOAD_AL_FUNCTION(LPALGETSOURCEF, alGetSourcef);
+	LOAD_AL_FUNCTION(LPALGETSOURCE3F, alGetSource3f);
+	LOAD_AL_FUNCTION(LPALGETSOURCEFV, alGetSourcefv);
+	LOAD_AL_FUNCTION(LPALGETSOURCEI, alGetSourcei);
+	LOAD_AL_FUNCTION(LPALGETSOURCE3I, alGetSource3i);
+	LOAD_AL_FUNCTION(LPALGETSOURCEIV, alGetSourceiv);
+	LOAD_AL_FUNCTION(LPALSOURCEPLAYV, alSourcePlayv);
+	LOAD_AL_FUNCTION(LPALSOURCESTOPV, alSourceStopv);
+	LOAD_AL_FUNCTION(LPALSOURCEREWINDV, alSourceRewindv);
+	LOAD_AL_FUNCTION(LPALSOURCEPAUSEV, alSourcePausev);
+	LOAD_AL_FUNCTION(LPALSOURCEPLAY, alSourcePlay);
+	LOAD_AL_FUNCTION(LPALSOURCESTOP, alSourceStop);
+	LOAD_AL_FUNCTION(LPALSOURCEREWIND, alSourceRewind);
+	LOAD_AL_FUNCTION(LPALSOURCEPAUSE, alSourcePause);
+	LOAD_AL_FUNCTION(LPALSOURCEQUEUEBUFFERS, alSourceQueueBuffers);
+	LOAD_AL_FUNCTION(LPALSOURCEUNQUEUEBUFFERS, alSourceUnqueueBuffers);
+	LOAD_AL_FUNCTION(LPALGENBUFFERS, alGenBuffers);
+	LOAD_AL_FUNCTION(LPALDELETEBUFFERS, alDeleteBuffers);
+	LOAD_AL_FUNCTION(LPALISBUFFER, alIsBuffer);
+	LOAD_AL_FUNCTION(LPALBUFFERDATA, alBufferData);
+	LOAD_AL_FUNCTION(LPALBUFFERF, alBufferf);
+	LOAD_AL_FUNCTION(LPALBUFFER3F, alBuffer3f);
+	LOAD_AL_FUNCTION(LPALBUFFERFV, alBufferfv);
+	LOAD_AL_FUNCTION(LPALBUFFERI, alBufferi);
+	LOAD_AL_FUNCTION(LPALBUFFER3I, alBuffer3i);
+	LOAD_AL_FUNCTION(LPALBUFFERIV, alBufferiv);
+	LOAD_AL_FUNCTION(LPALGETBUFFERF, alGetBufferf);
+	LOAD_AL_FUNCTION(LPALGETBUFFER3F, alGetBuffer3f);
+	LOAD_AL_FUNCTION(LPALGETBUFFERFV, alGetBufferfv);
+	LOAD_AL_FUNCTION(LPALGETBUFFERI, alGetBufferi);
+	LOAD_AL_FUNCTION(LPALGETBUFFER3I, alGetBuffer3i);
+	LOAD_AL_FUNCTION(LPALGETBUFFERIV, alGetBufferiv);
+	LOAD_AL_FUNCTION(LPALDOPPLERFACTOR, alDopplerFactor);
+	LOAD_AL_FUNCTION(LPALDOPPLERVELOCITY, alDopplerVelocity);
+	LOAD_AL_FUNCTION(LPALSPEEDOFSOUND, alSpeedOfSound);
+	LOAD_AL_FUNCTION(LPALDISTANCEMODEL, alDistanceModel);
+
+	return true;
+}
