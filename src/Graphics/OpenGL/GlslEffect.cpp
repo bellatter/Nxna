@@ -71,10 +71,19 @@ namespace OpenGl
 
 			GlslSource source((const char*)vertexSource, (const char*)fragSource, m_device->GetGlslVersion());
 
-			const char* defines[] = {"#define ", name, "\n" };
+			// HACK: We *should* be able to send each piece as a separate element in an array,
+			// but to get this to work with AMD hardware we have to concatenate beforehand.
+			// Otherwise we get shader compiler errors.
+			char buffer[256];
+#ifdef NXNA_PLATFORM_WIN32
+			_snprintf_s(buffer, 256, "#define %s \n", name);
+#else
+			snprintf(buffer, "#define %s \n", name);
+#endif
+			const char* defines[] = { buffer };
 
 			GlslProgram program;
-			program.Program = source.Build(defines, 3);
+			program.Program = source.Build(defines, 1);
 
 			loadUniformInfo(program);
 			loadAttributeInfo(program);
