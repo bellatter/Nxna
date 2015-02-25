@@ -78,7 +78,7 @@ namespace OpenGl
 #ifdef NXNA_PLATFORM_WIN32
 			_snprintf_s(buffer, 256, "#define %s \n", name);
 #else
-			snprintf(buffer, "#define %s \n", name);
+			snprintf(buffer, 256, "#define %s \n", name);
 #endif
 			const char* defines[] = { buffer };
 
