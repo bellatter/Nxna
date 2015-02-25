@@ -30,7 +30,7 @@ namespace OpenGl
 
 #ifndef USING_OPENGLES
 
-	void GLEWAPIENTRY errorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* param)
+	void GLEWAPIENTRY errorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, void* param)
 	{
 		printf("OpenGL Error: %s\n", message);
 	}
