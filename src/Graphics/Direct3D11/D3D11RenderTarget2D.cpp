@@ -1,3 +1,7 @@
+#include "../../NxnaConfig.h"
+
+#if !defined NXNA_DISABLE_D3D11
+
 #include <d3d11.h>
 #include "D3D11RenderTarget2D.h"
 #include "D3D11Texture2D.h"
@@ -71,3 +75,5 @@ namespace Direct3D11
 }
 }
 }
+
+#endif

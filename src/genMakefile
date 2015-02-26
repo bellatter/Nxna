@@ -3,9 +3,9 @@ echo COMPILER = g++
 echo LINKER = ar
 echo 'EFFECTTOOL=../tools/EffectTool/effecttool'
 echo 'ifeq ($(UNAME), Darwin)'
-echo COMPILER_FLAGS = -g -msse -I../lib/Glew/include
+echo COMPILER_FLAGS = -g -msse -IGraphics/OpenGl/glew
 echo 'else'
-echo 'COMPILER_FLAGS =-std=c++0x -g -Wall -msse -I../lib/Glew/include `pkg-config --cflags sdl2`'
+echo 'COMPILER_FLAGS =-std=c++0x -g -Wall -msse -IGraphics/OpenGL/glew `pkg-config --cflags sdl2`'
 echo 'endif'
 echo LINKER_FLAGS = cq
 echo EXECUTABLE = libnxna.a
@@ -14,17 +14,20 @@ echo OUTPUTDIR = build/x64/
 echo 'EFFECTS=Graphics/Effects/BasicEffect.nxfx Graphics/Effects/AlphaTestEffect.nxfx Graphics/Effects/DualTextureEffect.nxfx Graphics/Effects/SpriteEffect.nxfx'
 
 echo -n SOURCES=
-grep "<ClCompile Include=" nxna.vcxproj | sed 's/\\/\//g' | awk '{printf substr($2, 10, length($2) - 10); printf " "  }'
+grep "<ClCompile Include=" nxna2013.vcxproj | sed 's/\\/\//g' | awk '{printf substr($2, 10, length($2) - 10); printf " "  }'
 
 echo
 echo 'EFFECT_OUTPUT=$(EFFECTS:.nxfx=.inc)'
-echo 'OBJECTS = $(SOURCES:.cpp=.o)'
+echo 'OBJECTS = $(SOURCES:.cpp=.o) $(SOURCES:.c=.o)'
 
 echo '$(EXECUTABLE): $(EFFECT_OUTPUT) $(OBJECTS)'
 echo '	rm -f $(OUTPUTDIR)$(EXECUTABLE)'
 echo '	$(LINKER) $(LINKER_FLAGS) $(OUTPUTDIR)$@ $(OBJECTS)'
 	
 echo .cpp.o:
+echo '	$(COMPILER) $(COMPILER_FLAGS) -c $< -o $@'
+echo
+echo .c.o:
 echo '	$(COMPILER) $(COMPILER_FLAGS) -c $< -o $@'
 	
 echo '%.inc: %.nxfx'
