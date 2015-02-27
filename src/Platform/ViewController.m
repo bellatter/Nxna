@@ -68,6 +68,10 @@ float touchPointScale = 0;
 	//[g_gcm setDelegate: self];
 	//[g_gcm authenticateLocalUser];
 	
+	float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
+	
+	
+	
 	IOSGame_Init();
 }
 
@@ -95,6 +99,15 @@ float touchPointScale = 0;
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown &&
 				interfaceOrientation != UIInterfaceOrientationPortrait);
 }
+
+- (NSUInteger)supportedInterfaceOrientations {
+	return UIInterfaceOrientationMaskLandscape;
+}
+/*
+-(BOOL)shouldAutorotate
+{
+	return NO;
+}*/
 
 - (void)setupGL
 {
