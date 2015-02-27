@@ -2,7 +2,7 @@
 
 #import "AppDelegate.h"
 
-int NxnaMainIOS(int argc, char *argv[])
+int NxnaMainIOS(int argc, const char *argv[])
 {
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 	

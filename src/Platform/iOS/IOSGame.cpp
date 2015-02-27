@@ -5,7 +5,7 @@
 
 extern "C"
 {
-int NxnaMainIOS(int argc, char *argv[]);
+int NxnaMainIOS(int argc, const char *argv[]);
 }
 
 namespace Nxna
@@ -26,7 +26,7 @@ namespace iOS
 		g_instance = this;
 	}
 
-	void IOSGame::InitMeFirst(int argc, char** argv)
+	void IOSGame::InitMeFirst(int argc, const char** argv)
 	{
 		// start up the app. This will begin the game loop.
 		NxnaMainIOS(argc, argv);

@@ -19,7 +19,7 @@ namespace iOS
 	public:
 		IOSGame(Game* game);
 
-		void InitMeFirst(int argc, char** argv);
+		void InitMeFirst(int argc, const char** argv);
 		void Init();
 		void Update(float elapsedTime);
 		void Draw(float elapsedTime);
