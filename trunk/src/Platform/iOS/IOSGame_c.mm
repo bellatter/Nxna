@@ -5,9 +5,10 @@
 void IOSGame_GetScreenSize(int* width, int* height)
 {
 	CGRect screenRect = [[UIScreen mainScreen] bounds];
+	//CGRect screenRect = [ViewController getInstance].view.bounds;
 	float scale = [[UIScreen mainScreen] scale];
-	*width = screenRect.size.height * scale;
-	*height = screenRect.size.width * scale;
+	*width = screenRect.size.width * scale;
+	*height = screenRect.size.height * scale;
 }
 
 void IOSGame_ShowLeaderboard(const char* category, int scope)
