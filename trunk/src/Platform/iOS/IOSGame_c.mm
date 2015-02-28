@@ -4,11 +4,17 @@
 
 void IOSGame_GetScreenSize(int* width, int* height)
 {
-	CGRect screenRect = [[UIScreen mainScreen] bounds];
-	//CGRect screenRect = [ViewController getInstance].view.bounds;
 	float scale = [[UIScreen mainScreen] scale];
-	*width = screenRect.size.width * scale;
-	*height = screenRect.size.height * scale;
+	CGSize screenSize = [UIScreen mainScreen].bounds.size;
+	if ((NSFoundationVersionNumber <= NSFoundationVersionNumber_iOS_7_1) && UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+		*width = screenSize.height * scale;
+		*height = screenSize.width * scale;
+	}
+	else
+	{
+		*width = screenSize.width * scale;
+		*height = screenSize.height * scale;
+	}
 }
 
 void IOSGame_ShowLeaderboard(const char* category, int scope)
