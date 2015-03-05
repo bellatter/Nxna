@@ -30,6 +30,11 @@ namespace OpenGl
 		int m_glslVersion;
 		char m_vendor[128];
 		char m_renderer[128];
+		
+#ifdef USING_OPENGLES
+		bool m_defaultFboSet;
+		int m_defaultFbo;
+#endif
 
 		PresentationParameters m_presentationParameters;
 
