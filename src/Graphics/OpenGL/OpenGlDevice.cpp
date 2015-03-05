@@ -26,6 +26,11 @@ namespace OpenGl
 		m_declaration = nullptr;
 		m_effect = nullptr;
 		m_caps = new GraphicsDeviceCapabilities();
+		
+#ifdef USING_OPENGLES
+		m_defaultFboSet = false;
+		m_defaultFbo = 0;
+#endif
 	}
 
 #ifndef USING_OPENGLES
@@ -99,11 +104,15 @@ namespace OpenGl
 			m_caps->SupportsShaders = true;
 			m_glslVersion = (glslVersion[0] - '0') * 100 + (glslVersion[2] - '0') * 10;
 		}
+
+		m_defaultFbo = 0;
 #else
         m_version = 200;
         m_glslVersion = 100;
 
 		m_caps->SupportsShaders = true;
+		
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &m_defaultFbo);
 #endif
 	}
 
@@ -382,9 +391,21 @@ namespace OpenGl
 
 	void OpenGlDevice::SetRenderTarget(RenderTarget2D* renderTarget)
 	{
+#ifdef USING_OPENGLES
+		if (m_defaultFboSet == false)
+		{
+			m_defaultFboSet = true;
+			glGetIntegerv(GL_FRAMEBUFFER_BINDING, &m_defaultFbo);
+		}
+#endif
+		
 		if (renderTarget == nullptr)
 		{
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#ifdef USING_OPENGLES
+			glBindFramebuffer(GL_FRAMEBUFFER, m_defaultFbo);
+#else
+			glBindFrameBuffer(GL_FRAMEBUFFER, 0);
+#endif
 		}
 		else
 		{
