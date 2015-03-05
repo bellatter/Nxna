@@ -103,6 +103,11 @@ float touchPointScale = 0;
 - (NSUInteger)supportedInterfaceOrientations {
 	return UIInterfaceOrientationMaskLandscape;
 }
+
+- (BOOL)prefersStatusBarHidden {
+	return YES;
+}
+
 /*
 -(BOOL)shouldAutorotate
 {
