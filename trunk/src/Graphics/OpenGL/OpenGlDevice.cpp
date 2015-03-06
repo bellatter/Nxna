@@ -105,7 +105,6 @@ namespace OpenGl
 			m_glslVersion = (glslVersion[0] - '0') * 100 + (glslVersion[2] - '0') * 10;
 		}
 
-		m_defaultFbo = 0;
 #else
         m_version = 200;
         m_glslVersion = 100;
@@ -404,7 +403,7 @@ namespace OpenGl
 #ifdef USING_OPENGLES
 			glBindFramebuffer(GL_FRAMEBUFFER, m_defaultFbo);
 #else
-			glBindFrameBuffer(GL_FRAMEBUFFER, 0);
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 #endif
 		}
 		else
