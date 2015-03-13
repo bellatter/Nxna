@@ -294,6 +294,15 @@ namespace OpenGl
 		}
 #endif
 
+#ifndef USING_OPENGLES
+		if (GLEW_ARB_draw_elements_base_vertex == false)
+			if (baseVertex != 0)
+				setupVertexBufferPointers((void*)(baseVertex * m_vertices->GetDeclaration()->GetStride()));
+#else
+		if (baseVertex != 0)
+			setupVertexBufferPointers((void*)(baseVertex * m_vertices->GetDeclaration()->GetStride()));
+#endif
+
 		applyDirtyStates();
 
 		IndexElementSize elementSize = m_indices->GetElementSize();
@@ -308,8 +317,15 @@ namespace OpenGl
 		else
 			glPrimitiveType = GL_TRIANGLES;
 
+#ifndef USING_OPENGLES
+		if (GLEW_ARB_draw_elements_base_vertex)
+			glDrawElementsBaseVertex(glPrimitiveType, primitiveCount * 3, size, (void*)(startIndex * (int)elementSize), baseVertex);
+		else
+			glDrawElements(glPrimitiveType, primitiveCount * 3, size, (void*)(startIndex * (int)elementSize));
+#else
 		glDrawElements(glPrimitiveType, primitiveCount * 3, size, (void*)(startIndex * (int)elementSize));
-
+#endif
+		
 		GlException::ThrowIfError(__FILE__, __LINE__);
 	}
 

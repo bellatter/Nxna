@@ -9,13 +9,12 @@
 #include "VertexDeclaration.h"
 #include "../MathHelper.h"
 #include "../Utils.h"
+#include "../MemoryAllocator.h"
 
 namespace Nxna
 {
 namespace Graphics
 {
-	float* SpriteBatch::m_workingVerts = nullptr;
-	int SpriteBatch::m_workingVertsSize = 0;
 	SpriteEffect* SpriteBatch::m_effect = nullptr;
 	DynamicVertexBuffer* SpriteBatch::m_vertexBuffer = nullptr;
 	IndexBuffer* SpriteBatch::m_indexBuffer = nullptr;
@@ -303,8 +302,8 @@ namespace Graphics
 
 		Vector2 cursor(position.X, position.Y);
 
-		int len = strlen(text);
-		for (int i = 0; i < len; i++)
+		size_t len = strlen(text);
+		for (size_t i = 0; i < len; i++)
 		{
 			char c = text[i];
 			Rectangle glyph, cropping;
@@ -338,9 +337,9 @@ namespace Graphics
 
 		Vector2 cursor(position.X, position.Y);
 
-		int len = wcslen(text);
+		size_t len = wcslen(text);
 		bool ignoreSpacing = true; 
-		for (int i = 0; i < len; i++)
+		for (size_t i = 0; i < len; i++)
 		{
 			wchar_t c = text[i];
 			Rectangle glyph, cropping;
@@ -425,36 +424,34 @@ namespace Graphics
 		//setRenderStates();
 
 		int numSprites = m_sprites.size();
-		if (numSprites <= 0) return;
+		if (numSprites == 0) return;
 
 		const int stride = 6;
 		const int vertsPerSprite = 4;
 
-		if (m_workingVerts == nullptr)
+		if (m_vertexBuffer == nullptr)
 		{
-			m_workingVertsSize = numSprites * 2;
-			m_workingVerts = new float[m_workingVertsSize * vertsPerSprite * stride];
-
-			m_vertexBuffer = new DynamicVertexBuffer(m_device, m_declaration, m_workingVertsSize * vertsPerSprite, BufferUsage::WriteOnly);
+			m_vertexBuffer = new DynamicVertexBuffer(m_device, m_declaration, MAX_BATCH_SIZE * vertsPerSprite, BufferUsage::WriteOnly);
 		}
-		else if (m_workingVertsSize < numSprites)
+		else if (m_vertexBuffer->GetVertexCount() < numSprites * vertsPerSprite)
 		{
-			delete[] m_workingVerts;
-			m_workingVertsSize = Math::Max(m_workingVertsSize * 2, numSprites);
-			m_workingVerts = new float[m_workingVertsSize * vertsPerSprite * stride];
-
 			delete m_vertexBuffer;
-			m_vertexBuffer = new DynamicVertexBuffer(m_device, m_declaration, m_workingVertsSize * vertsPerSprite, BufferUsage::WriteOnly);
+			m_vertexBuffer = new DynamicVertexBuffer(m_device, m_declaration, numSprites * 2 * vertsPerSprite, BufferUsage::WriteOnly);
 		}
 
-		for (int i = 0; i < numSprites; i++)
+		int sizeOfVertices = sizeof(float) * numSprites * vertsPerSprite * stride;
+		void* workingMemory = NxnaTempMemoryPool::GetMemory(sizeOfVertices);
+		float* workingVerts = (float*)workingMemory;
+
+		auto itr = m_sprites.begin();
+		for (int i = 0; i < numSprites; i++, itr++)
 		{
-			float* verts = &m_workingVerts[i * stride * vertsPerSprite];
+			float* verts = &workingVerts[i * stride * vertsPerSprite];
 
-			copyIntoVerts(m_sprites[i], verts);
+			copyIntoVerts((*itr), verts);
 		}
 
-		m_vertexBuffer->SetData(m_workingVerts, numSprites * vertsPerSprite);
+		m_vertexBuffer->SetData(workingVerts, numSprites * vertsPerSprite);
 
 		Effect* effect = nullptr;
 		EffectParameter* diffuse = nullptr;
@@ -505,16 +502,26 @@ namespace Graphics
 		m_device->SetIndices(m_indexBuffer);
 
 		int batchSize = 0;
-		int lastRenderedIndex = 0;
+		int vertexBufferStartIndex = 0;
+		int indexBufferStartIndex = 0;
 		for (int i = 0; i < numSprites; i++)
 		{
+			if (batchSize >= MAX_BATCH_SIZE)
+			{
+				m_device->DrawIndexedPrimitives(PrimitiveType::TriangleList, vertexBufferStartIndex, 0, batchSize * vertsPerSprite, indexBufferStartIndex, batchSize * 2);
+				vertexBufferStartIndex += batchSize * 4;
+				indexBufferStartIndex = 0;
+				batchSize = 0;
+			}
+			
 			if (lastTexture != m_sprites[i].Texture)
 			{
 				if (batchSize > 0)
 				{
-					m_device->DrawIndexedPrimitives(PrimitiveType::TriangleList, 0, 0, batchSize * vertsPerSprite, lastRenderedIndex, batchSize * 2);
+					m_device->DrawIndexedPrimitives(PrimitiveType::TriangleList, vertexBufferStartIndex, 0, batchSize * vertsPerSprite, indexBufferStartIndex, batchSize * 2);
+					vertexBufferStartIndex += batchSize * 4;
+					indexBufferStartIndex = 0;
 					batchSize = 0;
-					lastRenderedIndex = i * 6;
 				}
 
 				diffuse->SetValue(m_sprites[i].Texture);
@@ -530,7 +537,7 @@ namespace Graphics
 		// render any remaining sprites
 		if (batchSize > 0)
 		{
-			m_device->DrawIndexedPrimitives(PrimitiveType::TriangleList, 0, 0, batchSize * vertsPerSprite, lastRenderedIndex, batchSize * 2);
+			m_device->DrawIndexedPrimitives(PrimitiveType::TriangleList, vertexBufferStartIndex, 0, batchSize * vertsPerSprite, indexBufferStartIndex, batchSize * 2);
 		}
 
 		m_sprites.clear();
@@ -652,7 +659,6 @@ namespace Graphics
 
 	void SpriteBatch::Internal_Shutdown()
 	{
-		if (m_workingVerts != nullptr) delete[] m_workingVerts;
 		if (m_declaration != nullptr) delete m_declaration;
 		if (m_indexBuffer != nullptr) delete m_indexBuffer;
 		if (m_vertexBuffer != nullptr) delete m_vertexBuffer;
