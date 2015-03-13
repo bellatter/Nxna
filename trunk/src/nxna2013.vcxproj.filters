@@ -309,6 +309,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="NxnaUtils.h" />
+    <ClInclude Include="MemoryAllocator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -539,5 +540,6 @@
     <ClCompile Include="Graphics\OpenGL\glew\glew.c">
       <Filter>Graphics\OpenGl\glew</Filter>
     </ClCompile>
+    <ClCompile Include="MemoryAllocator.cpp" />
   </ItemGroup>
 </Project>

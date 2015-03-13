@@ -61,8 +61,6 @@ namespace Graphics
 		static VertexDeclaration* m_declaration;
 		static DynamicVertexBuffer* m_vertexBuffer;
 		static IndexBuffer* m_indexBuffer;
-		static float* m_workingVerts;
-		static int m_workingVertsSize;
 
 	public:
 		SpriteBatch(GraphicsDevice* device);

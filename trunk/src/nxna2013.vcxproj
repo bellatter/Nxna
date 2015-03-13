@@ -243,6 +243,7 @@
     <ClInclude Include="Media\MediaPlayer.h" />
     <ClInclude Include="Media\OggMediaPlayer.h" />
     <ClInclude Include="Media\Song.h" />
+    <ClInclude Include="MemoryAllocator.h" />
     <ClInclude Include="Nxna.h" />
     <ClInclude Include="NxnaConfig.h" />
     <ClInclude Include="NxnaUtils.h" />
@@ -318,6 +319,7 @@
     <ClCompile Include="Media\MediaPlayer.cpp" />
     <ClCompile Include="Media\OggMediaPlayer.cpp" />
     <ClCompile Include="Media\Song.cpp" />
+    <ClCompile Include="MemoryAllocator.cpp" />
     <ClCompile Include="Platform\iOS\IOSOpenGlWindow.cpp" />
     <ClCompile Include="Platform\NaClMain.cpp" />
     <ClCompile Include="Platform\SdlMain.cpp" />
