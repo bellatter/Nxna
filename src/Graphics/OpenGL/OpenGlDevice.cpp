@@ -85,6 +85,7 @@ namespace OpenGl
 
 		setClearColor(Color::CornflowerBlue);
 		setClearDepth(1.0f);
+		setClearStencil(0);
 
 		GlException::ThrowIfError(__FILE__, __LINE__);
 
