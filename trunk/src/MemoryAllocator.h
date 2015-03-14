@@ -1,11 +1,13 @@
 #ifndef NXNA_MEMORYALLOCATOR_H
 #define NXNA_MEMORYALLOCATOR_H
 
+#include <cstdlib>
+
 namespace Nxna
 {
 	class NxnaTempMemoryPool
 	{
-		static void* m_memory;
+		static char* m_memory;
 		static size_t m_memorySize;
 
 	public:
