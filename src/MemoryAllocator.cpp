@@ -1,9 +1,8 @@
 #include "MemoryAllocator.h"
-#include <cstdlib>
 
 namespace Nxna
 {
-	void* NxnaTempMemoryPool::m_memory = nullptr;
+	char* NxnaTempMemoryPool::m_memory = nullptr;
 	size_t NxnaTempMemoryPool::m_memorySize = 0;
 
 	void* NxnaTempMemoryPool::GetMemory(size_t amount)
