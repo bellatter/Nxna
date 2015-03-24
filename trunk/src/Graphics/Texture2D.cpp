@@ -6,6 +6,7 @@
 #include "../Content/FileStream.h"
 #include "../Content/ContentManager.h"
 #include "../Content/XnbReader.h"
+#include "../MemoryAllocator.h"
 
 namespace Nxna
 {
@@ -89,22 +90,25 @@ namespace Graphics
 		for (int i = 0; i < mipCount; i++)
 		{
 			int size = stream->ReadInt32();
-			
-			pixels = new byte[size];
+
+			if (format == FormatBGR565)
+				pixels = (byte*)NxnaTempMemoryPool::GetMemory(size + size * 2);
+			else
+				pixels = (byte*)NxnaTempMemoryPool::GetMemory(size);
 
 			stream->Read(pixels, size);
 			imageSize = size;
 
 			if (format == FormatBGR565)
 			{
-				byte* convertedPixels = convert(pixels, size / 2, format);
-				delete[] pixels;
+				byte* convertedPixels = pixels + size;
+				convert(pixels, size / 2, format, convertedPixels);
 				pixels = convertedPixels;
 			}
 
 			texture->SetData(i, pixels, imageSize);
 
-			delete[] pixels;
+			NxnaTempMemoryPool::ReleaseMemory();
 		}
 
 		return texture;
@@ -124,12 +128,10 @@ namespace Graphics
 		m_pimpl = device->CreateTexture2DPimpl(width, height, mipMap, format, isRenderTarget);
 	}
 
-	byte* Texture2D::convert(byte* pixels, int length, int format)
+	void Texture2D::convert(byte* pixels, int length, int format, byte* destination)
 	{
 		if (format == 1)
 		{
-			byte* result = new byte[length * 4];
-
 			for (int i = 0; i < length; i++)
 			{
 				unsigned short pixel;
@@ -138,16 +140,12 @@ namespace Graphics
 				byte r, g, b;
 				convert565(pixel, &r, &g, &b);
 
-				result[i * 4 + 0] = r;
-				result[i * 4 + 1] = g;
-				result[i * 4 + 2] = b;
-				result[i * 4 + 3] = 255;
+				destination[i * 4 + 0] = r;
+				destination[i * 4 + 1] = g;
+				destination[i * 4 + 2] = b;
+				destination[i * 4 + 3] = 255;
 			}
-
-			return result;
 		}
-
-		return pixels;
 	}
 
 	void Texture2D::convert565(unsigned short pixel, byte* r, byte* g, byte* b)

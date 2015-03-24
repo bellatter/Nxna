@@ -88,7 +88,7 @@ namespace Graphics
 
 		void init(GraphicsDevice* device, int width, int height, bool mipMap, SurfaceFormat format, bool isRenderTarget);
 
-		static byte* convert(byte* pixels, int length, int format);
+		static void convert(byte* pixels, int length, int format, byte* destination);
 		static void convert565(unsigned short pixel, byte* r, byte* g, byte* b);
 	};
 

@@ -358,6 +358,8 @@ namespace Audio
 
 		alGenBuffers(1, (ALuint*)&effect->m_buffer);
 		alBufferData((ALuint)effect->m_buffer, bformat, buffer, dataSize, format.SamplesPerSec);
+
+		Nxna::NxnaTempMemoryPool::ReleaseMemory();
 #endif
 
 
