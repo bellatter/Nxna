@@ -7,6 +7,21 @@
 #include "ADPCM/ADPCMDecoder.h"
 #include "../Content/ContentManager.h"
 #include "../Content/FileStream.h"
+#include "../Utils/UnstableList.h"
+#include "../MemoryAllocator.h"
+
+#ifdef NXNA_AUDIOENGINE_OPENAL
+#ifdef __APPLE__
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#elif defined NXNA_PLATFORM_NIX
+#include <AL/al.h>
+#include <AL/alc.h>
+#else
+#include <al.h>
+#include <alc.h>
+#endif
+#endif
 
 namespace Nxna
 {
@@ -17,133 +32,122 @@ namespace Audio
 		assert(effect != nullptr);
 
 		m_isLooped = false;
-		m_source = nullptr;
 		m_gain = 1.0f;
 		m_positioned = false;
+		m_isFireAndForget = false;
 
-		m_bufferHandle = effect->m_bufferHandle;
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		alGenSources(1, (ALuint*)&m_source);
+#endif
+
+		updateParent(effect);
 	}
 
 	SoundEffectInstance::~SoundEffectInstance()
 	{
-		if (isSourceValid())
-			AudioManager::ReleaseSource(m_source);
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		alDeleteSources(1, (ALuint*)&m_source);
+#endif
 	}
 
 	void SoundEffectInstance::Play()
 	{
-		if (isSourceValid() == false)
-		{
-			m_source = AudioManager::GetFreeSource(this);
-			if (m_source == nullptr) return;
-
-			m_source->SetPosition(m_positioned == false, m_cachedPosition);
-			m_source->SetBuffer(m_bufferHandle);
-			m_source->IsLooping(m_isLooped);
-		}
-
-		m_source->Play(m_gain, 1.0f, 1.0f);
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		alSourcePlay(m_source);
+#endif
 	}
 
 	void SoundEffectInstance::Stop()
 	{
-		if (isSourceValid() == false) return;
-
-		m_source->Stop();
-
-		AudioManager::ReleaseSource(m_source);
-		m_source = nullptr;
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		alSourceStop(m_source);
+#endif
 	}
 
 	void SoundEffectInstance::Pause()
 	{
-		if (isSourceValid() == false) return;
-
-		m_source->Pause();
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		alSourcePause(m_source);
+#endif
 	}
 
 	bool SoundEffectInstance::IsLooped()
 	{
-		return m_isLooped;
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		ALint value;
+		alGetSourcei(m_source, AL_LOOPING, &value);
+
+		return value != 0;
+#endif
 	}
 	
 	void SoundEffectInstance::IsLooped(bool looped)
 	{
-		m_isLooped = looped;
-
-		if (isSourceValid())
-			m_source->IsLooping(looped);
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		alSourcei(m_source, AL_LOOPING, looped ? AL_TRUE : AL_FALSE);
+#endif
 	}
 
 	float SoundEffectInstance::Volume()
 	{
-		return m_gain;
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		float gain;
+		alGetSourcef((ALuint)m_source, AL_GAIN, &gain);
+		return gain;
+#endif
 	}
 
 	void SoundEffectInstance::Volume(float volume)
 	{
-		m_gain = volume;
-
-		if (isSourceValid())
-			m_source->SetGain(m_gain);
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		alSourcef((ALuint)m_source, AL_GAIN, volume);
+#endif
 	}
 
 	SoundState SoundEffectInstance::GetState()
 	{
-		if (isSourceValid())
-		{
-			return m_source->GetState();
-		}
+#if defined NXNA_AUDIOENGINE_OPENAL
+		int state;
+		alGetSourcei((ALuint)m_source, AL_SOURCE_STATE, &state);
+
+		if (state == AL_PLAYING)
+			return SoundState::Playing;
+		if (state == AL_PAUSED)
+			return SoundState::Paused;
 
 		return SoundState::Stopped;
+#endif
 	}
 
 	void SoundEffectInstance::Apply3D(const AudioListener* listener, const AudioEmitter* emitter)
 	{
-		m_positioned = true;
-		m_cachedPosition = emitter->GetPosition();
+#if defined NXNA_AUDIOENGINE_OPENAL
+		// assume the OpenAL listener stays at (0,0,0)
+		Nxna::Vector3 toEmitter = emitter->GetPosition() - listener->GetPosition();
 
-		if (isSourceValid())
-			AudioManager::Apply3D(m_source, listener, emitter);
-			
-/*
-#ifndef DISABLE_OPENAL
-		// TODO: OpenAL doesn't support multiple listeners like XNA does,
-		// but it may be possible to fake it...
-
-		// update the listener
-		Vector3 position = listener->GetPosition();
-		Vector3 forward = listener->GetForward();
-		Vector3 up = listener->GetUp();
-
-		alListener3f(AL_POSITION, position.X, position.Y, position.Z);
-
-		float forwardAndUp[] = {
-			forward.X, forward.Y, forward.Z,
-			up.X, up.Y, up.Z
-		};
-		alListenerfv(AL_ORIENTATION, forwardAndUp);
-
-		// update the source
-		if (isSourceValid())
+		if (listener->m_orientationDirty == true)
 		{
-			alSourcei(m_source, AL_SOURCE_RELATIVE, 0);
-			alSource3f(m_source, AL_POSITION, emitter->GetPosition().X, emitter->GetPosition().Y, emitter->GetPosition().Z);
+			listener->m_orientation = Nxna::Matrix::CreateWorld(Nxna::Vector3::Zero, listener->m_forward, listener->m_up);
+			listener->m_orientationDirty = false;
 		}
-		else
-		{
-			m_positioned = true;
-			m_cachedPosition = emitter->GetPosition();
-		}
-#endif*/
+
+		Nxna::Vector3 finalPosition = Nxna::Vector3::Transform(toEmitter, listener->m_orientation);
+
+		alSource3f(m_source, AL_POSITION, finalPosition.X, finalPosition.Y, finalPosition.Z);
+
+#endif
 	}
 
-	bool SoundEffectInstance::isSourceValid()
+	void SoundEffectInstance::updateParent(SoundEffect* parent)
 	{
-		return m_source != nullptr && AudioManager::IsSourceOwner(m_source, this);
+		m_parent = parent;
+
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		alSourcei(m_source, AL_BUFFER, m_parent->m_buffer);
+#endif
 	}
 
-
+#ifdef NXNA_AUDIOENGINE_OPENAL
 	struct WAVEFORMATEX
 	{
 		short FormatTag;
@@ -170,8 +174,33 @@ namespace Audio
 
 	const int WAVE_FORMAT_PCM = 1;
 	const int WAVE_FORMAT_ADPCM = 2;
+#endif
 
 	std::vector<byte> SoundEffect::m_workingData;
+	std::vector<SoundEffectInstance*> SoundEffect::m_instancePool;
+
+	SoundEffect::~SoundEffect()
+	{
+		for (size_t i = 0; i < m_children.size(); i++)
+		{
+			m_children[i]->Stop();
+
+			if (m_children[i]->m_isFireAndForget)
+			{
+				// return the instance to the queue
+				m_instancePool.push_back(m_children[i]);
+			}
+			else
+			{
+				// unlink (we don't own the pointer, so it's someone else's job to delete the instance)
+				m_children[i]->m_parent = nullptr;
+			}
+		}
+
+#if defined NXNA_AUDIOENGINE_OPENAL
+		alDeleteBuffers(1, (ALuint*)&m_buffer);
+#endif
+	}
 
 	bool SoundEffect::Play()
 	{
@@ -180,34 +209,66 @@ namespace Audio
 
 	bool SoundEffect::Play(float volume, float pitch, float pan)
 	{
-		AudioSource* source = AudioManager::GetFreeSource(nullptr);
-		if (source == nullptr) return false;
+		SoundEffectInstance* instance;
+		if (m_instancePool.empty() == false)
+		{
+			instance = m_instancePool.back();
+			m_instancePool.pop_back();
+			instance->updateParent(this);
+		}
+		else
+		{
+			instance = new SoundEffectInstance(this);
+			instance->m_isFireAndForget = true;
+		}
 
-		source->IsLooping(false);
-		source->SetBuffer(m_bufferHandle);
-		source->Play(volume, pitch, pan);
+		m_children.push_back(instance);
+
+		instance->IsLooped(false);
+		instance->Volume(volume);
+		instance->Play();
 
 		return true;
 	}
 
 	SoundEffectInstance* SoundEffect::CreateInstance()
 	{
-		return new SoundEffectInstance(this);
+		auto instance = new SoundEffectInstance(this);
+		m_children.push_back(instance);
+		return instance;
+	}
+
+	void SoundEffect::DestroyInstance(SoundEffectInstance* instance)
+	{
+		if (instance->m_isFireAndForget)
+			throw new InvalidOperationException("Cannot destroy a SoundEffectInstance not created with SoundEffect::CreateInstance()");
+
+		if (instance->m_parent != nullptr)
+		{
+			Utils::UnstableList<SoundEffectInstance*>::Remove(instance, instance->m_parent->m_children);
+		}
+
+		delete instance;
 	}
 
 	void SoundEffect::SetDistanceScale(float scale)
 	{
-		AudioManager::SetDistanceScale(scale);
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		// TODO
+#endif
 	}
 
 	void SoundEffect::SetMasterVolume(float volume)
 	{
-		AudioManager::SetMasterVolume(volume);
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		alListenerf(AL_GAIN, volume);
+#endif
 	}
 
 	SoundEffect* SoundEffect::LoadFrom(Content::Stream* stream)
 	{
 #ifndef DISABLE_OPENAL
+		SoundEffect* effect = new SoundEffect();
 
 		if (m_workingData.empty())
 			m_workingData.resize(100 * 1024); // 100 KB
@@ -219,12 +280,15 @@ namespace Audio
 		WAVEFORMATEX format;
 		stream->Read((byte*)&format, 18);
 
-		int samplesPerBlock = 0;
+		short samplesPerBlock = 0;
 		if (format.FormatTag == WAVE_FORMAT_ADPCM)
 		{
 			WAVEFORMATADPCM format2;
-			stream->Read((byte*)(&format2.SamplesPerBlock), 4);
+			stream->Read((byte*)(&format2.SamplesPerBlock), 2);
 			format2.wf = format;
+
+			// skip the # of coefficients
+			stream->Seek(2, Content::SeekOrigin::Current);
 
 			// skip the coefficients
 			stream->Seek(7 * 4, Content::SeekOrigin::Current);
@@ -253,35 +317,50 @@ namespace Audio
 
 		int dataSize = stream->ReadInt32();
 
-		if (format.FormatTag == WAVE_FORMAT_ADPCM)
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		ALenum bformat;
+		if (format.Channels == 1)
 		{
-			AdpcmDecoder decoder;
-			decoder.Decode(stream, format.Channels == 2, format.BitsPerSample, format.BlockAlign, samplesPerBlock);
-
-			const byte* output;
-			decoder.GetOutput(&output, &dataSize);
-
-			if ((unsigned int)dataSize > m_workingData.capacity())
+			if (format.BitsPerSample == 8)
 			{
-				m_workingData.reserve(dataSize * 2);
+				bformat = AL_FORMAT_MONO8;
 			}
-
-			memcpy(&m_workingData.front(), output, dataSize);
+			else
+			{
+				bformat = AL_FORMAT_MONO16;
+			}
 		}
 		else
 		{
-			//dataSize = stream->ReadInt32();
-			if (m_workingData.capacity() < (unsigned int)dataSize)
+			if (format.BitsPerSample == 8)
 			{
-				m_workingData.reserve(dataSize * 2);
+				bformat = AL_FORMAT_STEREO8;
 			}
-			stream->Read(&m_workingData.front(), dataSize);
+			else
+			{
+				bformat = AL_FORMAT_STEREO16;
+			}
 		}
 
-		SoundEffect* effect = new SoundEffect();
-		AudioBuffer dummy;
-		AudioBuffer::Create(format.Channels, format.BitsPerSample, format.SamplesPerSec, &m_workingData.front(), dataSize, &dummy);
-		effect->m_bufferHandle = dummy.Handle;
+		byte* buffer = nullptr;
+
+		if (format.FormatTag == WAVE_FORMAT_ADPCM)
+		{
+			AdpcmDecoder decoder(stream, format.Channels == 2, format.BitsPerSample, format.BlockAlign, samplesPerBlock);
+			buffer = (byte*)NxnaTempMemoryPool::GetMemory(decoder.GetRequiredBufferSize());
+			decoder.Decode(buffer);
+		}
+		else
+		{
+			buffer = (byte*)Nxna::NxnaTempMemoryPool::GetMemory(dataSize);
+			stream->Read(buffer, dataSize);
+		}
+
+		alGenBuffers(1, (ALuint*)&effect->m_buffer);
+		alBufferData((ALuint)effect->m_buffer, bformat, buffer, dataSize, format.SamplesPerSec);
+#endif
+
+
 
 		return effect;
 #else

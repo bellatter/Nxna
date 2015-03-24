@@ -16,18 +16,19 @@ namespace Audio
 {
 	class AdpcmDecoder
 	{
+		Content::Stream* m_stream;
+		bool m_stereo;
+		int m_bitrate;
+		int m_blockSize;
+		int m_samplesPerBlock;
+		size_t m_requiredOutputBufferSize;
+
 	public:
-		AdpcmDecoder();
+		AdpcmDecoder(Content::Stream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock);
 
-		void Decode(Content::Stream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock);
+		size_t GetRequiredBufferSize() { return m_requiredOutputBufferSize; }
 
-		void GetOutput(const byte** output, int* outputSize);
-
-	private:
-
-		static std::unique_ptr<Content::MemoryStream> m_workingData;
-
-		void copyToWorkingMemory(byte* data, unsigned int size);
+		void Decode(byte* outputBuffer);
 	};
 }
 }
