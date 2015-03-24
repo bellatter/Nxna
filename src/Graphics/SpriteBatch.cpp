@@ -453,6 +453,8 @@ namespace Graphics
 
 		m_vertexBuffer->SetData(workingVerts, numSprites * vertsPerSprite);
 
+		Nxna::NxnaTempMemoryPool::ReleaseMemory();
+
 		Effect* effect = nullptr;
 		EffectParameter* diffuse = nullptr;
 		Texture2D* lastTexture = nullptr;
