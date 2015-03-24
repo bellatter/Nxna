@@ -24,7 +24,7 @@ namespace Direct3D11
 	public:
 		D3D11VertexBuffer(bool dynamic, Direct3D11Device* device, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage);
 
-		virtual void SetData(int offsetInBytes, void* data, int numVertices) override;
+		virtual void SetData(int offsetInBytes, void* data, int numBytes) override;
 
 
 		void* GetInternalBuffer() const { return m_buffer; }
