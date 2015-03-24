@@ -24,12 +24,12 @@ namespace Direct3D11
 		m_buffer = nullptr;
 	}
 
-	void D3D11VertexBuffer::SetData(int offsetInBytes, void* data, int vertexCount)
+	void D3D11VertexBuffer::SetData(int offsetInBytes, void* data, int numBytes)
 	{
 		if (m_dynamic)
-			setDataDynamic(offsetInBytes, data, vertexCount);
+			setDataDynamic(offsetInBytes, data, numBytes);
 		else
-			setDataStatic(offsetInBytes, data, vertexCount);
+			setDataStatic(offsetInBytes, data, numBytes);
 	}
 
 	void D3D11VertexBuffer::setDataStatic(int offsetInBytes, void* data, int numBytes)
@@ -82,7 +82,7 @@ namespace Direct3D11
 			D3D11_BUFFER_DESC desc;
 			ZeroMemory(&desc, sizeof(desc));
 			desc.Usage = D3D11_USAGE_DYNAMIC;
-			desc.ByteWidth = numBytes;
+			desc.ByteWidth = capacity;
 			desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 			desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
