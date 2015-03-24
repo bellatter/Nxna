@@ -8,12 +8,17 @@ namespace Nxna
 {
 namespace Audio
 {
-	std::unique_ptr<Content::MemoryStream> AdpcmDecoder::m_workingData;
-
-	AdpcmDecoder::AdpcmDecoder()
+	AdpcmDecoder::AdpcmDecoder(Content::Stream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock)
 	{
-		if (m_workingData == nullptr)
-			m_workingData.reset(new Content::MemoryStream(1024 * 100)); // start at 100 KB
+		m_stream = data;
+		m_stereo = stereo;
+		m_bitrate = bitrate;
+		m_blockSize = blockSize;
+		m_samplesPerBlock = samplesPerBlock;
+
+		size_t sizePerBlock = m_samplesPerBlock * (stereo ? 2 : 1) * 2;
+		size_t numBlocks = (m_stream->Length() - m_stream->Position()) / m_blockSize;
+		m_requiredOutputBufferSize = numBlocks * sizePerBlock;
 	}
 
 	struct AdpcmInfo
@@ -93,7 +98,7 @@ namespace Audio
 		return bytesRead;
 	}
 
-	int decodeStereoBlock(AdpcmInfo* info, Content::Stream* block, int blockSize, byte* output)
+	int decodeStereoBlock(AdpcmInfo* info, Content::Stream* block, byte* output)
 	{
 		// this is based on the info here:
 		// http://wiki.multimedia.cx/index.php?title=Microsoft_ADPCM
@@ -136,44 +141,31 @@ namespace Audio
 		return bytesWritten;
 	}
 
-	void AdpcmDecoder::Decode(Content::Stream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock)
+	void AdpcmDecoder::Decode(byte* outputBuffer)
 	{
-		int outputSize = (blockSize - 14) * 4 + 8; // expand from 4 bit to 16 bit
-		byte* output = new byte[outputSize];
-
-		short AdaptCoeff1[] = { 256, 512, 0, 192, 240, 460, 392 } ;
-		short AdaptCoeff2[] = { 0, -256, 0, 64, 0, -208, -232 } ;
+		short AdaptCoeff1[] = { 256, 512, 0, 192, 240, 460, 392 };
+		short AdaptCoeff2[] = { 0, -256, 0, 64, 0, -208, -232 };
 
 		AdpcmInfo info;
-		info.NumChannels = (stereo ? 2 : 1);
+		info.NumChannels = (m_stereo ? 2 : 1);
 		info.NibbleState = false;
-		info.SamplesPerBlock = (short)samplesPerBlock;
+		info.SamplesPerBlock = (short)m_samplesPerBlock;
 		info.Coefficients1 = AdaptCoeff1;
 		info.Coefficients2 = AdaptCoeff2;
 
-		if (stereo)
+		if (m_stereo)
 		{
-			int bytesRead = 0;
-			while(data->Length() - data->Position() >= blockSize)
+			int bytesWritten = 0;
+			int blocksDecoded = 0;
+			
+			while(m_stream->Length() - m_stream->Position() >= m_blockSize)
 			{
-				int bytesRead = decodeStereoBlock(&info, data, blockSize, output);
-				m_workingData->Write(output, bytesRead);
+				assert(bytesWritten + m_samplesPerBlock * 4 <= (int)m_requiredOutputBufferSize);
+				bytesWritten += decodeStereoBlock(&info, m_stream, outputBuffer + bytesWritten);
+
+				blocksDecoded++;
 			}
 		}
-
-		delete[] output;
-	}
-
-	void AdpcmDecoder::GetOutput(const byte** output, int* outputSize)
-	{
-		*output = m_workingData->GetBuffer();
-		*outputSize = m_workingData->Length();
-	}
-
-	void AdpcmDecoder::copyToWorkingMemory(byte* data, unsigned int size)
-	{
-		// expand the working memory if needed
-		m_workingData->Write(data, size);
 	}
 }
 }

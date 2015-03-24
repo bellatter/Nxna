@@ -7,8 +7,12 @@ namespace Nxna
 {
 namespace Audio
 {
+	class SoundEffectInstance;
+
 	class AudioEmitter
 	{
+		friend class SoundEffectInstance;
+
 		Vector3 m_position;
 
 	public:

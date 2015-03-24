@@ -21,15 +21,20 @@ namespace Audio
 	class SoundEffectInstance
 	{
 		friend class SoundEffect;
-		AudioSource* m_source;
+		bool m_isFireAndForget;
+		SoundEffect* m_parent;
 		void* m_bufferHandle;
 		bool m_isLooped;
 		float m_gain;
 		Vector3 m_cachedPosition;
 		bool m_positioned;
 
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		int m_source;
+#endif
+
 	public:
-		~SoundEffectInstance();
+		
 
 		void Play();
 		void Stop();
@@ -45,30 +50,42 @@ namespace Audio
 
 	private:
 		SoundEffectInstance(SoundEffect* effect);
-		bool isSourceValid();
+		~SoundEffectInstance();
+
+		void updateParent(SoundEffect* parent);
 	};
 
 	class SoundEffect
 	{
 		friend class SoundEffectInstance;
 
-		void* m_bufferHandle;
-		bool m_duration;
+#ifdef NXNA_AUDIOENGINE_OPENAL
+		int m_buffer;
+#endif
+		float m_duration;
+
+		std::vector<SoundEffectInstance*> m_children;
 
 		static std::vector<byte> m_workingData;
+		static std::vector<SoundEffectInstance*> m_instancePool;
+		static std::vector<SoundEffectInstance*> m_fireAndForgetInstances;
 
 	public:
-
+		~SoundEffect();
 		float GetDuration() { return m_duration; }
 
 		bool Play();
 		bool Play(float volume, float pitch, float pan);
 		SoundEffectInstance* CreateInstance();
+		static void DestroyInstance(SoundEffectInstance* instance);
 
 		static void SetDistanceScale(float scale);
 		static void SetMasterVolume(float volume);
 
 		static SoundEffect* LoadFrom(Content::Stream* stream);
+
+	private:
+		SoundEffect() {}
 	};
 
 	
