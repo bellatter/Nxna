@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		A228BBF41505B54200045911 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A228BBF31505B54200045911 /* Foundation.framework */; };
+		A24321601AF165E40062820A /* MemoryAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A243215E1AF165E40062820A /* MemoryAllocator.cpp */; };
+		A24321611AF165E40062820A /* MemoryAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A243215E1AF165E40062820A /* MemoryAllocator.cpp */; };
+		A24321621AF165E40062820A /* MemoryAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = A243215F1AF165E40062820A /* MemoryAllocator.h */; };
+		A24321631AF165E40062820A /* MemoryAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = A243215F1AF165E40062820A /* MemoryAllocator.h */; };
 		A28808E61512E54E005D983A /* Color.h in Headers */ = {isa = PBXBuildFile; fileRef = A28808D11512E54E005D983A /* Color.h */; };
 		A28808E71512E54E005D983A /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808D21512E54E005D983A /* Game.cpp */; };
 		A28808E81512E54E005D983A /* Game.h in Headers */ = {isa = PBXBuildFile; fileRef = A28808D31512E54E005D983A /* Game.h */; };
@@ -257,6 +261,8 @@
 /* Begin PBXFileReference section */
 		A228BBF01505B54200045911 /* libNxna_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNxna_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A228BBF31505B54200045911 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A243215E1AF165E40062820A /* MemoryAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryAllocator.cpp; sourceTree = SOURCE_ROOT; };
+		A243215F1AF165E40062820A /* MemoryAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryAllocator.h; sourceTree = SOURCE_ROOT; };
 		A28808D11512E54E005D983A /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = SOURCE_ROOT; };
 		A28808D21512E54E005D983A /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = SOURCE_ROOT; };
 		A28808D31512E54E005D983A /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = SOURCE_ROOT; };
@@ -481,6 +487,8 @@
 		A228BBF51505B54200045911 /* Nxna */ = {
 			isa = PBXGroup;
 			children = (
+				A243215E1AF165E40062820A /* MemoryAllocator.cpp */,
+				A243215F1AF165E40062820A /* MemoryAllocator.h */,
 				A2FBA1FD18CBD5C00019B993 /* Color.cpp */,
 				A28808D11512E54E005D983A /* Color.h */,
 				A28808D21512E54E005D983A /* Game.cpp */,
@@ -811,6 +819,7 @@
 				A288097B1512E7EF005D983A /* Buttons.h in Headers */,
 				A288097D1512E7EF005D983A /* GamePad.h in Headers */,
 				A288097F1512E7EF005D983A /* Keyboard.h in Headers */,
+				A24321621AF165E40062820A /* MemoryAllocator.h in Headers */,
 				A28809801512E7EF005D983A /* Keys.h in Headers */,
 				A28809821512E7EF005D983A /* Mouse.h in Headers */,
 				A28809971512E83C005D983A /* GlIndexBuffer.h in Headers */,
@@ -865,6 +874,7 @@
 				A2C6313E1735FC6400DB1FDB /* simd_float.h in Headers */,
 				A2C631421735FC6400DB1FDB /* singlecolourfit.h in Headers */,
 				A2C631461735FC6400DB1FDB /* squish.h in Headers */,
+				A24321631AF165E40062820A /* MemoryAllocator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -973,6 +983,7 @@
 				A288096F1512E7AF005D983A /* FileStream.cpp in Sources */,
 				A28809711512E7AF005D983A /* XnbReader.cpp in Sources */,
 				A2FBA20C18CBD6090019B993 /* IEffectPimpl.cpp in Sources */,
+				A24321601AF165E40062820A /* MemoryAllocator.cpp in Sources */,
 				A288097C1512E7EF005D983A /* GamePad.cpp in Sources */,
 				A288097E1512E7EF005D983A /* Keyboard.cpp in Sources */,
 				A28809811512E7EF005D983A /* Mouse.cpp in Sources */,
@@ -1053,6 +1064,7 @@
 				A2FC4BA0185973CC00258812 /* IndexBuffer.cpp in Sources */,
 				A2963BA216ADF35F00817CFC /* SpriteSheet.cpp in Sources */,
 				A2963BA416ADF35F00817CFC /* Texture2D.cpp in Sources */,
+				A24321611AF165E40062820A /* MemoryAllocator.cpp in Sources */,
 				A2963BA616ADF35F00817CFC /* VertexBuffer.cpp in Sources */,
 				A2963BA916ADF35F00817CFC /* GlIndexBuffer.cpp in Sources */,
 				A2963BAB16ADF35F00817CFC /* GlslAlphaTestEffect.cpp in Sources */,
