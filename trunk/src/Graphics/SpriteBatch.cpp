@@ -444,7 +444,7 @@ namespace Graphics
 		float* workingVerts = (float*)workingMemory;
 
 		auto itr = m_sprites.begin();
-		for (int i = 0; i < numSprites; i++, itr++)
+		for (int i = 0; i < numSprites; i++, ++itr)
 		{
 			float* verts = &workingVerts[i * stride * vertsPerSprite];
 

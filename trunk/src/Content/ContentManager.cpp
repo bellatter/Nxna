@@ -44,7 +44,7 @@ namespace Content
 
 		// delete all the loaders
 		for (LoaderMap::iterator itr = m_loaders.begin();
-			itr != m_loaders.end(); itr++)
+			itr != m_loaders.end(); ++itr)
 		{
 			IContentReader* r = (*itr).second;
 			delete r;
@@ -54,7 +54,7 @@ namespace Content
 	void ContentManager::Unload()
 	{
 		for (ResourceMap::iterator itr = m_resources.begin();
-			itr != m_resources.end(); itr++)
+			itr != m_resources.end(); ++itr)
 		{
 			(*itr).second.first->Destroy((*itr).second.second);
 		}

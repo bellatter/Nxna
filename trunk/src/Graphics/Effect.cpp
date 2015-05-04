@@ -293,7 +293,7 @@ namespace Graphics
 
 	EffectTechnique* Effect::GetTechnique(const char* name)
 	{
-		for (auto itr = m_techniques.begin(); itr != m_techniques.end(); itr++)
+		for (auto itr = m_techniques.begin(); itr != m_techniques.end(); ++itr)
 		{
 			if ((*itr)->Name == name)
 				return (*itr);
