@@ -86,6 +86,10 @@ namespace Nxna
 			// XNA seems to call LoadContent() within Initialize()
 			LoadContent(); 
 		}
+		
+#ifdef NXNA_PLATFORM_APPLE_IOS
+		virtual void DidFinishLaunching() { }
+#endif
 
 		virtual void LoadContent() { }
 		virtual void Update(const Nxna::GameTime& /* time */) { }

@@ -26,6 +26,9 @@
 
 	self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+	
+	IOSGame_DidFinishLaunching();
+	
     return YES;
 }
 
