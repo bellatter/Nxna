@@ -48,6 +48,11 @@ namespace iOS
 		if (m_game->m_graphicsDeviceManager != nullptr)
 			m_game->m_graphicsDeviceManager->ShowWindow();
 	}
+	
+	void IOSGame::DidFinishLaunching()
+	{
+		m_game->DidFinishLaunching();
+	}
 
 	void IOSGame::Update(float elapsedTime)
 	{
@@ -108,6 +113,11 @@ extern "C"
 void IOSGame_Init()
 {
 	Nxna::Platform::iOS::g_instance->Init();
+}
+
+void IOSGame_DidFinishLaunching()
+{
+	Nxna::Platform::iOS::g_instance->DidFinishLaunching();
 }
 
 void IOSGame_Update(float elapsedTime)
