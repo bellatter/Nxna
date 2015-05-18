@@ -423,7 +423,7 @@ namespace Direct3D11
 	
 	Pvt::IIndexBufferPimpl* Direct3D11Device::CreateIndexBufferPimpl(IndexElementSize elementSize)
 	{
-		return new D3D11IndexBuffer(m_device, elementSize);
+		return new D3D11IndexBuffer(this, elementSize);
 	}
 
 	Pvt::IVertexBufferPimpl* Direct3D11Device::CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage)

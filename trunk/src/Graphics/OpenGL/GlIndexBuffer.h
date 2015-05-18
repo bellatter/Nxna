@@ -26,7 +26,7 @@ namespace OpenGl
 		GlIndexBuffer(IndexElementSize elementSize);
 		virtual ~GlIndexBuffer();
 
-		virtual void SetData(void* data, int indexCount) override;
+		virtual void SetData(int offsetInBytes, void* data, int indexCount) override;
 
 		void Bind() const;
 

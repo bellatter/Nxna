@@ -20,7 +20,13 @@ namespace Graphics
 	void IndexBuffer::SetData(void* indices, int indexCount)
 	{
 		m_indexCount = indexCount;
-		m_pimpl->SetData(indices, indexCount);
+		m_pimpl->SetData(0, indices, indexCount);
+	}
+
+	void IndexBuffer::SetData(int offsetInBytes, void* indices, int indexCount)
+	{
+		m_indexCount = indexCount;
+		m_pimpl->SetData(offsetInBytes, indices, indexCount);
 	}
 }
 }
