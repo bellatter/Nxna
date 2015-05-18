@@ -27,10 +27,14 @@ namespace OpenGl
 #endif
 	}
 
-	void GlIndexBuffer::SetData(void* data, int indexCount)
+	void GlIndexBuffer::SetData(int offsetInBytes, void* data, int indexCount)
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffer);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * (int)m_elementSize, data, GL_STATIC_DRAW);
+
+		if (offsetInBytes == 0)
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * (int)m_elementSize, data, GL_STATIC_DRAW);
+		else
+			glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offsetInBytes, indexCount * (int)m_elementSize, data);
 
 		m_indexCount = indexCount;
 

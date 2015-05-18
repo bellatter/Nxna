@@ -33,6 +33,7 @@ namespace Graphics
 		virtual ~IndexBuffer();
 
 		void SetData(void* indices, int indexCount);
+		void SetData(int offsetInBytes, void* indices, int indexCount);
 
 		int GetIndexCount() const { return m_indexCount; }
 		IndexElementSize GetElementSize() const { return m_elementSize; }

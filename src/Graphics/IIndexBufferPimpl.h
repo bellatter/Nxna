@@ -22,7 +22,7 @@ namespace Pvt
 
 		virtual ~IIndexBufferPimpl() { }
 
-		virtual void SetData(void* indices, int indexCount) = 0;
+		virtual void SetData(int offsetInBytes, void* indices, int indexCount) = 0;
 
 		IndexElementSize GetElementSize() const { return m_elementSize; }
 		int GetIndexCount() const { return m_indexCount; }

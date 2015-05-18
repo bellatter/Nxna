@@ -15,14 +15,14 @@ namespace Direct3D11
 {
 	class D3D11IndexBuffer : public Pvt::IIndexBufferPimpl
 	{
-		void* m_d3d11Device;
+		Direct3D11Device* m_d3d11Device;
 		void* m_indexBuffer;
 
 	public:
-		D3D11IndexBuffer(void* d3d11Device, IndexElementSize elementSize);
+		D3D11IndexBuffer(Direct3D11Device* d3d11Device, IndexElementSize elementSize);
 		virtual ~D3D11IndexBuffer();
 
-		virtual void SetData(void* data, int indexCount) override;
+		virtual void SetData(int offsetInBytes, void* data, int indexCount) override;
 
 		void* GetInternalBuffer() const { return m_indexBuffer; };
 	};
