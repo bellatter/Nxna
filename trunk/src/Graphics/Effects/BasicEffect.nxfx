@@ -52,6 +52,9 @@
 	</techniques>
 	<cbuffers>
 		<cbuffer>
+			<constant name="DiffuseColor"
+				type="float"
+				numElements="4" />
 			<constant name="ModelViewProjection"
 				type="float"
 				numElements="16" />
@@ -95,6 +98,8 @@ uniform sampler2D Diffuse;
 in HIGHP vec2 o_diffuseCoords;
 #endif
 
+uniform HIGHP vec4 DiffuseColor;
+
 #if defined BasicEffectColor || defined BasicEffectColorTexture
 in HIGHP vec4 o_color;
 #endif
@@ -120,9 +125,9 @@ void main()
 #endif
 	
 #if __VERSION__ < 130
-	gl_FragColor = finalColor;
+	gl_FragColor = finalColor * DiffuseColor;
 #else
-	outputColor = finalColor;
+	outputColor = finalColor * DiffuseColor;
 #endif
 
 }

@@ -14,6 +14,7 @@ sampler DiffuseSampler : register(s0);
 
 cbuffer Parameters : register(b0)
 {
+	float4 DiffuseColor;
    row_major float4x4 ModelViewProjection;
 };
 
@@ -44,21 +45,21 @@ void BasicEffectColorTextureVS(inout float2 texCoord : TEXCOORD0,
 
 float4 BasicEffectPS() : SV_Target0
 {
-	return float4(1.0, 1.0, 1.0, 1.0);
+	return DiffuseColor;
 }
 
 float4 BasicEffectTexturePS(float2 texCoord : TEXCOORD0) : SV_Target0
 {
-	return Diffuse.Sample(DiffuseSampler, texCoord);
+	return Diffuse.Sample(DiffuseSampler, texCoord) * DiffuseColor;
 }
 
 float4 BasicEffectColorPS(float4 color : COLOR0) : SV_Target0
 {
-	return color;
+	return color * DiffuseColor;
 }
 
 float4 BasicEffectColorTexturePS(float2 texCoord : TEXCOORD0,
 							float4 color : COLOR0) : SV_Target0
 {
-	return Diffuse.Sample(DiffuseSampler, texCoord) * color;
+	return Diffuse.Sample(DiffuseSampler, texCoord) * color * DiffuseColor;
 }

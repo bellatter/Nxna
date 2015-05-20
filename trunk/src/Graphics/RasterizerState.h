@@ -12,6 +12,11 @@ namespace Graphics
 		CullCounterClockwiseFace,
 		None
 	END_NXNA_ENUM(CullMode)
+		
+	NXNA_ENUM(FillMode)
+		Solid,
+		WireFrame
+	END_NXNA_ENUM(FillMode)
 
 	class RasterizerState
 	{
@@ -28,11 +33,13 @@ namespace Graphics
 		RasterizerState()
 		{
 			TheCullMode = CullMode::CullCounterClockwiseFace;
+			TheFillMode = FillMode::Solid;
 
 			m_handle = nullptr;
 		}
 
 		CullMode TheCullMode;
+		FillMode TheFillMode;
 
 		static const RasterizerState* GetCullClockwise()
 		{

@@ -287,7 +287,7 @@ namespace OpenGl
 
 	EffectParameter* GlslEffect::AddParameter(const char* name, EffectParameterType type, int numElements, int constantBufferIndex, int constantBufferConstantIndex, int constantBufferOffset)
 	{
-		EffectParameter* param = CreateParameter(m_parent, type, numElements, nullptr, name);
+		EffectParameter* param = CreateParameter(m_parent, type, numElements, nullptr, name, constantBufferIndex, constantBufferOffset);
 
 		m_parameters.insert(ParamMap::value_type(param->Name.c_str(), param));
 

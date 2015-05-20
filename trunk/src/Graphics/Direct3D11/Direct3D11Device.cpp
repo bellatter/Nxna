@@ -537,7 +537,16 @@ namespace Direct3D11
 				D3D11_RASTERIZER_DESC rasterizerDesc;
 				ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
 
-				rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+				switch (m_rasterizerState.TheFillMode)
+				{
+				case FillMode::WireFrame:
+					rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+					break;
+				default:
+					rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+					break;
+				}
+
 				if (m_rasterizerState.TheCullMode == CullMode::CullClockwiseFace)
 				{
 					rasterizerDesc.CullMode = D3D11_CULL_BACK;

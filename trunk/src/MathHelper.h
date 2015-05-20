@@ -3,6 +3,10 @@
 
 #include <cmath>
 
+#ifdef _MSC_VER
+#include <intrin.h>
+#endif
+
 namespace Nxna
 {
 	// This imitates the System.Math class
@@ -58,6 +62,18 @@ namespace Nxna
 		static double Min(double a, double b)
 		{
 			return (a < b ? a : b);
+		}
+
+		static unsigned int Log2(unsigned int a)
+		{
+#ifdef _MSC_VER
+			unsigned long result;
+			_BitScanReverse(&result, a);
+
+			return result;
+#else
+			return log(a) / log(2);
+#endif
 		}
 	};
 

@@ -17,13 +17,21 @@ namespace Graphics
 		m_textureEnabled = false;
 		m_vertexColorEnabled = false;
 		m_finalTransformDirty = true;
+		m_colorDirty = true;
+
+		m_diffuse.X = m_diffuse.Y = m_diffuse.Z = 1.0f;
+		m_alpha = 1.0f;
 
 		m_transformParameter = GetParameter("ModelViewProjection");
 		m_diffuseParameter = GetParameter("Diffuse");
+		m_diffuseColorParameter = GetParameter("DiffuseColor");
 	}
 
 	void BasicEffect::SetTexture(Texture2D* texture)
 	{
+		assert(m_diffuseParameter != nullptr);
+		assert(m_diffuseParameter->GetType() == EffectParameterType::Texture2D);
+
 		m_diffuseParameter->SetValue(texture);
 	}
 
@@ -41,6 +49,20 @@ namespace Graphics
 		}
 
 		m_transformParameter->SetValue(m_finalTransform.C);
+
+		if (m_colorDirty)
+		{
+			Nxna::Vector4 color;
+			color.X = m_diffuse.X * m_alpha;
+			color.Y = m_diffuse.Y * m_alpha;
+			color.Z = m_diffuse.Z * m_alpha;
+			color.W = m_alpha;
+
+			m_diffuseColorParameter->SetValue(color);
+
+			m_colorDirty = false;
+		}
+
 
 		// determine which to apply
 		if (m_vertexColorEnabled && m_textureEnabled)

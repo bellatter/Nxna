@@ -19,10 +19,8 @@ namespace Nxna
 		}
 
 		Vector3(float x, float y, float z)
+			: X(x), Y(y), Z(z)
 		{
-			X = x;
-			Y = y;
-			Z = z;
 		}
 
 		Vector3 operator *(float s) const
@@ -131,6 +129,7 @@ namespace Nxna
 		static Vector3 TransformNormal(const Vector3& normal, const Matrix& matrix) { Vector3 v; TransformNormal(normal, matrix, v); return v; }
 		static void TransformNormal(const Vector3& normal, const Matrix& matrix, Vector3& result);
 
+		static float Distance(const Vector3& v1, const Vector3& v2);
 		static float DistanceSquared(const Vector3& v1, const Vector3& v2);
 	};
 }
