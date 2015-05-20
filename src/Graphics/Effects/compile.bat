@@ -3,7 +3,7 @@ set et=..\..\..\Debug\EffectTool.exe
 
 rem build the full shaders
 %et% -h -hn AlphaTestEffect_bytecode AlphaTestEffect.nxfx AlphaTestEffect.inc
-%et% -h -hn BasicEffect_bytecode BasicEffect.nxfx" Effects\BasicEffect.inc
+%et% -h -hn BasicEffect_bytecode BasicEffect.nxfx BasicEffect.inc
 %et% -h -hn DualTextureEffect_bytecodeDualTextureEffect.nxfx" DualTextureEffect.inc
 %et% -h -hn SpriteEffect_bytecode SpriteEffect.nxfx" SpriteEffect.inc
 

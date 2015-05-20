@@ -98,6 +98,11 @@ namespace Nxna
 		 result.Z = z;
 	 }
 
+	 float Vector3::Distance(const Vector3& v1, const Vector3& v2)
+	 {
+		 return sqrt((v1.X - v2.X) * (v1.X - v2.X) + (v1.Y - v2.Y) * (v1.Y - v2.Y) + (v1.Z - v2.Z) * (v1.Z - v2.Z));
+	 }
+
 	 float Vector3::DistanceSquared(const Vector3& v1, const Vector3& v2)
 	 {
 		 return (v1.X - v2.X) * (v1.X - v2.X) + (v1.Y - v2.Y) * (v1.Y - v2.Y) + (v1.Z - v2.Z) * (v1.Z - v2.Z);

@@ -94,17 +94,21 @@ namespace Graphics
 		EffectParameterType m_type;
 		int m_numElements;
 		void* m_handle;
+		int m_constantBufferIndex;
+		int m_constantBufferOffset;
 
 		int m_value[16];
 		Texture2D* m_textureValue;
 
-		EffectParameter(Effect* parent, EffectParameterType type, int numElements, void* handle, const char* name)
+		EffectParameter(Effect* parent, EffectParameterType type, int numElements, void* handle, const char* name, int constantBufferIndex, int constantBufferOffset)
 		{
 			m_parent = parent;
 			m_type = type;
 			m_numElements = numElements;
 			m_handle = handle;
 			Name = name;
+			m_constantBufferIndex = constantBufferIndex;
+			m_constantBufferOffset = constantBufferOffset;
 
 			memset(m_value, 0, sizeof(m_value));
 			m_textureValue = nullptr;
@@ -185,6 +189,12 @@ namespace Graphics
 		Texture2D* GetValueTexture2D() { return m_textureValue; }
 
 		void* GetHandle() { return m_handle; }
+
+		// the constant buffer API is definitely not final. At the moment
+		// it's mostly behind-the-scenes, but it should be formalized into something.
+		// Of course, there's no such thing as constant buffers in XNA...
+		int GetConstantBufferIndex() { return m_constantBufferIndex; }
+		int GetConstantBufferOffset() { return m_constantBufferOffset; }
 	};
 
 	class EffectTechnique

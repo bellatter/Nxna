@@ -25,8 +25,13 @@ namespace Graphics
 		Matrix m_finalTransform;
 		bool m_finalTransformDirty;
 
+		Vector3 m_diffuse;
+		float m_alpha;
+		bool m_colorDirty;
+
 		EffectParameter* m_transformParameter;
 		EffectParameter* m_diffuseParameter;
+		EffectParameter* m_diffuseColorParameter;
 
 	public:
 
@@ -58,6 +63,18 @@ namespace Graphics
 		}
 
 		void SetTexture(Texture2D* texture);
+
+		void SetDiffuse(const Nxna::Vector3& color)
+		{
+			m_diffuse = color;
+			m_colorDirty = true;
+		}
+
+		void SetAlpha(float alpha)
+		{
+			m_alpha = alpha;
+			m_colorDirty = true;
+		}
 
 	protected:
 

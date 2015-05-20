@@ -13,9 +13,10 @@ namespace Graphics
 {
 namespace Direct3D11
 {
-	D3D11ConstantBuffer::D3D11ConstantBuffer(Direct3D11Device* device, bool vertex, bool pixel, int sizeInBytes, int numParameters)
+	D3D11ConstantBuffer::D3D11ConstantBuffer(Direct3D11Device* device, int index, bool vertex, bool pixel, int sizeInBytes, int numParameters)
 	{
 		m_device = device;
+		m_index = index;
 		m_vertex = vertex;
 		m_pixel = pixel;
 
@@ -32,16 +33,12 @@ namespace Direct3D11
 
 		m_sizeInBytes = sizeInBytes;
 		m_workingBuffer = new byte[sizeInBytes];
-		m_parameterIndices = new int[numParameters];
-		m_parameterOffsets = new int[numParameters];
 		m_numParameters = numParameters;
 	}
 
 	D3D11ConstantBuffer::~D3D11ConstantBuffer()
 	{
 		delete[] m_workingBuffer;
-		delete[] m_parameterIndices;
-		delete[] m_parameterOffsets;
 		m_buffer->Release();
 	}
 
@@ -49,10 +46,13 @@ namespace Direct3D11
 	{
 		for (unsigned int i = 0; i < parameters.size(); i++)
 		{
-			int index = m_parameterIndices[i];
-			int offset = m_parameterOffsets[i];
-
-			setParameter(offset, parameters[i]);
+			if (parameters[i]->GetConstantBufferIndex() == m_index)
+			{
+				if (parameters[i]->GetType() == EffectParameterType::Single)
+				{
+					parameters[i]->GetValueSingleArray((float*)&m_workingBuffer[parameters[i]->GetConstantBufferOffset()], parameters[i]->GetNumElements());
+				}
+			}
 		}
 	}
 	
@@ -76,20 +76,11 @@ namespace Direct3D11
 			context->PSSetConstantBuffers(slot, 1, &m_buffer);
 	}
 
-	void D3D11ConstantBuffer::SetParameterOffset(int parameterIndex, int offset)
-	{
-		if (parameterIndex < 0 || parameterIndex >= m_numParameters)
-			throw ArgumentException("parameterIndex");
-		if (offset < 0 || offset >= m_sizeInBytes)
-			throw ArgumentException("offset");
-
-		m_parameterOffsets[parameterIndex] = offset;
-	}
-
 	void D3D11ConstantBuffer::setParameter(int offset, EffectParameter* param)
 	{
 		if (param->GetType() == EffectParameterType::Single)
 		{
+			assert(offset >= 0);
 			param->GetValueSingleArray((float*)&m_workingBuffer[offset], param->GetNumElements());
 		}
 	}

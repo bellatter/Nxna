@@ -35,7 +35,7 @@ namespace Pvt
 		
 		virtual int ScoreProfile(ShaderProfile profile) = 0;
 
-		static EffectParameter* CreateParameter(Effect* parent, EffectParameterType type, int numElements, void* handle, const char* name);
+		static EffectParameter* CreateParameter(Effect* parent, EffectParameterType type, int numElements, void* handle, const char* name, int constantBufferIndex, int constantBufferOffset);
 	
 	protected:
 		int* GetRawValue(EffectParameter* parameter);

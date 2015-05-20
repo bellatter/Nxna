@@ -63,24 +63,17 @@ namespace Direct3D11
 
 	void HlslEffect::AddConstantBuffer(bool vertex, bool pixel, int sizeInBytes, int numParameters)
 	{
-		ConstantBuffer cbuffer(new D3D11ConstantBuffer(m_device, vertex, pixel, sizeInBytes, numParameters));
+		ConstantBuffer cbuffer(new D3D11ConstantBuffer(m_device, GetConstantBuffers().size(), vertex, pixel, sizeInBytes, numParameters));
 		GetConstantBuffers().push_back(cbuffer);
 	}
 
 	EffectParameter* HlslEffect::AddParameter(const char* name, EffectParameterType type, int numElements, int constantBufferIndex, int constantBufferConstantIndex, int constantBufferOffset)
 	{
-		EffectParameter* parameter = CreateParameter(m_parent, type, numElements, nullptr, name);
+		EffectParameter* parameter = CreateParameter(m_parent, type, numElements, nullptr, name, constantBufferIndex, constantBufferOffset);
 
 		m_parameters.insert(ParamMap::value_type(parameter->Name.c_str(), parameter));
 
 		m_parameterList.push_back(parameter);
-
-		if (type != EffectParameterType::Texture
-			&& type != EffectParameterType::Texture1D
-			&& type != EffectParameterType::Texture2D
-			&& type != EffectParameterType::Texture3D
-			&& type != EffectParameterType::TextureCube)
-			static_cast<D3D11ConstantBuffer*>(GetConstantBuffers()[constantBufferIndex].GetPmpl())->SetParameterOffset(constantBufferConstantIndex, constantBufferOffset);
 
 		return parameter;
 	}

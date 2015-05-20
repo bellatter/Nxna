@@ -1,5 +1,6 @@
 #include "OpenGL.h"
 #include "GlIndexBuffer.h"
+#include <cassert>
 
 namespace Nxna
 {
@@ -36,18 +37,24 @@ namespace OpenGl
 		else
 			glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offsetInBytes, indexCount * (int)m_elementSize, data);
 
-		m_indexCount = indexCount;
+		int totalIndexCount = indexCount + offsetInBytes / (int)m_elementSize;
 
 #ifndef NDEBUG
-		m_indices = new int[indexCount];
+		if (m_indices == nullptr)
+			m_indices = new int[totalIndexCount];
+		else
+			assert(totalIndexCount <= m_indexCount);
+
 		for (int i = 0; i < indexCount; i++)
 		{
 			if (m_elementSize == IndexElementSize::SixteenBits)
-				m_indices[i] = ((short*)data)[i];
+				m_indices[i + offsetInBytes / 2] = ((short*)data)[i];
 			else
-				m_indices[i] = ((int*)data)[i];
+				m_indices[i + offsetInBytes / 4] = ((int*)data)[i];
 		}
 #endif
+
+		m_indexCount = totalIndexCount;
 	}
 
 	void GlIndexBuffer::Bind() const

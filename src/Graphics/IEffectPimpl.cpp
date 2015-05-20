@@ -8,9 +8,9 @@ namespace Graphics
 {
 namespace Pvt
 {
-	EffectParameter* IEffectPimpl::CreateParameter(Effect* parent, EffectParameterType type, int numElements, void* handle, const char* name)
+	EffectParameter* IEffectPimpl::CreateParameter(Effect* parent, EffectParameterType type, int numElements, void* handle, const char* name, int constantBufferIndex, int constantBufferOffset)
 	{
-		return new EffectParameter(parent, type, numElements, handle, name);
+		return new EffectParameter(parent, type, numElements, handle, name, constantBufferIndex, constantBufferOffset);
 	}
 
 	int* IEffectPimpl::GetRawValue(EffectParameter* parameter)
