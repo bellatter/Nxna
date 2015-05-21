@@ -10,7 +10,7 @@ namespace Input
 		unsigned int stateIndex = (int)key >> 5;
 		if (stateIndex >= 8) return KeyState::Up;
 
-		unsigned int blah = 1 << (int)key;
+		unsigned int blah = 1 << ((int)key & 0x1f);
 		if ((blah & m_states[stateIndex]) == 0)
 			return KeyState::Up;
 
@@ -38,7 +38,7 @@ namespace Input
 	void Keyboard::InjectKeyDown(Keys key)
 	{
 		unsigned int stateIndex = (unsigned int)key >> 5;
-		m_current.m_states[stateIndex] |= ((1 << (unsigned int)key) & 0xffffffffff);
+		m_current.m_states[stateIndex] |= (1 << ((unsigned int)key & 0x1f));
 
 		if (m_bufferedKeyNext < 10)
 		{
@@ -50,7 +50,7 @@ namespace Input
 	void Keyboard::InjectKeyUp(Keys key)
 	{
 		unsigned int stateIndex = (unsigned int)key >> 5;
-		m_current.m_states[stateIndex] &= ~((1 << (unsigned int)key) & 0xffffffffff);
+		m_current.m_states[stateIndex] &= ~(1 << ((unsigned int)key & 0x1f));
 	}
 }
 }
