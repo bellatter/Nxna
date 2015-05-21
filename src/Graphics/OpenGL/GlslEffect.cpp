@@ -16,6 +16,7 @@ namespace OpenGl
 {
 	char GlslEffect::m_attribNameBuffer[];
 	int GlslEffect::m_boundProgramIndex = -1;
+	int GlslEffect::m_activeTextureUnit = 0;
 
 	GlslEffect::GlslEffect(OpenGlDevice* device, Effect* parent, const char* vertexSource, const char* fragmentSource)
 		: Pvt::IEffectPimpl(parent)
@@ -231,7 +232,11 @@ namespace OpenGl
 						}
 					}
 
-					glActiveTexture(GL_TEXTURE0 + usedTextureUnits);
+					if (m_activeTextureUnit != usedTextureUnits)
+					{
+						glActiveTexture(GL_TEXTURE0 + usedTextureUnits);
+						m_activeTextureUnit = usedTextureUnits;
+					}
 					glBindTexture(GL_TEXTURE_2D, static_cast<GlTexture2D*>(param->GetValueTexture2D()->GetPimpl())->GetGlTexture());
 					glUniform1i((*itr).Uniform, usedTextureUnits);
 
@@ -269,7 +274,11 @@ namespace OpenGl
 						}
 					}
 
-					glActiveTexture(GL_TEXTURE0 + usedTextureUnits);
+					if (m_activeTextureUnit != usedTextureUnits)
+					{
+						glActiveTexture(GL_TEXTURE0 + usedTextureUnits);
+						m_activeTextureUnit = usedTextureUnits;
+					}
 					glBindTexture(GL_TEXTURE_2D, glTex->GetGlTexture());
 					
 					glTex->SetSamplerState(samplerStates->Get(usedTextureUnits));
