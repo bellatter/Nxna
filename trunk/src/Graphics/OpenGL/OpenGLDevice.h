@@ -30,6 +30,8 @@ namespace OpenGl
 		int m_glslVersion;
 		char m_vendor[128];
 		char m_renderer[128];
+		BlendState m_cachedBlendState;
+		DepthStencilState m_cachedDepthStencilState;
 		
 #ifdef USING_OPENGLES
 		bool m_defaultFboSet;

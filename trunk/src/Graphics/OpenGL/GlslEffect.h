@@ -82,6 +82,7 @@ namespace OpenGl
 		static const int MAX_ATTRIB_SIZE = 256;
 		static char m_attribNameBuffer[MAX_ATTRIB_SIZE];
 		static int m_boundProgramIndex;
+		static int m_activeTextureUnit;
 
 	public:
 		GlslEffect(OpenGlDevice* device, Effect* parent, const char* vertexSource, const char* fragmentSource);

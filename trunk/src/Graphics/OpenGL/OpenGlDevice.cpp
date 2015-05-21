@@ -155,53 +155,45 @@ namespace OpenGl
 
 	DepthStencilState OpenGlDevice::GetDepthStencilState()
 	{
-		DepthStencilState result;
-
-		int func;
-		glGetIntegerv(GL_DEPTH_FUNC, &func);
-		result.DepthBufferFunction = convertCompareFunction(func);
-		result.DepthBufferEnable = glIsEnabled(GL_DEPTH_TEST) > 0;
-
-		int mask;
-		glGetIntegerv(GL_DEPTH_WRITEMASK, &mask);
-		result.DepthBufferWriteEnable = mask > 0;
-
-		result.StencilEnable = glIsEnabled(GL_STENCIL_TEST) > 0;
-
-		int ref;
-		glGetIntegerv(GL_STENCIL_REF, &ref);
-		result.ReferenceStencil = ref;
-
-		glGetIntegerv(GL_STENCIL_FUNC, &func);
-		result.StencilFunction = convertCompareFunction(func);
-
-		int pass;
-		glGetIntegerv(GL_STENCIL_PASS_DEPTH_PASS, &pass);
-		result.StencilPass = convertStencilOperation(pass);
-
-		return result;
+		return m_cachedDepthStencilState;
 	}
 
 	void OpenGlDevice::SetDepthStencilState(const DepthStencilState* state)
 	{
 		// depth buffer stuff
-		if (state->DepthBufferEnable)
-			glEnable(GL_DEPTH_TEST);
-		else
-			glDisable(GL_DEPTH_TEST);
+		if (state->DepthBufferEnable != m_cachedDepthStencilState.DepthBufferEnable)
+		{	
+			if (state->DepthBufferEnable)
+				glEnable(GL_DEPTH_TEST);
+			else
+				glDisable(GL_DEPTH_TEST);
+		}
 
-		glDepthFunc(convertCompareFunction(state->DepthBufferFunction));
-		glDepthMask(state->DepthBufferWriteEnable ? GL_TRUE : GL_FALSE);
+		if (state->DepthBufferFunction != m_cachedDepthStencilState.DepthBufferFunction)
+			glDepthFunc(convertCompareFunction(state->DepthBufferFunction));
+
+		if (state->DepthBufferWriteEnable != m_cachedDepthStencilState.DepthBufferWriteEnable)
+			glDepthMask(state->DepthBufferWriteEnable ? GL_TRUE : GL_FALSE);
 		
 		// stencil buffer stuff
-		if (state->StencilEnable)
-			glEnable(GL_STENCIL_TEST);
-		else
-			glDisable(GL_STENCIL_TEST);
+		if (state->StencilEnable != m_cachedDepthStencilState.StencilEnable)
+		{
+			if (state->StencilEnable)
+				glEnable(GL_STENCIL_TEST);
+			else
+				glDisable(GL_STENCIL_TEST);
+		}
 
-		glStencilFunc(convertCompareFunction(state->StencilFunction), state->ReferenceStencil, 0xffffffff);
+		if (state->StencilFunction != m_cachedDepthStencilState.StencilFunction ||
+			state->ReferenceStencil != m_cachedDepthStencilState.ReferenceStencil)
+			glStencilFunc(convertCompareFunction(state->StencilFunction), state->ReferenceStencil, 0xffffffff);
 
-		glStencilOp(convertStencilOperation(state->StencilFail), convertStencilOperation(state->StencilDepthBufferFail), convertStencilOperation(state->StencilPass));
+		if (state->StencilFail != m_cachedDepthStencilState.StencilFail ||
+			state->StencilDepthBufferFail != m_cachedDepthStencilState.StencilDepthBufferFail ||
+			state->StencilPass != m_cachedDepthStencilState.StencilPass)
+			glStencilOp(convertStencilOperation(state->StencilFail), convertStencilOperation(state->StencilDepthBufferFail), convertStencilOperation(state->StencilPass));
+
+		m_cachedDepthStencilState = *state;
 	}
 
 	void OpenGlDevice::SetIndices(const IndexBuffer* indices)
@@ -389,20 +381,32 @@ namespace OpenGl
 	{
 		assert(blendState != nullptr);
         GlException::ThrowIfError(__FILE__, __LINE__); 
-        
-		int colorSrc = convertBlendMode(blendState->ColorSourceBlend);
-        int colorDest = convertBlendMode(blendState->ColorDestinationBlend);
-        int alphaSrc = convertBlendMode(blendState->AlphaSourceBlend);
-        int alphaDest = convertBlendMode(blendState->AlphaDestinationBlend);
 
-        glBlendFuncSeparate(colorSrc, colorDest, alphaSrc, alphaDest);
-        
-        GlException::ThrowIfError(__FILE__, __LINE__);
-        
-        glBlendEquationSeparate(convertBlendFunc(blendState->ColorBlendFunction),
-            convertBlendFunc(blendState->AlphaBlendFunction));
+		if (blendState->ColorSourceBlend != m_cachedBlendState.ColorSourceBlend ||
+			blendState->ColorDestinationBlend != m_cachedBlendState.ColorDestinationBlend ||
+			blendState->AlphaSourceBlend != m_cachedBlendState.AlphaSourceBlend ||
+			blendState->AlphaDestinationBlend != m_cachedBlendState.AlphaDestinationBlend)
+		{
+			int colorSrc = convertBlendMode(blendState->ColorSourceBlend);
+			int colorDest = convertBlendMode(blendState->ColorDestinationBlend);
+			int alphaSrc = convertBlendMode(blendState->AlphaSourceBlend);
+			int alphaDest = convertBlendMode(blendState->AlphaDestinationBlend);
 
-		GlException::ThrowIfError(__FILE__, __LINE__);
+			glBlendFuncSeparate(colorSrc, colorDest, alphaSrc, alphaDest);
+
+			GlException::ThrowIfError(__FILE__, __LINE__);
+		}
+        
+		if (blendState->ColorBlendFunction != m_cachedBlendState.ColorBlendFunction ||
+			blendState->AlphaBlendFunction != m_cachedBlendState.AlphaBlendFunction)
+		{
+			glBlendEquationSeparate(convertBlendFunc(blendState->ColorBlendFunction),
+				convertBlendFunc(blendState->AlphaBlendFunction));
+
+			GlException::ThrowIfError(__FILE__, __LINE__);
+		}
+
+		m_cachedBlendState = *blendState;
 	}
 
 	void OpenGlDevice::SetRenderTarget(RenderTarget2D* renderTarget)
