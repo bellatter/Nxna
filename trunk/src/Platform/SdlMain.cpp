@@ -8,9 +8,9 @@
 #include <SDL.h>
 #endif
 
-extern int NxnaMain(int argc, const char* argv[]);
+extern int NxnaMain(int argc, const char** argv);
 
-int main(int argc, const char* argv[])
+int main(int argc, const char** argv)
 {
 	return NxnaMain(argc, argv);
 }
