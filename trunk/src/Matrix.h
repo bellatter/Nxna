@@ -52,6 +52,7 @@ namespace Nxna
 		static Matrix CreatePerspective(float width, float height, float nearPlaneDistance, float farPlaneDistance);
 		static Matrix CreateTranslation(float x, float y, float z) { Matrix m; CreateTranslation(x, y, z, m); return m; }
 		static void CreateTranslation(float x, float y, float z, Matrix& result);
+		static Matrix CreateTranslation(const Vector3& position) { Matrix m; CreateTranslation(position.X, position.Y, position.Z, m); return m; }
 		static Matrix CreateScale(float scale) { Matrix m; CreateScale(scale, scale, scale, m); return m; }
 		static void CreateScale(float x, float y, float z, Matrix& result);
 		static Matrix CreateRotationX(float rotation) { Matrix m; CreateRotationX(rotation, m); return m; }
