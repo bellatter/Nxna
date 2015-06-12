@@ -76,5 +76,26 @@ namespace Content
 
 		return new XnbReader(fs, name, fullName.c_str(), this);
 	}
+
+	FileStream* ContentManager::loadRaw(const char* name)
+	{
+		std::string fullName = m_rootDirectory + name;
+
+#if defined NXNA_PLATFORM_ANDROID
+		FileStream* fs = AndroidFileSystem::Open(fullName.c_str());
+#else
+		FileStream* fs = new FileStream(fullName.c_str());
+#endif
+
+		if (fs == nullptr)
+			return nullptr;
+		if (fs->IsOpen() == false)
+		{
+			delete fs;
+			return nullptr;
+		}
+
+		return fs;
+	}
 }
 }

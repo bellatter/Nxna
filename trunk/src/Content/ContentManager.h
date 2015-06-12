@@ -6,6 +6,7 @@
 #include <string>
 #include "../NxnaConfig.h"
 #include "XnbReader.h"
+#include "FileStream.h"
 #include "../Exception.h"
 
 namespace Nxna
@@ -21,6 +22,7 @@ namespace Content
 		virtual ~IContentReader() { }
 		virtual const char* GetTypeName() = 0;
 		virtual void* Read(XnbReader* reader) = 0;
+		virtual void* ReadRaw(FileStream* /* stream */) { return nullptr; }
 		virtual void Destroy(void* resource) = 0;
 	};
 
@@ -87,6 +89,38 @@ namespace Content
 			throw ContentException("Don't know how to load this content");
 		}
 
+		// Loads an uncompiled (as in non-XNB) resource. Be sure to include the extension in the filename.
+		// Returns nullptr if the resource couldn't be loaded.
+		// This is not part of the XNA API.
+		template<typename T>
+		T* TryLoadRaw(const char* name)
+		{
+			// is the resource already loaded?
+			ResourceMap::iterator r = m_resources.find(name);
+			if (r != m_resources.end())
+				return static_cast<T*>((*r).second.second);
+
+			// the resource hasn't been loaded yet, so load it
+			const char* typeName = typeid(T).name();
+			LoaderMap::iterator loader = m_loaders.find(typeName);
+
+			if (loader != m_loaders.end())
+			{
+				// load the raw resource data from a file
+				FileStream* stream = loadRaw(name);
+				if (stream == nullptr) return nullptr;
+
+				T* resource = static_cast<T*>((*loader).second->ReadRaw(stream));
+				m_resources.insert(ResourceMap::value_type(name, std::pair<IContentReader*, void*>((*loader).second, resource)));
+
+				delete stream;
+
+				return resource;
+			}
+
+			return nullptr;
+		}
+
 		void Unload();
 
 		// Regular XNA provides the ability to create custom ContentReaders. NXNA needs that too.
@@ -104,6 +138,7 @@ namespace Content
 	private:
 
 		XnbReader* load(const char* name);
+		FileStream* loadRaw(const char* name);
 	};
 }
 }
