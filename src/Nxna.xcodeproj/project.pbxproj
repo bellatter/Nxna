@@ -133,8 +133,6 @@
 		A2963B6216ADF35F00817CFC /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808E21512E54E005D983A /* Vector3.cpp */; };
 		A2963B6416ADF35F00817CFC /* Vector4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808E41512E54E005D983A /* Vector4.cpp */; };
 		A2963B6916ADF35F00817CFC /* NaClMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809461512E6F8005D983A /* NaClMain.cpp */; };
-		A2963B6F16ADF35F00817CFC /* IOSGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809551512E726005D983A /* IOSGame.cpp */; };
-		A2963B7116ADF35F00817CFC /* IOSOpenGlWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809571512E726005D983A /* IOSOpenGlWindow.cpp */; };
 		A2963B7616ADF35F00817CFC /* GamePad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809741512E7EF005D983A /* GamePad.cpp */; };
 		A2963B7816ADF35F00817CFC /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809761512E7EF005D983A /* Keyboard.cpp */; };
 		A2963B7B16ADF35F00817CFC /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809791512E7EF005D983A /* Mouse.cpp */; };
@@ -1038,8 +1036,6 @@
 				A2963B6216ADF35F00817CFC /* Vector3.cpp in Sources */,
 				A2963B6416ADF35F00817CFC /* Vector4.cpp in Sources */,
 				A2963B6916ADF35F00817CFC /* NaClMain.cpp in Sources */,
-				A2963B6F16ADF35F00817CFC /* IOSGame.cpp in Sources */,
-				A2963B7116ADF35F00817CFC /* IOSOpenGlWindow.cpp in Sources */,
 				A2963B7616ADF35F00817CFC /* GamePad.cpp in Sources */,
 				A2FBA21118CBD6090019B993 /* SpriteEffect.cpp in Sources */,
 				A2963B7816ADF35F00817CFC /* Keyboard.cpp in Sources */,
