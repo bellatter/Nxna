@@ -265,7 +265,7 @@ namespace Audio
 #endif
 	}
 
-	SoundEffect* SoundEffect::LoadFrom(Content::Stream* stream)
+	SoundEffect* SoundEffect::LoadFrom(Content::Stream* stream, bool isXNB)
 	{
 #ifndef DISABLE_OPENAL
 		SoundEffect* effect = new SoundEffect();
@@ -274,11 +274,13 @@ namespace Audio
 			m_workingData.resize(100 * 1024); // 100 KB
 
 		int formatSize = stream->ReadInt32();
-		if (formatSize < 18)
+		if (isXNB && formatSize != 18)
+			throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
+		else if (formatSize != 18 && formatSize != 16)
 			throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
 
 		WAVEFORMATEX format;
-		stream->Read((byte*)&format, 18);
+		stream->Read((byte*)&format, formatSize);
 
 		short samplesPerBlock = 0;
 		if (format.FormatTag == WAVE_FORMAT_ADPCM)
@@ -313,6 +315,12 @@ namespace Audio
 		{
 			if (format.BitsPerSample != 4)
 				throw Nxna::Content::ContentException("Sound Effect is not in a supported format.");
+		}
+
+		if (!isXNB)
+		{
+			// read the data section header
+			int dataMagic = stream->ReadInt32();
 		}
 
 		int dataSize = stream->ReadInt32();
@@ -374,7 +382,20 @@ namespace Audio
 	{
 		stream->ReadTypeID();
 
-		return SoundEffect::LoadFrom(stream->GetStream());
+		return SoundEffect::LoadFrom(stream->GetStream(), true);
+	}
+
+	void* SoundEffectLoader::ReadRaw(Content::FileStream* stream)
+	{
+		// read the raw WAV file, which has a RIFF header
+		// TODO: this only handles basic PCM encoded WAV files.
+		// It should support other encodings, like ADPCM
+		auto riff = stream->ReadInt32();
+		auto chuckSize = stream->ReadInt32();
+		auto waveID = stream->ReadInt32();
+		auto riffType = stream->ReadInt32();
+
+		return SoundEffect::LoadFrom(stream, false);
 	}
 
 	void SoundEffectLoader::Destroy(void* resource)
