@@ -68,6 +68,8 @@ namespace OpenGl
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (status != GL_FRAMEBUFFER_COMPLETE)
 			throw GraphicsException("Unable to create render target");
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 }
 }
