@@ -136,6 +136,11 @@ namespace Graphics
 			memcpy(m_value, &value, sizeof(value));
 		}
 
+		void SetValue(const Vector3& value)
+		{
+			memcpy(m_value, &value, sizeof(value));
+		}
+
 		void SetValue(const Vector4& value) 
 		{
 			memcpy(m_value, &value, sizeof(value));
