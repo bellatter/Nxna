@@ -274,10 +274,17 @@ namespace Audio
 			m_workingData.resize(100 * 1024); // 100 KB
 
 		int formatSize = stream->ReadInt32();
-		if (isXNB && formatSize != 18)
-			throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
-		else if (formatSize != 18 && formatSize != 16)
-			throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
+		if (isXNB)
+		{
+			if (formatSize < 18)
+				throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
+			formatSize = 18;
+		}
+		else
+		{
+			if (formatSize != 18 && formatSize != 16)
+				throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
+		}
 
 		WAVEFORMATEX format;
 		stream->Read((byte*)&format, formatSize);
@@ -368,6 +375,8 @@ namespace Audio
 		alBufferData((ALuint)effect->m_buffer, bformat, buffer, dataSize, format.SamplesPerSec);
 
 		Nxna::NxnaTempMemoryPool::ReleaseMemory();
+
+		effect->m_duration = (float)dataSize / format.SamplesPerSec / (format.BitsPerSample / 8) / format.Channels;
 #endif
 
 

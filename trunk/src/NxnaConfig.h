@@ -116,4 +116,26 @@ __pragma(warning(disable:4201))
 #define NXNA_DISABLE_D3D11
 #endif
 
+
+// determine whether this is 32-bit or 64-bit
+#ifdef _WIN32
+#ifdef _WIN64
+#define NXNA_64BIT
+#else
+#define NXNA_32BIT
+#endif
+#endif
+#if __GNUC__
+#if __x86_64__ || __ppc64__
+#define NXNA_64BIT
+#else
+#define NXNA_32BIT
+#endif
+#endif
+
+// make sure either NXNA_32BIT or NXNA_64BIT is enabled
+#if !defined NXNA_32BIT && !defined NXNA_64BIT
+#error Unable to determine whether NXNA is being compiled in 32-bit or 64-bit
+#endif
+
 #endif // NXNACONFIG_H
