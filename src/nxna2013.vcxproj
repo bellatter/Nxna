@@ -176,6 +176,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Content\ContentManager.h" />
     <ClInclude Include="Content\FileStream.h" />
+    <ClInclude Include="Content\MappedFileStream.h" />
     <ClInclude Include="Content\XnbReader.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameTime.h" />
@@ -273,6 +274,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Content\ContentManager.cpp" />
     <ClCompile Include="Content\FileStream.cpp" />
+    <ClCompile Include="Content\MappedFileStream.cpp" />
     <ClCompile Include="Content\XnbReader.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graphics\AlphaTestEffect.cpp" />
@@ -320,6 +322,7 @@
     <ClCompile Include="Media\OggMediaPlayer.cpp" />
     <ClCompile Include="Media\Song.cpp" />
     <ClCompile Include="MemoryAllocator.cpp" />
+    <ClCompile Include="NxnaUtils.cpp" />
     <ClCompile Include="Platform\iOS\IOSOpenGlWindow.cpp" />
     <ClCompile Include="Platform\NaClMain.cpp" />
     <ClCompile Include="Platform\SdlMain.cpp" />
