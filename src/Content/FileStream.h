@@ -2,6 +2,7 @@
 #define CONTENT_FILESTREAM_H
 
 #include "../NxnaConfig.h"
+#include <cstddef>
 
 NXNA_DISABLE_OVERRIDE_WARNING
 

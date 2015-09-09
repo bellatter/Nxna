@@ -9,7 +9,11 @@ namespace Content
 {
 	class MappedFileStream : public Stream
 	{
+#ifdef _WIN32
 		void* m_fp;
+#else
+		int m_fd;
+#endif
 		void* m_mapping;
 		void* m_baseAddress;
 		int m_size;
@@ -49,4 +53,4 @@ namespace Content
 }
 }
 
-#endif NXNA_CONTENT_MAPPEDFILESTREAM_H
+#endif // NXNA_CONTENT_MAPPEDFILESTREAM_H

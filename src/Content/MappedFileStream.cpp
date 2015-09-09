@@ -4,7 +4,14 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#else
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <fcntl.h>
+#include <unistd.h>
 #endif
+#include <cstring>
 
 namespace Nxna
 {
@@ -12,7 +19,11 @@ namespace Content
 {
 	MappedFileStream::MappedFileStream()
 	{
+#ifdef _WIN32
 		m_fp = nullptr;
+#else
+		m_fd = -1;
+#endif
 		m_mapping = nullptr;
 		m_baseAddress = nullptr;
 		m_size = 0;
@@ -21,7 +32,11 @@ namespace Content
 
 	MappedFileStream::MappedFileStream(const char* path)
 	{
+#ifdef _WIN32
 		m_fp = nullptr;
+#else
+		m_fd = -1;
+#endif
 		m_size = 0;
 
 		Load(path);
@@ -31,9 +46,14 @@ namespace Content
 	{
 		if (IsOpen())
 		{
+#ifdef _WIN32
 			UnmapViewOfFile(m_baseAddress);
 			CloseHandle(m_mapping);
 			CloseHandle(m_fp);
+#else
+			munmap(m_mapping, m_size);
+			close(m_fd);
+#endif
 		}
 	}
 
@@ -41,7 +61,11 @@ namespace Content
 	{
 		if (IsOpen() == false)
 		{
+#ifdef _WIN32
 			m_fp = nullptr;
+#else
+			m_fd = -1;
+#endif
 			m_mapping = nullptr;
 			m_baseAddress = nullptr;
 			m_size = 0;
@@ -74,7 +98,29 @@ namespace Content
 
 			m_size = GetFileSize(m_fp, nullptr);
 #else
-			m_fp = fopen(path, "rb");
+			m_fd = open(path, O_RDONLY, 0);
+			if (m_fd == -1)
+				return;
+			
+			// get the file size
+			struct stat statInfo;
+			if (fstat(m_fd, &statInfo) < 0)
+			{
+				close(m_fd);
+				m_fd = -1;
+				return;
+			}
+			
+			m_baseAddress = mmap(nullptr, statInfo.st_size, PROT_READ, MAP_PRIVATE, m_fd, 0);
+			if (m_baseAddress == MAP_FAILED)
+			{
+				close(m_fd);
+				m_fd = -1;
+				m_baseAddress = nullptr;
+				return;
+			}
+			
+			m_size = statInfo.st_size;
 #endif
 			m_bytesRead = 0;
 		}
@@ -82,7 +128,11 @@ namespace Content
 
 	bool MappedFileStream::IsOpen()
 	{
+#ifdef _WIN32
 		return m_fp != nullptr;
+#else
+		return m_fd != -1;
+#endif
 	}
 
 	int MappedFileStream::Read(byte* destination, int length)
