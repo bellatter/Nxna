@@ -310,6 +310,9 @@
     </ClInclude>
     <ClInclude Include="NxnaUtils.h" />
     <ClInclude Include="MemoryAllocator.h" />
+    <ClInclude Include="Content\MappedFileStream.h">
+      <Filter>Content</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp">
@@ -541,5 +544,9 @@
       <Filter>Graphics\OpenGl\glew</Filter>
     </ClCompile>
     <ClCompile Include="MemoryAllocator.cpp" />
+    <ClCompile Include="Content\MappedFileStream.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="NxnaUtils.cpp" />
   </ItemGroup>
 </Project>

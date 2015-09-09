@@ -7,6 +7,7 @@
 #include "../NxnaConfig.h"
 #include "XnbReader.h"
 #include "FileStream.h"
+#include "MappedFileStream.h"
 #include "../Exception.h"
 
 namespace Nxna

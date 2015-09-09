@@ -6,4 +6,12 @@
 #include "Content/FileStream.h"
 #include "Utils/StopWatch.h"
 
+namespace Nxna
+{
+namespace Utils
+{
+	unsigned int GetUTF8Character(const char* string, int position, unsigned int* result);
+}
+}
+
 #endif // NXNAUTILS_H
