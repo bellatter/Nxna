@@ -118,6 +118,14 @@
 		A28809A81512E83C005D983A /* OpenGLDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = A28809951512E83C005D983A /* OpenGLDevice.h */; };
 		A28809AC1512E8A7005D983A /* TouchPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28809AA1512E8A7005D983A /* TouchPanel.cpp */; };
 		A28809AD1512E8A7005D983A /* TouchPanel.h in Headers */ = {isa = PBXBuildFile; fileRef = A28809AB1512E8A7005D983A /* TouchPanel.h */; };
+		A291ECE91BA0E458000ED60F /* MappedFileStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A291ECE71BA0E458000ED60F /* MappedFileStream.cpp */; };
+		A291ECEA1BA0E458000ED60F /* MappedFileStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A291ECE71BA0E458000ED60F /* MappedFileStream.cpp */; };
+		A291ECEB1BA0E458000ED60F /* MappedFileStream.h in Headers */ = {isa = PBXBuildFile; fileRef = A291ECE81BA0E458000ED60F /* MappedFileStream.h */; };
+		A291ECEC1BA0E458000ED60F /* MappedFileStream.h in Headers */ = {isa = PBXBuildFile; fileRef = A291ECE81BA0E458000ED60F /* MappedFileStream.h */; };
+		A291ECF71BA11FD6000ED60F /* NxnaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A291ECF51BA11FD5000ED60F /* NxnaUtils.cpp */; };
+		A291ECF81BA11FD6000ED60F /* NxnaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A291ECF51BA11FD5000ED60F /* NxnaUtils.cpp */; };
+		A291ECF91BA11FD6000ED60F /* NxnaUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = A291ECF61BA11FD6000ED60F /* NxnaUtils.h */; };
+		A291ECFA1BA11FD6000ED60F /* NxnaUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = A291ECF61BA11FD6000ED60F /* NxnaUtils.h */; };
 		A2963B4116ADEE9700817CFC /* MediaPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963B3D16ADEE9700817CFC /* MediaPlayer.cpp */; };
 		A2963B4216ADEE9700817CFC /* MediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963B3E16ADEE9700817CFC /* MediaPlayer.h */; };
 		A2963B4316ADEE9700817CFC /* Song.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963B3F16ADEE9700817CFC /* Song.cpp */; };
@@ -369,6 +377,10 @@
 		A28809951512E83C005D983A /* OpenGLDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLDevice.h; path = Graphics/OpenGL/OpenGLDevice.h; sourceTree = SOURCE_ROOT; };
 		A28809AA1512E8A7005D983A /* TouchPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TouchPanel.cpp; path = Input/Touch/TouchPanel.cpp; sourceTree = SOURCE_ROOT; };
 		A28809AB1512E8A7005D983A /* TouchPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TouchPanel.h; path = Input/Touch/TouchPanel.h; sourceTree = SOURCE_ROOT; };
+		A291ECE71BA0E458000ED60F /* MappedFileStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MappedFileStream.cpp; path = Content/MappedFileStream.cpp; sourceTree = SOURCE_ROOT; };
+		A291ECE81BA0E458000ED60F /* MappedFileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MappedFileStream.h; path = Content/MappedFileStream.h; sourceTree = SOURCE_ROOT; };
+		A291ECF51BA11FD5000ED60F /* NxnaUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NxnaUtils.cpp; sourceTree = SOURCE_ROOT; };
+		A291ECF61BA11FD6000ED60F /* NxnaUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NxnaUtils.h; sourceTree = SOURCE_ROOT; };
 		A2963B3D16ADEE9700817CFC /* MediaPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MediaPlayer.cpp; path = Media/MediaPlayer.cpp; sourceTree = SOURCE_ROOT; };
 		A2963B3E16ADEE9700817CFC /* MediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MediaPlayer.h; path = Media/MediaPlayer.h; sourceTree = SOURCE_ROOT; };
 		A2963B3F16ADEE9700817CFC /* Song.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Song.cpp; path = Media/Song.cpp; sourceTree = SOURCE_ROOT; };
@@ -485,6 +497,8 @@
 		A228BBF51505B54200045911 /* Nxna */ = {
 			isa = PBXGroup;
 			children = (
+				A291ECF51BA11FD5000ED60F /* NxnaUtils.cpp */,
+				A291ECF61BA11FD6000ED60F /* NxnaUtils.h */,
 				A243215E1AF165E40062820A /* MemoryAllocator.cpp */,
 				A243215F1AF165E40062820A /* MemoryAllocator.h */,
 				A2FBA1FD18CBD5C00019B993 /* Color.cpp */,
@@ -603,6 +617,8 @@
 		A228BC721505B68700045911 /* Content */ = {
 			isa = PBXGroup;
 			children = (
+				A291ECE71BA0E458000ED60F /* MappedFileStream.cpp */,
+				A291ECE81BA0E458000ED60F /* MappedFileStream.h */,
 				A28809671512E7AF005D983A /* ContentManager.cpp */,
 				A28809681512E7AF005D983A /* ContentManager.h */,
 				A28809691512E7AF005D983A /* FileStream.cpp */,
@@ -801,6 +817,7 @@
 				A2FBA21618CBD6420019B993 /* GlRenderTarget2D.h in Headers */,
 				A28809361512E64C005D983A /* Nxna-Prefix.pch in Headers */,
 				A288093D1512E68C005D983A /* AudioEmitter.h in Headers */,
+				A291ECF91BA11FD6000ED60F /* NxnaUtils.h in Headers */,
 				A288093E1512E68C005D983A /* AudioListener.h in Headers */,
 				A28809401512E68C005D983A /* AudioManager.h in Headers */,
 				A28809421512E68C005D983A /* SoundEffect.h in Headers */,
@@ -843,6 +860,7 @@
 				A2C6312B1735FC6400DB1FDB /* colourblock.h in Headers */,
 				A2C6312F1735FC6400DB1FDB /* colourfit.h in Headers */,
 				A2C631331735FC6400DB1FDB /* colourset.h in Headers */,
+				A291ECEB1BA0E458000ED60F /* MappedFileStream.h in Headers */,
 				A2C631371735FC6400DB1FDB /* maths.h in Headers */,
 				A2C6313B1735FC6400DB1FDB /* rangefit.h in Headers */,
 				A2C6313D1735FC6400DB1FDB /* simd_float.h in Headers */,
@@ -858,6 +876,7 @@
 				A2963C6816AE050F00817CFC /* OggVorbisDecoder.h in Headers */,
 				A2963C7316AE3F3A00817CFC /* SDLGame.h in Headers */,
 				A2963C7716AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */,
+				A291ECFA1BA11FD6000ED60F /* NxnaUtils.h in Headers */,
 				A2963CAF16B49D2600817CFC /* GlslSource.h in Headers */,
 				A2963CB416BE02A100817CFC /* IOSMediaPlayer.h in Headers */,
 				A2963CC016BE15CB00817CFC /* OggMediaPlayer.h in Headers */,
@@ -865,6 +884,7 @@
 				A2C631281735FC6400DB1FDB /* clusterfit.h in Headers */,
 				A2C6312C1735FC6400DB1FDB /* colourblock.h in Headers */,
 				A2FBA21718CBD6420019B993 /* GlRenderTarget2D.h in Headers */,
+				A291ECEC1BA0E458000ED60F /* MappedFileStream.h in Headers */,
 				A2C631301735FC6400DB1FDB /* colourfit.h in Headers */,
 				A2C631341735FC6400DB1FDB /* colourset.h in Headers */,
 				A2C631381735FC6400DB1FDB /* maths.h in Headers */,
@@ -1011,9 +1031,11 @@
 				A2C6312D1735FC6400DB1FDB /* colourfit.cpp in Sources */,
 				A2C631311735FC6400DB1FDB /* colourset.cpp in Sources */,
 				A2C631351735FC6400DB1FDB /* maths.cpp in Sources */,
+				A291ECF71BA11FD6000ED60F /* NxnaUtils.cpp in Sources */,
 				A2C631391735FC6400DB1FDB /* rangefit.cpp in Sources */,
 				A2C6313F1735FC6400DB1FDB /* singlecolourfit.cpp in Sources */,
 				A2C631431735FC6400DB1FDB /* squish.cpp in Sources */,
+				A291ECE91BA0E458000ED60F /* MappedFileStream.cpp in Sources */,
 				A2FBA21418CBD6420019B993 /* GlRenderTarget2D.cpp in Sources */,
 				A2FBA20618CBD6090019B993 /* AlphaTestEffect.cpp in Sources */,
 				A2FBA20818CBD6090019B993 /* BasicEffect.cpp in Sources */,
@@ -1028,6 +1050,7 @@
 				A2963B4F16ADF35F00817CFC /* Song.cpp in Sources */,
 				A2963B5216ADF35F00817CFC /* Game.cpp in Sources */,
 				A2963B5416ADF35F00817CFC /* IGraphicsDeviceManager.cpp in Sources */,
+				A291ECF81BA11FD6000ED60F /* NxnaUtils.cpp in Sources */,
 				A2963B5616ADF35F00817CFC /* MathHelper.cpp in Sources */,
 				A2963B5816ADF35F00817CFC /* Matrix.cpp in Sources */,
 				A2963B5D16ADF35F00817CFC /* Quaternion.cpp in Sources */,
@@ -1040,6 +1063,7 @@
 				A2FBA21118CBD6090019B993 /* SpriteEffect.cpp in Sources */,
 				A2963B7816ADF35F00817CFC /* Keyboard.cpp in Sources */,
 				A2963B7B16ADF35F00817CFC /* Mouse.cpp in Sources */,
+				A291ECEA1BA0E458000ED60F /* MappedFileStream.cpp in Sources */,
 				A2FBA20D18CBD6090019B993 /* IEffectPimpl.cpp in Sources */,
 				A2FC4B9E185973CC00258812 /* GraphicsAdapter.cpp in Sources */,
 				A2963B7D16ADF35F00817CFC /* TouchPanel.cpp in Sources */,
