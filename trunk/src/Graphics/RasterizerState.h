@@ -34,12 +34,14 @@ namespace Graphics
 		{
 			TheCullMode = CullMode::CullCounterClockwiseFace;
 			TheFillMode = FillMode::Solid;
+			ScissorTestEnable = false;
 
 			m_handle = nullptr;
 		}
 
 		CullMode TheCullMode;
 		FillMode TheFillMode;
+		bool ScissorTestEnable;
 
 		static const RasterizerState* GetCullClockwise()
 		{

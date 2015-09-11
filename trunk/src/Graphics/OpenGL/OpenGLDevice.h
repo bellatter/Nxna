@@ -32,6 +32,7 @@ namespace OpenGl
 		char m_renderer[128];
 		BlendState m_cachedBlendState;
 		DepthStencilState m_cachedDepthStencilState;
+		Rectangle m_scissorRectangle;
 		
 #ifdef USING_OPENGLES
 		bool m_defaultFboSet;
@@ -39,6 +40,8 @@ namespace OpenGl
 #endif
 
 		PresentationParameters m_presentationParameters;
+
+		int m_renderTargetWidth, m_renderTargetHeight;
 
 	public:
 		OpenGlDevice();
@@ -52,6 +55,9 @@ namespace OpenGl
 
 		virtual DepthStencilState GetDepthStencilState() override;
 		virtual void SetDepthStencilState(const DepthStencilState* state) override;
+
+		virtual Rectangle GetScissorRectangle() override;
+		virtual void SetScissorRectangle(Rectangle r) override;
 
 		virtual void SetIndices(const IndexBuffer* indices) override;
 

@@ -31,6 +31,8 @@ namespace OpenGl
 		m_defaultFboSet = false;
 		m_defaultFbo = 0;
 #endif
+
+		m_renderTargetWidth = m_renderTargetHeight = 0;
 	}
 
 #ifndef USING_OPENGLES
@@ -119,6 +121,9 @@ namespace OpenGl
 	void OpenGlDevice::UpdatePresentationParameters(const PresentationParameters& pp)
 	{
 		m_presentationParameters = pp;
+
+		m_renderTargetWidth = pp.BackBufferWidth;
+		m_renderTargetHeight = pp.BackBufferHeight;
 	}
 
 	CullMode OpenGlDevice::GetRasterizerState()
@@ -151,6 +156,11 @@ namespace OpenGl
             else
                 glFrontFace(GL_CW);
         }
+
+		if (state->ScissorTestEnable)
+			glEnable(GL_SCISSOR_TEST);
+		else
+			glDisable(GL_SCISSOR_TEST);
 	}
 
 	DepthStencilState OpenGlDevice::GetDepthStencilState()
@@ -194,6 +204,18 @@ namespace OpenGl
 			glStencilOp(convertStencilOperation(state->StencilFail), convertStencilOperation(state->StencilDepthBufferFail), convertStencilOperation(state->StencilPass));
 
 		m_cachedDepthStencilState = *state;
+	}
+
+	Rectangle OpenGlDevice::GetScissorRectangle()
+	{
+		return m_scissorRectangle;
+	}
+
+	void OpenGlDevice::SetScissorRectangle(Rectangle r)
+	{
+		m_scissorRectangle = r;
+
+		glScissor(r.X, m_renderTargetHeight - (r.Y + r.Height), r.Width, r.Height);
 	}
 
 	void OpenGlDevice::SetIndices(const IndexBuffer* indices)
@@ -433,6 +455,23 @@ namespace OpenGl
 
 			glBindFramebuffer(GL_FRAMEBUFFER, target->GetFBO());
 		}
+
+		m_scissorRectangle.X = 0;
+		m_scissorRectangle.Y = 0;
+		if (renderTarget != nullptr)
+		{
+			m_scissorRectangle.Width = renderTarget->GetWidth();
+			m_scissorRectangle.Height = renderTarget->GetHeight();
+		}
+		else
+		{
+			m_scissorRectangle.Width = m_presentationParameters.BackBufferWidth;
+			m_scissorRectangle.Height = m_presentationParameters.BackBufferHeight;
+		}
+		glScissor(0, 0, m_scissorRectangle.Width, m_scissorRectangle.Height);
+
+		m_renderTargetWidth = m_scissorRectangle.Width;
+		m_renderTargetHeight = m_scissorRectangle.Height;
 	}
 
 	void OpenGlDevice::Present() {}

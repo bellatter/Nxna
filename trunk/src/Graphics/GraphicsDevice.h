@@ -146,6 +146,9 @@ namespace Graphics
 			SetDepthStencilState(&state);
 		}
 
+		virtual Rectangle GetScissorRectangle() = 0;
+		virtual void SetScissorRectangle(Rectangle r) = 0;
+
 		virtual void SetIndices(const IndexBuffer* indices) = 0;
 
 		virtual void Clear(const Color& c) = 0;
