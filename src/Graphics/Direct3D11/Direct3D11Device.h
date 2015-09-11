@@ -70,6 +70,9 @@ namespace Direct3D11
 		virtual DepthStencilState GetDepthStencilState() override;
 		virtual void SetDepthStencilState(const DepthStencilState* state) override;
 
+		virtual Rectangle GetScissorRectangle() override;
+		virtual void SetScissorRectangle(Rectangle r) override;
+
 		virtual void SetIndices(const IndexBuffer* indices) override;
 
 		virtual void Clear(const Color& c) override;

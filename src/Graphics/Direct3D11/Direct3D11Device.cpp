@@ -231,6 +231,31 @@ namespace Direct3D11
 		m_depthStencilStateDirty = true;
 	}
 
+	Rectangle Direct3D11Device::GetScissorRectangle()
+	{
+		D3D11_RECT dr;
+		UINT n = 1;
+		m_deviceContext->RSGetScissorRects(&n, &dr);
+
+		Rectangle r;
+		r.X = dr.left;
+		r.Y = dr.top;
+		r.Width = dr.right - dr.left;
+		r.Height = dr.bottom - dr.top;
+		return r;
+	}
+
+	void Direct3D11Device::SetScissorRectangle(Rectangle r)
+	{
+		D3D11_RECT dr;
+		dr.left = r.X;
+		dr.top = r.Y;
+		dr.right = r.X + r.Width;
+		dr.bottom = r.Y + r.Height;
+		
+		m_deviceContext->RSSetScissorRects(1, &dr);
+	}
+
 	void Direct3D11Device::SetIndices(const IndexBuffer* indices)
 	{
 		m_indices = static_cast<const D3D11IndexBuffer*>(indices->GetPimpl());
@@ -563,6 +588,15 @@ namespace Direct3D11
 					rasterizerDesc.FrontCounterClockwise = true;
 				}
 				rasterizerDesc.DepthClipEnable = true;
+
+				if (m_rasterizerState.ScissorTestEnable)
+				{
+					rasterizerDesc.ScissorEnable = true;
+				}
+				else
+				{
+					rasterizerDesc.ScissorEnable = false;
+				}
 
 				if (FAILED(m_device->CreateRasterizerState(&rasterizerDesc, (ID3D11RasterizerState**)internalHandle)))
 					throw GraphicsException("Unable to create D3D11 rasterizer state", __FILE__, __LINE__);
