@@ -300,7 +300,7 @@ namespace Graphics
 
 		// TODO: do the sprite effects
 
-		Vector2 cursor(position.X, position.Y);
+		Vector2 cursor;
 
 		size_t len = strlen(text);
 		for (size_t i = 0; i < len; i++)
@@ -313,11 +313,12 @@ namespace Graphics
 
 			cursor.X += kerning.X * scale;
 
-			Vector2 position = cursor;
-			position.X += cropping.X * scale;
-			position.Y += cropping.Y * scale;
+			Vector2 transformedPosition = cursor;
+			transformedPosition.X += cropping.X * scale;
+			transformedPosition.Y += cropping.Y * scale;
+			Nxna::Vector2::Transform(transformedPosition, transform, transformedPosition);
 
-			Draw(spriteFont->m_texture, position, &glyph, color, rotation, Vector2(0,0), scale, effects, layerDepth); 
+			Draw(spriteFont->m_texture, transformedPosition + position, &glyph, color, rotation, Vector2(0,0), scale, effects, layerDepth); 
 
 			cursor.X += (kerning.Y + kerning.Z) * scale;
 		}
@@ -335,7 +336,7 @@ namespace Graphics
 
 		// TODO: do the sprite effects
 
-		Vector2 cursor(position.X, position.Y);
+		Vector2 cursor;
 
 		size_t len = wcslen(text);
 		bool ignoreSpacing = true; 
@@ -352,11 +353,12 @@ namespace Graphics
 
 			cursor.X += kerning.X * scale;
 
-			Vector2 position = cursor;
-			position.X += cropping.X * scale;
-			position.Y += cropping.Y * scale;
+			Vector2 transformedPosition = cursor;
+			transformedPosition.X += cropping.X * scale;
+			transformedPosition.Y += cropping.Y * scale;
+			Nxna::Vector2::Transform(transformedPosition, transform, transformedPosition);
 
-			Draw(spriteFont->m_texture, position, &glyph, color, rotation, Vector2(0,0), scale, effects, layerDepth); 
+			Draw(spriteFont->m_texture, transformedPosition + position, &glyph, color, rotation, Vector2(0,0), scale, effects, layerDepth); 
 
 			cursor.X += (kerning.Y + kerning.Z) * scale;
 
@@ -376,7 +378,7 @@ namespace Graphics
 
 		// TODO: do the sprite effects
 
-		Vector2 cursor(position.X, position.Y);
+		Vector2 cursor;
 
 		int pos = 0;
 		int charsRead;
@@ -392,11 +394,12 @@ namespace Graphics
 
 			cursor.X += kerning.X * scale;
 
-			Vector2 position = cursor;
-			position.X += cropping.X * scale;
-			position.Y += cropping.Y * scale;
+			Vector2 transformedPosition = cursor;
+			transformedPosition.X += cropping.X * scale;
+			transformedPosition.Y += cropping.Y * scale;
+			Nxna::Vector2::Transform(transformedPosition, transform, transformedPosition);
 
-			Draw(spriteFont->m_texture, position, &glyph, color, rotation, Vector2(0,0), scale, effects, layerDepth); 
+			Draw(spriteFont->m_texture, transformedPosition + position, &glyph, color, rotation, Vector2(0,0), scale, effects, layerDepth); 
 
 			cursor.X += (kerning.Y + kerning.Z) * scale;
 		}
