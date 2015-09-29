@@ -67,7 +67,11 @@ namespace Input
 		LeftControl = 162,
 		RightControl = 163,
 
+		OemPlus = 187,
+		OemComma = 188,
+		OemMinus = 189,
 		OemPeriod = 190,
+
 		OemOpenBrackets = 219,
 		OemPipe = 220,
 		OemCloseBrackets = 221

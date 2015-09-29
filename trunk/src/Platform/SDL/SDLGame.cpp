@@ -136,41 +136,48 @@ namespace SDL
 
 	Nxna::Input::Keys convertSDLK(SDL_Keycode sdlk)
 	{
-		if (sdlk == SDLK_BACKSPACE)
+		switch (sdlk)
+		{
+		case SDLK_BACKSPACE:
 			return Nxna::Input::Keys::Back;
-		if (sdlk == SDLK_RETURN)
+		case SDLK_RETURN:
 			return Nxna::Input::Keys::Enter;
-		if (sdlk == SDLK_ESCAPE)
+		case SDLK_ESCAPE:
 			return Nxna::Input::Keys::Escape;
-		if (sdlk == SDLK_SPACE)
+		case SDLK_SPACE:
 			return Nxna::Input::Keys::Space;
-		if (sdlk == SDLK_BACKQUOTE)
+		case SDLK_BACKQUOTE:
 			return Nxna::Input::Keys::OemTilde;
-		if (sdlk == SDLK_LSHIFT)
+		case SDLK_LSHIFT:
 			return Nxna::Input::Keys::LeftShift;
-		if (sdlk == SDLK_RSHIFT)
+		case SDLK_RSHIFT:
 			return Nxna::Input::Keys::RightShift;
-		if (sdlk == SDLK_LCTRL)
+		case SDLK_LCTRL:
 			return Nxna::Input::Keys::LeftControl;
-		if (sdlk == SDLK_RCTRL)
+		case SDLK_RCTRL:
 			return Nxna::Input::Keys::RightControl;
-		if (sdlk == SDLK_UP)
+		case SDLK_UP:
 			return Nxna::Input::Keys::Up;
-		if (sdlk == SDLK_DOWN)
+		case SDLK_DOWN:
 			return Nxna::Input::Keys::Down;
-		if (sdlk == SDLK_RIGHT)
+		case SDLK_RIGHT:
 			return Nxna::Input::Keys::Right;
-		if (sdlk == SDLK_LEFT)
+		case SDLK_LEFT:
 			return Nxna::Input::Keys::Left;
-		if (sdlk == SDLK_PERIOD)
+		case SDLK_PERIOD:
 			return Nxna::Input::Keys::OemPeriod;
+		case SDLK_PLUS:
+			return Nxna::Input::Keys::OemPlus;
+		case SDLK_MINUS:
+			return Nxna::Input::Keys::OemMinus;
+		default:
+			if (sdlk >= SDLK_a && sdlk <= SDLK_z)
+				return (Nxna::Input::Keys)((int)Nxna::Input::Keys::A + (sdlk - SDLK_a));
+			if (sdlk >= SDLK_0 && sdlk <= SDLK_9)
+				return (Nxna::Input::Keys)((int)Nxna::Input::Keys::D0 + (sdlk - SDLK_0));
 
-		if (sdlk >= SDLK_a && sdlk <= SDLK_z)
-			return (Nxna::Input::Keys)((int)Nxna::Input::Keys::A + (sdlk - SDLK_a));
-		if (sdlk >= SDLK_0 && sdlk <= SDLK_9)
-			return (Nxna::Input::Keys)((int)Nxna::Input::Keys::D0 + (sdlk - SDLK_0));
-
-		return Nxna::Input::Keys::None;
+			return Nxna::Input::Keys::None;
+		}
 	}
 
 	void SDLGame::handleEvents()
