@@ -2,6 +2,7 @@
 #define GRAPHICS_SPRITESHEET_H
 
 #include <vector>
+#include <cassert>
 #include "../NxnaConfig.h"
 #include "../Content/ContentManager.h"
 #include "../Rectangle.h"
@@ -24,6 +25,7 @@ namespace Graphics
 
 		Rectangle GetSourceRectangle(int spriteIndex)
 		{
+			assert(spriteIndex >= 0 && spriteIndex < (int)m_spriteRectangles.size());
 			return m_spriteRectangles[spriteIndex];
 		}
 
