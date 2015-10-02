@@ -118,20 +118,27 @@ __pragma(warning(disable:4201))
 
 
 // determine whether this is 32-bit or 64-bit
-#ifdef _WIN32
+#ifdef NXNA_PLATFORM_WIN32
 #ifdef _WIN64
 #define NXNA_64BIT
 #else
 #define NXNA_32BIT
 #endif
+#elif defined NXNA_PLATFORM_APPLE
+#ifdef __LP64__
+#define NXNA_64BIT
+#else
+#define NXNA_32BIT
 #endif
-#if __GNUC__
+#else
 #if __x86_64__ || __ppc64__
 #define NXNA_64BIT
 #else
 #define NXNA_32BIT
 #endif
 #endif
+
+
 
 // make sure either NXNA_32BIT or NXNA_64BIT is enabled
 #if !defined NXNA_32BIT && !defined NXNA_64BIT
