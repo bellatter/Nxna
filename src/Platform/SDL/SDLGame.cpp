@@ -202,6 +202,9 @@ namespace SDL
 			case SDL_MOUSEBUTTONUP:
 				Nxna::Input::Mouse::InjectMouseButton(e.button.button, false);
 				break;
+			case SDL_MOUSEWHEEL:
+				Nxna::Input::Mouse::InjectMouseScroll(e.wheel.y);
+				break;
 			case SDL_KEYDOWN:
 				Nxna::Input::Keyboard::InjectKeyDown(convertSDLK(e.key.keysym.sym));
 				break;

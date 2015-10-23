@@ -13,6 +13,7 @@ namespace Input
 		ButtonState LeftButton;
 		ButtonState MiddleButton;
 		ButtonState RightButton;
+		int ScrollWheelValue;
 	};
 
 	class Mouse
@@ -25,6 +26,7 @@ namespace Input
 
 		static void InjectMouseMove(int mx, int my);
 		static void InjectMouseButton(int button, bool down);
+		static void InjectMouseScroll(int scroll);
 	};
 }
 }

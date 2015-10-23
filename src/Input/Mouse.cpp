@@ -23,5 +23,10 @@ namespace Input
 		else if (button == 3)
 			_current.RightButton = state;
 	}
+
+	void Mouse::InjectMouseScroll(int scroll)
+	{
+		_current.ScrollWheelValue += scroll;
+	}
 }
 }
