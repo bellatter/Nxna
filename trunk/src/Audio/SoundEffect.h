@@ -65,8 +65,6 @@ namespace Audio
 		float m_duration;
 
 		std::vector<SoundEffectInstance*> m_children;
-
-		static std::vector<byte> m_workingData;
 		static std::vector<SoundEffectInstance*> m_instancePool;
 		static std::vector<SoundEffectInstance*> m_fireAndForgetInstances;
 

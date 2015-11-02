@@ -176,7 +176,6 @@ namespace Audio
 	const int WAVE_FORMAT_ADPCM = 2;
 #endif
 
-	std::vector<byte> SoundEffect::m_workingData;
 	std::vector<SoundEffectInstance*> SoundEffect::m_instancePool;
 
 	SoundEffect::~SoundEffect()
@@ -269,9 +268,6 @@ namespace Audio
 	{
 #ifndef DISABLE_OPENAL
 		SoundEffect* effect = new SoundEffect();
-
-		if (m_workingData.empty())
-			m_workingData.resize(100 * 1024); // 100 KB
 
 		int formatSize = stream->ReadInt32();
 		if (isXNB)

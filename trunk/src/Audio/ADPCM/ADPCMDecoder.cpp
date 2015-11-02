@@ -8,6 +8,14 @@ namespace Nxna
 {
 namespace Audio
 {
+	short AdaptCoeff1[] = { 256, 512, 0, 192, 240, 460, 392 };
+	short AdaptCoeff2[] = { 0, -256, 0, 64, 0, -208, -232 };
+	
+	int AdaptationTable[] = { 
+		230, 230, 230, 230, 307, 409, 512, 614, 
+		768, 614, 512, 409, 307, 230, 230, 230 
+	};
+
 	AdpcmDecoder::AdpcmDecoder(Content::Stream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock)
 	{
 		m_stream = data;
@@ -27,9 +35,6 @@ namespace Audio
 		byte Nibble;
 		bool NibbleState;
 		short SamplesPerBlock;
-
-		short* Coefficients1;
-		short* Coefficients2;
 	};
 
 	struct AdpcmBlockHeader
@@ -40,14 +45,9 @@ namespace Audio
 		short Sample2;
 	};
 
-	void decodeNibble(byte nibble, AdpcmBlockHeader* header, int predictedSample)
+	inline void decodeNibble(byte nibble, AdpcmBlockHeader* header, int predictedSample)
 	{
 		assert(nibble < 16);
-
-		int AdaptationTable[] = { 
-			230, 230, 230, 230, 307, 409, 512, 614, 
-			768, 614, 512, 409, 307, 230, 230, 230 
-		};
 
 		int sample;
 		if (nibble & 0x08)
@@ -69,14 +69,14 @@ namespace Audio
 			header->Delta = 16;
 	}
 
-	int decodeFrame(AdpcmInfo* info, AdpcmBlockHeader* headers, Content::Stream* data)
+	inline int decodeFrame(AdpcmInfo* info, AdpcmBlockHeader* headers, Content::Stream* data)
 	{
 		int bytesRead = 0;
 		for (int i = 0; i < info->NumChannels; i++)
 		{
 			AdpcmBlockHeader* header = &headers[i];
-			short coeff1 = info->Coefficients1[header->Predictor];
-			short coeff2 = info->Coefficients2[header->Predictor];
+			short coeff1 = AdaptCoeff1[header->Predictor];
+			short coeff2 = AdaptCoeff2[header->Predictor];
 
 			int predictedSample = ((header->Sample1 * coeff1) + (header->Sample2 * coeff2)) / 256;
 
@@ -143,15 +143,10 @@ namespace Audio
 
 	void AdpcmDecoder::Decode(byte* outputBuffer)
 	{
-		short AdaptCoeff1[] = { 256, 512, 0, 192, 240, 460, 392 };
-		short AdaptCoeff2[] = { 0, -256, 0, 64, 0, -208, -232 };
-
 		AdpcmInfo info;
 		info.NumChannels = (m_stereo ? 2 : 1);
 		info.NibbleState = false;
 		info.SamplesPerBlock = (short)m_samplesPerBlock;
-		info.Coefficients1 = AdaptCoeff1;
-		info.Coefficients2 = AdaptCoeff2;
 
 		if (m_stereo)
 		{
