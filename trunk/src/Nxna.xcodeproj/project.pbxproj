@@ -126,6 +126,10 @@
 		A291ECF81BA11FD6000ED60F /* NxnaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A291ECF51BA11FD5000ED60F /* NxnaUtils.cpp */; };
 		A291ECF91BA11FD6000ED60F /* NxnaUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = A291ECF61BA11FD6000ED60F /* NxnaUtils.h */; };
 		A291ECFA1BA11FD6000ED60F /* NxnaUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = A291ECF61BA11FD6000ED60F /* NxnaUtils.h */; };
+		A293FA5F1BE80C2500F41734 /* StopWatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293FA5D1BE80C2500F41734 /* StopWatch.cpp */; };
+		A293FA601BE80C2500F41734 /* StopWatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A293FA5D1BE80C2500F41734 /* StopWatch.cpp */; };
+		A293FA611BE80C2500F41734 /* StopWatch.h in Headers */ = {isa = PBXBuildFile; fileRef = A293FA5E1BE80C2500F41734 /* StopWatch.h */; };
+		A293FA621BE80C2500F41734 /* StopWatch.h in Headers */ = {isa = PBXBuildFile; fileRef = A293FA5E1BE80C2500F41734 /* StopWatch.h */; };
 		A2963B4116ADEE9700817CFC /* MediaPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963B3D16ADEE9700817CFC /* MediaPlayer.cpp */; };
 		A2963B4216ADEE9700817CFC /* MediaPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A2963B3E16ADEE9700817CFC /* MediaPlayer.h */; };
 		A2963B4316ADEE9700817CFC /* Song.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2963B3F16ADEE9700817CFC /* Song.cpp */; };
@@ -381,6 +385,8 @@
 		A291ECE81BA0E458000ED60F /* MappedFileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MappedFileStream.h; path = Content/MappedFileStream.h; sourceTree = SOURCE_ROOT; };
 		A291ECF51BA11FD5000ED60F /* NxnaUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NxnaUtils.cpp; sourceTree = SOURCE_ROOT; };
 		A291ECF61BA11FD6000ED60F /* NxnaUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NxnaUtils.h; sourceTree = SOURCE_ROOT; };
+		A293FA5D1BE80C2500F41734 /* StopWatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StopWatch.cpp; path = Utils/StopWatch.cpp; sourceTree = SOURCE_ROOT; };
+		A293FA5E1BE80C2500F41734 /* StopWatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StopWatch.h; path = Utils/StopWatch.h; sourceTree = SOURCE_ROOT; };
 		A2963B3D16ADEE9700817CFC /* MediaPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MediaPlayer.cpp; path = Media/MediaPlayer.cpp; sourceTree = SOURCE_ROOT; };
 		A2963B3E16ADEE9700817CFC /* MediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MediaPlayer.h; path = Media/MediaPlayer.h; sourceTree = SOURCE_ROOT; };
 		A2963B3F16ADEE9700817CFC /* Song.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Song.cpp; path = Media/Song.cpp; sourceTree = SOURCE_ROOT; };
@@ -497,6 +503,7 @@
 		A228BBF51505B54200045911 /* Nxna */ = {
 			isa = PBXGroup;
 			children = (
+				A293FA5C1BE80C1100F41734 /* Utils */,
 				A291ECF51BA11FD5000ED60F /* NxnaUtils.cpp */,
 				A291ECF61BA11FD6000ED60F /* NxnaUtils.h */,
 				A243215E1AF165E40062820A /* MemoryAllocator.cpp */,
@@ -701,6 +708,15 @@
 			name = Touch;
 			sourceTree = "<group>";
 		};
+		A293FA5C1BE80C1100F41734 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A293FA5D1BE80C2500F41734 /* StopWatch.cpp */,
+				A293FA5E1BE80C2500F41734 /* StopWatch.h */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
 		A2963B3B16ADEE7900817CFC /* Media */ = {
 			isa = PBXGroup;
 			children = (
@@ -854,6 +870,7 @@
 				A2963C7216AE3F3A00817CFC /* SDLGame.h in Headers */,
 				A2963C7616AE3F3A00817CFC /* SDLOpenGlWindow.h in Headers */,
 				A2963CAE16B49D2600817CFC /* GlslSource.h in Headers */,
+				A293FA611BE80C2500F41734 /* StopWatch.h in Headers */,
 				A2963CB316BE02A100817CFC /* IOSMediaPlayer.h in Headers */,
 				A2C631231735FC6400DB1FDB /* alpha.h in Headers */,
 				A2C631271735FC6400DB1FDB /* clusterfit.h in Headers */,
@@ -880,6 +897,7 @@
 				A2963CAF16B49D2600817CFC /* GlslSource.h in Headers */,
 				A2963CB416BE02A100817CFC /* IOSMediaPlayer.h in Headers */,
 				A2963CC016BE15CB00817CFC /* OggMediaPlayer.h in Headers */,
+				A293FA621BE80C2500F41734 /* StopWatch.h in Headers */,
 				A2C631241735FC6400DB1FDB /* alpha.h in Headers */,
 				A2C631281735FC6400DB1FDB /* clusterfit.h in Headers */,
 				A2C6312C1735FC6400DB1FDB /* colourblock.h in Headers */,
@@ -939,7 +957,7 @@
 		A228BBE71505B54200045911 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = A228BBEA1505B54200045911 /* Build configuration list for PBXProject "Nxna" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1007,6 +1025,7 @@
 				A28809811512E7EF005D983A /* Mouse.cpp in Sources */,
 				A28809961512E83C005D983A /* GlIndexBuffer.cpp in Sources */,
 				A28809981512E83C005D983A /* GlslAlphaTestEffect.cpp in Sources */,
+				A293FA5F1BE80C2500F41734 /* StopWatch.cpp in Sources */,
 				A288099A1512E83C005D983A /* GlslBasicEffect.cpp in Sources */,
 				A288099C1512E83C005D983A /* GlslDualTextureEffect.cpp in Sources */,
 				A2FBA20A18CBD6090019B993 /* DualTextureEffect.cpp in Sources */,
@@ -1064,6 +1083,7 @@
 				A2963B7816ADF35F00817CFC /* Keyboard.cpp in Sources */,
 				A2963B7B16ADF35F00817CFC /* Mouse.cpp in Sources */,
 				A291ECEA1BA0E458000ED60F /* MappedFileStream.cpp in Sources */,
+				A293FA601BE80C2500F41734 /* StopWatch.cpp in Sources */,
 				A2FBA20D18CBD6090019B993 /* IEffectPimpl.cpp in Sources */,
 				A2FC4B9E185973CC00258812 /* GraphicsAdapter.cpp in Sources */,
 				A2963B7D16ADF35F00817CFC /* TouchPanel.cpp in Sources */,
@@ -1135,8 +1155,10 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1170,8 +1192,10 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1190,7 +1214,6 @@
 		A228BBFE1505B54200045911 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				DSTROOT = /tmp/Nxna.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Nxna-Prefix.pch";
@@ -1203,7 +1226,6 @@
 		A228BBFF1505B54200045911 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				DSTROOT = /tmp/Nxna.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Nxna-Prefix.pch";
@@ -1216,6 +1238,7 @@
 		A2963B4B16ADF23600817CFC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1237,6 +1260,7 @@
 		A2963B4C16ADF23600817CFC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EXECUTABLE_PREFIX = lib;
 				FRAMEWORK_SEARCH_PATHS = (
