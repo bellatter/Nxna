@@ -43,7 +43,7 @@ namespace Content
 	FileStream::FileStream()
 	{
 #ifdef _WIN32
-		m_fp = nullptr;
+		m_fp = INVALID_HANDLE_VALUE;
 #else
 		m_fp = -1;
 #endif
@@ -55,7 +55,7 @@ namespace Content
 	FileStream::~FileStream()
 	{
 #ifdef _WIN32
-		if (m_fp != nullptr)
+		if (m_fp != INVALID_HANDLE_VALUE)
 			CloseHandle(m_fp);
 #else
 		if (m_fp != -1)
@@ -66,7 +66,7 @@ namespace Content
 	bool FileStream::IsOpen()
 	{
 #ifdef _WIN32
-		return m_fp != nullptr;
+		return m_fp != INVALID_HANDLE_VALUE;
 #else
 		return m_fp != -1;
 #endif
