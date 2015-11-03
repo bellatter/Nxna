@@ -4,6 +4,17 @@
 #include "FileStream.h"
 #include "../MathHelper.h"
 
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#else
+#include <io.h>
+#include <fcntl.h>
+#include <sys\types.h>
+#include <sys\stat.h>
+#endif
+
+
 namespace Nxna
 {
 namespace Content
@@ -11,23 +22,31 @@ namespace Content
 	FileStream::FileStream(const char* path)
 	{
 #if defined NXNA_PLATFORM_WIN32
-		fopen_s((FILE**)&m_fp, path, "rb");
+		m_fp = CreateFile(path, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 #else
-		m_fp = fopen(path, "rb");
+		m_fp = (void*)open(path, _O_BINARY | _O_RDONLY);
 #endif
-		m_bytesRead = 0;
+		m_bytePosition = 0;
+		m_bufferPosition = 0;
+		m_bufferSize = 0;
 	}
 
 	FileStream::FileStream()
 	{
 		m_fp = nullptr;
-		m_bytesRead = 0;
+		m_bytePosition = 0;
+		m_bufferPosition = 0;
+		m_bufferSize = 0;
 	}
 
 	FileStream::~FileStream()
 	{
 		if (m_fp != nullptr)
-			fclose((FILE*)m_fp);
+#ifdef _WIN32
+			CloseHandle(m_fp);
+#else
+			close((int)m_fp);
+#endif
 	}
 
 	bool FileStream::IsOpen()
@@ -35,18 +54,78 @@ namespace Content
 		return m_fp != nullptr;
 	}
 
-	int FileStream::Read(byte* destination, int length)
+	int FileStream::Read(byte* destination, unsigned int length)
 	{
-		int read = fread(destination, 1, length, (FILE*)m_fp);
-		m_bytesRead += read;
+		auto bufferBytesToCopy = m_bufferSize - m_bufferPosition;
+		unsigned int fileBytesToCopy;
+		if (length < bufferBytesToCopy)
+		{
+			bufferBytesToCopy = length;
+			fileBytesToCopy = 0;
+		}
+		else
+		{
+			fileBytesToCopy = length - bufferBytesToCopy;
+		}
 
-		return read;
+		memcpy(destination, m_buffer + m_bufferPosition, bufferBytesToCopy);
+		m_bufferPosition += bufferBytesToCopy;
+
+		if (fileBytesToCopy > 0)
+		{
+			if (fileBytesToCopy > m_maxBufferSize)
+			{
+#ifdef _WIN32
+				DWORD r = 0;
+				ReadFile(m_fp, destination + bufferBytesToCopy, fileBytesToCopy, &r, nullptr);
+#else
+				auto r = read((int)m_fp, destination + bufferBytesToCopy, fileBytesToCopy);
+#endif
+				m_bytePosition += r;
+				m_bufferSize = 0;
+				m_bufferPosition = 0;
+
+				return bufferBytesToCopy + r;
+			}
+
+#ifdef _WIN32
+			DWORD numBytesRead = 0;
+			ReadFile(m_fp, m_buffer, m_maxBufferSize, &numBytesRead, nullptr);
+			m_bufferSize = numBytesRead;
+#else
+			m_bufferSize = read((int)m_fp, m_buffer, m_maxBufferSize);
+#endif
+			if (m_bufferSize < fileBytesToCopy)
+				fileBytesToCopy = m_bufferSize;
+
+			memcpy(destination + bufferBytesToCopy, m_buffer, fileBytesToCopy);
+			m_bufferPosition = fileBytesToCopy;
+		}
+
+		m_bytePosition += bufferBytesToCopy + fileBytesToCopy;
+		return bufferBytesToCopy + fileBytesToCopy;
 	}
 
 	byte FileStream::ReadByte()
 	{
-		byte r;
-		Read(&r, 1);
+		// ReadByte() is a special implementation to help speed things up that need
+		// to read files 1 byte at a time
+
+		if (m_bufferPosition == m_bufferSize)
+		{
+#ifdef _WIN32
+			DWORD numBytesRead = 0;
+			ReadFile(m_fp, m_buffer, m_maxBufferSize, &numBytesRead, nullptr);
+			m_bufferSize = numBytesRead;
+#else
+			m_bufferSize = read((int)m_fp, m_buffer, m_maxBufferSize);
+#endif
+			m_bufferPosition = 0;
+		}
+
+		byte r = m_buffer[m_bufferPosition];
+		m_bufferPosition++;
+		m_bytePosition++;
 
 		return r;
 	}
@@ -85,39 +164,47 @@ namespace Content
 	{
 		if (origin == SeekOrigin::Current)
 		{
-			fseek((FILE*)m_fp, offset, SEEK_CUR);
-			m_bytesRead += offset;
+			m_bytePosition += offset;
 		}
 		else if (origin == SeekOrigin::Begin)
 		{
-			fseek((FILE*)m_fp, offset, SEEK_SET);
-			m_bytesRead = offset;
+			m_bytePosition = offset;
 		}
 		else if (origin == SeekOrigin::End)
 		{
-			fseek((FILE*)m_fp, offset, SEEK_END);
-			m_bytesRead = Length() - offset;
+			m_bytePosition = Length() - offset;
 		}
+
+#ifdef _WIN32
+		SetFilePointer(m_fp, m_bytePosition, nullptr, FILE_BEGIN);
+#else
+		lseek((int)m_fp, m_bytePosition, SEEK_SET);
+#endif
+		m_bufferPosition = 0;
+		m_bufferSize = 0;
 	}
 
 	int FileStream::Position()
 	{
-		return (int)ftell((FILE*)m_fp);
+		return m_bytePosition;
 	}
 
 	int FileStream::Length()
 	{
-		long current = ftell((FILE*)m_fp);
-		fseek((FILE*)m_fp, 0, SEEK_END);
-		int size = (int)ftell((FILE*)m_fp);
-		fseek((FILE*)m_fp, current, SEEK_SET);
+#ifdef _WIN32
+		return (int)GetFileSize(m_fp, nullptr);
+#else
+		struct _stat s;
+		_fstat((int)m_fp, &s);
+		return s.st_size;
+#endif
 
-		return size;
+		
 	}
 
 	bool FileStream::Eof()
 	{
-		return m_bytesRead >= Length(); 
+		return m_bytePosition >= Length(); 
 	}
 
 	void FileStream::swapLE(void* /* data */, int /* length */)
@@ -150,9 +237,9 @@ namespace Content
 			delete[] m_memory;
 	}
 
-	int MemoryStream::Read(byte* destination, int length)
+	int MemoryStream::Read(byte* destination, unsigned int length)
 	{
-		int bytesToRead = Math::Min(length, m_length - m_position);
+		int bytesToRead = length < m_length - m_position ? length : m_length - m_position;
 
 		if (bytesToRead > 0)
 		{
