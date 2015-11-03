@@ -11,7 +11,7 @@
 #ifdef __APPLE__
 #include <sys/uio.h>
 #else
-#include <io.h>
+#include <sys/io.h>
 #endif
 #include <fcntl.h>
 #include <sys/types.h>
