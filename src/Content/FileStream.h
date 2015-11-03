@@ -35,7 +35,11 @@ namespace Content
 
 	class FileStream : public Stream
 	{
+#ifdef _WIN32
 		void* m_fp;
+#else
+		int m_fp;
+#endif
 		static const unsigned int m_maxBufferSize = 1024 * 4;
 		byte m_buffer[m_maxBufferSize];
 		unsigned int m_bufferSize;

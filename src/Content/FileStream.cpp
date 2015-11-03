@@ -8,10 +8,19 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #else
+#ifdef __APPLE__
+#include <sys/uio.h>
+#else
 #include <io.h>
+#endif
 #include <fcntl.h>
-#include <sys\types.h>
-#include <sys\stat.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
 #endif
 
 
@@ -24,7 +33,7 @@ namespace Content
 #if defined NXNA_PLATFORM_WIN32
 		m_fp = CreateFile(path, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 #else
-		m_fp = (void*)open(path, _O_BINARY | _O_RDONLY);
+		m_fp = open(path, O_BINARY | O_RDONLY);
 #endif
 		m_bytePosition = 0;
 		m_bufferPosition = 0;
@@ -33,7 +42,11 @@ namespace Content
 
 	FileStream::FileStream()
 	{
+#ifdef _WIN32
 		m_fp = nullptr;
+#else
+		m_fp = -1;
+#endif
 		m_bytePosition = 0;
 		m_bufferPosition = 0;
 		m_bufferSize = 0;
@@ -41,17 +54,22 @@ namespace Content
 
 	FileStream::~FileStream()
 	{
-		if (m_fp != nullptr)
 #ifdef _WIN32
+		if (m_fp != nullptr)
 			CloseHandle(m_fp);
 #else
-			close((int)m_fp);
+		if (m_fp != -1)
+			close(m_fp);
 #endif
 	}
 
 	bool FileStream::IsOpen()
 	{
+#ifdef _WIN32
 		return m_fp != nullptr;
+#else
+		return m_fp != -1;
+#endif
 	}
 
 	int FileStream::Read(byte* destination, unsigned int length)
@@ -93,7 +111,7 @@ namespace Content
 			ReadFile(m_fp, m_buffer, m_maxBufferSize, &numBytesRead, nullptr);
 			m_bufferSize = numBytesRead;
 #else
-			m_bufferSize = read((int)m_fp, m_buffer, m_maxBufferSize);
+			m_bufferSize = read(m_fp, m_buffer, m_maxBufferSize);
 #endif
 			if (m_bufferSize < fileBytesToCopy)
 				fileBytesToCopy = m_bufferSize;
@@ -178,7 +196,7 @@ namespace Content
 #ifdef _WIN32
 		SetFilePointer(m_fp, m_bytePosition, nullptr, FILE_BEGIN);
 #else
-		lseek((int)m_fp, m_bytePosition, SEEK_SET);
+		lseek(m_fp, m_bytePosition, SEEK_SET);
 #endif
 		m_bufferPosition = 0;
 		m_bufferSize = 0;
@@ -194,8 +212,8 @@ namespace Content
 #ifdef _WIN32
 		return (int)GetFileSize(m_fp, nullptr);
 #else
-		struct _stat s;
-		_fstat((int)m_fp, &s);
+		struct stat s;
+		fstat((int)m_fp, &s);
 		return s.st_size;
 #endif
 
