@@ -29,7 +29,7 @@ namespace Content
 		void Load(const char* path);
 
 		virtual bool IsOpen();
-		virtual int Read(byte* destination, int length) override;
+		virtual int Read(byte* destination, unsigned int length) override;
 		virtual int ReadInt32() override;
 		virtual short ReadInt16() override;
 		virtual float ReadFloat() override;

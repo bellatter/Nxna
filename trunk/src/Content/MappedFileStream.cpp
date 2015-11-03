@@ -135,7 +135,7 @@ namespace Content
 #endif
 	}
 
-	int MappedFileStream::Read(byte* destination, int length)
+	int MappedFileStream::Read(byte* destination, unsigned int length)
 	{
 		if (m_bytesRead + length > m_size)
 			length = m_size - m_bytesRead;
@@ -150,8 +150,14 @@ namespace Content
 
 	byte MappedFileStream::ReadByte()
 	{
-		byte r;
-		Read(&r, 1);
+		byte r = 0;
+		if (m_bytesRead + 1 < m_size)
+			r = ((char*)m_baseAddress)[m_bytesRead++];
+
+		return r;
+
+		//byte r;
+		//Read(&r, 1);
 
 		return r;
 	}

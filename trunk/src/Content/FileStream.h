@@ -21,7 +21,7 @@ namespace Content
 	public:
 		virtual ~Stream() { }
 
-		virtual int Read(byte* destination, int length) = 0;
+		virtual int Read(byte* destination, unsigned int length) = 0;
 		virtual int ReadInt32() = 0;
 		virtual short ReadInt16() = 0;
 		virtual float ReadFloat() = 0;
@@ -36,16 +36,20 @@ namespace Content
 	class FileStream : public Stream
 	{
 		void* m_fp;
+		static const unsigned int m_maxBufferSize = 1024 * 4;
+		byte m_buffer[m_maxBufferSize];
+		unsigned int m_bufferSize;
+		unsigned int m_bufferPosition;
 
 	protected:
-		int m_bytesRead;
+		int m_bytePosition;
 
 	public:
 		FileStream(const char* path);
 		virtual ~FileStream();
 
 		virtual bool IsOpen();
-		virtual int Read(byte* destination, int length) override;
+		virtual int Read(byte* destination, unsigned int length) override;
 		virtual int ReadInt32() override;
 		virtual short ReadInt16() override;
 		virtual float ReadFloat() override;
@@ -78,7 +82,7 @@ namespace Content
 		MemoryStream(int size = 512);
 		virtual ~MemoryStream();
 
-		virtual int Read(byte* destination, int length) override;
+		virtual int Read(byte* destination, unsigned int length) override;
 		virtual int ReadInt32() override;
 		virtual short ReadInt16() override;
 		virtual float ReadFloat() override;
