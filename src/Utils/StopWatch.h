@@ -2,6 +2,7 @@
 #define NXNA_UTILS_STOPWATCH_H
 
 #include <cstdint>
+#include "../Platform/PlatformDefs.h"
 
 namespace Nxna
 {
