@@ -13,6 +13,7 @@ namespace Media
 
 	public:
 		static void Play(Song* song);
+		static bool TryPlay(Song* song);
 		static void Pause();
 		static void Resume();
 		static void Stop();

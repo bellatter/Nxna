@@ -26,6 +26,30 @@ namespace Media
 		if (OggMediaPlayer::Play(song) == false)
 			m_currentSong = nullptr;
 #endif
+
+		if (m_currentSong == nullptr)
+			throw InvalidOperationException("Unable to play song", __FILE__, __LINE__);
+	}
+
+	bool MediaPlayer::TryPlay(Song* song)
+	{
+		m_currentSong = song;
+
+#ifdef NXNA_PLATFORM_APPLE_IOS
+		if (IOSMediaPlayer::Play(song) == false)
+		{
+			m_currentSong = nullptr;
+			return false;
+		}
+#else
+		if (OggMediaPlayer::Play(song) == false)
+		{
+			m_currentSong = nullptr;
+			return false;
+		}
+#endif
+
+		return true;
 	}
 
 	void MediaPlayer::Stop()

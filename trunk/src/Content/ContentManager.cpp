@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "ContentManager.h"
 #include "FileStream.h"
+#include "MappedFileStream.h"
 #include "XnbReader.h"
 #include "../Graphics/Texture2D.h"
 #include "../Graphics/SpriteSheet.h"
@@ -70,6 +71,7 @@ namespace Content
 		FileStream* fs = AndroidFileSystem::Open(fullName.c_str());
 #else
 		FileStream* fs = new FileStream(fullName.c_str());
+		//MappedFileStream* fs = new MappedFileStream(fullName.c_str());
 #endif
 		if (fs == nullptr || fs->IsOpen() == false)
 			throw ContentException(std::string("Unable to open file: ") + fullName);
