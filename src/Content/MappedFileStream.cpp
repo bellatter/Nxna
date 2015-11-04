@@ -98,7 +98,7 @@ namespace Content
 
 			m_size = GetFileSize(m_fp, nullptr);
 #else
-			m_fd = open(path, O_RDONLY, 0);
+			m_fd = open(path, O_RDONLY);
 			if (m_fd == -1)
 				return;
 			
