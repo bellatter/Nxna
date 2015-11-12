@@ -91,8 +91,12 @@ namespace Graphics
 		void DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, const Color& color);
 		void DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, const Color& color,
 			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth);
+		void DrawString(SpriteFont* spriteFont, const wchar_t* text, size_t numCharacters, const Vector2& position, const Color& color,
+			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth);
 		void DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color);
 		void DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color,
+			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth);
+		void DrawString(SpriteFont* spriteFont, const char* text, size_t numCharacters, const Vector2& position, const Color& color,
 			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth);
 		void DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color);
 		void DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color,

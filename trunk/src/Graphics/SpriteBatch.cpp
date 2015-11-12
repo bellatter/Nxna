@@ -324,6 +324,44 @@ namespace Graphics
 		}
 	}
 
+	void SpriteBatch::DrawString(SpriteFont* spriteFont, const char* text, size_t numCharacters, const Vector2& position, const Color& color,
+		float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth)
+	{
+		Matrix rotationMatrix;
+		Matrix::CreateRotationZ(rotation, rotationMatrix);
+		Matrix translationMatrix;
+		Matrix::CreateTranslation(-origin.X * scale, -origin.Y * scale, 0, translationMatrix);
+		Matrix transform;
+		Matrix::Multiply(translationMatrix, rotationMatrix, transform);
+
+		// TODO: do the sprite effects
+
+		Vector2 cursor;
+
+		size_t len = strlen(text);
+		if (numCharacters > len)
+			numCharacters = len;
+		for (size_t i = 0; i < numCharacters; i++)
+		{
+			char c = text[i];
+			Rectangle glyph, cropping;
+			Vector3 kerning;
+
+			spriteFont->GetCharacterInfo(c, &glyph, &cropping, &kerning);
+
+			cursor.X += kerning.X * scale;
+
+			Vector2 transformedPosition = cursor;
+			transformedPosition.X += cropping.X * scale;
+			transformedPosition.Y += cropping.Y * scale;
+			Nxna::Vector2::Transform(transformedPosition, transform, transformedPosition);
+
+			Draw(spriteFont->m_texture, transformedPosition + position, &glyph, color, rotation, Vector2(0, 0), scale, effects, layerDepth);
+
+			cursor.X += (kerning.Y + kerning.Z) * scale;
+		}
+	}
+
 	void SpriteBatch::DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, const Color& color,
 		float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth)
 	{
@@ -339,8 +377,52 @@ namespace Graphics
 		Vector2 cursor;
 
 		size_t len = wcslen(text);
-		bool ignoreSpacing = true; 
+		bool ignoreSpacing = true;
 		for (size_t i = 0; i < len; i++)
+		{
+			wchar_t c = text[i];
+			Rectangle glyph, cropping;
+			Vector3 kerning;
+
+			spriteFont->GetCharacterInfo(c, &glyph, &cropping, &kerning);
+
+			if (!ignoreSpacing)
+				cursor.X += spriteFont->GetSpacing() * scale;
+
+			cursor.X += kerning.X * scale;
+
+			Vector2 transformedPosition = cursor;
+			transformedPosition.X += cropping.X * scale;
+			transformedPosition.Y += cropping.Y * scale;
+			Nxna::Vector2::Transform(transformedPosition, transform, transformedPosition);
+
+			Draw(spriteFont->m_texture, transformedPosition + position, &glyph, color, rotation, Vector2(0, 0), scale, effects, layerDepth);
+
+			cursor.X += (kerning.Y + kerning.Z) * scale;
+
+			ignoreSpacing = false;
+		}
+	}
+
+	void SpriteBatch::DrawString(SpriteFont* spriteFont, const wchar_t* text, size_t numCharacters, const Vector2& position, const Color& color,
+		float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth)
+	{
+		Matrix rotationMatrix;
+		Matrix::CreateRotationZ(rotation, rotationMatrix);
+		Matrix translationMatrix;
+		Matrix::CreateTranslation(-origin.X * scale, -origin.Y * scale, 0, translationMatrix);
+		Matrix transform;
+		Matrix::Multiply(translationMatrix, rotationMatrix, transform);
+
+		// TODO: do the sprite effects
+
+		Vector2 cursor;
+
+		size_t len = wcslen(text);
+		if (numCharacters > len)
+			numCharacters = len;
+		bool ignoreSpacing = true; 
+		for (size_t i = 0; i < numCharacters; i++)
 		{
 			wchar_t c = text[i];
 			Rectangle glyph, cropping;
