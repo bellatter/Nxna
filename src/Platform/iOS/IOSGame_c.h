@@ -10,6 +10,7 @@ extern "C"
 #endif
 
 void IOSGame_Init();
+void IOSGame_DidAppear(bool animated);
 void IOSGame_DidFinishLaunching();
 void IOSGame_Update(float elapsedTime);
 void IOSGame_Draw(float elapsedTime);
@@ -22,6 +23,7 @@ void IOSGame_GetScreenSize(int* width, int* height);
 	
 void IOSGame_ShowLeaderboard(const char* category, int scope);
 void IOSGame_ShowAchievements();
+void IOSGame_EnableBannerAds(bool enable);
 
 #ifdef __cplusplus
 }

@@ -53,6 +53,11 @@ namespace iOS
 	{
 		m_game->DidFinishLaunching();
 	}
+	
+	void IOSGame::DidAppear(bool animated)
+	{
+		m_game->DidAppear(animated);
+	}
 
 	void IOSGame::Update(float elapsedTime)
 	{
@@ -113,6 +118,11 @@ extern "C"
 void IOSGame_Init()
 {
 	Nxna::Platform::iOS::g_instance->Init();
+}
+	
+void IOSGame_DidAppear(bool animated)
+{
+	Nxna::Platform::iOS::g_instance->DidAppear(animated);
 }
 
 void IOSGame_DidFinishLaunching()

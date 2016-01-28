@@ -22,6 +22,7 @@ namespace iOS
 		void InitMeFirst(int argc, const char** argv);
 		void Init();
 		void DidFinishLaunching();
+		void DidAppear(bool animated);
 		void Update(float elapsedTime);
 		void Draw(float elapsedTime);
 		void Exit();
