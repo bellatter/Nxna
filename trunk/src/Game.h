@@ -89,6 +89,7 @@ namespace Nxna
 		
 #ifdef NXNA_PLATFORM_APPLE_IOS
 		virtual void DidFinishLaunching() { }
+		virtual void DidAppear(bool animated) {}
 #endif
 
 		virtual void LoadContent() { }

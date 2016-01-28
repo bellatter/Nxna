@@ -33,6 +33,8 @@ namespace iOS
 		
 		void ShowLeaderboard(const char* category, LeaderboardTimeScope scope);
 		void ShowAchievements();
+		
+		void EnableBannerAds(bool enabled);
 	};
 }
 }
