@@ -226,7 +226,6 @@
     <ClInclude Include="Graphics\SpriteEffect.h" />
     <ClInclude Include="Graphics\SpriteEffectPimpl.h" />
     <ClInclude Include="Graphics\SpriteFont.h" />
-    <ClInclude Include="Graphics\SpriteSheet.h" />
     <ClInclude Include="Graphics\Texture2D.h" />
     <ClInclude Include="Graphics\VertexBuffer.h" />
     <ClInclude Include="Graphics\VertexDeclaration.h" />
@@ -349,7 +348,6 @@
     <ClCompile Include="Graphics\OpenGL\OpenGlDevice.cpp" />
     <ClCompile Include="Graphics\SpriteBatch.cpp" />
     <ClCompile Include="Graphics\SpriteFont.cpp" />
-    <ClCompile Include="Graphics\SpriteSheet.cpp" />
     <ClCompile Include="Graphics\Texture2D.cpp" />
     <ClCompile Include="Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />

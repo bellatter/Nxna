@@ -35,7 +35,6 @@ namespace Nxna
 #include "Graphics/BasicEffect.h"
 #include "Graphics/DualTextureEffect.h"
 #include "Graphics/AlphaTestEffect.h"
-#include "Graphics/SpriteSheet.h"
 #include "Graphics/SpriteFont.h"
 #include "Graphics/SamplerState.h"
 #include "Input/Mouse.h"
