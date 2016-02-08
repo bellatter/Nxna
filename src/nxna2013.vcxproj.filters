@@ -92,9 +92,6 @@
     <ClInclude Include="Graphics\SpriteFont.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\SpriteSheet.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Texture2D.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -328,9 +325,6 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\SpriteFont.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\SpriteSheet.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Texture2D.cpp">

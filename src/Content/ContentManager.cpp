@@ -4,7 +4,6 @@
 #include "MappedFileStream.h"
 #include "XnbReader.h"
 #include "../Graphics/Texture2D.h"
-#include "../Graphics/SpriteSheet.h"
 #include "../Graphics/SpriteFont.h"
 #include "../Audio/SoundEffect.h"
 #include "../Media/Song.h"
@@ -20,7 +19,6 @@ namespace Content
 	ContentManager::ContentManager()
 	{
 		// add all the loaders
-		AddContentReader<Nxna::Graphics::SpriteSheet>();
 		AddContentReader<Nxna::Graphics::Texture2DLoader>();
 		AddContentReader<Nxna::Graphics::SpriteFontLoader>();
 		AddContentReader<Nxna::Audio::SoundEffectLoader>();
@@ -30,7 +28,6 @@ namespace Content
 	ContentManager::ContentManager(const char* rootDirectory)
 	{
 		// add all the loaders
-		AddContentReader<Nxna::Graphics::SpriteSheet>();
 		AddContentReader<Nxna::Graphics::Texture2DLoader>();
 		AddContentReader<Nxna::Graphics::SpriteFontLoader>();
 		AddContentReader<Nxna::Audio::SoundEffectLoader>();
