@@ -103,46 +103,41 @@ namespace OpenGl
 		glBindTexture(GL_TEXTURE_2D, m_glTex);
 
 		int minFilter, magFilter;
-		if (state->Filter == TextureFilter::Linear)
+		switch (state->Filter)
 		{
+		case TextureFilter::Linear:
 			minFilter = (m_hasMipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 			magFilter = GL_LINEAR;
-		}
-		else if (state->Filter == TextureFilter::Point)
-		{
+			break;
+		case TextureFilter::Point:
 			minFilter = (m_hasMipmaps ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST);
 			magFilter = GL_NEAREST;
-		}
-		else if (state->Filter == TextureFilter::LinearMipPoint)
-		{
+			break;
+		case TextureFilter::LinearMipPoint:
 			// TODO: what should we do if they want a mipmap filter but the texture isn't mipmapped?
 			minFilter = GL_LINEAR_MIPMAP_NEAREST;
 			magFilter = GL_LINEAR;
-		}
-		else if (state->Filter == TextureFilter::PointMipLinear)
-		{
+			break;
+		case TextureFilter::PointMipLinear:
 			minFilter = GL_NEAREST_MIPMAP_LINEAR;
 			magFilter = GL_NEAREST;
-		}
-		else if (state->Filter == TextureFilter::MinLinearMagPointMipLinear)
-		{
+			break;
+		case TextureFilter::MinLinearMagPointMipLinear:
 			minFilter = GL_LINEAR_MIPMAP_LINEAR;
 			magFilter = GL_NEAREST;
-		}
-		else if (state->Filter == TextureFilter::MinLinearMagPointMipPoint)
-		{
+			break;
+		case TextureFilter::MinLinearMagPointMipPoint:
 			minFilter = GL_LINEAR_MIPMAP_NEAREST;
 			magFilter = GL_NEAREST;
-		}
-		else if (state->Filter == TextureFilter::MinPointMagLinearMipLinear)
-		{
+			break;
+		case TextureFilter::MinPointMagLinearMipLinear:
 			minFilter = GL_NEAREST_MIPMAP_LINEAR;
 			magFilter = GL_LINEAR;
-		}
-		else if (state->Filter == TextureFilter::MinPointMagLinearMipPoint)
-		{
+			break;
+		case TextureFilter::MinPointMagLinearMipPoint:
 			minFilter = GL_NEAREST_MIPMAP_NEAREST;
 			magFilter = GL_LINEAR;
+			break;
 		}
 
 		int wrapS = convertAddressMode(state->AddressU);
@@ -162,12 +157,15 @@ namespace OpenGl
 
 	int GlTexture2D::convertAddressMode(TextureAddressMode mode)
 	{
-		if (mode == TextureAddressMode::Wrap)
+		switch (mode)
+		{
+		case TextureAddressMode::Wrap:
 			return GL_REPEAT;
-		if (mode == TextureAddressMode::Clamp)
+		case TextureAddressMode::Clamp:
 			return GL_CLAMP_TO_EDGE;
-		
-		return GL_MIRRORED_REPEAT;
+		default:
+			return GL_MIRRORED_REPEAT;
+		}
 	}
 
 }
