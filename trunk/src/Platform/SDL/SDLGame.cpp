@@ -172,6 +172,30 @@ namespace SDL
 			return Nxna::Input::Keys::OemMinus;
 		case SDLK_EQUALS:
 			return Nxna::Input::Keys::OemPlus;
+		case SDLK_F1:
+			return Nxna::Input::Keys::F1;
+		case SDLK_F2:
+			return Nxna::Input::Keys::F2;
+		case SDLK_F3:
+			return Nxna::Input::Keys::F3;
+		case SDLK_F4:
+			return Nxna::Input::Keys::F4;
+		case SDLK_F5:
+			return Nxna::Input::Keys::F5;
+		case SDLK_F6:
+			return Nxna::Input::Keys::F6;
+		case SDLK_F7:
+			return Nxna::Input::Keys::F7;
+		case SDLK_F8:
+			return Nxna::Input::Keys::F8;
+		case SDLK_F9:
+			return Nxna::Input::Keys::F9;
+		case SDLK_F10:
+			return Nxna::Input::Keys::F10;
+		case SDLK_F11:
+			return Nxna::Input::Keys::F11;
+		case SDLK_F12:
+			return Nxna::Input::Keys::F12;
 		default:
 			if (sdlk >= SDLK_a && sdlk <= SDLK_z)
 				return (Nxna::Input::Keys)((int)Nxna::Input::Keys::A + (sdlk - SDLK_a));
