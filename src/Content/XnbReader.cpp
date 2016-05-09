@@ -1,5 +1,6 @@
 #include "XnbReader.h"
 #include "FileStream.h"
+#include "MappedFileStream.h"
 #include "ContentManager.h"
 #include "../MathHelper.h"
 
@@ -7,7 +8,7 @@ namespace Nxna
 {
 namespace Content
 {
-	XnbReader::XnbReader(Stream* stream, const char* name, const char* fullPath, ContentManager* contentManager)
+	XnbReader::XnbReader(MappedFileStream* stream, const char* name, const char* fullPath, ContentManager* contentManager)
 	{
 		m_stream = stream;
 		m_name = name;
@@ -37,6 +38,11 @@ namespace Content
 		buffer[bytesToRead] = 0;
 
 		return std::string((char*)buffer);
+	}
+
+	const byte* XnbReader::GetData()
+	{
+		return nullptr;
 	}
 
 	void XnbReader::readHeader()

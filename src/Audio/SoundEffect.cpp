@@ -264,7 +264,7 @@ namespace Audio
 #endif
 	}
 
-	SoundEffect* SoundEffect::LoadFrom(Content::Stream* stream, bool isXNB)
+	SoundEffect* SoundEffect::LoadFrom(Content::MappedFileStream* stream, bool isXNB)
 	{
 #ifndef DISABLE_OPENAL
 		SoundEffect* effect = new SoundEffect();
@@ -363,14 +363,14 @@ namespace Audio
 		}
 		else
 		{
-			buffer = (byte*)Nxna::NxnaTempMemoryPool::GetMemory(dataSize);
-			stream->Read(buffer, dataSize);
+			buffer = (byte*)stream->GetData() + stream->Position();
 		}
 
 		alGenBuffers(1, (ALuint*)&effect->m_buffer);
 		alBufferData((ALuint)effect->m_buffer, bformat, buffer, dataSize, format.SamplesPerSec);
 
-		Nxna::NxnaTempMemoryPool::ReleaseMemory();
+		if (format.FormatTag == WAVE_FORMAT_ADPCM)
+			Nxna::NxnaTempMemoryPool::ReleaseMemory();
 
 		effect->m_duration = (float)dataSize / format.SamplesPerSec / (format.BitsPerSample / 8) / format.Channels;
 #endif
@@ -390,7 +390,7 @@ namespace Audio
 		return SoundEffect::LoadFrom(stream->GetStream(), true);
 	}
 
-	void* SoundEffectLoader::ReadRaw(Content::FileStream* stream)
+	void* SoundEffectLoader::ReadRaw(Content::MappedFileStream* stream)
 	{
 		// read the raw WAV file, which has a RIFF header
 		// TODO: this only handles basic PCM encoded WAV files.

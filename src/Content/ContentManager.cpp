@@ -67,8 +67,8 @@ namespace Content
 #if defined NXNA_PLATFORM_ANDROID
 		FileStream* fs = AndroidFileSystem::Open(fullName.c_str());
 #else
-		FileStream* fs = new FileStream(fullName.c_str());
-		//MappedFileStream* fs = new MappedFileStream(fullName.c_str());
+		//FileStream* fs = new FileStream(fullName.c_str());
+		MappedFileStream* fs = new MappedFileStream(fullName.c_str());
 #endif
 		if (fs == nullptr || fs->IsOpen() == false)
 			throw ContentException(std::string("Unable to open file: ") + fullName);
@@ -76,14 +76,14 @@ namespace Content
 		return new XnbReader(fs, name, fullName.c_str(), this);
 	}
 
-	FileStream* ContentManager::loadRaw(const char* name)
+	MappedFileStream* ContentManager::loadRaw(const char* name)
 	{
 		std::string fullName = m_rootDirectory + name;
 
 #if defined NXNA_PLATFORM_ANDROID
 		FileStream* fs = AndroidFileSystem::Open(fullName.c_str());
 #else
-		FileStream* fs = new FileStream(fullName.c_str());
+		MappedFileStream* fs = new MappedFileStream(fullName.c_str());
 #endif
 
 		if (fs == nullptr)
