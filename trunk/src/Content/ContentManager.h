@@ -14,7 +14,7 @@ namespace Nxna
 {
 namespace Content
 {
-	class FileStream;
+	class MappedFileStream;
 	class XnbReader;
 	
 	class IContentReader
@@ -23,7 +23,7 @@ namespace Content
 		virtual ~IContentReader() { }
 		virtual const char* GetTypeName() = 0;
 		virtual void* Read(XnbReader* reader) = 0;
-		virtual void* ReadRaw(FileStream* /* stream */) { return nullptr; }
+		virtual void* ReadRaw(MappedFileStream* /* stream */) { return nullptr; }
 		virtual void Destroy(void* resource) = 0;
 	};
 
@@ -108,7 +108,7 @@ namespace Content
 			if (loader != m_loaders.end())
 			{
 				// load the raw resource data from a file
-				FileStream* stream = loadRaw(name);
+				MappedFileStream* stream = loadRaw(name);
 				if (stream == nullptr) return nullptr;
 
 				T* resource = static_cast<T*>((*loader).second->ReadRaw(stream));
@@ -139,7 +139,7 @@ namespace Content
 	private:
 
 		XnbReader* load(const char* name);
-		FileStream* loadRaw(const char* name);
+		MappedFileStream* loadRaw(const char* name);
 	};
 }
 }

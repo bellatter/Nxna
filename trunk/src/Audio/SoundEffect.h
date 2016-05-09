@@ -80,7 +80,7 @@ namespace Audio
 		static void SetDistanceScale(float scale);
 		static void SetMasterVolume(float volume);
 
-		static SoundEffect* LoadFrom(Content::Stream* stream, bool isXNB);
+		static SoundEffect* LoadFrom(Content::MappedFileStream* stream, bool isXNB);
 
 	private:
 		SoundEffect() {}
@@ -93,7 +93,7 @@ namespace Audio
 	public:
 		virtual const char* GetTypeName() override { return typeid(SoundEffect).name(); }
 		virtual void* Read(Content::XnbReader* stream) override;
-		virtual void* ReadRaw(Content::FileStream* stream) override;
+		virtual void* ReadRaw(Content::MappedFileStream* stream) override;
 		virtual void Destroy(void* resource) override;
 	};
 }
