@@ -28,8 +28,6 @@ namespace OpenGl
 		const GlIndexBuffer* m_indices;
 		int m_version;
 		int m_glslVersion;
-		char m_vendor[128];
-		char m_renderer[128];
 		BlendState m_cachedBlendState;
 		DepthStencilState m_cachedDepthStencilState;
 		Rectangle m_scissorRectangle;
@@ -85,8 +83,7 @@ namespace OpenGl
 
 		void SetCurrentEffect(GlslEffect* effect) { m_effect = effect; }
 
-		const char* GetVendor();
-		const char* GetRenderer();
+		virtual void GetInfo(GraphicsDeviceInfo* info) override;
 		int GetVersion() { return m_version; }
 		int GetGlslVersion() { return m_glslVersion; }
 

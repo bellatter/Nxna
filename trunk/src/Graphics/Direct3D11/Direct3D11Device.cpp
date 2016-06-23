@@ -38,7 +38,6 @@ namespace Direct3D11
 		m_rasterizerStateDirty = true;
 		m_currentRenderTarget = nullptr;
 
-		m_caps->SupportsFullNonPowerOfTwoTextures = true;
 		m_caps->SupportsShaders = true;
 	}
 
@@ -667,27 +666,42 @@ namespace Direct3D11
 			const VertexElement* e = decl.GetElements();
 			for (int i = 0; i < decl.GetNumElements(); i++)
 			{
-				if (e[i].ElementUsage == VertexElementUsage::Position)
+				switch (e[i].ElementUsage)
+				{
+				case VertexElementUsage::Position:
 					desc[i].SemanticName = "SV_POSITION";
-				else if (e[i].ElementUsage == VertexElementUsage::Normal)
+					break;
+				case VertexElementUsage::Normal:
 					desc[i].SemanticName = "NORMAL";
-				else if (e[i].ElementUsage == VertexElementUsage::TextureCoordinate)
+					break;
+				case VertexElementUsage::TextureCoordinate:
 					desc[i].SemanticName = "TEXCOORD";
-				else if (e[i].ElementUsage == VertexElementUsage::Color)
+					break;
+				case VertexElementUsage::Color:
 					desc[i].SemanticName = "COLOR";
+					break;
+				}
 
 				desc[i].SemanticIndex = e[i].UsageIndex;
 			
-				if (e[i].ElementFormat == VertexElementFormat::Single)
+				switch (e[i].ElementFormat)
+				{
+				case VertexElementFormat::Single:
 					desc[i].Format = DXGI_FORMAT_R32_FLOAT;
-				else if (e[i].ElementFormat == VertexElementFormat::Vector2)
+					break;
+				case VertexElementFormat::Vector2:
 					desc[i].Format = DXGI_FORMAT_R32G32_FLOAT;
-				else if (e[i].ElementFormat == VertexElementFormat::Vector3)
+					break;
+				case VertexElementFormat::Vector3:
 					desc[i].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-				else if (e[i].ElementFormat == VertexElementFormat::Vector4)
+					break;
+				case VertexElementFormat::Vector4:
 					desc[i].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-				else if (e[i].ElementFormat == VertexElementFormat::Color)
+					break;
+				case VertexElementFormat::Color:
 					desc[i].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+					break;
+				}
 
 				desc[i].InputSlot = 0;
 				desc[i].AlignedByteOffset = e[i].Offset;

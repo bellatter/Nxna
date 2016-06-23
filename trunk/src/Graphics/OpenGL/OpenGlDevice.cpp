@@ -61,12 +61,6 @@ namespace OpenGl
 			//m_caps->SupportsS3tcTextureCompression = true;
 		}
 
-		// does the GPU offer Hi-Def level support for non-power-of-2 textures?
-		if (GLEW_ARB_texture_non_power_of_two)
-		{
-			m_caps->SupportsFullNonPowerOfTwoTextures = true;
-		}
-
 		if (GLEW_ARB_debug_output)
 		{
 			glDebugMessageCallbackARB(errorCallback, nullptr);
@@ -161,6 +155,11 @@ namespace OpenGl
 			glEnable(GL_SCISSOR_TEST);
 		else
 			glDisable(GL_SCISSOR_TEST);
+
+		if (state->TheFillMode == FillMode::Solid)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		else
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 
 	DepthStencilState OpenGlDevice::GetDepthStencilState()
@@ -485,14 +484,18 @@ namespace OpenGl
 		glReadPixels(0, 0, m_presentationParameters.BackBufferWidth, m_presentationParameters.BackBufferHeight, GL_RGB, GL_UNSIGNED_BYTE, data);
 	}
 
-	const char* OpenGlDevice::GetVendor()
+	void OpenGlDevice::GetInfo(GraphicsDeviceInfo* info)
 	{
-		return (char*)glGetString(GL_VENDOR);
-	}
+		auto vendor = (char*)glGetString(GL_VENDOR);
+		auto renderer = (char*)glGetString(GL_RENDERER);
 
-	const char* OpenGlDevice::GetRenderer()
-	{
-		return (char*)glGetString(GL_RENDERER);
+		if (vendor != nullptr)
+			strncpy(info->Name, vendor, 256);
+		if (renderer != nullptr)
+			strncpy(info->Description, renderer, 256);
+
+		info->Name[255] = 0;
+		info->Description[255] = 0;
 	}
 
 	void OpenGlDevice::SetSamplers()
