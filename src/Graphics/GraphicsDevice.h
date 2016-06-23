@@ -113,6 +113,15 @@ namespace Graphics
 		class AlphaTestEffectPimpl;
 	}
 
+	// NOTE: This API should be considered temporary!
+	// The XNA way to do it is to get the GraphicsAdapter and get
+	// the info you need from it.
+	struct GraphicsDeviceInfo
+	{
+		char Name[256];
+		char Description[256];
+	};
+
 	class GraphicsDevice
 	{
 		friend class Texture2D;
@@ -177,6 +186,7 @@ namespace Graphics
 		virtual const char* GetRendererName() = 0;
 
 		GraphicsDeviceCapabilities* GetCaps() { return m_caps; }
+		virtual void GetInfo(GraphicsDeviceInfo* info) { info->Description[0] = 0; info->Name[0] = 0; }
 
 		static GraphicsDevice* GetDevice() { return m_instance; }
 

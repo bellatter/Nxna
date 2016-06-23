@@ -11,12 +11,10 @@ namespace Graphics
 		GraphicsDeviceCapabilities()
 		{
 			SupportsS3tcTextureCompression = false;
-			SupportsFullNonPowerOfTwoTextures = false;
 			SupportsShaders = false;
 		}
 
 		bool SupportsS3tcTextureCompression;
-		bool SupportsFullNonPowerOfTwoTextures;
 		bool SupportsShaders;
 	};
 }
