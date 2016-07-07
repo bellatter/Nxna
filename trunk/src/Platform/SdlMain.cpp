@@ -1,6 +1,6 @@
-#include "PlatformDefs.h"
+#include "../NxnaConfig.h"
 
-#if !defined NXNA_PLATFORM_NACL && (!defined NXNA_PLATFORM_WIN32 || defined NXNA_PLATFORM_WIN32_SDL) 
+#ifdef NXNA_PLATFORMENGINE_SDL
 
 #if defined NXNA_PLATFORM_APPLE
 #include <SDL2/SDL.h>
@@ -8,9 +8,9 @@
 #include <SDL.h>
 #endif
 
-extern int NxnaMain(int argc, const char** argv);
+extern int NxnaMain(int argc, char* argv[]);
 
-int main(int argc, const char** argv)
+int main(int argc, char* argv[])
 {
 	return NxnaMain(argc, argv);
 }
