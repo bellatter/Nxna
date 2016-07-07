@@ -20,48 +20,16 @@ typedef unsigned char byte;
 #if defined NXNA_PLATFORM_APPLE_IOS
 #define NXNA_PLATFORMENGINE_IOS
 #define NXNA_DISABLE_OGG
+#elseif defined NXNA_PLATFORM_WIN32
+#define NXNA_PLATFORMENGINE_WIN32
 #else
 #define NXNA_PLATFORMENGINE_SDL
 #endif
 
-// disable Visual C++ 2010 specific stuff if needed
-#if !defined _MSC_VER || _MSC_VER < 1600
-#if __cplusplus < 200103L
-#define nullptr 0
-#endif
-#define override
-#endif
-
 // allow typesafe enums
-#if !defined DISABLE_NXNA_CLASS_ENUMS
 #define NXNA_ENUM(e) enum class e {
 #define NXNA_BITWISE_ENUM(e) enum e {
 #define END_NXNA_ENUM(e) };
-#else
-template<typename def, typename inner = typename def::type>
-class safe_enum : public def
-{
-	typedef typename def::type type;
-	inner val;
-public:
-	safe_enum(int v) : val((type)v) {}
-	safe_enum(type v) : val(v) {}
-	safe_enum() : val((inner)0) {}
-	inner underlying() const { return val; }
- 
-	//bool operator == (const safe_enum & s) const { return this->val == s.val; }
-	//bool operator != (const safe_enum & s) const { return this->val != s.val; }
-	bool operator <  (const safe_enum & s) const { return this->val <  s.val; }
-	bool operator <= (const safe_enum & s) const { return this->val <= s.val; }
-	bool operator >  (const safe_enum & s) const { return this->val >  s.val; }
-	bool operator >= (const safe_enum & s) const { return this->val >= s.val; }
-	operator int() const { return (int)this->val; }
-};
-
-#define NXNA_ENUM(e) struct e##_def { enum type {
-#define NXNA_BITWISE_ENUM(e) struct e##_def { enum type {
-#define END_NXNA_ENUM(e) }; }; typedef safe_enum<e##_def> e;
-#endif
 
 // create some macros to disable constant warnings about "override" keyword
 #ifdef _MSC_VER

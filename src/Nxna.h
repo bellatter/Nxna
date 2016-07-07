@@ -7,12 +7,13 @@
 
 namespace Nxna
 {
-	NXNA_ENUM(PlayerIndex)
+	enum class PlayerIndex
+	{
 		One,
 		Two,
 		Three,
 		Four
-	END_NXNA_ENUM(PlayerIndex)
+	};
 }
 
 #include "GameTime.h"
