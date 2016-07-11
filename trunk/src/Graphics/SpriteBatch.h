@@ -76,30 +76,30 @@ namespace Graphics
 		void Begin(SpriteSortMode sortMode, const BlendState* blendState, 
 			const DepthStencilState* depthStencilState, const RasterizerState* rasterizerState, Effect* effect, const Matrix& transform);
 
-		void Draw(Texture2D* texture, const Vector2& position, const Color& color);
-		void Draw(Texture2D* texture, const Rectangle& destinationRectangle, const Color& color);
-		void Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, const Color& color);
-		void Draw(Texture2D* texture, const Rectangle& destinationRectangle, const Rectangle* sourceRectangle, const Color& color);
+		void Draw(Texture2D* texture, const Vector2& position, Color color);
+		void Draw(Texture2D* texture, const Rectangle& destinationRectangle, Color color);
+		void Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, Color color);
+		void Draw(Texture2D* texture, const Rectangle& destinationRectangle, const Rectangle* sourceRectangle, Color color);
 
-		void Draw(Texture2D* texture, const Rectangle& destinationRectangle, const Rectangle* sourceRectangle, const Color& color,
+		void Draw(Texture2D* texture, const Rectangle& destinationRectangle, const Rectangle* sourceRectangle, Color color,
 			float rotation, const Vector2& origin, SpriteEffects effects, float layerDepth);
-		void Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, const Color& color,
+		void Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, Color color,
 			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth);
-		void Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, const Color& color,
+		void Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, Color color,
 			float rotation, const Vector2& origin, const Vector2& scale, SpriteEffects effects, float layerDepth);
 
-		void DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, const Color& color);
-		void DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, const Color& color,
+		void DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, Color color);
+		void DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, Color color,
 			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth);
-		void DrawString(SpriteFont* spriteFont, const wchar_t* text, size_t numCharacters, const Vector2& position, const Color& color,
+		void DrawString(SpriteFont* spriteFont, const wchar_t* text, size_t numCharacters, const Vector2& position, Color color,
 			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth);
-		void DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color);
-		void DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color,
+		void DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, Color color);
+		void DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, Color color,
 			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth);
-		void DrawString(SpriteFont* spriteFont, const char* text, size_t numCharacters, const Vector2& position, const Color& color,
+		void DrawString(SpriteFont* spriteFont, const char* text, size_t numCharacters, const Vector2& position, Color color,
 			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth);
-		void DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color);
-		void DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color,
+		void DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, Color color);
+		void DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, Color color,
 			float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth); 
 
 
@@ -109,7 +109,7 @@ namespace Graphics
 
 	private:
 
-		void addSprite(Texture2D* texture, const Vector4& position, const Vector4& source, const Color& color, 
+		void addSprite(Texture2D* texture, const Vector4& position, const Vector4& source, Color color, 
 			float rotation, const Vector2& origin, SpriteEffects effects, float layerDepth);
 
 		void flush();
