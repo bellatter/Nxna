@@ -109,7 +109,7 @@ namespace Graphics
         flush();
 	}
 
-	void SpriteBatch::Draw(Texture2D* texture, const Vector2& position, const Color& color)
+	void SpriteBatch::Draw(Texture2D* texture, const Vector2& position, Color color)
 	{
 		assert(texture != nullptr);
 
@@ -122,7 +122,7 @@ namespace Graphics
 		Draw(texture, r, nullptr, color);
 	}
 
-	void SpriteBatch::Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, const Color& color)
+	void SpriteBatch::Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, Color color)
 	{
 		assert(texture != nullptr);
 
@@ -135,7 +135,7 @@ namespace Graphics
 		Draw(texture, r, sourceRectangle, color);
 	}
 	
-	void SpriteBatch::Draw(Texture2D* texture, const Rectangle& destinationRectangle, const Rectangle* sourceRectangle, const Color& color)
+	void SpriteBatch::Draw(Texture2D* texture, const Rectangle& destinationRectangle, const Rectangle* sourceRectangle, Color color)
 	{
 		assert(texture != nullptr);
 
@@ -169,7 +169,7 @@ namespace Graphics
 		m_sprites.push_back(s);
 	}
 
-	void SpriteBatch::Draw(Texture2D* texture, const Rectangle& destinationRectangle, const Color& color)
+	void SpriteBatch::Draw(Texture2D* texture, const Rectangle& destinationRectangle, Color color)
 	{
 		assert(texture != nullptr);
 
@@ -193,13 +193,13 @@ namespace Graphics
 		m_sprites.push_back(s);
 	}
 
-	void SpriteBatch::Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, const Color& color,
+	void SpriteBatch::Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, Color color,
 		float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth)
 	{
 		Draw(texture, position, sourceRectangle, color, rotation, origin, Vector2(scale, scale), effects, layerDepth);
 	}
 
-	void SpriteBatch::Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, const Color& color,
+	void SpriteBatch::Draw(Texture2D* texture, const Vector2& position, const Rectangle* sourceRectangle, Color color,
 		float rotation, const Vector2& origin, const Vector2& scale, SpriteEffects effects, float layerDepth)
 	{
 		assert(texture != nullptr);
@@ -238,7 +238,7 @@ namespace Graphics
 		addSprite(texture, destination, source, color, rotation, origin, effects, layerDepth);
 	}
 
-	void SpriteBatch::Draw(Texture2D* texture, const Rectangle& destinationRectangle, const Rectangle* sourceRectangle, const Color& color,
+	void SpriteBatch::Draw(Texture2D* texture, const Rectangle& destinationRectangle, const Rectangle* sourceRectangle, Color color,
 		float rotation, const Vector2& origin, SpriteEffects effects, float layerDepth)
 	{
 		assert(texture != nullptr);
@@ -273,22 +273,22 @@ namespace Graphics
 		m_sprites.push_back(s);
 	}
 
-	void SpriteBatch::DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color)
+	void SpriteBatch::DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, Color color)
 	{
 		DrawString(spriteFont, text, position, color, 0, Nxna::Vector2(0, 0), 1.0f, SpriteEffects::None, 0);
 	}
 
-	void SpriteBatch::DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, const Color& color)
+	void SpriteBatch::DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, Color color)
 	{
 		DrawString(spriteFont, text, position, color, 0, Nxna::Vector2(0, 0), 1.0f, SpriteEffects::None, 0);
 	}
 
-	void SpriteBatch::DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color)
+	void SpriteBatch::DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, Color color)
 	{
 		DrawStringUTF8(spriteFont, text, position, color, 0, Nxna::Vector2(0, 0), 1.0f, SpriteEffects::None, 0);
 	}
 
-	void SpriteBatch::DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color,
+	void SpriteBatch::DrawString(SpriteFont* spriteFont, const char* text, const Vector2& position, Color color,
 		float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth)
 	{
 		Matrix rotationMatrix;
@@ -324,7 +324,7 @@ namespace Graphics
 		}
 	}
 
-	void SpriteBatch::DrawString(SpriteFont* spriteFont, const char* text, size_t numCharacters, const Vector2& position, const Color& color,
+	void SpriteBatch::DrawString(SpriteFont* spriteFont, const char* text, size_t numCharacters, const Vector2& position, Color color,
 		float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth)
 	{
 		Matrix rotationMatrix;
@@ -362,7 +362,7 @@ namespace Graphics
 		}
 	}
 
-	void SpriteBatch::DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, const Color& color,
+	void SpriteBatch::DrawString(SpriteFont* spriteFont, const wchar_t* text, const Vector2& position, Color color,
 		float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth)
 	{
 		Matrix rotationMatrix;
@@ -404,7 +404,7 @@ namespace Graphics
 		}
 	}
 
-	void SpriteBatch::DrawString(SpriteFont* spriteFont, const wchar_t* text, size_t numCharacters, const Vector2& position, const Color& color,
+	void SpriteBatch::DrawString(SpriteFont* spriteFont, const wchar_t* text, size_t numCharacters, const Vector2& position, Color color,
 		float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth)
 	{
 		Matrix rotationMatrix;
@@ -448,7 +448,7 @@ namespace Graphics
 		}
 	}
 
-	void SpriteBatch::DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, const Color& color,
+	void SpriteBatch::DrawStringUTF8(SpriteFont* spriteFont, const char* text, const Vector2& position, Color color,
 		float rotation, const Vector2& origin, float scale, SpriteEffects effects, float layerDepth)
 	{
 		Matrix rotationMatrix;
@@ -487,7 +487,7 @@ namespace Graphics
 		}
 	}
 
-	void SpriteBatch::addSprite(Texture2D* texture, const Vector4& position, const Vector4& source, const Color& color, 
+	void SpriteBatch::addSprite(Texture2D* texture, const Vector4& position, const Vector4& source, Color color, 
 		float rotation, const Vector2& origin, SpriteEffects effects, float layerDepth)
 	{
 		Sprite s;
