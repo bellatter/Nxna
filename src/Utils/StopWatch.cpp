@@ -6,6 +6,8 @@
 #elif defined NXNA_PLATFORM_APPLE
 #include <mach/mach.h>
 #include <mach/mach_time.h>
+#else
+#include <time.h>
 #endif
 
 namespace Nxna
@@ -26,6 +28,10 @@ namespace Utils
 		return (uint64_t)ticks.QuadPart;
 #elif defined NXNA_PLATFORM_APPLE
 		return mach_absolute_time();
+#else
+		struct timespec now;
+  		clock_gettime(CLOCK_MONOTONIC, &now);
+  		return now.tv_sec * 1000000000 + now.tv_nsec;
 #endif
 	}
 
@@ -86,6 +92,8 @@ namespace Utils
 		return GetElapsedTicks() * 1000 / m_frequency;
 #elif defined NXNA_PLATFORM_APPLE
 		return GetElapsedTicks() * m_info.numer / m_info.denom / 1000000;
+#else
+		return GetElapsedTicks() / 1000000;
 #endif
 	}
 
@@ -95,6 +103,8 @@ namespace Utils
 		return (unsigned int)(GetElapsedTicks() * 1000 / m_frequency);
 #elif defined NXNA_PLATFORM_APPLE
 		return (unsigned int)(GetElapsedTicks() * m_info.numer / m_info.denom / 1000000);
+#else
+		return (unsigned int)(GetElapsedTicks() / 1000000);
 #endif
 	}
 }
