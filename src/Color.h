@@ -1,124 +1,36 @@
-#ifndef COLOR_H
-#define COLOR_H
-
-#include "NxnaConfig.h"
-#include "MathHelper.h"
+#ifndef NXNA_COLOR_H
+#define NXNA_COLOR_H
 
 namespace Nxna
 {
-struct Color
-{
-	Color()
+	struct Color
 	{
-		R = G = B = A = 0;
-	}
+		Color()
+		{
+			R = G = B = A = 0;
+		}
 
-	Color(int r, int g, int b)
-	{
-		R = (byte)r; G = (byte)g; B = (byte)b; A = 255;
-	}
+		Color(int r, int g, int b)
+		{
+			R = (unsigned char)r; G = (unsigned char)g; B = (unsigned char)b; A = 255;
+		}
 
-	Color(int r, int g, int b, int a)
-	{
-		R = (byte)r; G = (byte)g; B = (byte)b; A = (byte)a;
-	}
+		Color(int r, int g, int b, int a)
+		{
+			R = (unsigned char)r; G = (unsigned char)g; B = (unsigned char)b; A = (unsigned char)a;
+		}
 
-	byte R;
-	byte G;
-	byte B;
-	byte A;
+		unsigned char R;
+		unsigned char G;
+		unsigned char B;
+		unsigned char A;
+	};
 
-	unsigned int GetPackedValue() const
-	{
-		return (unsigned int)A << 24 | (unsigned int)B << 16 | (unsigned int)G << 8 | R;
-	}
+	typedef unsigned int PackedColor;
 
-	Color operator *(float s) const
-	{
-		float r = R * s;
-		float g = G * s;
-		float b = B * s;
-		float a = A * s;
-
-		// clamp
-		if (r > 255.0f)
-			r = 255.0f;
-		else if (r < 0)
-			r = 0;
-
-		if (g > 255.0f)
-			g = 255.0f;
-		else if (g < 0)
-			g = 0;
-
-		if (b > 255.0f)
-			b = 255.0f;
-		else if (b < 0)
-			b = 0;
-
-		if (a > 255.0f)
-			a = 255.0f;
-		else if (a < 0)
-			a = 0;
-
-		Color c;
-		c.R = (byte)r;
-		c.G = (byte)g;
-		c.B = (byte)b;
-		c.A = (byte)a;
-
-		return c;
-	}
-
-	static const Color Bisque;
-	static const Color Black;
-	static const Color Blue;
-	static const Color BurlyWood;
-	static const Color CornflowerBlue;
-	static const Color DarkOrange;
-	static const Color DeepSkyBlue;
-	static const Color DodgerBlue;
-	static const Color Fuchsia;
-	static const Color Gray;
-	static const Color Gold;
-	static const Color Goldenrod;
-	static const Color IndianRed;
-	static const Color LightBlue;
-	static const Color LightGray;
-	static const Color Red;
-	static const Color SaddleBrown;
-	static const Color SandyBrown;
-	static const Color Tomato;
-	static const Color White;
-	static const Color Yellow;
-
-	static Color Lerp(const Color& c1, const Color& c2, float amount)
-	{
-		return Color((int)MathHelper::Lerp(c1.R, c2.R, amount),
-			(int)MathHelper::Lerp(c1.G, c2.G, amount),
-			(int)MathHelper::Lerp(c1.B, c2.B, amount),
-			(int)MathHelper::Lerp(c1.A, c2.A, amount));
-	}
-
-	static Color FromNonPremultiplied(int r, int g, int b, int a)
-	{
-		return Color((byte)(r * a / 255), (byte)(g * a / 255), (byte)(b * a / 255), (byte)a);
-	}
-
-	bool operator==(const Color& c) const
-	{
-		return R == c.R &&
-			G == c.G &&
-			B == c.B &&
-			A == c.A;
-	}
-
-	bool operator!=(const Color& c) const
-	{
-		return !(*this == c);
-	}
-};
-
+#define NXNA_GET_PACKED_COLOR(c) (PackedColor)((unsigned int)c.A << 24 | (unsigned int)c.B << 16 | (unsigned int)c.G << 8 | c.R)
+#define NXNA_GET_PACKED_COLOR_RGB_BYTES(r,g,b) (Nxna::PackedColor)((unsigned int)255 << 24 | (unsigned int)(b & 0xff) << 16 | (unsigned int)(g & 0xff) << 8 | (r & 0xff))
+#define NXNA_GET_UNPACKED_COLOR(c, r, g, b, a) { r == c & 0xff; g = (c >> 8) & 0xff; b = (c >> 16) & 0xff; a = (c >> 24) & 0xff; }
 }
 
-#endif // COLOR_H
+#endif // NXNA_COLOR_H

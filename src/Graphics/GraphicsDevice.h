@@ -1,231 +1,556 @@
-#ifndef GRAPHICS_GRAPHICSDEVICE_H
-#define GRAPHICS_GRAPHICSDEVICE_H
+#ifndef NXNA_GRAPHICS_GRAPHICSDEVICE_H
+#define NXNA_GRAPHICS_GRAPHICSDEVICE_H
 
-#include "../Color.h"
-#include "../Exception.h"
-#include "BlendState.h"
-#include "DepthStencilState.h"
-#include "RasterizerState.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "Texture2D.h"
-#include "RenderTarget2D.h"
-#include "SamplerStateCollection.h"
-#include "PresentationParameters.h"
+#ifdef NXNA_ENABLE_DIRECT3D11
+#include <d3d11.h>
+#endif
+
+#ifdef NXNA_ENABLE_MATH
 #include "../Vector3.h"
-#include "../Rectangle.h"
+#include "../Matrix.h"
+#endif
 
+#include "PipelineState.h"
+
+
+/// Nxna2
 namespace Nxna
 {
-namespace Graphics
-{
-	struct Viewport
+	/// Graphics
+	namespace Graphics
 	{
-		Viewport()
+		/// The type of graphics device
+		enum class GraphicsDeviceType
 		{
-			X = 0;
-			Y = 0;
-			Width = 0;
-			Height = 0;
-		}
+			/// Represents no renderer
+			None, 
 
-		Viewport(int x, int y, int width, int height)
-		{
-			X = x;
-			Y = y;
-			Width = width;
-			Height = height;
-		}
+			/// OpenGL 4.1
+			OpenGl41,
 
-		float GetAspectRatio() const { return Width / (float)Height; }
+			/// OpenGL ES 3.0
+			OpenGLES3,
+			
+			/// Direct3D 11
+			Direct3D11,
 
-		Nxna::Vector3 Project(const Nxna::Vector3& source,
-			const Nxna::Matrix& project,
-			const Nxna::Matrix& view,
-			const Nxna::Matrix& world);
-
-		Nxna::Vector3 Unproject(const Nxna::Vector3& source, 
-			const Nxna::Matrix& projection, 
-			const Nxna::Matrix& view, 
-			const Nxna::Matrix& world);
-
-		Rectangle GetBounds()
-		{
-			return Rectangle(X, Y, Width, Height);
-		}
-
-		int X, Y, Width, Height;
-	};
-
-	NXNA_ENUM(PrimitiveType)
-		TriangleList,
-		TriangleStrip
-	END_NXNA_ENUM(PrimitiveType)
-
-	NXNA_ENUM(ClearOptions)
-		DepthBuffer = 0x01,
-		Stencil = 0x02,
-		Target = 0x04
-	END_NXNA_ENUM(ClearOptions)
-
-#ifdef NXNA_CLASS_ENUMS_NOT_SUPPORTED
-	inline ClearOptions operator|(ClearOptions& a, ClearOptions& b)
-#else
-	inline ClearOptions operator|(ClearOptions a, ClearOptions b)
+#ifndef NDEBUG
+			LAST
 #endif
-	{
-		return static_cast<ClearOptions>(static_cast<int>(a) | static_cast<int>(b));
-	}
+		};
+		
+		union Capabilities
+		{
+			struct
+			{
+				bool SupportsS3tcTextureCompression;
+			} OpenGLCaps;
+		};
 
-#ifdef NXNA_CLASS_ENUMS_NOT_SUPPORTED
-	inline ClearOptions operator&(ClearOptions& a, ClearOptions& b)
-#else
-	inline ClearOptions operator&(ClearOptions a, ClearOptions b)
+		enum class Usage
+		{
+			/// Default write-only usage
+			Default,
+
+			/// Write-once
+			Immutable,
+
+			/// Write lots of times
+			Dynamic
+		};
+
+		enum class PrimitiveType
+		{
+			/// A list of triangles
+			TriangleList,
+
+			/// A triangle strip
+			TriangleStrip
+		};
+
+		enum class IndexElementSize
+		{
+			/// 16 bit indices
+			SixteenBits = 2,
+
+			/// 32 bit indices
+			ThirtyTwoBits = 4
+		};
+
+		struct IndexBuffer
+		{
+			union
+			{
+				struct
+				{
+					unsigned int ByteLength;
+					unsigned int Buffer;
+				} OpenGL;
+#ifdef NXNA_ENABLE_DIRECT3D11
+				struct
+				{
+					ID3D11Buffer* Buffer;
+				} Direct3D11;
 #endif
-	{
-		return static_cast<ClearOptions>(static_cast<int>(a) & static_cast<int>(b));
-	}
+			};
 
-	class VertexDeclaration;
-	class VertexBuffer;
-	class IndexBuffer;
-	class Texture2D;
-	class RenderTarget2D;
-	class Effect;
-	class BasicEffect;
-	class SpriteEffect;
-	class DualTextureEffect;
-	class AlphaTestEffect;
-	struct GraphicsDeviceCapabilities;
-	class IVertexBufferPimpl;
-	class IDynamicVertexBufferPimpl;
+			IndexElementSize ElementSize;
 
-	namespace Pvt
-	{
-		class ITexture2DPimpl;
-		class IRenderTarget2DPimpl;
-		class IIndexBufferPimpl;
+#ifndef NXNA_DISABLE_VALIDATION
+			unsigned int ByteLength;
+			Usage BufferUsage;
+#endif
+		};
 
-		class IEffectPimpl;
-		class BasicEffectPimpl;
-		class SpriteEffectPimpl;
-		class DualTextureEffectPimpl;
-		class AlphaTestEffectPimpl;
-	}
-
-	// NOTE: This API should be considered temporary!
-	// The XNA way to do it is to get the GraphicsAdapter and get
-	// the info you need from it.
-	struct GraphicsDeviceInfo
-	{
-		char Name[256];
-		char Description[256];
-	};
-
-	class GraphicsDevice
-	{
-		friend class Texture2D;
-		friend class RenderTarget2D;
-		friend class IndexBuffer;
-		friend class VertexBuffer;
-		friend class DynamicVertexBuffer;
-		friend class Effect;
-		friend class BasicEffect;
-		friend class SpriteEffect;
-		friend class DualTextureEffect;
-		friend class AlphaTestEffect;
-
-	protected:
-		static GraphicsDevice* m_instance;
-		GraphicsDeviceCapabilities* m_caps;
-		SamplerStateCollection m_samplers;
-
-	public:
-		virtual ~GraphicsDevice();
-
-		virtual PresentationParameters GetPresentationParameters() = 0;
-
-		virtual CullMode GetRasterizerState() = 0;
-		virtual void SetRasterizerState(const RasterizerState* state) = 0;
-
-		virtual DepthStencilState GetDepthStencilState() = 0;
-		virtual void SetDepthStencilState(const DepthStencilState* state) = 0;
-		void SetDepthStencilState(const DepthStencilState& state)
+		struct VertexBuffer
 		{
-			SetDepthStencilState(&state);
-		}
+			union
+			{
+				struct
+				{
+					unsigned int ByteLength;
+					unsigned int Buffer;
+					unsigned int VAO;
+				} OpenGL;
+#ifdef NXNA_ENABLE_DIRECT3D11
+				struct
+				{
+					ID3D11Buffer* Buffer;
+				} Direct3D11;
+#endif
+			};
 
-		virtual Rectangle GetScissorRectangle() = 0;
-		virtual void SetScissorRectangle(Rectangle r) = 0;
+#ifndef NXNA_DISABLE_VALIDATION
+			unsigned int ByteLength;
+			Usage BufferUsage;
+#endif
+		};
 
-		virtual void SetIndices(const IndexBuffer* indices) = 0;
+		struct ConstantBuffer
+		{
+			union
+			{
+				struct
+				{
+					unsigned int ByteLength;
+					unsigned int UniformBuffer;
+				} OpenGL;
+				struct
+				{
+					ID3D11Buffer* Buffer;
+				} Direct3D11;
+			};
 
-		virtual void Clear(const Color& c) = 0;
-		virtual void Clear(ClearOptions options, const Color& c, float depth, int stencil) = 0;
-		virtual Viewport GetViewport() = 0;
-		virtual void SetViewport(const Viewport& viewport) = 0;
+#ifndef NXNA_DISABLE_VALIDATION
+			Usage BufferUsage;
+			unsigned int ByteLength;
+#endif
+		};
 
-		virtual void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount) = 0;
-		virtual void DrawPrimitives(PrimitiveType primitiveType, int startVertex, int primitiveCount) = 0;
-		virtual void DrawUserIndexedPrimitives(PrimitiveType primitiveType, void* data, int numVertices, int* indices, int primitiveCount, const VertexDeclaration* vertexDeclaration) = 0;
-		virtual void DrawUserIndexedPrimitives(PrimitiveType primitiveType, void* data, int numVertices, short* indices, int primitiveCount, const VertexDeclaration* vertexDeclaration) = 0;
-		virtual void DrawUserPrimitives(PrimitiveType primitiveType, void* data, int primitiveCount, const VertexDeclaration* vertexDeclaration) = 0;
+		enum class BufferType
+		{
+			/// An index buffer
+			Index,
 
-		virtual void SetVertexBuffer(const VertexBuffer* vertexBuffer) = 0;
-		virtual void SetBlendState(const BlendState* blendState) = 0;
+			/// A vertex buffer
+			Vertex,
 
-		virtual void SetRenderTarget(RenderTarget2D* renderTarget) = 0;
+			/// A constant (or uniform) buffer
+			Constant
+		};
 
-		virtual void Present() = 0;
+		struct Buffer
+		{
+			union
+			{
+				struct
+				{
+					unsigned int BufferHandle;
+				} OpenGL;
+				struct
+				{
+					ID3D11Buffer* BufferPtr;
+				} Direct3D11;
+			};
 
-		SamplerStateCollection& GetSamplerStates() { return m_samplers; }
-
-		virtual void GetBackBufferData(void* data) = 0;
-
-		// Gets the renderer name. Will be "Direct3D" for Direct3D and "OpenGL" for OpenGL.
-		virtual const char* GetRendererName() = 0;
-
-		GraphicsDeviceCapabilities* GetCaps() { return m_caps; }
-		virtual void GetInfo(GraphicsDeviceInfo* info) { info->Description[0] = 0; info->Name[0] = 0; }
-
-		static GraphicsDevice* GetDevice() { return m_instance; }
-
-	protected:
-		void** GetInternalHandle(BlendState* blendState) { return &blendState->m_handle; }
-		void** GetInternalHandle(DepthStencilState* depthStencilState) { return &depthStencilState->m_handle; }
-		void *const* GetInternalHandle(const SamplerState* samplerState) { return &samplerState->m_handle; }
-		void** GetInternalHandle(RasterizerState* rasterizerState) { return &rasterizerState->m_handle; }
-
-		virtual void SetSamplers() = 0;
-
-		virtual Pvt::ITexture2DPimpl* CreateTexture2DPimpl(int width, int height, bool mipMap, SurfaceFormat format, bool isRenderTarget) = 0;
-		virtual Pvt::IRenderTarget2DPimpl* CreateRenderTarget2DPimpl(RenderTarget2D* parentRenderTarget, int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage) = 0;
-		virtual Pvt::IIndexBufferPimpl* CreateIndexBufferPimpl(IndexElementSize elementSize) = 0;
-		virtual Pvt::IVertexBufferPimpl* CreateVertexBufferPimpl(bool dynamic, const VertexDeclaration* vertexDeclaration, int vertexCount, BufferUsage usage) = 0;
+#ifndef NXNA_DISABLE_VALIDATION
+			BufferType Type;
+			Usage BufferUsage;
+			unsigned int ByteLength;
+#endif
+		};
 		
-		virtual Pvt::IEffectPimpl* CreateEffectPimpl(Effect* parent) = 0;
-		//virtual Pvt::BasicEffectPimpl* CreateBasicEffectPimpl(BasicEffect* effect, Pvt::IEffectPimpl* pimpl) = 0;
-		//virtual Pvt::SpriteEffectPimpl* CreateSpriteEffectPimpl(SpriteEffect* effect, Pvt::IEffectPimpl* pimpl) = 0;
-		//virtual Pvt::DualTextureEffectPimpl* CreateDualTextureEffectPimpl(DualTextureEffect* effect, Pvt::IEffectPimpl* pimpl) = 0;
-		//virtual Pvt::AlphaTestEffectPimpl* CreateAlphaTestEffectPimpl(AlphaTestEffect* effect, Pvt::IEffectPimpl* pimpl) = 0;
-		
-	};
 
-	class GraphicsException : public Exception
-	{
-	public:
-
-		GraphicsException(const std::string& message)
-			: Exception(message)
+		struct Viewport
 		{
-		}
+			Viewport()
+			{
+				X = 0;
+				Y = 0;
+				Width = 0;
+				Height = 0;
+			}
 
-		GraphicsException(const std::string& message, const char* file, int line)
-			: Exception(message, file, line)
+			Viewport(int x, int y, int width, int height)
+			{
+				X = x;
+				Y = y;
+				Width = width;
+				Height = height;
+			}
+
+			float GetAspectRatio() const { return Width / (float)Height; }
+
+#ifdef NXNA_ENABLE_MATH
+			Vector3 Project(const Vector3& source,
+				const Matrix& project,
+				const Matrix& view,
+				const Matrix& world);
+#endif
+			void Project(const float* source3f, 
+				const float* projectMatrix16f, 
+				const float* viewMatrix16f,
+				const float* worldMatrix16f,
+				float* result3f);
+
+#ifdef NXNA_ENABLE_MATH
+			Vector3 Unproject(const Vector3& source,
+				const Matrix& projection,
+				const Matrix& view,
+				const Matrix& world);
+#endif
+
+#ifdef NXNA_ENABLE_MATH
+			Rectangle GetBounds()
+			{
+				return Rectangle(X, Y, Width, Height);
+			}
+#endif
+
+			int X, Y, Width, Height;
+		};
+
+		struct GraphicsDeviceDebugMessage
 		{
-		}
-	};
-}
+			GraphicsDeviceType DeviceType;
+			const char* Message;
+		};
+
+		enum class ShaderType
+		{
+			Vertex,
+			Pixel
+		};
+
+		typedef void (*GraphicsDeviceMessageCallback)(GraphicsDeviceDebugMessage);
+
+		/// A struct full of parameters used to create a new GraphicsDevice
+		///
+		/// In the case of OpenGL, you have the option of using *just* the features of the particular
+		/// context version you requested, or you can enable extensions and allow the renderer to
+		/// take advantage of newer features that may be present and provide better performance.
+		/// This lets the renderer do things like target Mac OSX, which only supports OpenGL 4.1,
+		/// but on platforms that support OpenGL 4.5 the renderer can do things like direct state access.
+		struct GraphicsDeviceCreationParams
+		{
+			GraphicsDeviceType Type;
+			int ScreenWidth;
+			int ScreenHeight;
+
+			union
+			{
+				struct
+				{
+					/// Whether to allow the renderer to use extensions beyond what is present
+					/// in the core OpenGL version requested
+					bool AllowExtensionUse;
+				} OpenGL;
+#ifdef NXNA_ENABLE_DIRECT3D11
+				struct
+				{
+					ID3D11Device* Device;
+					ID3D11DeviceContext* DeviceContext;
+					ID3D11RenderTargetView* RenderTargetView;
+					IDXGISwapChain* SwapChain;
+				} Direct3D11;
+#endif
+			};
+		};
+
+#ifdef NXNA_ENABLE_DIRECT3D11
+		struct D3D11DeviceState
+		{
+			ID3D11Device* Device;
+			ID3D11DeviceContext* Context;
+			ID3D11RenderTargetView* RenderTargetView;
+			IDXGISwapChain* SwapChain;
+		};
+#endif
+
+		enum class SurfaceFormat
+		{
+			Color,
+			Bgr565,
+			Bgra5551,
+			Bgra4444,
+			Dxt1,
+			Dxt3,
+			Dxt5,
+
+			// the following are not supported by XNA. These are our own
+			// extensions so that iOS devices can have compressed textures too.
+			Pvrtc4
+		};
+
+		struct TextureCreationDesc
+		{
+			int Width;
+			int Height;
+			int MipLevels;
+			Usage TextureUsage;
+			SurfaceFormat Format;
+
+			void* InitialData;
+			size_t InitialDataByteCount;
+		};
+
+		struct Texture2D
+		{
+			union
+			{
+				struct
+				{
+					unsigned int Handle;
+				} OpenGL;
+#ifdef NXNA_ENABLE_DIRECT3D11
+				struct
+				{
+					ID3D11ShaderResourceView* m_shaderResourceView;
+					ID3D11Texture2D* m_texture;
+				} Direct3D11;
+#endif
+			};
+		};
+
+		struct Texture2DExtra
+		{
+			Texture2D Texture;
+			int Width;
+			int Height;
+		};
+
+		struct IndexBufferDesc
+		{
+			IndexElementSize ElementSize;
+			int NumElements;
+			Usage BufferUsage;
+
+			void* InitialData;
+			unsigned int InitialDataByteCount;
+		};
+
+		struct VertexBufferDesc
+		{
+			int NumVertices;
+			Usage BufferUsage;
+			InputElement* InputElements;
+			int NumInputElements;
+			int StrideBytes;
+
+			void* InitialData;
+			size_t InitialDataByteCount;
+		};
+
+		struct ConstantBufferDesc
+		{
+			Usage BufferUsage;
+			unsigned int ByteCount;
+
+			void* InitialData;
+		};
+
+		enum class MapType
+		{
+			Write,
+			WriteDiscard,
+			WriteNoOverwrite
+		};
+
+		class GraphicsDevice
+		{
+			GraphicsDeviceType m_type;
+			Capabilities m_caps;
+			int m_screenWidth, m_screenHeight;
+
+			IndexBuffer m_indices;
+			VertexBuffer m_vertices;
+			ShaderPipeline* m_shaderPipeline;
+			BlendState* m_blendState;
+			RasterizerState* m_rasterizerState;
+
+			NxnaResultDetails m_errorDetails;
+
+#ifdef NXNA_ENABLE_DIRECT3D11
+			D3D11DeviceState m_d3d11State;
+#endif
+
+		public:
+			GraphicsDevice(const GraphicsDeviceCreationParams* params);
+			void SetMessageCallback(GraphicsDeviceMessageCallback callback);
+
+			GraphicsDeviceType GetType() { return m_type; }
+			const NxnaResultDetails* GetErrorDetails() { return &m_errorDetails; }
+
+			Capabilities* GetCaps() { return &m_caps; }
+
+			/// Sets the current viewport
+			void SetViewport(int x, int y, int width, int height);
+			/// Sets the current viewport
+			void SetViewport(Viewport viewport);
+
+			/// Creates a new shader object
+			/// @param[in] type The type of shader to create
+			/// @param[in] bytecode A pointer to the bytecode of the shader. This can be Direct3D bytecode, or GLSL source code.
+			/// @param[in] bytecodeLength The length in bytes of the bytecode
+			/// @param[out] result A pointer to a Shader object
+			/// @return NxnaResult::Success if successful, or an error otherwise
+			NxnaResult CreateShader(ShaderType type, const void* bytecode, int bytecodeLength, Shader* result);
+
+			/// Destroys an existing shader object
+			/// @param[in] shader A pointer to the shader object to delete
+			///
+			/// Destroying a shader that is being used (including as part of a ShaderPipeline) is allowed.
+			/// The underlying API will delete the shader when appropriate.
+			void DestroyShader(Shader* shader);
+
+			/// Create a new texture object
+			/// @param[in] desc A pointer to a TextureCreationDesc object describing the new texture
+			/// @param[out] result A pointer to a Texture2D object
+			/// @return NxnaResult::Success if successful, or an error otherwise
+			NxnaResult CreateTexture2D(const TextureCreationDesc* desc, Texture2D* result);
+			void BindTexture(Texture2D* texture, int textureUnit);
+
+			/// Destroys an existing texture object
+			/// @param[in] texture A pointer to the texture to delete
+			void DestroyTexture2D(Texture2D* texture);
+
+			/// Create a new ShaderPipeline object
+			/// @param[in] desc A pointer to a ShaderPipelineDesc object describing the new shader pipeline
+			/// @param[out] result A pointer to a Texture2D object
+			/// @return NxnaResult::Success if successful, or an error otherwise
+			NxnaResult CreateShaderPipeline(const ShaderPipelineDesc* desc, ShaderPipeline* result);
+			void SetShaderPipeline(ShaderPipeline* pipeline);
+
+			/// Destroys an existing shader pipeline object
+			/// @param[in] pipeline A pointer to the shader pipeline object to delete
+			void DestroyShaderPipeline(ShaderPipeline* pipeline);
+
+			/// Create a new BlendState object
+			/// @param[in] desc A pointer to a BlendStateDesc object describing the new blend state
+			/// @param[out] result A pointer to a BlendState object
+			/// @return NxnaResult::Success if successful, or an error otherwise
+			NxnaResult CreateBlendState(const BlendStateDesc* desc, BlendState* result);
+			void SetBlendState(BlendState* state);
+
+			/// Destroys an existing shader object
+			/// @param[in] state A pointer to the blend state to delete
+			void DestroyBlendState(BlendState* state);
+
+			NxnaResult CreateRasterizerState(const RasterizerStateDesc* desc, RasterizerState* result);
+			void SetRasterizerState(RasterizerState* state);
+			void DestroyRasterizerState(RasterizerState* state);
+
+			/// Create a new IndexBuffer object
+			/// @param[in] desc A pointer to a IndexBufferDesc object describing the new index buffer
+			/// @param[out] result A pointer to a IndexBuffer object
+			/// @return NxnaResult::Success if successful, or an error otherwise
+			NxnaResult CreateIndexBuffer(const IndexBufferDesc* desc, IndexBuffer* result);
+			/// Destroys an existing index buffer
+			/// @param[in] buffer The index buffer to delete
+			void DestroyIndexBuffer(IndexBuffer buffer);
+			/// Updates the contents of an IndexBuffer
+			///
+			/// This is equivalent to glBufferSubData() on OpenGL and ID3D11DeviceContext::UpdateSubresource() on Direct3D 11
+			void UpdateIndexBuffer(IndexBuffer buffer, unsigned int startOffset, void* data, unsigned int dataLengthInBytes);
+			void SetIndices(IndexBuffer indices);
+
+			/// Create a new VertexBuffer object
+			/// @param[in] desc A pointer to a VertexBufferDesc object describing the new vertex buffer
+			/// @param[out] result A pointer to a VertexBuffer object
+			/// @return True if successful, false otherwise
+			NxnaResult CreateVertexBuffer(const VertexBufferDesc* desc, VertexBuffer* result);
+			/// Destroys an existing vertex buffer
+			/// @param[in] buffer The vertex buffer to delete
+			void DestroyVertexBuffer(VertexBuffer buffer);
+			/// Updates the contents of a VertexBuffer
+			///
+			/// This is equivalent to glBufferSubData() on OpenGL and ID3D11DeviceContext::UpdateSubresource() on Direct3D 11
+			void UpdateVertexBuffer(VertexBuffer buffer, unsigned int startOffset, void* data, unsigned int dataLengthInBytes);
+			void SetVertexBuffer(VertexBuffer vertexBuffer, unsigned int offset, unsigned int stride);
+
+			/// Create a new ConstantBuffer object
+			/// @param[in] desc A pointer to a ConstantBufferDesc object describing the new constant buffer
+			/// @param[out] result A pointer to a ConstantBuffer object
+			/// @return NxnaResult::Success if successful, or an error otherwise
+			NxnaResult CreateConstantBuffer(const ConstantBufferDesc* desc, ConstantBuffer* result);
+			/// Updates the contents of a ConstantBuffer
+			///
+			/// This is equivalent to glBufferSubData() on OpenGL and ID3D11DeviceContext::UpdateSubresource() on Direct3D 11
+			void UpdateConstantBuffer(ConstantBuffer buffer, void* data, unsigned int dataLengthInBytes);
+			void SetConstantBuffer(ConstantBuffer buffer, int index);
+			/// Destroys an existing vertex buffer
+			/// @param[in] buffer A pointer to the constant buffer to delete
+			void DestroyConstantBuffer(ConstantBuffer* buffer);
+
+			/// Maps an IndexBuffer for writing or reading
+			/// @param[in] buffer An index buffer to map
+			/// @param[in] type The type of mapping to perform
+			/// @return A pointer to memory representing the contents of the buffer, or nullptr if unable to map the buffer
+			///
+			/// This is equivalent to glMapBufferRange() on OpenGL or ID3D11DeviceContext::Map() on Direct3D 11
+			void* MapBuffer(IndexBuffer buffer, MapType type);
+			/// Maps a VertexBuffer for writing or reading
+			/// @param[in] buffer A vertex buffer to map
+			/// @param[in] type The type of mapping to perform
+			/// @return A pointer to memory representing the contents of the buffer, or nullptr if unable to map the buffer
+			///
+			/// This is equivalent to glMapBufferRange() on OpenGL or ID3D11DeviceContext::Map() on Direct3D 11
+			void* MapBuffer(VertexBuffer buffer, MapType type);
+			/// Maps a ConstantBuffer for writing or reading
+			/// @param[in] buffer A constant buffer to map
+			/// @param[in] type The type of mapping to perform
+			/// @return A pointer to memory representing the contents of the buffer, or nullptr if unable to map the buffer
+			///
+			/// This is equivalent to glMapBufferRange() on OpenGL or ID3D11DeviceContext::Map() on Direct3D 11
+			void* MapBuffer(ConstantBuffer buffer, MapType type);
+
+			/// Unmaps a previously mapped IndexBuffer
+			/// @param[in] buffer An index buffer
+			void UnmapBuffer(IndexBuffer buffer);
+			/// Unmaps a previously mapped VertexBuffer
+			/// @param[in] buffer A vertex buffer
+			void UnmapBuffer(VertexBuffer buffer);
+			/// Unmaps a previously mapped ConstantBuffer
+			/// @param[in] buffer A constant buffer
+			void UnmapBuffer(ConstantBuffer buffer);
+
+			void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount);
+			void DrawPrimitives(PrimitiveType primitiveType, int startVertex, int primitiveCount);
+
+			void Clear(float r, float g, float b, float a);
+			void Present();
+
+#ifdef NXNA_ENABLE_DIRECT3D11
+			/// Gets a struct containing all the Direct3D objects it has (such as the ID3D11Device, ID3D11DeviceContext, etc)
+			///
+			/// Don't call this method if the GraphicsDevice is not a Direct3D 11 device. Bad things may or may not happen.
+			const D3D11DeviceState* GetD3D11DeviceState() { return &m_d3d11State; }
+#endif
+
+		private:
+			void applyDirtyStates();
+		};
+	}
 }
 
-#endif // GRAPHICS_GRAPHICSDEVICE_H
+#endif // NXNA_GRAPHICS_GRAPHICSDEVICE_H
