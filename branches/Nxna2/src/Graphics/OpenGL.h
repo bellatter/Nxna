@@ -6,7 +6,7 @@
 #include <Windows.h>
 #endif
 
-#ifdef _WIN32
+#if 0
 #include <GL/gl.h>
 #include "glext.h"
 
@@ -22,6 +22,7 @@
 extern PFNGLDEBUGMESSAGECALLBACKPROC glDebugMessageCallback;
 #else
 
+#define GLEW_STATIC
 #include "glew/glew.h"
 
 #endif
