@@ -6,11 +6,11 @@
 #include <Windows.h>
 #endif
 
-#include <gl/GL.h>
+#ifdef _WIN32
+#include <GL/gl.h>
 #include "glext.h"
 
 
-#ifdef _WIN32
 // create function prototypes for everything that Windows leaves out
 
 #define NXNA_DECLARE_GL_EXTENSION_20(p, n) NXNA_DECLARE_GL_EXTENSION(2, 0, p, n)
@@ -20,6 +20,9 @@
 
 /* OpenGL 4.3 */
 extern PFNGLDEBUGMESSAGECALLBACKPROC glDebugMessageCallback;
+#else
+
+#include "glew/glew.h"
 
 #endif
 

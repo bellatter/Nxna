@@ -2,6 +2,8 @@
 #include "OpenGL.h"
 #include "PipelineState.h"
 #include <cstdio>
+#include <cstring>
+
 namespace Nxna
 {
 namespace Graphics
@@ -9,7 +11,7 @@ namespace Graphics
 	static const int g_numDeviceTypes = 4;
 	GraphicsDeviceMessageCallback g_callbacks[g_numDeviceTypes];
 
-	void APIENTRY glDebugOutputCallback(GLenum source,
+	void GLEWAPIENTRY glDebugOutputCallback(GLenum source,
 		GLenum type,
 		GLuint id,
 		GLenum severity,
@@ -1180,7 +1182,7 @@ namespace Graphics
 					}
 
 					glEnableVertexAttribArray(i);
-					glVertexAttribPointer(i, sizeOfElement, type, normalize, desc->StrideBytes, (void*)desc->InputElements[i].Offset);
+					glVertexAttribPointer(i, sizeOfElement, type, normalize, desc->StrideBytes, (void*)(intptr_t)desc->InputElements[i].Offset);
 				}
 			}
 
@@ -1739,7 +1741,7 @@ namespace Graphics
 			else
 				glPrimitiveType = GL_TRIANGLES;
 
-			glDrawElementsBaseVertex(glPrimitiveType, primitiveCount * 3, size, (void*)(startIndex * (int)m_indices.ElementSize), baseVertex);
+			glDrawElementsBaseVertex(glPrimitiveType, primitiveCount * 3, size, (void*)(intptr_t)(startIndex * (int)m_indices.ElementSize), baseVertex);
 		}
 		}
 	}
