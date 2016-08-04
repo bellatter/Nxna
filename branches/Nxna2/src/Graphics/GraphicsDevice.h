@@ -135,10 +135,12 @@ namespace Nxna
 					unsigned int ByteLength;
 					unsigned int UniformBuffer;
 				} OpenGL;
+#ifdef NXNA_ENABLE_DIRECT3D11
 				struct
 				{
 					ID3D11Buffer* Buffer;
 				} Direct3D11;
+#endif
 			};
 
 #ifndef NXNA_DISABLE_VALIDATION
@@ -167,10 +169,12 @@ namespace Nxna
 				{
 					unsigned int BufferHandle;
 				} OpenGL;
+#ifdef NXNA_ENABLE_DIRECT3D11
 				struct
 				{
 					ID3D11Buffer* BufferPtr;
 				} Direct3D11;
+#endif
 			};
 
 #ifndef NXNA_DISABLE_VALIDATION
@@ -311,7 +315,7 @@ namespace Nxna
 			SurfaceFormat Format;
 
 			void* InitialData;
-			size_t InitialDataByteCount;
+			unsigned int InitialDataByteCount;
 		};
 
 		struct Texture2D
@@ -358,7 +362,7 @@ namespace Nxna
 			int StrideBytes;
 
 			void* InitialData;
-			size_t InitialDataByteCount;
+			unsigned int InitialDataByteCount;
 		};
 
 		struct ConstantBufferDesc

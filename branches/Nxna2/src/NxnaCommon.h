@@ -20,7 +20,7 @@ namespace Nxna
 
 	struct NxnaResultDetails
 	{
-		char* Filename;
+		const char* Filename;
 		int LineNumber;
 		
 		int APIErrorCode;
