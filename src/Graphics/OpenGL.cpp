@@ -1,12 +1,13 @@
 #include "OpenGL.h"
 
+#if 0
 #undef NXNA_DECLARE_GL_EXTENSION
 #define NXNA_DECLARE_GL_EXTENSION(vmajor, vminor, p, n) p n;
 #include "GLExtensions.h"
 
 /* OpenGL 4.3 */
 PFNGLDEBUGMESSAGECALLBACKPROC glDebugMessageCallback;
-
+#endif
 
 namespace Nxna
 {
@@ -16,7 +17,7 @@ namespace OpenGL
 {
 	void LoadGLExtensions(int glMajorVersion, int glMinorVersion, bool allowAllExtensions)
 	{
-#ifdef _WIN32
+#if 0
 #define GL_LOAD_PROC(t, p) p = (t)wglGetProcAddress(#p)
 #undef NXNA_DECLARE_GL_EXTENSION
 #define NXNA_DECLARE_GL_EXTENSION(vmajor, vminor, p, n) n = nullptr;
@@ -75,8 +76,15 @@ namespace OpenGL
 
 		// always attempt to load these functions, no matter the context version
 		GL_LOAD_PROC(PFNGLDEBUGMESSAGECALLBACKPROC, glDebugMessageCallback);
+#else
+		glewInit();
 #endif
 	}
 }
 }
 }
+
+#define GLEW_INCLUDE "glew/glew.h"
+#define GLEW_WGLEW_INCLUDE "glew/wglew.h"
+#define GLEW_GLXEW_INCLUDE "glew/glxew.h"
+#include "glew/glew.c"
