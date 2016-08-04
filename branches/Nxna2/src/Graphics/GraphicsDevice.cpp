@@ -1,7 +1,6 @@
 ﻿#include "GraphicsDevice.h"
 #include "OpenGL.h"
 #include "PipelineState.h"
-#include "../Error.h"
 #include <cstdio>
 namespace Nxna
 {
@@ -1010,7 +1009,7 @@ namespace Graphics
 		}
 			break;
 		default:
-			ReportError("Unsupported graphics device type");
+			NXNA_SET_ERROR_DETAILS(0, "Unsupported graphics device type");
 		}
 	}
 
@@ -1048,7 +1047,7 @@ namespace Graphics
 		}
 			break;
 		default:
-			ReportError("Unsupported graphics device type");
+			NXNA_SET_ERROR_DETAILS(0, "Unsupported graphics device type");
 		}
 	}
 
@@ -1080,7 +1079,7 @@ namespace Graphics
 		}
 			break;
 		default:
-			ReportError("Unsupported graphics device type");
+			NXNA_SET_ERROR_DETAILS(0, "Unsupported graphics device type");
 		}
 
 		m_indices = indices;
@@ -1212,7 +1211,7 @@ namespace Graphics
 		}
 			break;
 		default:
-			ReportError("Unsupported graphics device type");
+			NXNA_SET_ERROR_DETAILS(0, "Unsupported graphics device type");
 		}
 	}
 
@@ -1247,7 +1246,7 @@ namespace Graphics
 		}
 			break;
 		default:
-			ReportError("Unsupported graphics device type");
+			NXNA_SET_ERROR_DETAILS(0, "Unsupported graphics device type");
 		}
 	}
 
@@ -1268,7 +1267,7 @@ namespace Graphics
 		}
 			break;
 		default:
-			ReportError("Unsupported graphics device type");
+			NXNA_SET_ERROR_DETAILS(0, "Unsupported graphics device type");
 		}
 
 		m_vertices = m_vertices;
@@ -1382,7 +1381,7 @@ namespace Graphics
 		}
 			break;
 		default:
-			ReportError("Unsupported graphics device type");
+			NXNA_SET_ERROR_DETAILS(0, "Unsupported graphics device type");
 		}
 	}
 
