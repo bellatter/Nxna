@@ -84,7 +84,7 @@ namespace OpenGL
 }
 }
 
-#define GLEW_INCLUDE "glew/glew.h"
-#define GLEW_WGLEW_INCLUDE "glew/wglew.h"
-#define GLEW_GLXEW_INCLUDE "glew/glxew.h"
+#define GLEW_INCLUDE "glew.h"
+#define GLEW_WGLEW_INCLUDE "wglew.h"
+#define GLEW_GLXEW_INCLUDE "glxew.h"
 #include "glew/glew.c"
