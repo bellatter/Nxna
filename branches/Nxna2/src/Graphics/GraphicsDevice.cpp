@@ -55,10 +55,7 @@ namespace Graphics
 				;
 			}
 
-			OpenGL::LoadGLExtensions(4, 1, params->OpenGL.AllowExtensionUse);
-
-			
-
+			OpenGL::LoadGLExtensions(4, 1);
 
 			break;
 #ifdef NXNA_ENABLE_DIRECT3D11

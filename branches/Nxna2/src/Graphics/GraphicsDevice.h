@@ -265,9 +265,7 @@ namespace Nxna
 			{
 				struct
 				{
-					/// Whether to allow the renderer to use extensions beyond what is present
-					/// in the core OpenGL version requested
-					bool AllowExtensionUse;
+					// nothing
 				} OpenGL;
 #ifdef NXNA_ENABLE_DIRECT3D11
 				struct

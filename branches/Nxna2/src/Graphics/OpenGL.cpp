@@ -15,7 +15,7 @@ namespace Graphics
 {
 namespace OpenGL
 {
-	void LoadGLExtensions(int glMajorVersion, int glMinorVersion, bool allowAllExtensions)
+	void LoadGLExtensions(int glMajorVersion, int glMinorVersion)
 	{
 #if 0
 #define GL_LOAD_PROC(t, p) p = (t)wglGetProcAddress(#p)
