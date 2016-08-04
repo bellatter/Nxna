@@ -1,0 +1,25 @@
+unsigned char g_vsMain[] = "#version 410\n"
+"\n"
+"uniform dataz { mat4 ModelViewProjection; };\n"
+"layout(location = 0) in vec3 position;\n"
+"layout(location = 1) in vec4 color;\n"
+"out vec4 outputColor;\n"
+"out gl_PerVertex{ vec4 gl_Position; };\n"
+"\n"
+"void main()\n"
+"{\n"
+"	outputColor = color;\n"
+"	gl_Position = ModelViewProjection * vec4(position, 1.0);\n"
+"}\n";
+
+
+unsigned char g_psMain[] = "#version 410\n"
+"\n"
+"uniform dataz { mat4 ModelViewProjection; };\n"
+"in vec4 inputColor;\n"
+"out vec4 outputColor;\n"
+"\n"
+"void main()\n"
+"{\n"
+"	outputColor = inputColor;\n"
+"}\n";
