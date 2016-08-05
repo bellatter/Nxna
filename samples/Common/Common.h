@@ -7,7 +7,8 @@ struct WindowInfo
 	HWND Window;
 	bool HasGLContext;
 #elif defined __linux__
-	// TODO
+	void* Display;
+	unsigned int Window;
 #else
 	// TODO
 #endif

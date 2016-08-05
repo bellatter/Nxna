@@ -1,7 +1,7 @@
 #ifndef MATH_VECTOR2_H
 #define MATH_VECTOR2_H
 
-#include <intrin.h>
+//#include <intrin.h>
 
 #include "MathBase.h"
 

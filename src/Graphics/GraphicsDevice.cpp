@@ -31,28 +31,28 @@ namespace Graphics
 		}
 	}
 
-	GraphicsDevice::GraphicsDevice(const GraphicsDeviceCreationParams* params)
+	NxnaResult GraphicsDevice::CreateGraphicsDevice(const GraphicsDeviceDesc* params, GraphicsDevice* result)
 	{
-		m_type = params->Type;
-		m_screenWidth = params->ScreenWidth;
-		m_screenHeight = params->ScreenHeight;
+		result->m_type = params->Type;
+		result->m_screenWidth = params->ScreenWidth;
+		result->m_screenHeight = params->ScreenHeight;
 
-		m_shaderPipeline = nullptr;
-		m_blendState = nullptr;
-		m_rasterizerState = nullptr;
+		result->m_shaderPipeline = nullptr;
+		result->m_blendState = nullptr;
+		result->m_rasterizerState = nullptr;
 
 		switch (params->Type)
 		{
 		case GraphicsDeviceType::OpenGl41:
 			
-			int major, minor;
+			int major = 0, minor = 0;
 			glGetIntegerv(GL_MAJOR_VERSION, &major);
 			glGetIntegerv(GL_MINOR_VERSION, &minor);
 
 			if (major < 4 || (major == 4 && minor < 1))
 			{
-				// warning! Invalid context! What should we do? Throw an exception?
-				;
+				// we require a 4.1+ context
+				return NxnaResult::UnknownError;
 			}
 
 			OpenGL::LoadGLExtensions(4, 1);
@@ -60,13 +60,18 @@ namespace Graphics
 			break;
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
-			m_d3d11State.Device = params->Direct3D11.Device;
-			m_d3d11State.Context = params->Direct3D11.DeviceContext;
-			m_d3d11State.RenderTargetView = params->Direct3D11.RenderTargetView;
-			m_d3d11State.SwapChain = params->Direct3D11.SwapChain;
+			result->m_d3d11State.Device = params->Direct3D11.Device;
+			result->m_d3d11State.Context = params->Direct3D11.DeviceContext;
+			result->m_d3d11State.RenderTargetView = params->Direct3D11.RenderTargetView;
+			result->m_d3d11State.SwapChain = params->Direct3D11.SwapChain;
 			break;
 #endif
 		}
+	}
+
+	void GraphicsDevice::DestroyGraphicsDevice(GraphicsDevice* device)
+	{
+		// nothing... for now
 	}
 
 	void GraphicsDevice::SetMessageCallback(GraphicsDeviceMessageCallback callback)
@@ -700,9 +705,9 @@ namespace Graphics
 			if (m_blendState == nullptr || m_blendState->OpenGL.Desc.IndependentBlendEnabled != state->OpenGL.Desc.IndependentBlendEnabled)
 			{
 				if (state->OpenGL.Desc.IndependentBlendEnabled == true)
-					goto allBuffers;
-				else
 					goto allSeparate;
+				else
+					goto allBuffers;
 			}
 			else if (state->OpenGL.Desc.IndependentBlendEnabled == false)
 			{

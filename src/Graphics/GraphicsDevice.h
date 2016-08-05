@@ -255,7 +255,7 @@ namespace Nxna
 		/// take advantage of newer features that may be present and provide better performance.
 		/// This lets the renderer do things like target Mac OSX, which only supports OpenGL 4.1,
 		/// but on platforms that support OpenGL 4.5 the renderer can do things like direct state access.
-		struct GraphicsDeviceCreationParams
+		struct GraphicsDeviceDesc
 		{
 			GraphicsDeviceType Type;
 			int ScreenWidth;
@@ -397,7 +397,9 @@ namespace Nxna
 #endif
 
 		public:
-			GraphicsDevice(const GraphicsDeviceCreationParams* params);
+			static NxnaResult CreateGraphicsDevice(const GraphicsDeviceDesc* params, GraphicsDevice* result);
+			static void DestroyGraphicsDevice(GraphicsDevice* device);
+
 			void SetMessageCallback(GraphicsDeviceMessageCallback callback);
 
 			GraphicsDeviceType GetType() { return m_type; }
