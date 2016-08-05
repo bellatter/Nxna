@@ -220,6 +220,15 @@ int main(int argc, char** argv)
 		rotation += 0.1f;
 	}
 
+	device->SetShaderPipeline(nullptr);
+
+	device->DestroyRasterizerState(&rs);
+	device->DestroyBlendState(&bs);
+	device->DestroyConstantBuffer(&cb);
+	device->DestroyShaderPipeline(&sp);
+	device->DestroyIndexBuffer(ib);
+	device->DestroyVertexBuffer(vb);
+	Nxna::Graphics::GraphicsDevice::DestroyGraphicsDevice(device);
 	DestroyGameWindow(window);
 
 	return 0;

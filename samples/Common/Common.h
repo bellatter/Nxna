@@ -9,6 +9,7 @@ struct WindowInfo
 #elif defined __linux__
 	void* Display;
 	unsigned int Window;
+	void* Context;
 #else
 	// TODO
 #endif
