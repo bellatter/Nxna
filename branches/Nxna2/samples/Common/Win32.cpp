@@ -71,6 +71,11 @@ void ShowGameWindow(WindowInfo window)
 	SetFocus(window.Window);
 }
 
+void DestroyGameWindow(WindowInfo window)
+{
+	// nothing
+}
+
 bool CreateOpenGLContext(WindowInfo* window)
 {
 	// now create the OpenGL context
@@ -301,19 +306,25 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 	}
 	case WM_MOUSEMOVE:
 	{
+#ifdef NXNA_ENABLE_INPUT
 		Nxna::Input::Mouse::InjectMouseMove((int)LOWORD(lparam), (int)HIWORD(lparam));
+#endif
 
 		return 0;
 	}
 	case WM_LBUTTONDOWN:
 	{
+#ifdef NXNA_ENABLE_INPUT
 		Nxna::Input::Mouse::InjectMouseButton(0, true);
+#endif
 
 		return 0;
 	}
 	case WM_LBUTTONUP:
 	{
+#ifdef NXNA_ENABLE_INPUT
 		Nxna::Input::Mouse::InjectMouseButton(0, false);
+#endif
 
 		return 0;
 	}
