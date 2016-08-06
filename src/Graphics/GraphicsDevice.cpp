@@ -11,6 +11,14 @@ namespace Graphics
 	static const int g_numDeviceTypes = 4;
 	GraphicsDeviceMessageCallback g_callbacks[g_numDeviceTypes];
 
+#ifdef _WIN32
+#define NXNA_SET_ERROR_DETAILS(api, desc) { m_errorDetails.Filename = __FILE__; m_errorDetails.LineNumber = __LINE__; m_errorDetails.APIErrorCode = api; \
+	strncpy_s(m_errorDetails.ErrorDescription, desc, 255); m_errorDetails.ErrorDescription[255] = 0; }
+#else
+#define NXNA_SET_ERROR_DETAILS(api, desc) { m_errorDetails.Filename = __FILE__; m_errorDetails.LineNumber = __LINE__; m_errorDetails.APIErrorCode = api; \
+	strncpy(m_errorDetails.ErrorDescription, desc, 255); m_errorDetails.ErrorDescription[255] = 0; }
+#endif
+
 	void GLEWAPIENTRY glDebugOutputCallback(GLenum source,
 		GLenum type,
 		GLuint id,
@@ -44,19 +52,22 @@ namespace Graphics
 		switch (params->Type)
 		{
 		case GraphicsDeviceType::OpenGl41:
-			
+		{
+			OpenGL::LoadGLExtensions(4, 1);
+
 			int major = 0, minor = 0;
 			glGetIntegerv(GL_MAJOR_VERSION, &major);
 			glGetIntegerv(GL_MINOR_VERSION, &minor);
 
 			if (major < 4 || (major == 4 && minor < 1))
 			{
-				// we require a 4.1+ context
-				return NxnaResult::UnknownError;
+				if (GLEW_ARB_separate_shader_objects == false)
+				{
+					// we require a 4.1+ capable context
+					return NxnaResult::NotSupported;
+				}
 			}
-
-			OpenGL::LoadGLExtensions(4, 1);
-
+		}
 			break;
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
@@ -67,6 +78,8 @@ namespace Graphics
 			break;
 #endif
 		}
+
+		return NxnaResult::Success;
 	}
 
 	void GraphicsDevice::DestroyGraphicsDevice(GraphicsDevice* device)
@@ -166,14 +179,6 @@ namespace Graphics
 		}
 		}
 	}
-
-#ifdef _WIN32
-#define NXNA_SET_ERROR_DETAILS(api, desc) { m_errorDetails.Filename = __FILE__; m_errorDetails.LineNumber = __LINE__; m_errorDetails.APIErrorCode = api; \
-	strncpy_s(m_errorDetails.ErrorDescription, desc, 255); m_errorDetails.ErrorDescription[255] = 0; }
-#else
-#define NXNA_SET_ERROR_DETAILS(api, desc) { m_errorDetails.Filename = __FILE__; m_errorDetails.LineNumber = __LINE__; m_errorDetails.APIErrorCode = api; \
-	strncpy(m_errorDetails.ErrorDescription, desc, 255); m_errorDetails.ErrorDescription[255] = 0; }
-#endif
 
 	NxnaResult GraphicsDevice::CreateShader(ShaderType type, const void* bytecode, int bytecodeLength, Shader* result)
 	{

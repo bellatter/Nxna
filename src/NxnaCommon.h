@@ -14,8 +14,11 @@ namespace Nxna
 		/// Success, no errors
 		Success = 0,
 
+		/// The requested operation is not supported on the current platform or hardware
+		NotSupported = -10000,
+
 		/// An unknown error
-		UnknownError
+		UnknownError = -1
 	};
 
 	struct NxnaResultDetails
