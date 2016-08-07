@@ -397,12 +397,20 @@ namespace Nxna
 #endif
 
 		public:
+			/// Initializes a new GraphicsDevice
+			/// @param[in] params A pointer to a filled out GraphicsDeviceDesc struct describing the new GraphicsDevice
+			/// @param[out] result A pointer to a GraphicsDevice object
+			/// @return NxnaResult::Success if successful, or an error otherwise
 			static NxnaResult CreateGraphicsDevice(const GraphicsDeviceDesc* params, GraphicsDevice* result);
 			static void DestroyGraphicsDevice(GraphicsDevice* device);
 
 			void SetMessageCallback(GraphicsDeviceMessageCallback callback);
 
+#ifndef NXNA_ENABLE_DIRECT3D11
+			constexpr GraphicsDeviceType GetType() { return m_type; }
+#else
 			GraphicsDeviceType GetType() { return m_type; }
+#endif
 			const NxnaResultDetails* GetErrorDetails() { return &m_errorDetails; }
 
 			Capabilities* GetCaps() { return &m_caps; }
