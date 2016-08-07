@@ -44,25 +44,30 @@ Now whenever you need to use Nxna2, just #include the header file you created.
 
 The first thing to do is to create a new window, along with an OpenGL context if you
 intend to use the OpenGL renderer or a Direct3D device and device context if you intend to
-use Direct3D.
+use Direct3D. It's your responsibility to set up the window and context/device. Nxna2 won't do it.
+That's so that you have complete control over the window creation process without Nxna2 getting
+in the way.
 
-Next, you'll need to create a new GraphicsDevice. You do that by filling out a GraphicsDeviceCreationParams object
-and passing that to the constructor for GraphicsDevice.
+Next, you'll need to create a new GraphicsDevice object, which will act as a wrapper around whatever API
+you choose. You do that by filling out an Nxna::Graphics::GraphicsDeviceDesc struct and pass that to
+Nxna::Graphics::GraphicsDevice::CreateGraphicsDevice().
 
 To create a new OpenGL device:
 \code
-Nxna::Graphics::GraphicsDeviceCreationParams params;
-memset(&params, 0, sizeof(Nxna::Graphics::GraphicsDeviceCreationParams));
+Nxna::Graphics::GraphicsDevice device;
+Nxna::Graphics::GraphicsDeviceDesc params;
+memset(&params, 0, sizeof(Nxna::Graphics::GraphicsDeviceDesc));
 params.Type = Nxna::Graphics::GraphicsDeviceType::OpenGl41;
 params.ScreenWidth = 640;
 params.ScreenHeight = 480;
-auto device = new Nxna::Graphics::GraphicsDevice(&params);
+Nxna::Graphics::GraphicsDevice::CreateGraphicsDevice(&params, &device);
 \endcode
 
 To create a Direct3D 11 device:
 \code
-Nxna::Graphics::GraphicsDeviceCreationParams params;
-memset(&params, 0, sizeof(Nxna::Graphics::GraphicsDeviceCreationParams));
+Nxna::Graphics::GraphicsDevice device;
+Nxna::Graphics::GraphicsDeviceDesc params;
+memset(&params, 0, sizeof(Nxna::Graphics::GraphicsDeviceDesc));
 params.Type = Nxna::Graphics::GraphicsDeviceType::Direct3D11;
 params.ScreenWidth = 640;
 params.ScreenHeight = 480;
@@ -70,7 +75,7 @@ params.Direct3D11.Device = deviceThatYouCreatedInPreviousStep;
 params.Direct3D11.DeviceContext = contextThatYouCreatedInPreviousStep;
 params.Direct3D11.RenderTargetView = rtvThatYouAlreadyCreated;
 params.Direct3D11.SwapChain = swapChainYouAlreadyCreated;
-auto device = new Nxna::Graphics::GraphicsDevice(&params);
+Nxna::Graphics::GraphicsDevice::CreateGraphicsDevice(&params, &device);
 \endcode
 
 To be continued...
