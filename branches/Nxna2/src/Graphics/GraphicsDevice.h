@@ -273,6 +273,7 @@ namespace Nxna
 					ID3D11Device* Device;
 					ID3D11DeviceContext* DeviceContext;
 					ID3D11RenderTargetView* RenderTargetView;
+					ID3D11DepthStencilView* DepthStencilView;
 					IDXGISwapChain* SwapChain;
 				} Direct3D11;
 #endif
@@ -285,9 +286,14 @@ namespace Nxna
 			ID3D11Device* Device;
 			ID3D11DeviceContext* Context;
 			ID3D11RenderTargetView* RenderTargetView;
+			ID3D11DepthStencilView* DepthStencilView;
 			IDXGISwapChain* SwapChain;
 		};
 #endif
+		struct OpenGlDeviceState
+		{
+			DepthStencilStateDesc DepthStencil;
+		};
 
 		enum class SurfaceFormat
 		{
@@ -392,9 +398,13 @@ namespace Nxna
 
 			NxnaResultDetails m_errorDetails;
 
+			union
+			{
 #ifdef NXNA_ENABLE_DIRECT3D11
-			D3D11DeviceState m_d3d11State;
+				D3D11DeviceState m_d3d11State;
 #endif
+				OpenGlDeviceState m_oglState;
+			};
 
 		public:
 			/// Initializes a new GraphicsDevice
@@ -471,6 +481,10 @@ namespace Nxna
 			NxnaResult CreateRasterizerState(const RasterizerStateDesc* desc, RasterizerState* result);
 			void SetRasterizerState(RasterizerState* state);
 			void DestroyRasterizerState(RasterizerState* state);
+
+			NxnaResult CreateDepthStencilState(const DepthStencilStateDesc* desc, DepthStencilState* result);
+			void SetDepthStencilState(DepthStencilState* state);
+			void DestroyDepthStencilState(DepthStencilState* state);
 
 			/// Create a new IndexBuffer object
 			/// @param[in] desc A pointer to a IndexBufferDesc object describing the new index buffer
@@ -549,7 +563,12 @@ namespace Nxna
 			void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount);
 			void DrawPrimitives(PrimitiveType primitiveType, int startVertex, int primitiveCount);
 
-			void Clear(float r, float g, float b, float a);
+			void ClearColor(Color color);
+			void ClearColor(float r, float g, float b, float a);
+			void ClearColor(const float* colorRGBA4f);
+
+			void ClearDepthStencil(bool clearDepth, bool clearStencil, float depthValue, int stencilValue);
+
 			void Present();
 
 #ifdef NXNA_ENABLE_DIRECT3D11

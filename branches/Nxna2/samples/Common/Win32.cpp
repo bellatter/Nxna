@@ -137,7 +137,7 @@ bool CreateOpenGLContext(WindowInfo* window)
 
 
 #ifdef NXNA_ENABLE_DIRECT3D11
-bool CreateDirect3DDevice(WindowInfo* window, int width, int height, ID3D11Device** pdevice, ID3D11DeviceContext** pcontext, ID3D11RenderTargetView** prenderTargetView, IDXGISwapChain** pswapChain)
+bool CreateDirect3DDevice(WindowInfo* window, int width, int height, ID3D11Device** pdevice, ID3D11DeviceContext** pcontext, ID3D11RenderTargetView** prenderTargetView, ID3D11DepthStencilView** pdepthStencilView, IDXGISwapChain** pswapChain)
 {
 	IDXGIFactory* factory;
 	HRESULT result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
@@ -251,8 +251,9 @@ bool CreateDirect3DDevice(WindowInfo* window, int width, int height, ID3D11Devic
 		return false;
 
 	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+	*pdepthStencilView = depthStencilView;
 
-
+#if 0
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
 
@@ -282,6 +283,7 @@ bool CreateDirect3DDevice(WindowInfo* window, int width, int height, ID3D11Devic
 		return false;
 
 	deviceContext->OMSetDepthStencilState(dstate, 1);
+#endif
 
 	*pdevice = device;
 	*pcontext = deviceContext;

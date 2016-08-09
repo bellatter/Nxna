@@ -67,6 +67,8 @@ namespace Graphics
 					return NxnaResult::NotSupported;
 				}
 			}
+
+			result->SetDepthStencilState(nullptr);
 		}
 			break;
 #ifdef NXNA_ENABLE_DIRECT3D11
@@ -74,6 +76,7 @@ namespace Graphics
 			result->m_d3d11State.Device = params->Direct3D11.Device;
 			result->m_d3d11State.Context = params->Direct3D11.DeviceContext;
 			result->m_d3d11State.RenderTargetView = params->Direct3D11.RenderTargetView;
+			result->m_d3d11State.DepthStencilView = params->Direct3D11.DepthStencilView;
 			result->m_d3d11State.SwapChain = params->Direct3D11.SwapChain;
 			break;
 #endif
@@ -927,7 +930,204 @@ namespace Graphics
 		}
 	}
 
-	
+#define NXNA_CONVERT_COMPARISON_D3D11(s, d) { \
+	switch(s) { \
+	case CompareFunction::Always: d = D3D11_COMPARISON_ALWAYS; break; \
+	case CompareFunction::Equal: d = D3D11_COMPARISON_EQUAL; break; \
+	case CompareFunction::Greater: d = D3D11_COMPARISON_GREATER; break; \
+	case CompareFunction::GreaterEqual: d = D3D11_COMPARISON_GREATER_EQUAL; break; \
+	case CompareFunction::Less: d = D3D11_COMPARISON_LESS; break; \
+	case CompareFunction::LessEqual: d = D3D11_COMPARISON_LESS_EQUAL; break; \
+	case CompareFunction::Never: d = D3D11_COMPARISON_NEVER; break; \
+	case CompareFunction::NotEqual: d = D3D11_COMPARISON_NOT_EQUAL; break; \
+	} }
+
+#define NXNA_CONVERT_STENCIL_OP_D3D11(s, d) { \
+	switch(s) { \
+	case StencilOperation::Decrement: d = D3D11_STENCIL_OP_DECR; break; \
+	case StencilOperation::DecrementSaturation: d = D3D11_STENCIL_OP_DECR_SAT; break; \
+	case StencilOperation::Increment: d = D3D11_STENCIL_OP_INCR; break; \
+	case StencilOperation::IncrementSaturation: d = D3D11_STENCIL_OP_INCR_SAT; break; \
+	case StencilOperation::Invert: d = D3D11_STENCIL_OP_INVERT; break; \
+	case StencilOperation::Keep: d = D3D11_STENCIL_OP_KEEP; break; \
+	case StencilOperation::Replace: d = D3D11_STENCIL_OP_REPLACE; break; \
+	case StencilOperation::Zero: d = D3D11_STENCIL_OP_ZERO; break; \
+	} }
+
+#define NXNA_CONVERT_COMPARISON_OGL(s, d) { \
+	switch(s) { \
+	case CompareFunction::Always: d = GL_ALWAYS; break; \
+	case CompareFunction::Equal: d = GL_EQUAL; break; \
+	case CompareFunction::Greater: d = GL_GREATER; break; \
+	case CompareFunction::GreaterEqual: d = GL_GEQUAL; break; \
+	case CompareFunction::Less: d = GL_LESS; break; \
+	case CompareFunction::LessEqual: d = GL_LEQUAL; break; \
+	case CompareFunction::Never: d = GL_NEVER; break; \
+	case CompareFunction::NotEqual: d = GL_NOTEQUAL; break; \
+	} }
+
+#define NXNA_CONVERT_STENCIL_OP_OGL(s, d) { \
+	switch(s) { \
+	case StencilOperation::Decrement: d = GL_DECR_WRAP; break; \
+	case StencilOperation::DecrementSaturation: d = GL_DECR; break; \
+	case StencilOperation::Increment: d = GL_INCR_WRAP; break; \
+	case StencilOperation::IncrementSaturation: d = GL_INCR; break; \
+	case StencilOperation::Invert: d = GL_INVERT; break; \
+	case StencilOperation::Keep: d = GL_KEEP; break; \
+	case StencilOperation::Replace: d = GL_REPLACE; break; \
+	case StencilOperation::Zero: d = GL_ZERO; break; \
+	} }
+
+	NxnaResult GraphicsDevice::CreateDepthStencilState(const DepthStencilStateDesc* desc, DepthStencilState* result)
+	{
+		NXNA_VALIDATION_ASSERT(desc != nullptr, "desc cannot be null");
+		NXNA_VALIDATION_ASSERT(result != nullptr, "result cannot be null");
+
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			D3D11_DEPTH_STENCIL_DESC ddesc;
+			ZeroMemory(&ddesc, sizeof(D3D11_DEPTH_STENCILOP_DESC));
+			ddesc.DepthEnable = desc->DepthBufferEnabled;
+			ddesc.DepthWriteMask = desc->DepthBufferWriteEnabled ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
+			NXNA_CONVERT_COMPARISON_D3D11(desc->DepthBufferFunction, ddesc.DepthFunc);
+
+			ddesc.StencilEnable = desc->StencilEnable;
+			ddesc.StencilReadMask = 0xff;
+			ddesc.StencilWriteMask = 0xff;
+
+			// Stencil operations if pixel is front-facing.
+			NXNA_CONVERT_STENCIL_OP_D3D11(desc->StencilFail, ddesc.FrontFace.StencilFailOp);
+			NXNA_CONVERT_STENCIL_OP_D3D11(desc->StencilDepthBufferFail, ddesc.FrontFace.StencilDepthFailOp);
+			NXNA_CONVERT_STENCIL_OP_D3D11(desc->StencilPass, ddesc.FrontFace.StencilPassOp);
+			NXNA_CONVERT_COMPARISON_D3D11(desc->StencilFunction, ddesc.FrontFace.StencilFunc);
+
+			// Stencil operations if pixel is back-facing.
+			ddesc.BackFace.StencilFailOp = ddesc.FrontFace.StencilFailOp;
+			ddesc.BackFace.StencilDepthFailOp = ddesc.FrontFace.StencilDepthFailOp;
+			ddesc.BackFace.StencilPassOp = ddesc.FrontFace.StencilPassOp;
+			ddesc.BackFace.StencilFunc = ddesc.FrontFace.StencilFunc;
+
+			auto r = m_d3d11State.Device->CreateDepthStencilState(&ddesc, &result->Direct3D11.State);
+			if (FAILED(r))
+			{
+				NXNA_SET_ERROR_DETAILS(r, "CreateDepthStencilState() failed");
+				return NxnaResult::UnknownError;
+			}
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			result->OpenGL.Desc = *desc;
+		}
+			break;
+		}
+
+		return NxnaResult::Success;
+	}
+
+	void GraphicsDevice::SetDepthStencilState(DepthStencilState* state)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			if (state == nullptr)
+				m_d3d11State.Context->OMSetDepthStencilState(nullptr, 0);
+			else
+				m_d3d11State.Context->OMSetDepthStencilState(state->Direct3D11.State, state->Direct3D11.ReferenceStencil);
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			DepthStencilStateDesc newState;
+			if (state != nullptr)
+				newState = state->OpenGL.Desc;
+			else
+				newState = NXNA_DEPTHSTENCIL_DEFAULT;
+
+			// depth buffer stuff
+			if (state == nullptr || m_oglState.DepthStencil.DepthBufferEnabled != newState.DepthBufferEnabled)
+			{
+				if (newState.DepthBufferEnabled)
+					glEnable(GL_DEPTH_TEST);
+				else
+					glDisable(GL_DEPTH_TEST);
+			}
+
+			if (state == nullptr || m_oglState.DepthStencil.DepthBufferFunction != newState.DepthBufferFunction)
+			{
+				GLenum f;
+				NXNA_CONVERT_COMPARISON_OGL(newState.DepthBufferFunction, f);
+				glDepthFunc(f);
+			}
+
+			if (state == nullptr || m_oglState.DepthStencil.DepthBufferWriteEnabled != newState.DepthBufferWriteEnabled)
+			{
+				glDepthMask(newState.DepthBufferWriteEnabled ? GL_TRUE : GL_FALSE);
+			}
+
+			// stencil buffer stuff
+			if (state == nullptr || m_oglState.DepthStencil.StencilEnable != newState.StencilEnable)
+			{
+				if (newState.StencilEnable)
+					glEnable(GL_STENCIL_TEST);
+				else
+					glDisable(GL_STENCIL_TEST);
+			}
+
+			if (state == nullptr ||
+				m_oglState.DepthStencil.StencilFunction != newState.StencilFunction ||
+				m_oglState.DepthStencil.ReferenceStencil != newState.ReferenceStencil)
+			{
+				GLenum f;
+				NXNA_CONVERT_COMPARISON_OGL(newState.StencilFunction, f);
+				glStencilFunc(f, newState.ReferenceStencil, 0xffffffff);
+			}
+
+			if (state == nullptr ||
+				m_oglState.DepthStencil.StencilFail != newState.StencilFail ||
+				m_oglState.DepthStencil.StencilDepthBufferFail != newState.StencilDepthBufferFail ||
+				m_oglState.DepthStencil.StencilPass != newState.StencilPass)
+			{
+				GLenum stencilFail, depthFail, stencilPass;
+				NXNA_CONVERT_STENCIL_OP_OGL(newState.StencilFail, stencilFail);
+				NXNA_CONVERT_STENCIL_OP_OGL(newState.StencilDepthBufferFail, depthFail);
+				NXNA_CONVERT_STENCIL_OP_OGL(newState.StencilPass, stencilPass);
+				glStencilOp(stencilFail, depthFail, stencilPass);
+			}
+
+			m_oglState.DepthStencil = newState;
+		}
+			break;
+		}
+	}
+
+	void GraphicsDevice::DestroyDepthStencilState(DepthStencilState* state)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			state->Direct3D11.State->Release();
+			state->Direct3D11.State = nullptr;
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			// nothing
+		}
+			break;
+		}
+	}
+
 	NxnaResult GraphicsDevice::CreateIndexBuffer(const IndexBufferDesc* desc, IndexBuffer* result)
 	{
 		result->ElementSize = desc->ElementSize;
@@ -1753,26 +1953,90 @@ namespace Graphics
 		}
 	}
 
-	void GraphicsDevice::Clear(float r, float g, float b, float a)
+	void GraphicsDevice::ClearColor(Color color)
+	{
+		float rgba[] = { color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f };
+
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			m_d3d11State.Context->ClearRenderTargetView(m_d3d11State.RenderTargetView, rgba);
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			glClearBufferfv(GL_COLOR, 0, rgba);
+		}
+			break;
+		}
+	}
+
+	void GraphicsDevice::ClearColor(float r, float g, float b, float a)
+	{
+		float rgba[] = { r, g, b, a };
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			m_d3d11State.Context->ClearRenderTargetView(m_d3d11State.RenderTargetView, rgba);
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			glClearBufferfv(GL_COLOR, 0, rgba);
+		}
+			break;
+		}
+	}
+	
+	void GraphicsDevice::ClearColor(const float* colorRGBA4f)
 	{
 		switch (GetType())
 		{
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
 		{
-			float c[4] = { r, g, b, a };
-			m_d3d11State.Context->ClearRenderTargetView(m_d3d11State.RenderTargetView, c);
+			m_d3d11State.Context->ClearRenderTargetView(m_d3d11State.RenderTargetView, colorRGBA4f);
 		}
 			break;
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-			float c[4] = { r, g, b, a };
-			glClearBufferfv(GL_COLOR, 0, c);
-
-			glClearBufferfi(GL_DEPTH_STENCIL, 0, 0, 0);
+			glClearBufferfv(GL_COLOR, 0, colorRGBA4f);
 		}
-		break;
+			break;
+		}
+	}
+
+	void GraphicsDevice::ClearDepthStencil(bool clearDepth, bool clearStencil, float depthValue, int stencilValue)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			UINT flags = 0;
+			if (clearDepth) flags |= D3D11_CLEAR_DEPTH;
+			if (clearStencil) flags |= D3D11_CLEAR_STENCIL;
+			m_d3d11State.Context->ClearDepthStencilView(m_d3d11State.DepthStencilView, flags , depthValue, stencilValue);
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			if (clearDepth && clearStencil)
+				glClearBufferfi(GL_DEPTH_STENCIL, 0, depthValue, stencilValue);
+			else if (clearDepth)
+				glClearBufferfv(GL_DEPTH, 0, &depthValue);
+			else if (clearStencil)
+				glClearBufferiv(GL_STENCIL, 0, &stencilValue);
+		}
+			break;
 		}
 	}
 

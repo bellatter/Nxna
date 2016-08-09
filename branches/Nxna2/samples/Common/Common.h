@@ -20,7 +20,7 @@ void ShowGameWindow(WindowInfo window);
 void DestroyGameWindow(WindowInfo window);
 
 #ifdef _WIN32
-bool CreateDirect3DDevice(WindowInfo* window, int width, int height, ID3D11Device** pdevice, ID3D11DeviceContext** pcontext, ID3D11RenderTargetView** prenderTargetView, IDXGISwapChain** pswapChain);
+bool CreateDirect3DDevice(WindowInfo* window, int width, int height, ID3D11Device** pdevice, ID3D11DeviceContext** pcontext, ID3D11RenderTargetView** prenderTargetView, ID3D11DepthStencilView** pdepthStencilView, IDXGISwapChain** pswapChain);
 #endif
 
 bool CreateOpenGLContext(WindowInfo* window);

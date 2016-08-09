@@ -142,9 +142,9 @@ namespace Nxna
 
 
 #ifdef NXNA_ENABLE_RENDERER
+#include "Color.h"
 #include "Graphics/GraphicsDevice.h"
 #include "Graphics/PipelineState.h"
-#include "Color.h"
 #endif
 
 #ifdef NXNA_ENABLE_INPUT
