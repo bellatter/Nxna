@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 	// now either create a Direct3D device, or an OpenGL context
 #ifdef NXNA_ENABLE_DIRECT3D11
 	if (params.Type == Nxna::Graphics::GraphicsDeviceType::Direct3D11)
-		CreateDirect3DDevice(&window, params.ScreenWidth, params.ScreenHeight, &params.Direct3D11.Device, &params.Direct3D11.DeviceContext, &params.Direct3D11.RenderTargetView, &params.Direct3D11.SwapChain);
+		CreateDirect3DDevice(&window, params.ScreenWidth, params.ScreenHeight, &params.Direct3D11.Device, &params.Direct3D11.DeviceContext, &params.Direct3D11.RenderTargetView, &params.Direct3D11.DepthStencilView, &params.Direct3D11.SwapChain);
 	else
 #endif
 		CreateOpenGLContext(&window);
@@ -202,7 +202,8 @@ int main(int argc, char** argv)
 		HandleMessages(window);
 
 		// clear to black
-		device->Clear(0, 0, 0, 0);
+		device->ClearColor(0, 0, 0, 0);
+		device->ClearDepthStencil(true, true, 1.0f, 0);
 
 		// rotate the triangle and send the new transformation matrix to the constant buffer
 		Nxna::Matrix world = Nxna::Matrix::CreateRotationY(rotation);

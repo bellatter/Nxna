@@ -72,6 +72,62 @@ namespace Graphics
 		};
 	};
 
+	enum class CompareFunction : nxna_byte
+	{
+		Always,
+		Equal,
+		Greater,
+		GreaterEqual,
+		Less,
+		LessEqual,
+		Never,
+		NotEqual
+	};
+
+	enum class StencilOperation : nxna_byte
+	{
+		Decrement,
+		DecrementSaturation,
+		Increment,
+		IncrementSaturation,
+		Invert,
+		Keep,
+		Replace,
+		Zero
+	};
+
+	struct DepthStencilStateDesc
+	{
+		CompareFunction DepthBufferFunction;
+		bool DepthBufferEnabled;
+		bool DepthBufferWriteEnabled;
+
+		bool StencilEnable;
+		int ReferenceStencil;
+		CompareFunction StencilFunction;
+		StencilOperation StencilPass;
+		StencilOperation StencilFail;
+		StencilOperation StencilDepthBufferFail;
+	};
+
+	struct DepthStencilState
+	{
+		union
+		{
+			struct
+			{
+				DepthStencilStateDesc Desc;
+			} OpenGL;
+#ifdef NXNA_ENABLE_DIRECT3D11
+			struct
+			{
+				ID3D11DepthStencilState* State;
+				int ReferenceStencil;
+			} Direct3D11;
+#endif
+		};
+	};
+
 	enum class InputElementFormat
 	{
 		/// A single 32-bit floating point number
@@ -255,6 +311,18 @@ namespace Graphics
 		true, \
 		Nxna::Graphics::FillMode::Solid, \
 		false \
+	}
+
+#define NXNA_DEPTHSTENCIL_DEFAULT { \
+		CompareFunction::Less, \
+		true, \
+		true, \
+		false, \
+		0, \
+		CompareFunction::Always, \
+		StencilOperation::Keep, \
+		StencilOperation::Keep, \
+		StencilOperation::Keep \
 	}
 }
 }
