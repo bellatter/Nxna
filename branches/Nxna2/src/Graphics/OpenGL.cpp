@@ -84,7 +84,9 @@ namespace OpenGL
 }
 }
 
+#ifndef NXNA_DISABLE_GLEW_IMPLEMENTATION
 #define GLEW_INCLUDE "glew.h"
 #define GLEW_WGLEW_INCLUDE "wglew.h"
 #define GLEW_GLXEW_INCLUDE "glxew.h"
 #include "glew/glew.c"
+#endif

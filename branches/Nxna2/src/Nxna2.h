@@ -10,6 +10,8 @@ NXNA_ENABLE_DIRECT3D11 - Enables the Direct3D11 renderer. (no effect on non-Wind
 
 NXNA_DISABLE_VALIDATION - Disables some extra run-time checks
 
+NXNA_DISABLE_GLEW_IMPLEMENTATION - Don't include glew.c when building Nxna
+
 */
 
 /*! \mainpage Nxna2
