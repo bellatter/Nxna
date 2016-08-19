@@ -73,13 +73,26 @@ namespace Graphics
 			break;
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
+		{
+			if (params->Direct3D11.Device == nullptr ||
+				params->Direct3D11.DeviceContext == nullptr ||
+				params->Direct3D11.RenderTargetView == nullptr ||
+				params->Direct3D11.DepthStencilView == nullptr ||
+				params->Direct3D11.SwapChain == nullptr)
+			{
+				return NxnaResult::InvalidArgument;
+			}
+
 			result->m_d3d11State.Device = params->Direct3D11.Device;
 			result->m_d3d11State.Context = params->Direct3D11.DeviceContext;
 			result->m_d3d11State.RenderTargetView = params->Direct3D11.RenderTargetView;
 			result->m_d3d11State.DepthStencilView = params->Direct3D11.DepthStencilView;
 			result->m_d3d11State.SwapChain = params->Direct3D11.SwapChain;
+		}
 			break;
 #endif
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::Success;

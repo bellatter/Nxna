@@ -17,6 +17,8 @@ namespace Nxna
 		/// The requested operation is not supported on the current platform or hardware
 		NotSupported = -10000,
 
+		InvalidArgument = -10100,
+
 		/// An unknown error
 		UnknownError = -1
 	};
