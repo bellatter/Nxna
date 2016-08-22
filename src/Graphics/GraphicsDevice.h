@@ -333,9 +333,12 @@ namespace Nxna
 #ifdef NXNA_ENABLE_DIRECT3D11
 				struct
 				{
-					ID3D11ShaderResourceView* m_shaderResourceView;
 					ID3D11Texture2D* m_texture;
+					ID3D11ShaderResourceView* m_shaderResourceView;
 				} Direct3D11;
+				intptr_t UniqueID;
+#else
+				unsigned int UniqueID;
 #endif
 			};
 		};

@@ -297,6 +297,8 @@ namespace Graphics
 	{
 		NXNA_VALIDATION_ASSERT(desc != nullptr, "desc cannot be null");
 
+		memset(result, 0, sizeof(Texture2D));
+
 		switch (GetType())
 		{
 #ifdef NXNA_ENABLE_DIRECT3D11
@@ -2036,7 +2038,7 @@ namespace Graphics
 			UINT flags = 0;
 			if (clearDepth) flags |= D3D11_CLEAR_DEPTH;
 			if (clearStencil) flags |= D3D11_CLEAR_STENCIL;
-			m_d3d11State.Context->ClearDepthStencilView(m_d3d11State.DepthStencilView, flags , depthValue, stencilValue);
+			m_d3d11State.Context->ClearDepthStencilView(m_d3d11State.DepthStencilView, flags , depthValue, (UINT8)stencilValue);
 		}
 			break;
 #endif
