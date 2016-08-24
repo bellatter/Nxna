@@ -3,6 +3,7 @@
 #include "PipelineState.h"
 #include <cstdio>
 #include <cstring>
+#include <cmath>
 
 namespace Nxna
 {
@@ -134,7 +135,7 @@ namespace Graphics
 #endif
 	}
 
-	void GraphicsDevice::SetViewport(int x, int y, int width, int height)
+	void GraphicsDevice::SetViewport(float x, float y, float width, float height)
 	{
 		switch (GetType())
 		{
@@ -142,10 +143,10 @@ namespace Graphics
 		case GraphicsDeviceType::Direct3D11:
 		{
 			D3D11_VIEWPORT vp;
-			vp.TopLeftX = (float)x;
-			vp.TopLeftY = (float)y;
-			vp.Width = (float)width;
-			vp.Height = (float)height;
+			vp.TopLeftX = x;
+			vp.TopLeftY = y;
+			vp.Width = width;
+			vp.Height = height;
 			vp.MinDepth = 0;
 			vp.MaxDepth = 1.0f;
 
@@ -155,11 +156,14 @@ namespace Graphics
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
+			// TODO: OpenGL 4.1 (the API at least, not necessarily the hardware) supports fractional viewport sizes,
+			// so use that if available. For now just truncate the fraction part.
+
 			// OpenGL stores the bottom-left corner, but XNA
 			// stores the upper-left corner, so we have to convert.
-			y = m_screenHeight - (height + y);
+			int y2 = m_screenHeight - (int)(height + y);
 
-			glViewport(x, y, width, height);
+			glViewport((int)x, y2, (int)width, (int)height);
 		}
 		break;
 		}
@@ -173,10 +177,10 @@ namespace Graphics
 		case GraphicsDeviceType::Direct3D11:
 		{
 			D3D11_VIEWPORT vp;
-			vp.TopLeftX = (float)viewport.X;
-			vp.TopLeftY = (float)viewport.Y;
-			vp.Width = (float)viewport.Width;
-			vp.Height = (float)viewport.Height;
+			vp.TopLeftX = viewport.X;
+			vp.TopLeftY = viewport.Y;
+			vp.Width = viewport.Width;
+			vp.Height = viewport.Height;
 			vp.MinDepth = 0;
 			vp.MaxDepth = 1.0f;
 
@@ -189,10 +193,43 @@ namespace Graphics
 
 			// OpenGL stores the bottom-left corner, but XNA
 			// stores the upper-left corner, so we have to convert.
-			int y = m_screenHeight - (viewport.Height + viewport.Y);
+			int y2 = m_screenHeight - (int)(viewport.Height + viewport.Y);
 
-			glViewport(viewport.X, y, viewport.Width, viewport.Height);
+			glViewport((int)viewport.X, y2, (int)viewport.Width, (int)viewport.Height);
 		}
+		}
+	}
+
+	Viewport GraphicsDevice::GetViewport()
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			UINT numViewports = 1;
+			D3D11_VIEWPORT vp;
+			m_d3d11State.Context->RSGetViewports(&numViewports, &vp);
+
+			return Viewport(vp.TopLeftX, vp.TopLeftY, vp.Width, vp.Height);
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			GLint viewport[4];
+			glGetIntegerv(GL_VIEWPORT, viewport);
+
+			// OpenGL stores the bottom-left corner, but XNA
+			// stores the upper-left corner, so we have to convert.
+			viewport[1] = m_screenHeight - viewport[1] - viewport[3];
+ 			
+			Viewport vp((float)viewport[0], (float)viewport[1], (float)viewport[2], (float)viewport[3]);
+			return vp;
+		}
+		default:
+			// we should never get here!
+			return Viewport();
 		}
 	}
 
@@ -367,10 +404,11 @@ namespace Graphics
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-			int mipLevels = desc->MipLevels;
+			unsigned int mipLevels = desc->MipLevels;
 			if (mipLevels == 0)
-				mipLevels = 1;
-
+			{
+				mipLevels = 1 + (unsigned int)floor(log2(desc->Width > desc->Height ? desc->Width : desc->Height));
+			}
 
 			glGenTextures(1, &result->OpenGL.Handle);
 			glBindTexture(GL_TEXTURE_2D, result->OpenGL.Handle);
@@ -379,7 +417,7 @@ namespace Graphics
 
 			if (glTexStorage2D)
 			{
-				glTexStorage2D(GL_TEXTURE_2D, desc->MipLevels, GL_RGBA8, desc->Width, desc->Height);
+				glTexStorage2D(GL_TEXTURE_2D, mipLevels, GL_RGBA8, desc->Width, desc->Height);
 				if (desc->InitialData)
 					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, desc->Width, desc->Height, GL_RGBA, GL_UNSIGNED_BYTE, desc->InitialData);
 			}
@@ -387,6 +425,9 @@ namespace Graphics
 			{
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, desc->InitialData);
 			}
+
+			if (desc->MipLevels == 0)
+				glGenerateMipmap(GL_TEXTURE_2D);
 		}
 			break;
 		}

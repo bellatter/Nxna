@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 	device->SetMessageCallback(msgCallback);
 
 	// set the viewport
-	Nxna::Graphics::Viewport vp(0, 0, screenWidth, screenHeight);
+	Nxna::Graphics::Viewport vp(0, 0, (float)screenWidth, (float)screenHeight);
 	device->SetViewport(vp);
 
 	// create the matrices

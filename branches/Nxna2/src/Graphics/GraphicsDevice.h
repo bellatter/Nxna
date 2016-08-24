@@ -195,7 +195,7 @@ namespace Nxna
 				Height = 0;
 			}
 
-			Viewport(int x, int y, int width, int height)
+			Viewport(float x, float y, float width, float height)
 			{
 				X = x;
 				Y = y;
@@ -224,14 +224,8 @@ namespace Nxna
 				const Matrix& world);
 #endif
 
-#ifdef NXNA_ENABLE_MATH
-			Rectangle GetBounds()
-			{
-				return Rectangle(X, Y, Width, Height);
-			}
-#endif
 
-			int X, Y, Width, Height;
+			float X, Y, Width, Height;
 		};
 
 		struct GraphicsDeviceDebugMessage
@@ -312,9 +306,10 @@ namespace Nxna
 
 		struct TextureCreationDesc
 		{
-			int Width;
-			int Height;
-			int MipLevels;
+			unsigned int Width;
+			unsigned int Height;
+			/// The number of mip levels. Set this to 0 to automatically generate mipmaps.
+			unsigned int MipLevels;
 			Usage TextureUsage;
 			SurfaceFormat Format;
 
@@ -429,9 +424,12 @@ namespace Nxna
 			Capabilities* GetCaps() { return &m_caps; }
 
 			/// Sets the current viewport
-			void SetViewport(int x, int y, int width, int height);
+			void SetViewport(float x, float y, float width, float height);
 			/// Sets the current viewport
 			void SetViewport(Viewport viewport);
+
+			/// Gets the current viewport
+			Viewport GetViewport();
 
 			/// Creates a new shader object
 			/// @param[in] type The type of shader to create

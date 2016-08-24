@@ -118,8 +118,8 @@ namespace Graphics
 		sprite->TextureHeight = textureHeight;
 		sprite->Source[0] = 0;
 		sprite->Source[1] = 0;
-		sprite->Source[2] = 1.0f;
-		sprite->Source[3] = 1.0f;
+		sprite->Source[2] = (float)textureWidth;
+		sprite->Source[3] = (float)textureHeight;
 		sprite->Destination[0] = x;
 		sprite->Destination[1] = y;
 		sprite->Destination[2] = width;
@@ -132,22 +132,22 @@ namespace Graphics
 		sprite->Effects = SpriteEffects::None;
 	}
 
-	void SpriteBatch::SortSprites(SpriteBatchSprite* sprites, int* indices, int numSprites, SpriteSortMode mode)
+	void SpriteBatch::SortSprites(SpriteBatchSprite* sprites, unsigned int* indices, unsigned int numSprites, SpriteSortMode mode)
 	{
 		if (indices == nullptr)
 			return; // nowhere to put the results, so don't do anything
 
 		// tODO: finish this and the other methods
 
-		for (int i = 0; i < numSprites; i++)
+		for (unsigned int i = 0; i < numSprites; i++)
 		{
 			indices[i] = i;
 		}
 	}
 
-	void SpriteBatch::FillIndexBuffer(unsigned short* indices, int numIndices)
+	void SpriteBatch::FillIndexBuffer(unsigned short* indices, unsigned int numIndices)
 	{
-		for (short i = 0; i < numIndices / 6; i++)
+		for (unsigned short i = 0; i < numIndices / 6; i++)
 		{
 			indices[i * 6 + 0] = i * 4;
 			indices[i * 6 + 1] = i * 4 + 1;
@@ -158,7 +158,7 @@ namespace Graphics
 		}
 	}
 
-	unsigned int SpriteBatch::FillVertexBuffer(SpriteBatchSprite* sprites, int* indices, int numSprites, void* buffer, size_t bufferByteLength, unsigned int* textureRunLengths, unsigned int* numTextureRunLengths)
+	unsigned int SpriteBatch::FillVertexBuffer(SpriteBatchSprite* sprites, unsigned int* indices, unsigned int numSprites, void* buffer, size_t bufferByteLength, unsigned int* textureRunLengths, unsigned int* numTextureRunLengths)
 	{
 		if (numSprites == 0) return 0;
 
@@ -179,7 +179,7 @@ namespace Graphics
 		if (numSprites > spriteCapacity)
 			numSprites = (int)spriteCapacity;
 		
-		for (size_t i = 0; i < numSprites; i++)
+		for (unsigned int i = 0; i < numSprites; i++)
 		{
 			// look for texture changes
 			if (sprites[i].Texture.UniqueID != currentTextureID)
@@ -298,7 +298,7 @@ namespace Graphics
 		return numSprites;
 	}
 
-	void SpriteBatch::SetupVertexElements(InputElement* elements, int* stride)
+	void SpriteBatch::SetupVertexElements(InputElement* elements, unsigned int* stride)
 	{
 		elements[0].Offset = 0;
 		elements[0].ElementFormat = InputElementFormat::Vector3;
