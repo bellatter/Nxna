@@ -1,6 +1,7 @@
 #ifndef NXNA_GRAPHICS_SPRITEBATCH_H
 #define NXNA_GRAPHICS_SPRITEBATCH_H
 
+#include <cstddef>
 #include "../Color.h"
 #include "../Vector2.h"
 #include "../Vector4.h"

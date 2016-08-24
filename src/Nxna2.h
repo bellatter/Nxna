@@ -178,6 +178,10 @@ namespace Nxna
 #include "Quaternion.cpp"
 #endif
 
+#ifdef NXNA_ENABLE_SPRITEBATCH
+#include "Graphics/SpriteBatch.cpp"
+#endif
+
 #ifdef NXNA_ENABLE_RENDERER
 #include "Graphics/GraphicsDevice.cpp"
 #include "Graphics/OpenGL.cpp"
@@ -188,8 +192,6 @@ namespace Nxna
 #include "Input/Mouse.cpp"
 #endif
 
-#ifdef NXNA_ENABLE_SPRITEBATCH
-#include "Graphics/SpriteBatch.cpp"
-#endif
+
 
 #endif // NXNA2_IMPLEMENTATION
