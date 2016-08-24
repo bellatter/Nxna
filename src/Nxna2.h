@@ -96,6 +96,14 @@ Generally you should treat those objects as completely opaque and not mess aroun
 #ifndef NXNA2_H
 #define NXNA2_H
 
+// do some sanity checks
+#ifndef _WIN32
+#ifdef NXNA_ENABLE_DIRECT3D11
+#undef NXNA_ENABLE_DIRECT3D11
+#endif
+#endif
+
+
 #include "NxnaCommon.h"
 
 
@@ -171,6 +179,14 @@ namespace Nxna
 
 #ifdef NXNA2_IMPLEMENTATION
 
+#ifndef _WIN32
+#ifdef NXNA_ENABLE_DIRECT3D11
+#error NXNA_ENABLE_DIRECT3D11 is not valid on any platform other than Windows
+#define NXNA_ERROR_STOP_COMPILATION
+#endif
+#endif
+
+#ifndef NXNA_ERROR_STOP_COMPILATION
 #ifdef NXNA_ENABLE_MATH
 #include "Vector2.cpp"
 #include "Vector3.cpp"
@@ -192,6 +208,7 @@ namespace Nxna
 #include "Input/Mouse.cpp"
 #endif
 
+#endif // NXNA_ERROR_STOP_COMPILATION
 
 
 #endif // NXNA2_IMPLEMENTATION

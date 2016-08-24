@@ -333,6 +333,7 @@ namespace Graphics
 	NxnaResult GraphicsDevice::CreateTexture2D(const TextureCreationDesc* desc, Texture2D* result)
 	{
 		NXNA_VALIDATION_ASSERT(desc != nullptr, "desc cannot be null");
+		NXNA_VALIDATION_ASSERT(result != nullptr, "result cannot be null");
 
 		memset(result, 0, sizeof(Texture2D));
 
