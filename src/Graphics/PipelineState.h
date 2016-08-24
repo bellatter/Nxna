@@ -314,15 +314,27 @@ namespace Graphics
 	}
 
 #define NXNA_DEPTHSTENCIL_DEFAULT { \
-		CompareFunction::Less, \
+		Nxna::Graphics::CompareFunction::Less, \
 		true, \
 		true, \
 		false, \
 		0, \
-		CompareFunction::Always, \
-		StencilOperation::Keep, \
-		StencilOperation::Keep, \
-		StencilOperation::Keep \
+		Nxna::Graphics::CompareFunction::Always, \
+		Nxna::Graphics::StencilOperation::Keep, \
+		Nxna::Graphics::StencilOperation::Keep, \
+		Nxna::Graphics::StencilOperation::Keep \
+	}
+
+#define NXNA_DEPTHSTENCIL_DEPTHREAD { \
+	Nxna::Graphics::CompareFunction::Less, \
+		true, \
+		false, \
+		false, \
+		0, \
+		Nxna::Graphics::CompareFunction::Always, \
+		Nxna::Graphics::StencilOperation::Keep, \
+		Nxna::Graphics::StencilOperation::Keep, \
+		Nxna::Graphics::StencilOperation::Keep \
 	}
 }
 }
