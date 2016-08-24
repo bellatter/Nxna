@@ -1,8 +1,6 @@
 #include "SpriteBatch.h"
 #include "GraphicsDevice.h"
 #include "PipelineState.h"
-#include "../MathBase.h"
-#include "../Error.h"
 
 #ifdef NXNA_ENABLE_MATH
 #include "../Matrix.h"
