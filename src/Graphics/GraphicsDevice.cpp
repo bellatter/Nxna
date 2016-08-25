@@ -1294,8 +1294,7 @@ namespace Graphics
 			switch (desc->Filter)
 			{
 			case TextureFilter::Point:
-			//	minFilter = GL_NEAREST_MIPMAP_NEAREST;
-				minFilter = GL_NEAREST;
+				minFilter = GL_NEAREST_MIPMAP_NEAREST;
 				magFilter = GL_NEAREST;
 				break;
 			case TextureFilter::Linear:
