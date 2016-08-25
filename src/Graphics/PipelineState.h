@@ -289,6 +289,60 @@ namespace Graphics
 		};
 	};
 
+	enum class TextureFilter
+	{
+		Point = 0x0,
+		Linear = 0x15,
+		Anisotropic = 0x55,
+
+		LinearMipPoint = 0x14,
+		PointMipLinear = 0x1,
+
+		MinLinearMagPointMipLinear = 0x11,
+		MinLinearMagPointMipPoint = 0x10,
+		MinPointMagLinearMipLinear = 0x5,
+		MinPointMagLinearMipPoint = 0x4
+	};
+
+	enum class TextureAddressMode
+	{
+		Clamp,
+		Mirror,
+		Wrap,
+		Border,
+		MirrorOnce
+	};
+
+	struct SamplerStateDesc
+	{
+		TextureFilter Filter;
+		TextureAddressMode AddressU;
+		TextureAddressMode AddressV;
+		TextureAddressMode AddressW;
+		float MipLODBias;
+		unsigned int MaxAnisotropy;
+		float BorderColor[4];
+		float MinLOD;
+		float MaxLOD;
+	};
+
+	struct SamplerState
+	{
+		union
+		{
+			struct
+			{
+				unsigned int Handle;
+			} OpenGL;
+#ifdef NXNA_ENABLE_DIRECT3D11
+			struct
+			{
+				ID3D11SamplerState * State;
+			} Direct3D11;
+#endif
+		};
+	};
+
 	void GetAdditiveBlendState(BlendStateDesc* state);
 	void GetNonPreMultipliedBlendState(BlendStateDesc* state);
 	void GetOpaqueBlendState(BlendStateDesc* state);
@@ -303,7 +357,7 @@ namespace Graphics
 		Nxna::Graphics::BlendFunction::Add, \
 		Nxna::Graphics::Blend::InverseSourceAlpha, \
 		Nxna::Graphics::Blend::One \
-	}
+		}
 
 
 #define NXNA_RASTERIZERSTATEDESC_CULLNONE { \
@@ -311,7 +365,7 @@ namespace Graphics
 		true, \
 		Nxna::Graphics::FillMode::Solid, \
 		false \
-	}
+		}
 
 #define NXNA_DEPTHSTENCIL_DEFAULT { \
 		Nxna::Graphics::CompareFunction::Less, \
@@ -323,7 +377,7 @@ namespace Graphics
 		Nxna::Graphics::StencilOperation::Keep, \
 		Nxna::Graphics::StencilOperation::Keep, \
 		Nxna::Graphics::StencilOperation::Keep \
-	}
+		}
 
 #define NXNA_DEPTHSTENCIL_DEPTHREAD { \
 	Nxna::Graphics::CompareFunction::Less, \
@@ -335,7 +389,20 @@ namespace Graphics
 		Nxna::Graphics::StencilOperation::Keep, \
 		Nxna::Graphics::StencilOperation::Keep, \
 		Nxna::Graphics::StencilOperation::Keep \
+		}
+
+#define NXNA_SAMPLERSTATEDESC_POINTCLAMP { \
+		Nxna::Graphics::TextureFilter::Point, \
+		Nxna::Graphics::TextureAddressMode::Clamp, \
+		Nxna::Graphics::TextureAddressMode::Clamp, \
+		Nxna::Graphics::TextureAddressMode::Clamp, \
+		0, \
+		1, \
+		{1.0f, 1.0f, 1.0f, 1.0f}, \
+		-10000.0f, \
+		10000.0f \
 	}
+
 }
 }
 

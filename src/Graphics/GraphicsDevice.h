@@ -39,12 +39,17 @@ namespace Nxna
 #endif
 		};
 		
-		union Capabilities
+		struct Capabilities
 		{
-			struct
+			union
 			{
-				bool SupportsS3tcTextureCompression;
-			} OpenGLCaps;
+				struct
+				{
+					bool SupportsS3tcTextureCompression;
+				} OpenGLCaps;
+			};
+
+			unsigned int MaxSamplerCount;
 		};
 
 		enum class Usage
@@ -287,6 +292,7 @@ namespace Nxna
 		struct OpenGlDeviceState
 		{
 			DepthStencilStateDesc DepthStencil;
+			unsigned int DefaultSamplerState;
 		};
 
 		enum class SurfaceFormat
@@ -421,7 +427,7 @@ namespace Nxna
 #endif
 			const NxnaResultDetails* GetErrorDetails() { return &m_errorDetails; }
 
-			Capabilities* GetCaps() { return &m_caps; }
+			const Capabilities* GetCaps() { return &m_caps; }
 
 			/// Sets the current viewport
 			void SetViewport(float x, float y, float width, float height);
@@ -486,6 +492,11 @@ namespace Nxna
 			NxnaResult CreateDepthStencilState(const DepthStencilStateDesc* desc, DepthStencilState* result);
 			void SetDepthStencilState(DepthStencilState* state);
 			void DestroyDepthStencilState(DepthStencilState* state);
+
+			NxnaResult CreateSamplerState(const SamplerStateDesc* desc, SamplerState* result);
+			void SetSamplerState(unsigned int slot, SamplerState* sampler);
+			void SetSamplerStates(unsigned int startSlot, unsigned int numSamplers, SamplerState* const* samplers);
+			void DestroySamplerState(SamplerState* state);
 
 			/// Create a new IndexBuffer object
 			/// @param[in] desc A pointer to a IndexBufferDesc object describing the new index buffer
