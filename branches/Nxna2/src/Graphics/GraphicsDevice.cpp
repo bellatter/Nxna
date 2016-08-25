@@ -69,7 +69,25 @@ namespace Graphics
 				}
 			}
 
+			// load the capabilities
+			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (GLint*)&result->m_caps.MaxSamplerCount);
+
+			// set the depth stuff to the defaults
 			result->SetDepthStencilState(nullptr);
+
+			// create a default sampler state
+			{
+				glGenSamplers(1, &result->m_oglState.DefaultSamplerState);
+				glSamplerParameteri(result->m_oglState.DefaultSamplerState, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+				glSamplerParameteri(result->m_oglState.DefaultSamplerState, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glSamplerParameteri(result->m_oglState.DefaultSamplerState, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glSamplerParameteri(result->m_oglState.DefaultSamplerState, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glSamplerParameteri(result->m_oglState.DefaultSamplerState, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+				float color[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+				glSamplerParameterfv(result->m_oglState.DefaultSamplerState, GL_TEXTURE_BORDER_COLOR, color);
+
+				result->SetSamplerStates(0, result->m_caps.MaxSamplerCount, nullptr);
+			}
 		}
 			break;
 #ifdef NXNA_ENABLE_DIRECT3D11
@@ -83,6 +101,9 @@ namespace Graphics
 			{
 				return NxnaResult::InvalidArgument;
 			}
+
+			// load the capabilities
+			result->m_caps.MaxSamplerCount = D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT; 
 
 			result->m_d3d11State.Device = params->Direct3D11.Device;
 			result->m_d3d11State.Context = params->Direct3D11.DeviceContext;
@@ -1180,6 +1201,259 @@ namespace Graphics
 		case GraphicsDeviceType::OpenGl41:
 		{
 			// nothing
+		}
+			break;
+		}
+	}
+
+#define NXNA_CONVERT_TEXTURE_ADDRESS_OGL(s, d) { \
+	switch(s) { \
+	case TextureAddressMode::Clamp: d = GL_CLAMP_TO_EDGE; break; \
+	case TextureAddressMode::Mirror: d = GL_MIRRORED_REPEAT; break; \
+	case TextureAddressMode::Wrap: d = GL_REPEAT; break; \
+	case TextureAddressMode::Border: d = GL_CLAMP_TO_BORDER; break; \
+	case TextureAddressMode::MirrorOnce: d = GL_MIRROR_CLAMP_TO_EDGE; break; \
+		} }
+
+#define NXNA_CONVERT_TEXTURE_ADDRESS_D3D11(s, d) { \
+	switch(s) { \
+	case TextureAddressMode::Clamp: d = D3D11_TEXTURE_ADDRESS_CLAMP; break; \
+	case TextureAddressMode::Mirror: d = D3D11_TEXTURE_ADDRESS_MIRROR; break; \
+	case TextureAddressMode::Wrap: d = D3D11_TEXTURE_ADDRESS_WRAP; break; \
+	case TextureAddressMode::Border: d = D3D11_TEXTURE_ADDRESS_BORDER; break; \
+	case TextureAddressMode::MirrorOnce: d = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE; break; \
+	} }
+
+	NxnaResult GraphicsDevice::CreateSamplerState(const SamplerStateDesc* desc, SamplerState* result)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			D3D11_SAMPLER_DESC sd = {};
+			switch (desc->Filter)
+			{
+			case TextureFilter::Point:
+				sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+				break;
+			case TextureFilter::Linear:
+				sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+				break;
+			case TextureFilter::Anisotropic:
+				sd.Filter = D3D11_FILTER_ANISOTROPIC;
+				break;
+			case TextureFilter::LinearMipPoint:
+				sd.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+				break;
+			case TextureFilter::PointMipLinear:
+				sd.Filter = D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+				break;
+			case TextureFilter::MinLinearMagPointMipLinear:
+				sd.Filter = D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+				break;
+			case TextureFilter::MinLinearMagPointMipPoint:
+				sd.Filter = D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
+				break;
+			case TextureFilter::MinPointMagLinearMipLinear:
+				sd.Filter = D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
+				break;
+			case TextureFilter::MinPointMagLinearMipPoint:
+				sd.Filter = D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
+				break;
+			}
+
+			NXNA_CONVERT_TEXTURE_ADDRESS_D3D11(desc->AddressU, sd.AddressU);
+			NXNA_CONVERT_TEXTURE_ADDRESS_D3D11(desc->AddressV, sd.AddressV);
+			NXNA_CONVERT_TEXTURE_ADDRESS_D3D11(desc->AddressW, sd.AddressW);
+			sd.MipLODBias = desc->MipLODBias;
+			sd.MaxAnisotropy = desc->MaxAnisotropy;
+			sd.BorderColor[0] = desc->BorderColor[0];
+			sd.BorderColor[1] = desc->BorderColor[1];
+			sd.BorderColor[2] = desc->BorderColor[2];
+			sd.BorderColor[3] = desc->BorderColor[3];
+			sd.MinLOD = desc->MinLOD;
+			sd.MaxLOD = desc->MaxLOD;
+			sd.ComparisonFunc = D3D11_COMPARISON_NEVER; // TODO: support comparison modes
+
+			auto r = m_d3d11State.Device->CreateSamplerState(&sd, &result->Direct3D11.State);
+			if (FAILED(r))
+			{
+				NXNA_SET_ERROR_DETAILS(r, "CreateSamplerState() failed");
+				return NxnaResult::UnknownError;
+			}
+
+			return NxnaResult::Success;
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			glGenSamplers(1, &result->OpenGL.Handle);
+			GLenum minFilter, magFilter;
+			switch (desc->Filter)
+			{
+			case TextureFilter::Point:
+			//	minFilter = GL_NEAREST_MIPMAP_NEAREST;
+				minFilter = GL_NEAREST;
+				magFilter = GL_NEAREST;
+				break;
+			case TextureFilter::Linear:
+				minFilter = GL_LINEAR_MIPMAP_LINEAR;
+				magFilter = GL_LINEAR;
+				break;
+			case TextureFilter::Anisotropic:
+				minFilter = GL_LINEAR_MIPMAP_LINEAR;
+				magFilter = GL_LINEAR;
+				break;
+			case TextureFilter::LinearMipPoint:
+				minFilter = GL_LINEAR_MIPMAP_NEAREST;
+				magFilter = GL_LINEAR;
+				break;
+			case TextureFilter::PointMipLinear:
+				minFilter = GL_NEAREST_MIPMAP_LINEAR;
+				magFilter = GL_NEAREST;
+				break;
+			case TextureFilter::MinLinearMagPointMipLinear:
+				minFilter = GL_LINEAR_MIPMAP_LINEAR;
+				magFilter = GL_NEAREST;
+				break;
+			case TextureFilter::MinLinearMagPointMipPoint:
+				minFilter = GL_LINEAR_MIPMAP_NEAREST;
+				magFilter = GL_NEAREST;
+				break;
+			case TextureFilter::MinPointMagLinearMipLinear:
+				minFilter = GL_NEAREST_MIPMAP_LINEAR;
+				magFilter = GL_NEAREST;
+				break;
+			case TextureFilter::MinPointMagLinearMipPoint:
+				minFilter = GL_NEAREST_MIPMAP_NEAREST;
+				magFilter = GL_LINEAR;
+				break;
+			}
+			glSamplerParameteri(result->OpenGL.Handle, GL_TEXTURE_MIN_FILTER, minFilter);
+			glSamplerParameteri(result->OpenGL.Handle, GL_TEXTURE_MAG_FILTER, magFilter);
+
+			GLenum wrapU, wrapV, wrapW;
+			NXNA_CONVERT_TEXTURE_ADDRESS_OGL(desc->AddressU, wrapU);
+			NXNA_CONVERT_TEXTURE_ADDRESS_OGL(desc->AddressV, wrapV);
+			NXNA_CONVERT_TEXTURE_ADDRESS_OGL(desc->AddressW, wrapW);
+			glSamplerParameteri(result->OpenGL.Handle, GL_TEXTURE_WRAP_S, wrapU);
+			glSamplerParameteri(result->OpenGL.Handle, GL_TEXTURE_WRAP_T, wrapV);
+			glSamplerParameteri(result->OpenGL.Handle, GL_TEXTURE_WRAP_R, wrapW);
+			glSamplerParameterf(result->OpenGL.Handle, GL_TEXTURE_LOD_BIAS, desc->MipLODBias);
+			glSamplerParameteri(result->OpenGL.Handle, GL_TEXTURE_MAX_ANISOTROPY_EXT, desc->MaxAnisotropy);
+			glSamplerParameterfv(result->OpenGL.Handle, GL_TEXTURE_BORDER_COLOR, desc->BorderColor);
+			glSamplerParameterf(result->OpenGL.Handle, GL_TEXTURE_MIN_LOD, desc->MinLOD);
+			glSamplerParameterf(result->OpenGL.Handle, GL_TEXTURE_MAX_LOD, desc->MaxLOD);
+
+
+			// TODO: verify that the driver supports anisotropic filtering, return NxnaResult::NotSupported if not and they request anything > 1
+			// TODO: if the user requests MirrorOnce then verify that the driver supports it before requesting it, return NxnaResult::NotSupported if not
+			return NxnaResult::Success;
+		}
+			break;
+		default:
+			return NxnaResult::NotSupported;
+		}
+	}
+
+	void GraphicsDevice::SetSamplerState(unsigned int slot, SamplerState* sampler)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			if (sampler == nullptr)
+			{
+				m_d3d11State.Context->PSSetSamplers(slot, 1, nullptr);
+			}
+			else
+			{
+				m_d3d11State.Context->PSSetSamplers(slot, 1, &sampler->Direct3D11.State);
+			}
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			if (sampler == nullptr)
+			{
+				glBindSampler(slot, m_oglState.DefaultSamplerState);
+			}
+			else
+			{
+				glBindSampler(slot, sampler->OpenGL.Handle);
+			}
+		}
+			break;
+		}
+	}
+
+	void GraphicsDevice::SetSamplerStates(unsigned int startSlot, unsigned int numSamplers, SamplerState* const* samplers)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			if (samplers == nullptr)
+			{
+				m_d3d11State.Context->PSSetSamplers(startSlot, numSamplers, nullptr);
+			}
+			else
+			{
+				for (unsigned int i = 0; i < numSamplers; i++)
+				{
+					if (samplers[i] == nullptr)
+						m_d3d11State.Context->PSSetSamplers(startSlot + i, 1, nullptr);
+					else
+						m_d3d11State.Context->PSSetSamplers(startSlot + i, 1, &samplers[i]->Direct3D11.State);
+				}
+			}
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			if (samplers == nullptr)
+			{
+				for (unsigned int i = startSlot; i < m_caps.MaxSamplerCount; i++)
+				{
+					glBindSampler(i, m_oglState.DefaultSamplerState);
+				}
+			}
+			else
+			{
+				for (unsigned int i = 0; i < numSamplers; i++)
+				{
+					if (samplers[i] == nullptr)
+						glBindSampler(startSlot + i, m_oglState.DefaultSamplerState);
+					else
+						glBindSampler(startSlot + i, samplers[i]->OpenGL.Handle);
+				}
+			}
+		}
+			break;
+		}
+	}
+
+	void GraphicsDevice::DestroySamplerState(SamplerState* state)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			state->Direct3D11.State->Release();
+			state->Direct3D11.State = nullptr;
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			glDeleteSamplers(1, &state->OpenGL.Handle);
 		}
 			break;
 		}

@@ -33,6 +33,7 @@ class MySpriteBatch
 	static Nxna::Graphics::BlendState m_blendState;
 	static Nxna::Graphics::RasterizerState m_rasterState;
 	static Nxna::Graphics::DepthStencilState m_depthState;
+	static Nxna::Graphics::SamplerState m_samplerState;
 	static unsigned int m_stride;
 	static bool m_staticDataInitialized;
 public:
@@ -138,10 +139,19 @@ public:
 				return -1;
 			}
 
+			// create a depth/stencil state using read-only
 			Nxna::Graphics::DepthStencilStateDesc dd = NXNA_DEPTHSTENCIL_DEPTHREAD;
 			if (device->CreateDepthStencilState(&dd, &m_depthState) != Nxna::NxnaResult::Success)
 			{
 				printf("Unable to create depth/stencil state\n");
+				return -1;
+			}
+
+			// create a point-filtering sampler state
+			Nxna::Graphics::SamplerStateDesc sd = NXNA_SAMPLERSTATEDESC_POINTCLAMP;
+			if (device->CreateSamplerState(&sd, &m_samplerState) != Nxna::NxnaResult::Success)
+			{
+				printf("Unable to create sampler state\n");
 				return -1;
 			}
 		}
@@ -179,6 +189,7 @@ public:
 		m_device->SetDepthStencilState(&m_depthState);
 		m_device->SetConstantBuffer(m_constantBuffer, 0);
 		m_device->SetShaderPipeline(&m_shaderPipeline);
+		m_device->SetSamplerState(0, &m_samplerState);
 		m_device->SetVertexBuffer(m_vertexBuffer, 0, m_stride);
 		m_device->SetIndices(m_indexBuffer);
 
@@ -216,6 +227,7 @@ Nxna::Graphics::ConstantBuffer MySpriteBatch::m_constantBuffer;
 Nxna::Graphics::BlendState MySpriteBatch::m_blendState;
 Nxna::Graphics::RasterizerState MySpriteBatch::m_rasterState;
 Nxna::Graphics::DepthStencilState MySpriteBatch::m_depthState;
+Nxna::Graphics::SamplerState MySpriteBatch::m_samplerState;
 unsigned int MySpriteBatch::m_stride;
 bool MySpriteBatch::m_staticDataInitialized = false;
 
