@@ -198,6 +198,8 @@ namespace Nxna
 				Y = 0;
 				Width = 0;
 				Height = 0;
+				MinDepth = 0;
+				MaxDepth = 1.0f;
 			}
 
 			Viewport(float x, float y, float width, float height)
@@ -206,6 +208,8 @@ namespace Nxna
 				Y = y;
 				Width = width;
 				Height = height;
+				MinDepth = 0;
+				MaxDepth = 1.0f;
 			}
 
 			float GetAspectRatio() const { return Width / (float)Height; }
@@ -230,7 +234,7 @@ namespace Nxna
 #endif
 
 
-			float X, Y, Width, Height;
+			float X, Y, Width, Height, MinDepth, MaxDepth;
 		};
 
 		struct GraphicsDeviceDebugMessage
@@ -287,11 +291,18 @@ namespace Nxna
 			ID3D11RenderTargetView* RenderTargetView;
 			ID3D11DepthStencilView* DepthStencilView;
 			IDXGISwapChain* SwapChain;
+
+			ID3D11RasterizerState* CurrentRasterizerState;
+			ID3D11BlendState* CurrentBlendState;
 		};
 #endif
 		struct OpenGlDeviceState
 		{
-			DepthStencilStateDesc DepthStencil;
+			DepthStencilStateDesc CurrentDepthStencilState;
+			RasterizerStateDesc CurrentRasterizerState;
+			BlendStateDesc CurrentBlendState;
+
+			// default states
 			unsigned int DefaultSamplerState;
 		};
 
@@ -397,8 +408,6 @@ namespace Nxna
 			IndexBuffer m_indices;
 			VertexBuffer m_vertices;
 			ShaderPipeline* m_shaderPipeline;
-			BlendState* m_blendState;
-			RasterizerState* m_rasterizerState;
 
 			NxnaResultDetails m_errorDetails;
 
@@ -430,7 +439,7 @@ namespace Nxna
 			const Capabilities* GetCaps() { return &m_caps; }
 
 			/// Sets the current viewport
-			void SetViewport(float x, float y, float width, float height);
+			void SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth);
 			/// Sets the current viewport
 			void SetViewport(Viewport viewport);
 

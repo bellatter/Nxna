@@ -367,6 +367,13 @@ namespace Graphics
 		false \
 		}
 
+#define NXNA_RASTERIZERSTATEDESC_DEFAULT { \
+		Nxna::Graphics::CullMode::CullBackFaces, \
+		false, \
+		Nxna::Graphics::FillMode::Solid, \
+		false \
+		}
+
 #define NXNA_DEPTHSTENCIL_DEFAULT { \
 		Nxna::Graphics::CompareFunction::Less, \
 		true, \
@@ -403,6 +410,18 @@ namespace Graphics
 		10000.0f \
 	}
 
+#define NXNA_BLENDSTATEDESC_DEFAULT { \
+	false, \
+	{ \
+		false, \
+		Nxna::Graphics::BlendFunction::Add, \
+		Nxna::Graphics::Blend::Zero, \
+		Nxna::Graphics::Blend::One, \
+		Nxna::Graphics::BlendFunction::Add, \
+		Nxna::Graphics::Blend::Zero, \
+		Nxna::Graphics::Blend::One, \
+	} \
+	}
 }
 }
 
