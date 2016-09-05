@@ -47,8 +47,6 @@ namespace Graphics
 		result->m_screenHeight = params->ScreenHeight;
 
 		result->m_shaderPipeline = nullptr;
-		result->m_blendState = nullptr;
-		result->m_rasterizerState = nullptr;
 
 		switch (params->Type)
 		{
@@ -72,8 +70,10 @@ namespace Graphics
 			// load the capabilities
 			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (GLint*)&result->m_caps.MaxSamplerCount);
 
-			// set the depth stuff to the defaults
+			// set the states to the defaults
 			result->SetDepthStencilState(nullptr);
+			result->SetBlendState(nullptr);
+			result->SetRasterizerState(nullptr);
 
 			// create a default sampler state
 			{
@@ -156,7 +156,7 @@ namespace Graphics
 #endif
 	}
 
-	void GraphicsDevice::SetViewport(float x, float y, float width, float height)
+	void GraphicsDevice::SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth)
 	{
 		switch (GetType())
 		{
@@ -168,8 +168,8 @@ namespace Graphics
 			vp.TopLeftY = y;
 			vp.Width = width;
 			vp.Height = height;
-			vp.MinDepth = 0;
-			vp.MaxDepth = 1.0f;
+			vp.MinDepth = minDepth;
+			vp.MaxDepth = maxDepth;
 
 			m_d3d11State.Context->RSSetViewports(1, &vp);
 		}
@@ -185,6 +185,7 @@ namespace Graphics
 			int y2 = m_screenHeight - (int)(height + y);
 
 			glViewport((int)x, y2, (int)width, (int)height);
+			glDepthRange(minDepth, maxDepth);
 		}
 		break;
 		}
@@ -758,57 +759,67 @@ namespace Graphics
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
 		{
-			if (m_blendState == nullptr || m_blendState->Direct3D11.State != state->Direct3D11.State)
+			if (state == nullptr)
+				m_d3d11State.Context->OMSetBlendState(nullptr, nullptr, 0xffffffff);
+			else if (m_d3d11State.CurrentBlendState != state->Direct3D11.State)
 				m_d3d11State.Context->OMSetBlendState((ID3D11BlendState*)state->Direct3D11.State, nullptr, 0xffffffff);
+
+			m_d3d11State.CurrentBlendState = state ? state->Direct3D11.State : nullptr;
 		}
 			break;
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-#define SET_GL_BLENDING_FOR_RT(rtIndex, state) \
-									{ \
-								if (m_blendState == nullptr || m_blendState->OpenGL.Desc.RenderTarget[rtIndex].BlendingEnabled != state->OpenGL.Desc.RenderTarget[rtIndex].BlendingEnabled) \
-																{ \
-									if (state->OpenGL.Desc.RenderTarget[rtIndex].BlendingEnabled) \
-										glEnablei(GL_BLEND, rtIndex); \
-																		else \
-										glDisablei(GL_BLEND, rtIndex); \
-																} \
-								\
-								GLenum colorSrc, colorDest, alphaSrc, alphaDest; \
-								CONVERT_GL_BLEND(state->OpenGL.Desc.RenderTarget[rtIndex].ColorSourceBlend, colorSrc); \
-								CONVERT_GL_BLEND(state->OpenGL.Desc.RenderTarget[rtIndex].ColorDestinationBlend, colorDest); \
-								CONVERT_GL_BLEND(state->OpenGL.Desc.RenderTarget[rtIndex].AlphaSourceBlend, alphaSrc); \
-								CONVERT_GL_BLEND(state->OpenGL.Desc.RenderTarget[rtIndex].AlphaDestinationBlend, alphaDest); \
-								glBlendFuncSeparatei(rtIndex, colorSrc, colorDest, alphaSrc, alphaDest); \
-								\
-								GLenum colorFunc, alphaFunc; \
-								CONVERT_GL_BLEND_FUNC(state->OpenGL.Desc.RenderTarget[rtIndex].ColorBlendFunction, colorFunc); \
-								CONVERT_GL_BLEND_FUNC(state->OpenGL.Desc.RenderTarget[rtIndex].AlphaBlendFunction, alphaFunc); \
-								glBlendEquationSeparatei(rtIndex, colorFunc, alphaFunc); \
-									}
+			BlendStateDesc desc;
+			if (state == nullptr)
+				desc = NXNA_BLENDSTATEDESC_DEFAULT;
+			else
+				desc = state->OpenGL.Desc;
 
-			if (m_blendState == nullptr || m_blendState->OpenGL.Desc.IndependentBlendEnabled != state->OpenGL.Desc.IndependentBlendEnabled)
+#define SET_GL_BLENDING_FOR_RT(rtIndex, state) \
+				{ \
+			if (m_oglState.CurrentBlendState.RenderTarget[rtIndex].BlendingEnabled != desc.RenderTarget[rtIndex].BlendingEnabled) \
+											{ \
+				if (desc.RenderTarget[rtIndex].BlendingEnabled) \
+					glEnablei(GL_BLEND, rtIndex); \
+													else \
+					glDisablei(GL_BLEND, rtIndex); \
+											} \
+			\
+			GLenum colorSrc, colorDest, alphaSrc, alphaDest; \
+			CONVERT_GL_BLEND(desc.RenderTarget[rtIndex].ColorSourceBlend, colorSrc); \
+			CONVERT_GL_BLEND(desc.RenderTarget[rtIndex].ColorDestinationBlend, colorDest); \
+			CONVERT_GL_BLEND(desc.RenderTarget[rtIndex].AlphaSourceBlend, alphaSrc); \
+			CONVERT_GL_BLEND(desc.RenderTarget[rtIndex].AlphaDestinationBlend, alphaDest); \
+			glBlendFuncSeparatei(rtIndex, colorSrc, colorDest, alphaSrc, alphaDest); \
+			\
+			GLenum colorFunc, alphaFunc; \
+			CONVERT_GL_BLEND_FUNC(desc.RenderTarget[rtIndex].ColorBlendFunction, colorFunc); \
+			CONVERT_GL_BLEND_FUNC(desc.RenderTarget[rtIndex].AlphaBlendFunction, alphaFunc); \
+			glBlendEquationSeparatei(rtIndex, colorFunc, alphaFunc); \
+				}
+
+			if (m_oglState.CurrentBlendState.IndependentBlendEnabled != desc.IndependentBlendEnabled)
 			{
-				if (state->OpenGL.Desc.IndependentBlendEnabled == true)
+				if (desc.IndependentBlendEnabled == true)
 					goto allSeparate;
 				else
 					goto allBuffers;
 			}
-			else if (state->OpenGL.Desc.IndependentBlendEnabled == false)
+			else if (desc.IndependentBlendEnabled == false)
 			{
-				if (memcmp(&m_blendState->OpenGL.Desc.RenderTarget[0], &state->OpenGL.Desc.RenderTarget[0], sizeof(RenderTargetBlendStateDesc)) != 0)
+				if (memcmp(&m_oglState.CurrentBlendState.RenderTarget[0], &desc.RenderTarget[0], sizeof(RenderTargetBlendStateDesc)) != 0)
 					goto allBuffers;
 				else
 				{
 					// no changes necesary
 				}
 			}
-			else if (state->OpenGL.Desc.IndependentBlendEnabled == true)
+			else if (desc.IndependentBlendEnabled == true)
 			{
 				for (int i = 0; i < 8; i++)
 				{
-					if (memcmp(&m_blendState->OpenGL.Desc.RenderTarget[i], &state->OpenGL.Desc.RenderTarget[i], sizeof(RenderTargetBlendStateDesc)))
+					if (memcmp(&m_oglState.CurrentBlendState.RenderTarget[i], &desc.RenderTarget[i], sizeof(RenderTargetBlendStateDesc)))
 						SET_GL_BLENDING_FOR_RT(i, state);
 				}
 			}
@@ -816,24 +827,24 @@ namespace Graphics
 
 		allBuffers:
 			{
-				if (m_blendState == nullptr || m_blendState->OpenGL.Desc.RenderTarget[0].BlendingEnabled != state->OpenGL.Desc.RenderTarget[0].BlendingEnabled)
+				if (m_oglState.CurrentBlendState.RenderTarget[0].BlendingEnabled != desc.RenderTarget[0].BlendingEnabled)
 				{
-					if (state->OpenGL.Desc.RenderTarget[0].BlendingEnabled)
+					if (desc.RenderTarget[0].BlendingEnabled)
 						glEnable(GL_BLEND);
 					else
 						glDisable(GL_BLEND);
 				}
 
 				GLenum colorSrc, colorDest, alphaSrc, alphaDest;
-				CONVERT_GL_BLEND(state->OpenGL.Desc.RenderTarget[0].ColorSourceBlend, colorSrc);
-				CONVERT_GL_BLEND(state->OpenGL.Desc.RenderTarget[0].ColorDestinationBlend, colorDest);
-				CONVERT_GL_BLEND(state->OpenGL.Desc.RenderTarget[0].AlphaSourceBlend, alphaSrc);
-				CONVERT_GL_BLEND(state->OpenGL.Desc.RenderTarget[0].AlphaDestinationBlend, alphaDest);
+				CONVERT_GL_BLEND(desc.RenderTarget[0].ColorSourceBlend, colorSrc);
+				CONVERT_GL_BLEND(desc.RenderTarget[0].ColorDestinationBlend, colorDest);
+				CONVERT_GL_BLEND(desc.RenderTarget[0].AlphaSourceBlend, alphaSrc);
+				CONVERT_GL_BLEND(desc.RenderTarget[0].AlphaDestinationBlend, alphaDest);
 				glBlendFuncSeparate(colorSrc, colorDest, alphaSrc, alphaDest);
 
 				GLenum colorFunc, alphaFunc;
-				CONVERT_GL_BLEND_FUNC(state->OpenGL.Desc.RenderTarget[0].ColorBlendFunction, colorFunc);
-				CONVERT_GL_BLEND_FUNC(state->OpenGL.Desc.RenderTarget[0].AlphaBlendFunction, alphaFunc);
+				CONVERT_GL_BLEND_FUNC(desc.RenderTarget[0].ColorBlendFunction, colorFunc);
+				CONVERT_GL_BLEND_FUNC(desc.RenderTarget[0].AlphaBlendFunction, alphaFunc);
 				glBlendEquationSeparate(colorFunc, alphaFunc);
 
 				goto end;
@@ -851,11 +862,11 @@ namespace Graphics
 
 		end:
 			;
+
+			m_oglState.CurrentBlendState = desc;
 		}
 			break;
 		}
-
-		m_blendState = state;
 	}
 
 	void GraphicsDevice::DestroyBlendState(BlendState* state)
@@ -936,60 +947,67 @@ namespace Graphics
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
 		{
-			if (m_rasterizerState == nullptr || state->Direct3D11.State != m_rasterizerState->Direct3D11.State)
+			if (state == nullptr || m_d3d11State.CurrentRasterizerState != state->Direct3D11.State)
 				m_d3d11State.Context->RSSetState(state->Direct3D11.State);
+
+			m_d3d11State.CurrentRasterizerState = state ? state->Direct3D11.State : nullptr;
 		}
 			break;
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-			if (m_rasterizerState == nullptr ||
-				state->OpenGL.Desc.CullingMode != state->OpenGL.Desc.CullingMode ||
-				state->OpenGL.Desc.FrontCounterClockwise != state->OpenGL.Desc.FrontCounterClockwise)
+			RasterizerStateDesc desc;
+			if (state == nullptr)
+				desc = NXNA_RASTERIZERSTATEDESC_DEFAULT;
+			else
+				desc = state->OpenGL.Desc;
+
+			if (state == nullptr ||
+				m_oglState.CurrentRasterizerState.CullingMode != desc.CullingMode ||
+				m_oglState.CurrentRasterizerState.FrontCounterClockwise != desc.FrontCounterClockwise)
 			{
-				switch (state->OpenGL.Desc.CullingMode)
+				switch (desc.CullingMode)
 				{
 				case CullMode::None:
 					glDisable(GL_CULL_FACE);
 					break;
 				case CullMode::CullBackFaces:
 					glEnable(GL_CULL_FACE);
-					glFrontFace(state->OpenGL.Desc.FrontCounterClockwise ? GL_CCW : GL_CW);
+					glFrontFace(desc.FrontCounterClockwise ? GL_CCW : GL_CW);
 					break;
 				case CullMode::CullFrontFaces:
 					glEnable(GL_CULL_FACE);
-					glFrontFace(state->OpenGL.Desc.FrontCounterClockwise ? GL_CW : GL_CCW);
+					glFrontFace(desc.FrontCounterClockwise ? GL_CW : GL_CCW);
 					break;
 				}
 			}
 
-			if (m_rasterizerState == nullptr || state->OpenGL.Desc.ScissorTestEnabled != m_rasterizerState->OpenGL.Desc.ScissorTestEnabled)
+			if (state == nullptr || 
+				desc.ScissorTestEnabled != m_oglState.CurrentRasterizerState.ScissorTestEnabled)
 			{
-				if (state->OpenGL.Desc.ScissorTestEnabled)
+				if (desc.ScissorTestEnabled)
 					glEnable(GL_SCISSOR_TEST);
 				else
 					glDisable(GL_SCISSOR_TEST);
 			}
 
-			if (m_rasterizerState == nullptr || state->OpenGL.Desc.FillingMode != m_rasterizerState->OpenGL.Desc.FillingMode)
+			if (state == nullptr ||
+				desc.FillingMode != m_oglState.CurrentRasterizerState.FillingMode)
 			{
-				if (state->OpenGL.Desc.FillingMode == FillMode::Solid)
+				if (desc.FillingMode == FillMode::Solid)
 					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				else
 					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			}
+
+			m_oglState.CurrentRasterizerState = desc;
 		}
 			break;
 		}
-
-		m_rasterizerState = state;
 	}
 
 	void GraphicsDevice::DestroyRasterizerState(RasterizerState* state)
 	{
-		if (m_rasterizerState == state)
-			m_rasterizerState = nullptr;
-
 		switch(GetType())
 		{
 #ifdef NXNA_ENABLE_DIRECT3D11
@@ -997,6 +1015,9 @@ namespace Graphics
 		{
 			state->Direct3D11.State->Release();
 			state->Direct3D11.State = nullptr;
+
+			if (m_d3d11State.CurrentRasterizerState == state->Direct3D11.State)
+				m_d3d11State.CurrentRasterizerState = nullptr;
 		}
 			break;
 #endif
@@ -1130,7 +1151,7 @@ namespace Graphics
 				newState = NXNA_DEPTHSTENCIL_DEFAULT;
 
 			// depth buffer stuff
-			if (state == nullptr || m_oglState.DepthStencil.DepthBufferEnabled != newState.DepthBufferEnabled)
+			if (state == nullptr || m_oglState.CurrentDepthStencilState.DepthBufferEnabled != newState.DepthBufferEnabled)
 			{
 				if (newState.DepthBufferEnabled)
 					glEnable(GL_DEPTH_TEST);
@@ -1138,20 +1159,20 @@ namespace Graphics
 					glDisable(GL_DEPTH_TEST);
 			}
 
-			if (state == nullptr || m_oglState.DepthStencil.DepthBufferFunction != newState.DepthBufferFunction)
+			if (state == nullptr || m_oglState.CurrentDepthStencilState.DepthBufferFunction != newState.DepthBufferFunction)
 			{
 				GLenum f;
 				NXNA_CONVERT_COMPARISON_OGL(newState.DepthBufferFunction, f);
 				glDepthFunc(f);
 			}
 
-			if (state == nullptr || m_oglState.DepthStencil.DepthBufferWriteEnabled != newState.DepthBufferWriteEnabled)
+			if (state == nullptr || m_oglState.CurrentDepthStencilState.DepthBufferWriteEnabled != newState.DepthBufferWriteEnabled)
 			{
 				glDepthMask(newState.DepthBufferWriteEnabled ? GL_TRUE : GL_FALSE);
 			}
 
 			// stencil buffer stuff
-			if (state == nullptr || m_oglState.DepthStencil.StencilEnable != newState.StencilEnable)
+			if (state == nullptr || m_oglState.CurrentDepthStencilState.StencilEnable != newState.StencilEnable)
 			{
 				if (newState.StencilEnable)
 					glEnable(GL_STENCIL_TEST);
@@ -1160,8 +1181,8 @@ namespace Graphics
 			}
 
 			if (state == nullptr ||
-				m_oglState.DepthStencil.StencilFunction != newState.StencilFunction ||
-				m_oglState.DepthStencil.ReferenceStencil != newState.ReferenceStencil)
+				m_oglState.CurrentDepthStencilState.StencilFunction != newState.StencilFunction ||
+				m_oglState.CurrentDepthStencilState.ReferenceStencil != newState.ReferenceStencil)
 			{
 				GLenum f;
 				NXNA_CONVERT_COMPARISON_OGL(newState.StencilFunction, f);
@@ -1169,9 +1190,9 @@ namespace Graphics
 			}
 
 			if (state == nullptr ||
-				m_oglState.DepthStencil.StencilFail != newState.StencilFail ||
-				m_oglState.DepthStencil.StencilDepthBufferFail != newState.StencilDepthBufferFail ||
-				m_oglState.DepthStencil.StencilPass != newState.StencilPass)
+				m_oglState.CurrentDepthStencilState.StencilFail != newState.StencilFail ||
+				m_oglState.CurrentDepthStencilState.StencilDepthBufferFail != newState.StencilDepthBufferFail ||
+				m_oglState.CurrentDepthStencilState.StencilPass != newState.StencilPass)
 			{
 				GLenum stencilFail, depthFail, stencilPass;
 				NXNA_CONVERT_STENCIL_OP_OGL(newState.StencilFail, stencilFail);
@@ -1180,7 +1201,7 @@ namespace Graphics
 				glStencilOp(stencilFail, depthFail, stencilPass);
 			}
 
-			m_oglState.DepthStencil = newState;
+			m_oglState.CurrentDepthStencilState = newState;
 		}
 			break;
 		}
