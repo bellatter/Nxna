@@ -80,6 +80,38 @@ namespace Nxna
 		return m;
 	}
 
+	Matrix Matrix::CreateLookAtLH(const Vector3& cameraPosition, const Vector3& cameraTarget, const Vector3& cameraUpVector)
+	{
+		Vector3 direction = (cameraPosition - cameraTarget);
+		Vector3::Normalize(direction, direction);
+		Vector3 right = Vector3::Cross(cameraUpVector, direction);
+		Vector3 trueUp = Vector3::Cross(direction, right);
+
+		Matrix m;
+
+		m.M11 = right.X;
+		m.M12 = trueUp.X;
+		m.M13 = direction.X;
+		m.M14 = 0;
+
+		m.M21 = right.Y;
+		m.M22 = trueUp.Y;
+		m.M23 = direction.Y;
+		m.M24 = 0;
+
+		m.M31 = right.Z;
+		m.M32 = trueUp.Z;
+		m.M33 = direction.Z;
+		m.M34 = 0;
+
+		m.M41 = -(right.X * cameraPosition.X + right.Y * cameraPosition.Y + right.Z * cameraPosition.Z);
+		m.M42 = -(trueUp.X * cameraPosition.X + trueUp.Y * cameraPosition.Y + trueUp.Z * cameraPosition.Z);
+		m.M43 = -(direction.X * cameraPosition.X + direction.Y * cameraPosition.Y + direction.Z * cameraPosition.Z);
+		m.M44 = 1.0f;
+
+		return m;
+	}
+
 	Matrix Matrix::CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane)
 	{
 		Matrix result;
@@ -108,6 +140,13 @@ namespace Nxna
 		float height = 2.0f * (float)tanf(fieldOfView * 0.5f) * nearPlaneDistance;
 
 		return CreatePerspective(height * aspectRatio, height, nearPlaneDistance, farPlaneDistance);
+	}
+
+	Matrix Matrix::CreatePerspectiveFieldOfViewLH(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance)
+	{
+		float height = 2.0f * (float)tanf(fieldOfView * 0.5f) * nearPlaneDistance;
+
+		return CreatePerspectiveLH(height * aspectRatio, height, nearPlaneDistance, farPlaneDistance);
 	}
 
 	Matrix Matrix::CreatePerspective(float width, float height, float nearPlaneDistance, float farPlaneDistance)
@@ -143,6 +182,48 @@ namespace Nxna
 
 		return m;
 	}
+
+	Matrix Matrix::CreatePerspectiveLH(float width, float height, float nearPlaneDistance, float farPlaneDistance)
+	{
+		float halfWidth = width * 0.5f;
+		float halfHeight = height * 0.5f;
+		return CreatePerspectiveOffCenterLH(-halfWidth, halfWidth, -halfHeight, halfHeight, nearPlaneDistance, farPlaneDistance);
+	}
+
+	Matrix Matrix::CreatePerspectiveOffCenterLH(float left, float right, float bottom, float top, float nearPlaneDistance, float farPlaneDistance)
+	{
+		bool zNegOne = true;
+
+		Matrix m;
+		GetIdentity(m);
+
+		const float s = 1.0f;
+		float invWidth = 1.0f / (right - left);
+		float invHeight = 1.0f / (top - bottom);
+		float invDepth = 1.0f / (farPlaneDistance - nearPlaneDistance);
+		float near2 = 2.0f * nearPlaneDistance;
+
+		m.M11 = near2 * invWidth;
+		m.M22 = near2 * invHeight;
+		m.M31 = -s * (right + left) * invWidth;
+		m.M32 = -s * (top + bottom) * invHeight;
+		m.M34 = s;
+		m.M44 = 0;
+
+		if (zNegOne)
+		{
+			m.M33 = s * (farPlaneDistance + nearPlaneDistance) * invDepth;
+			m.M43 = -2.0f * farPlaneDistance * nearPlaneDistance * invDepth;
+		}
+		else
+		{
+			m.M33 = s * farPlaneDistance * invDepth;
+			m.M43 = -s * nearPlaneDistance * m.M33;
+		}
+
+		return m;
+	}
+
 
 	void Matrix::CreateTranslation(float x, float y, float z, Matrix& result)
 	{

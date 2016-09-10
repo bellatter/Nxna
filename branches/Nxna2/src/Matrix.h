@@ -45,9 +45,15 @@ namespace Nxna
 		}
 
 		static Matrix CreateLookAt(const Vector3& cameraPosition, const Vector3& cameraTarget, const Vector3& cameraUpVector);
+		static Matrix CreateLookAtLH(const Vector3& cameraPosition, const Vector3& cameraTarget, const Vector3& cameraUpVector);
+		
 		static Matrix CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane);
 		static Matrix CreatePerspectiveFieldOfView(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance);
+		static Matrix CreatePerspectiveFieldOfViewLH(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance);
 		static Matrix CreatePerspective(float width, float height, float nearPlaneDistance, float farPlaneDistance);
+		static Matrix CreatePerspectiveLH(float width, float height, float nearPlaneDistance, float farPlaneDistance);
+		static Matrix CreatePerspectiveOffCenterLH(float left, float right, float bottom, float top, float nearPlaneDistance, float farPlaneDistance);
+		
 		static Matrix CreateTranslation(float x, float y, float z) { Matrix m; CreateTranslation(x, y, z, m); return m; }
 		static void CreateTranslation(float x, float y, float z, Matrix& result);
 		static Matrix CreateTranslation(const Vector3& position) { Matrix m; CreateTranslation(position.X, position.Y, position.Z, m); return m; }

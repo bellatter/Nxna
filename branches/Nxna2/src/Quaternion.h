@@ -25,6 +25,7 @@ namespace Nxna
 		static Quaternion CreateFromYawPitchRoll(float yaw, float pitch, float roll);
 
 		static void Multiply(const Quaternion& q1, const Quaternion& q2, Quaternion& result);
+		static void Multiply(const Quaternion& q, Nxna::Vector3 v, Nxna::Vector3& result);
 	};
 }
 
