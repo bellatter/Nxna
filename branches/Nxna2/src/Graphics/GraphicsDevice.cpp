@@ -2423,6 +2423,12 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
+			// force depth writing on, otherwise the clear won't have any effect
+			if (m_oglState.CurrentDepthStencilState.DepthBufferWriteEnabled == false)
+			{
+				glDepthMask(GL_TRUE);
+			}
+
 			glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 			if (clearDepth && clearStencil)
@@ -2431,6 +2437,12 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glClearBufferfv(GL_DEPTH, 0, &depthValue);
 			else if (clearStencil)
 				glClearBufferiv(GL_STENCIL, 0, &stencilValue);
+
+			// restore the depth mask
+			if (m_oglState.CurrentDepthStencilState.DepthBufferWriteEnabled == false)
+			{
+				glDepthMask(GL_FALSE);
+			}
 		}
 			break;
 		}
