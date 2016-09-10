@@ -437,6 +437,8 @@ namespace Graphics
 			glBindTexture(GL_TEXTURE_2D, result->OpenGL.Handle);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, mipLevels - 1);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 			if (glTexStorage2D)
 			{
@@ -799,7 +801,9 @@ namespace Graphics
 			glBlendEquationSeparatei(rtIndex, colorFunc, alphaFunc); \
 				}
 
-			if (m_oglState.CurrentBlendState.IndependentBlendEnabled != desc.IndependentBlendEnabled)
+			if (state == nullptr)
+				goto allBuffers;			
+			else if (m_oglState.CurrentBlendState.IndependentBlendEnabled != desc.IndependentBlendEnabled)
 			{
 				if (desc.IndependentBlendEnabled == true)
 					goto allSeparate;
@@ -827,7 +831,7 @@ namespace Graphics
 
 		allBuffers:
 			{
-				if (m_oglState.CurrentBlendState.RenderTarget[0].BlendingEnabled != desc.RenderTarget[0].BlendingEnabled)
+				if (state == nullptr || m_oglState.CurrentBlendState.RenderTarget[0].BlendingEnabled != desc.RenderTarget[0].BlendingEnabled)
 				{
 					if (desc.RenderTarget[0].BlendingEnabled)
 						glEnable(GL_BLEND);
@@ -2304,6 +2308,45 @@ namespace Graphics
 		}
 	}
 
+	void GraphicsDevice::DrawPrimitives(PrimitiveType primitiveType, int startIndex, int primitiveCount)
+	{
+		applyDirtyStates();
+
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			int indexCount;
+			if (primitiveType == PrimitiveType::TriangleList)
+			{
+				indexCount = primitiveCount * 3;
+				m_d3d11State.Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			}
+			else if (primitiveType == PrimitiveType::TriangleStrip)
+			{
+				indexCount = primitiveCount * 3; // FIXME
+				m_d3d11State.Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+			}
+
+			// TODO
+			//m_d3d11State.Context->DrawIndexed(indexCount, startIndex, baseVertex);
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			GLenum glPrimitiveType;
+			if (primitiveType == PrimitiveType::TriangleStrip)
+				glPrimitiveType = GL_TRIANGLE_STRIP;
+			else
+				glPrimitiveType = GL_TRIANGLES;
+
+			glDrawArrays(glPrimitiveType, startIndex, primitiveCount * 3);
+		}
+		}
+	}
+
 	void GraphicsDevice::ClearColor(Color color)
 	{
 		float rgba[] = { color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f };
@@ -2380,6 +2423,8 @@ namespace Graphics
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
+			glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 			if (clearDepth && clearStencil)
 				glClearBufferfi(GL_DEPTH_STENCIL, 0, depthValue, stencilValue);
 			else if (clearDepth)

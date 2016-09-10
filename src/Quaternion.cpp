@@ -32,4 +32,16 @@ namespace Nxna
 
 		return result;
 	}
+
+	void Quaternion::Multiply(const Quaternion& q, Nxna::Vector3 v, Nxna::Vector3& result)
+	{
+		Quaternion q1 = { v.X, v.Y, v.Z, 0 };
+		Quaternion conjugate = { -q.X, -q.Y, -q.Z, q.W };
+		
+		Quaternion q2, q3;
+		Multiply(q, q1, q2);
+		Multiply(q2, conjugate, q3);
+
+		result = { q3.X, q3.Y, q3.Z };  
+	}
 }
