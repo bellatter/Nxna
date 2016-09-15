@@ -398,6 +398,18 @@ namespace Graphics
 		Nxna::Graphics::StencilOperation::Keep \
 		}
 
+#define NXNA_SAMPLERSTATEDESC_LINEARWRAP { \
+		Nxna::Graphics::TextureFilter::Linear, \
+		Nxna::Graphics::TextureAddressMode::Wrap, \
+		Nxna::Graphics::TextureAddressMode::Wrap, \
+		Nxna::Graphics::TextureAddressMode::Wrap, \
+		0, \
+		1, \
+			{1.0f, 1.0f, 1.0f, 1.0f}, \
+		-10000.0f, \
+		10000.0f \
+		}
+
 #define NXNA_SAMPLERSTATEDESC_POINTCLAMP { \
 		Nxna::Graphics::TextureFilter::Point, \
 		Nxna::Graphics::TextureAddressMode::Clamp, \
