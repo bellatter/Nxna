@@ -422,6 +422,18 @@ namespace Graphics
 		10000.0f \
 	}
 
+#define NXNA_SAMPLERSTATEDESC_LINEARCLAMP { \
+		Nxna::Graphics::TextureFilter::Linear, \
+		Nxna::Graphics::TextureAddressMode::Clamp, \
+		Nxna::Graphics::TextureAddressMode::Clamp, \
+		Nxna::Graphics::TextureAddressMode::Clamp, \
+		0, \
+		1, \
+		{1.0f, 1.0f, 1.0f, 1.0f}, \
+		-10000.0f, \
+		10000.0f \
+	}
+
 #define NXNA_BLENDSTATEDESC_DEFAULT { \
 	false, \
 	{ \
