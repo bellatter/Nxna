@@ -129,8 +129,16 @@ namespace Graphics
 		Rectangle r;
 		r.X = (int)position.X;
 		r.Y = (int)position.Y;
-		r.Width = texture->GetWidth();
-		r.Height = texture->GetHeight();
+		if (sourceRectangle != nullptr)
+		{
+			r.Width = sourceRectangle->Width;
+			r.Height = sourceRectangle->Height;
+		}
+		else
+		{
+			r.Width = texture->GetWidth();
+			r.Height = texture->GetHeight();
+		}
 
 		Draw(texture, r, sourceRectangle, color);
 	}
