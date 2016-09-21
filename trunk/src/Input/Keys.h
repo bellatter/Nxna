@@ -92,14 +92,18 @@ namespace Input
 		LeftControl = 162,
 		RightControl = 163,
 
+		OemSemicolon = 186,
 		OemPlus = 187,
 		OemComma = 188,
 		OemMinus = 189,
 		OemPeriod = 190,
+		OemQuestion = 191,
 
 		OemOpenBrackets = 219,
 		OemPipe = 220,
-		OemCloseBrackets = 221
+		OemCloseBrackets = 221,
+		OemQuotes = 222,
+		OemBackslash = 226
 	END_NXNA_ENUM(Keys)
 }
 }

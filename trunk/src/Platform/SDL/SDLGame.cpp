@@ -166,12 +166,20 @@ namespace SDL
 			return Nxna::Input::Keys::Left;
 		case SDLK_PERIOD:
 			return Nxna::Input::Keys::OemPeriod;
+		case SDLK_SLASH:
+			return Nxna::Input::Keys::OemQuestion;
 		case SDLK_PLUS:
 			return Nxna::Input::Keys::OemPlus;
 		case SDLK_MINUS:
 			return Nxna::Input::Keys::OemMinus;
 		case SDLK_EQUALS:
 			return Nxna::Input::Keys::OemPlus;
+		case SDLK_QUOTE:
+			return Nxna::Input::Keys::OemQuotes;
+		case SDLK_SEMICOLON:
+			return Nxna::Input::Keys::OemSemicolon;
+		case SDLK_BACKSLASH:
+			return Nxna::Input::Keys::OemBackslash;
 		case SDLK_F1:
 			return Nxna::Input::Keys::F1;
 		case SDLK_F2:
