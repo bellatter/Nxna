@@ -300,8 +300,32 @@ namespace Graphics
 				return NxnaResult::UnknownError;
 			}
 
-			const GLchar* buffer[] = { (char*)bytecode };
-			auto s = glCreateShaderProgramv(glType, 1, buffer);
+			// Use DECLARE_SAMPLER2D(binding point, name) to declare your samplers. This will allow explicit binding
+			// points on supported hardware, and allow Nxna to query for the binding point on older hardware.
+
+			// TODO: in order to support hardware that doesn't have the ARB_shading_language_420pack extension
+			// we'll have to do a quick parse of the shader, looking for DECLARE_SAMPLER2D() and getting the
+			// requested binding point, then use glGetUniformLocation() and build a map between the two.
+			unsigned int s;
+			if (strncmp((char*)bytecode, "#version", 8) == 0)
+			{
+				// The shader starts with #version, which means we can't add anything to it. Try it as-is.
+				const GLchar* buffer[] = {
+					(char*)bytecode
+				};
+				s = glCreateShaderProgramv(glType, 1, buffer);
+			}
+			else
+			{
+				const GLchar* buffer[] = { 
+					"#version 410\n"
+					"#extension GL_ARB_shading_language_420pack : require\n"
+					"#define DECLARE_SAMPLER2D(b, n) layout(binding=b) uniform sampler2D n\n",
+					(char*)bytecode 
+				};
+				s = glCreateShaderProgramv(glType, 2, buffer);
+			}
+
 			if (s == 0)
 			{
 				NXNA_SET_ERROR_DETAILS(0, "glCreateShaderProgamv() was unable to create a new shader program");
