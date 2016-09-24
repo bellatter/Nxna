@@ -393,6 +393,29 @@ namespace Graphics
 
 
 		memcpy(constantBuffer, &transform, sizeof(Matrix));
+#else
+		if (maxLength < sizeof(float) * 16) return;
+
+		float* cbufferData = (float*)constantBuffer;
+		cbufferData[0] = n1 * 2.0f;
+		cbufferData[1] = 0;
+		cbufferData[2] = 0;
+		cbufferData[3] = 0;
+
+		cbufferData[4] = 0;
+		cbufferData[5] = n2 * 2.0f;
+		cbufferData[6] = 0;
+		cbufferData[7] = 0;
+
+		cbufferData[8] = 0;
+		cbufferData[9] = 0;
+		cbufferData[10] = 1.0f;
+		cbufferData[11] = 0;
+
+		cbufferData[12] = -1.0f;
+		cbufferData[13] = 1.0f;
+		cbufferData[14] = 0;
+		cbufferData[15] = 1.0f;
 #endif
 
 	}
