@@ -110,6 +110,9 @@ namespace OpenGl
 		case Semantic::Position:
 			attrib.Usage = VertexElementUsage::Position;
 			break;
+		case Semantic::Normal:
+			attrib.Usage = VertexElementUsage::Normal;
+			break;
 		case Semantic::TexCoord:
 			attrib.Usage = VertexElementUsage::TextureCoordinate;
 			break;
