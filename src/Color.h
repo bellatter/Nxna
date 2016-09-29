@@ -85,6 +85,7 @@ struct Color
 	static const Color IndianRed;
 	static const Color LightBlue;
 	static const Color LightGray;
+	static const Color LightGreen;
 	static const Color Red;
 	static const Color SaddleBrown;
 	static const Color SandyBrown;
