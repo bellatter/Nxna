@@ -19,6 +19,10 @@ namespace Graphics
 		m_finalTransformDirty = true;
 		m_colorDirty = true;
 
+		m_world = Matrix::Identity;
+		m_view = Matrix::Identity;
+		m_projection = Matrix::Identity;
+
 		m_diffuse.X = m_diffuse.Y = m_diffuse.Z = 1.0f;
 		m_alpha = 1.0f;
 
