@@ -26,6 +26,11 @@ namespace Nxna
 		{
 			return Vector2(X + Width * 0.5f, Y + Height * 0.5f);
 		}
+		
+		bool Contains(int x, int y)
+		{
+			return x >= X && y >= Y && x <= X + Width && y <= Y + Height;
+		}
 	};
 }
 
