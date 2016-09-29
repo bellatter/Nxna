@@ -118,6 +118,7 @@ namespace Nxna
 			result.Z = v.Z * scaleFactor;
 		}
 
+		static float Dot(Vector3 v1, Vector3 v2) { return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z; }
 		static void Dot(const Vector3& v1, const Vector3& v2, float& result);
 		static Vector3 Cross(const Vector3& v1, const Vector3& v2);
 		static void Cross(const Vector3& v1, const Vector3& v2, Vector3& result);
