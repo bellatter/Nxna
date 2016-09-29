@@ -359,6 +359,29 @@ namespace Nxna
         result.M44 = (matrix.M31 * det4 - matrix.M32 * det2 + matrix.M33 * det1) * invDetMatrix;
 	}
 
+	void Matrix::Transpose(const Matrix& matrix, Matrix& result)
+	{
+		float m[16];
+		memcpy(m, matrix.C, sizeof(float) * 16);
+
+		result.M11 = m[0];
+		result.M12 = m[4];
+		result.M13 = m[8];
+		result.M14 = m[12];
+		result.M21 = m[1];
+		result.M22 = m[5];
+		result.M23 = m[9];
+		result.M24 = m[13];
+		result.M31 = m[2];
+		result.M32 = m[6];
+		result.M33 = m[10];
+		result.M34 = m[14];
+		result.M41 = m[3];
+		result.M42 = m[7];
+		result.M43 = m[11];
+		result.M44 = m[15];
+	}
+
 	void Matrix::Multiply(const Matrix& matrix1, const Matrix& matrix2, Matrix& result)
 	{
 		result.M11 = matrix1.M11 * matrix2.M11 + matrix1.M12 * matrix2.M21 + matrix1.M13 * matrix2.M31 + matrix1.M14 * matrix2.M41;

@@ -67,6 +67,7 @@ namespace Nxna
 		static void CreateConstrainedBillboard(const Nxna::Vector3& objectPosition, const Nxna::Vector3& cameraPosition, const Nxna::Vector3& rotationAxis, const Nxna::Vector3* cameraForwardVector, const Nxna::Vector3* objectForwardVector, Matrix& result);
 		static Matrix CreateWorld(const Nxna::Vector3& position, const Nxna::Vector3& forward, const Nxna::Vector3& up);
 		static void Invert(const Matrix& matrix, Matrix& result);
+		static void Transpose(const Matrix& matrix, Matrix& result);
 
 		static void Multiply(const Matrix& matrix1, const Matrix& matrix2, Matrix& result);
 	};
