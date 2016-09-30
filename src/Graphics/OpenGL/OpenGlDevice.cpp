@@ -286,7 +286,7 @@ namespace OpenGl
 
 		// OpenGL stores the bottom-left corner, but XNA
 		// stores the upper-left corner, so we have to convert.
-		int y = m_presentationParameters.BackBufferHeight - (viewport.Height + viewport.Y);
+		int y = m_renderTargetHeight - (viewport.Height + viewport.Y);
 
 		glViewport(viewport.X, y, viewport.Width, viewport.Height);
         
@@ -439,7 +439,7 @@ namespace OpenGl
 			glGetIntegerv(GL_FRAMEBUFFER_BINDING, &m_defaultFbo);
 		}
 #endif
-		
+
 		if (renderTarget == nullptr)
 		{
 #ifdef USING_OPENGLES
