@@ -69,6 +69,9 @@ namespace Graphics
 
 			// load the capabilities
 			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (GLint*)&result->m_caps.MaxSamplerCount);
+			glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, (GLint*)&result->m_caps.MaxRenderTargets);
+			if (result->m_caps.MaxRenderTargets > 8) result->m_caps.MaxRenderTargets = 8; // the hardware supports more than Nxna does! :(
+			result->m_caps.TextureOriginUpperLeft = false;
 
 			// set the states to the defaults
 			result->SetDepthStencilState(nullptr);
@@ -88,6 +91,9 @@ namespace Graphics
 
 				result->SetSamplerStates(0, result->m_caps.MaxSamplerCount, nullptr);
 			}
+
+			result->m_oglState.CurrentFBO = 0;
+			result->m_oglState.CurrentFBOHeight = result->m_screenHeight;
 		}
 			break;
 #ifdef NXNA_ENABLE_DIRECT3D11
@@ -104,12 +110,18 @@ namespace Graphics
 
 			// load the capabilities
 			result->m_caps.MaxSamplerCount = D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT; 
+			result->m_caps.MaxRenderTargets = D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT;
+			result->m_caps.TextureOriginUpperLeft = true;
 
 			result->m_d3d11State.Device = params->Direct3D11.Device;
 			result->m_d3d11State.Context = params->Direct3D11.DeviceContext;
-			result->m_d3d11State.RenderTargetView = params->Direct3D11.RenderTargetView;
-			result->m_d3d11State.DepthStencilView = params->Direct3D11.DepthStencilView;
+			result->m_d3d11State.DefaultRenderTargetView = params->Direct3D11.RenderTargetView;
+			result->m_d3d11State.DefaultDepthStencilView = params->Direct3D11.DepthStencilView;
 			result->m_d3d11State.SwapChain = params->Direct3D11.SwapChain;
+
+			memset(result->m_d3d11State.CurrentRenderTargetViews, 0, sizeof(result->m_d3d11State.CurrentRenderTargetViews));
+			result->m_d3d11State.CurrentRenderTargetViews[0] = params->Direct3D11.RenderTargetView;
+			result->m_d3d11State.CurrentDepthStencilView = params->Direct3D11.DepthStencilView;
 		}
 			break;
 #endif
@@ -182,7 +194,7 @@ namespace Graphics
 
 			// OpenGL stores the bottom-left corner, but XNA
 			// stores the upper-left corner, so we have to convert.
-			int y2 = m_screenHeight - (int)(height + y);
+			int y2 = m_oglState.CurrentFBOHeight - (int)(height + y);
 
 			glViewport((int)x, y2, (int)width, (int)height);
 			glDepthRange(minDepth, maxDepth);
@@ -215,7 +227,7 @@ namespace Graphics
 
 			// OpenGL stores the bottom-left corner, but XNA
 			// stores the upper-left corner, so we have to convert.
-			int y2 = m_screenHeight - (int)(viewport.Height + viewport.Y);
+			int y2 = m_oglState.CurrentFBOHeight - (int)(viewport.Height + viewport.Y);
 
 			glViewport((int)viewport.X, y2, (int)viewport.Width, (int)viewport.Height);
 		}
@@ -401,6 +413,10 @@ namespace Graphics
 			dtdesc.SampleDesc.Quality = 0;
 			dtdesc.Usage = D3D11_USAGE_DEFAULT;
 			dtdesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+			if (desc->Flags & (int)TextureCreationFlags::AllowRenderTargetColorAttachment)
+				dtdesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
+			if (desc->Flags & (int)TextureCreationFlags::AllowRenderTargetDepthAttachment)
+				dtdesc.BindFlags |= D3D11_BIND_DEPTH_STENCIL;
 			dtdesc.CPUAccessFlags = 0;
 			dtdesc.MiscFlags = 0;
 
@@ -438,7 +454,7 @@ namespace Graphics
 			ZeroMemory(&srvDesc, sizeof(srvDesc));
 			srvDesc.Format = dtdesc.Format;
 			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-			srvDesc.Texture2D.MipLevels = desc->MipLevels;
+			srvDesc.Texture2D.MipLevels = -1;
 
 			r = m_d3d11State.Device->CreateShaderResourceView(result->Direct3D11.m_texture, &srvDesc, &result->Direct3D11.m_shaderResourceView);
 			if (FAILED(r))
@@ -2007,6 +2023,389 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		}
 	}
 
+	NxnaResult GraphicsDevice::CreateRenderTarget(const RenderTargetDesc* desc, RenderTarget* result)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			memset(result, 0, sizeof(RenderTarget));
+
+			if (desc->DepthFormatType != DepthFormat::None)
+			{
+				D3D11_TEXTURE2D_DESC depthBufferDesc;
+				ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
+				depthBufferDesc.Width = desc->Width;
+				depthBufferDesc.Height = desc->Height;
+				depthBufferDesc.MipLevels = 1;
+				depthBufferDesc.ArraySize = 1;
+				if (desc->DepthFormatType == DepthFormat::Depth16)
+					depthBufferDesc.Format = DXGI_FORMAT_D16_UNORM;
+				else if (desc->DepthFormatType == DepthFormat::Depth24 || desc->DepthFormatType == DepthFormat::Depth24Stencil8)
+					depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+				depthBufferDesc.SampleDesc.Count = 1;
+				depthBufferDesc.SampleDesc.Quality = 0;
+				depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+				depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+				depthBufferDesc.CPUAccessFlags = 0;
+				depthBufferDesc.MiscFlags = 0;
+
+				auto r = m_d3d11State.Device->CreateTexture2D(&depthBufferDesc, nullptr, &result->Direct3D11.DefaultDepthStencilTexture);
+				if (FAILED(r))
+				{
+					NXNA_SET_ERROR_DETAILS(r, "CreateTexture2D() failed when creating default depth texture");
+					return NxnaResult::UnknownError;
+				}
+
+				r = m_d3d11State.Device->CreateDepthStencilView(result->Direct3D11.DefaultDepthStencilTexture, nullptr, &result->Direct3D11.DefaultDepthStencilView);
+				if (FAILED(r))
+				{
+					result->Direct3D11.DefaultDepthStencilTexture->Release();
+					NXNA_SET_ERROR_DETAILS(r, "CreateDepthStencilView() failed when creating default depth texture");
+					return NxnaResult::UnknownError;
+				}
+			}
+
+			return NxnaResult::Success;
+		}
+			break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			glGenFramebuffers(1, &result->OpenGL.FBO);
+			result->OpenGL.Height = desc->Height;
+
+			if (desc->DepthFormatType != DepthFormat::None)
+			{
+				glGenRenderbuffers(1, &result->OpenGL.DefaultDepthStencilTexture);
+				glBindRenderbuffer(GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+
+				if (desc->DepthFormatType == DepthFormat::Depth16)
+					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, desc->Width, desc->Height);
+				else if (desc->DepthFormatType == DepthFormat::Depth24)
+					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, desc->Width, desc->Height);
+				else if (desc->DepthFormatType == DepthFormat::Depth24Stencil8)
+					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, desc->Width, desc->Height);
+
+				if (glNamedFramebufferRenderbuffer)
+					glNamedFramebufferRenderbuffer(result->OpenGL.FBO, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+				else
+				{
+					glBindFramebuffer(GL_FRAMEBUFFER, result->OpenGL.FBO);
+					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+				}
+
+				if (desc->DepthFormatType == DepthFormat::Depth24Stencil8)
+				{
+					if (glNamedFramebufferRenderbuffer)
+						glFramebufferRenderbuffer(result->OpenGL.FBO, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+					else
+					{
+						glBindFramebuffer(GL_FRAMEBUFFER, result->OpenGL.FBO);
+						glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+					}
+				}
+				else
+				{
+					if (glNamedFramebufferRenderbuffer)
+						glNamedFramebufferRenderbuffer(result->OpenGL.FBO, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+					else
+					{
+						glBindFramebuffer(GL_FRAMEBUFFER, result->OpenGL.FBO);
+						glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+					}
+				}
+
+				if (!glNamedFramebufferRenderbuffer)
+					glBindFramebuffer(GL_FRAMEBUFFER, m_oglState.CurrentFBO);
+			}
+
+			return NxnaResult::Success;
+		}
+			break;
+		}
+
+		return NxnaResult::NotSupported;
+	}
+
+	NxnaResult GraphicsDevice::BindRenderTarget(RenderTarget* renderTarget)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			if (renderTarget == nullptr)
+			{
+				m_d3d11State.Context->OMSetRenderTargets(1, &m_d3d11State.DefaultRenderTargetView, m_d3d11State.DefaultDepthStencilView);
+
+				memset(m_d3d11State.CurrentRenderTargetViews, 0, sizeof(m_d3d11State.CurrentRenderTargetViews));
+				m_d3d11State.CurrentRenderTargetViews[0] = m_d3d11State.DefaultRenderTargetView;
+				m_d3d11State.CurrentDepthStencilView = m_d3d11State.DefaultDepthStencilView;
+			}
+			else
+			{
+				m_d3d11State.Context->OMSetRenderTargets(8, renderTarget->Direct3D11.ColorAttachments, renderTarget->Direct3D11.DepthAttachment);
+				memcpy(m_d3d11State.CurrentRenderTargetViews, renderTarget->Direct3D11.ColorAttachments, sizeof(m_d3d11State.CurrentRenderTargetViews));;
+				m_d3d11State.CurrentDepthStencilView = renderTarget->Direct3D11.DepthAttachment;
+			}
+
+			return NxnaResult::Success;
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			if (renderTarget == nullptr)
+			{
+				m_oglState.CurrentFBO = 0;
+				m_oglState.CurrentFBOHeight = m_screenHeight;
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			}
+			else
+			{
+				m_oglState.CurrentFBO = renderTarget->OpenGL.FBO;
+				m_oglState.CurrentFBOHeight = renderTarget->OpenGL.Height;
+				glBindFramebuffer(GL_FRAMEBUFFER, renderTarget->OpenGL.FBO);
+			}
+			
+		
+			return NxnaResult::Success;
+		}
+		break;
+		}
+		
+		return NxnaResult::NotSupported;
+	}
+
+	void GraphicsDevice::DestroyRenderTarget(RenderTarget* renderTarget)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			if (renderTarget->Direct3D11.DefaultDepthStencilView)
+				renderTarget->Direct3D11.DefaultDepthStencilView->Release();
+			if (renderTarget->Direct3D11.DefaultDepthStencilTexture)
+				renderTarget->Direct3D11.DefaultDepthStencilTexture->Release();
+
+			memset(renderTarget, 0, sizeof(RenderTarget));
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			glDeleteFramebuffers(1, &renderTarget->OpenGL.FBO);
+			renderTarget->OpenGL.FBO = 0;
+		}
+		break;
+		}
+	}
+
+	NxnaResult GraphicsDevice::CreateRenderTargetColorAttachment(const RenderTargetColorAttachmentDesc* desc, RenderTargetColorAttachment* result)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+			ZeroMemory(&rtvDesc, sizeof(rtvDesc));
+			rtvDesc.Format = DXGI_FORMAT_UNKNOWN;
+			rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+			rtvDesc.Texture2D.MipSlice = 0;
+
+			auto r = m_d3d11State.Device->CreateRenderTargetView(desc->Texture.Direct3D11.m_texture, &rtvDesc, &result->Direct3D11.View);
+			if (FAILED(r))
+			{
+				NXNA_SET_ERROR_DETAILS(r, "CreateRenderTargetView() failed");
+				return NxnaResult::UnknownError;
+			}
+
+			return NxnaResult::Success;
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			result->OpenGL.Texture = desc->Texture;
+
+			return NxnaResult::Success;
+		}
+		break;
+		}
+
+		return NxnaResult::NotSupported;
+	}
+
+	NxnaResult GraphicsDevice::CreateRenderTargetDepthAttachment(const RenderTargetDepthAttachmentDesc* desc, RenderTargetDepthAttachment* result)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+			ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
+			depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+			depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+			depthStencilViewDesc.Texture2D.MipSlice = 0;
+			
+			auto r = m_d3d11State.Device->CreateDepthStencilView(desc->Texture.Direct3D11.m_texture, &depthStencilViewDesc, &result->Direct3D11.View);
+			if (FAILED(r))
+			{
+				NXNA_SET_ERROR_DETAILS(r, "CreateDepthStencilView() failed");
+				return NxnaResult::UnknownError;
+			}
+
+			return NxnaResult::Success;
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			result->OpenGL.Texture = desc->Texture;
+
+			return NxnaResult::Success;
+		}
+		break;
+		}
+
+		return NxnaResult::NotSupported;
+	}
+
+	NxnaResult GraphicsDevice::SetRenderTargetAttachments(RenderTarget* renderTarget, RenderTargetColorAttachment** colorAttachments, unsigned int numColorAttachments, RenderTargetDepthAttachment* depthAttachment)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			memset(renderTarget->Direct3D11.ColorAttachments, 0, sizeof(renderTarget->Direct3D11.ColorAttachments));
+
+			if (numColorAttachments > 8) numColorAttachments = 8;
+			for (unsigned int i = 0; i < numColorAttachments; i++)
+				renderTarget->Direct3D11.ColorAttachments[i] = colorAttachments[i]->Direct3D11.View;
+
+			if (depthAttachment == nullptr)
+				renderTarget->Direct3D11.DepthAttachment = renderTarget->Direct3D11.DefaultDepthStencilView;
+
+			return NxnaResult::Success;
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			if (!glNamedFramebufferTexture)
+				glBindFramebuffer(GL_FRAMEBUFFER, renderTarget->OpenGL.FBO);
+
+			// make sure we don't set too many render target attachments
+			if (numColorAttachments > m_caps.MaxRenderTargets)
+				numColorAttachments = m_caps.MaxRenderTargets;
+
+			for (unsigned int i = 0; i < numColorAttachments; i++)
+			{
+				GLuint texHandle = 0;
+				if (colorAttachments[i] != nullptr)
+					texHandle = colorAttachments[i]->OpenGL.Texture.OpenGL.Handle;
+
+				if (glNamedFramebufferTexture)
+					glNamedFramebufferTexture(renderTarget->OpenGL.FBO, GL_COLOR_ATTACHMENT0 + i, texHandle, 0);
+				else
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texHandle, 0);
+			}
+
+			// continue until GL_MAX_COLOR_ATTACHMENTS and un-attach everything
+			for (unsigned int i = numColorAttachments; i < m_caps.MaxRenderTargets; i++)
+			{
+				if (glNamedFramebufferTexture)
+					glNamedFramebufferTexture(renderTarget->OpenGL.FBO, GL_COLOR_ATTACHMENT0 + i, 0, 0);
+				else
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, 0, 0);
+			}
+
+			if (depthAttachment)
+			{
+				if (glNamedFramebufferRenderbuffer)
+					glNamedFramebufferRenderbuffer(renderTarget->OpenGL.FBO, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthAttachment->OpenGL.Texture.OpenGL.Handle);
+				else
+					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthAttachment->OpenGL.Texture.OpenGL.Handle);
+			}
+			else
+			{
+				if (glNamedFramebufferRenderbuffer)
+					glNamedFramebufferRenderbuffer(renderTarget->OpenGL.FBO, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderTarget->OpenGL.DefaultDepthStencilTexture);
+				else
+					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderTarget->OpenGL.DefaultDepthStencilTexture);
+			}
+
+			if (glNamedFramebufferRenderbuffer)
+			{
+				GLenum status = glCheckNamedFramebufferStatus(renderTarget->OpenGL.FBO, GL_FRAMEBUFFER);
+				if (status != GL_FRAMEBUFFER_COMPLETE)
+					return NxnaResult::UnknownError;
+			}
+			else
+			{
+				GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+				if (status != GL_FRAMEBUFFER_COMPLETE)
+					return NxnaResult::UnknownError;
+			}
+
+			if (!glNamedFramebufferTexture)
+				glBindFramebuffer(GL_FRAMEBUFFER, m_oglState.CurrentFBO);
+
+			return NxnaResult::Success;
+		}
+		break;
+		}
+
+		return NxnaResult::NotSupported;
+	}
+
+	void GraphicsDevice::DestroyRenderTargetColorAttachment(RenderTargetColorAttachment* attachment)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			attachment->Direct3D11.View->Release();
+			attachment->Direct3D11.View = nullptr;
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			// nothing
+		}
+		break;
+		}
+	}
+
+	void GraphicsDevice::DestroyRenderTargetDepthAttachment(RenderTargetDepthAttachment* attachment)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			attachment->Direct3D11.View->Release();
+			attachment->Direct3D11.View = nullptr;
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			// nothing
+		}
+		break;
+		}
+	}
+
+
 #define D3D11_MAP_BUFFER \
 	D3D11_MAP access; \
 	switch (type) \
@@ -2380,7 +2779,12 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
 		{
-			m_d3d11State.Context->ClearRenderTargetView(m_d3d11State.RenderTargetView, rgba);
+			for (unsigned int i = 0; i < 8; i++)
+			{
+				if (m_d3d11State.CurrentRenderTargetViews[i])
+					m_d3d11State.Context->ClearRenderTargetView(m_d3d11State.CurrentRenderTargetViews[i], rgba);
+			}
+			
 		}
 			break;
 #endif
@@ -2400,7 +2804,11 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
 		{
-			m_d3d11State.Context->ClearRenderTargetView(m_d3d11State.RenderTargetView, rgba);
+			for (unsigned int i = 0; i < 8; i++)
+			{
+				if (m_d3d11State.CurrentRenderTargetViews[i])
+					m_d3d11State.Context->ClearRenderTargetView(m_d3d11State.CurrentRenderTargetViews[i], rgba);
+			}
 		}
 			break;
 #endif
@@ -2419,7 +2827,11 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
 		{
-			m_d3d11State.Context->ClearRenderTargetView(m_d3d11State.RenderTargetView, colorRGBA4f);
+			for (unsigned int i = 0; i < 8; i++)
+			{
+				if (m_d3d11State.CurrentRenderTargetViews[i])
+					m_d3d11State.Context->ClearRenderTargetView(m_d3d11State.CurrentRenderTargetViews[i], colorRGBA4f);
+			}
 		}
 			break;
 #endif
@@ -2441,7 +2853,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			UINT flags = 0;
 			if (clearDepth) flags |= D3D11_CLEAR_DEPTH;
 			if (clearStencil) flags |= D3D11_CLEAR_STENCIL;
-			m_d3d11State.Context->ClearDepthStencilView(m_d3d11State.DepthStencilView, flags , depthValue, (UINT8)stencilValue);
+			m_d3d11State.Context->ClearDepthStencilView(m_d3d11State.CurrentDepthStencilView, flags , depthValue, (UINT8)stencilValue);
 		}
 			break;
 #endif

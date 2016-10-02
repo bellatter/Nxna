@@ -50,6 +50,8 @@ namespace Nxna
 			};
 
 			unsigned int MaxSamplerCount;
+			unsigned int MaxRenderTargets;
+			bool TextureOriginUpperLeft;
 		};
 
 		enum class Usage
@@ -288,12 +290,14 @@ namespace Nxna
 		{
 			ID3D11Device* Device;
 			ID3D11DeviceContext* Context;
-			ID3D11RenderTargetView* RenderTargetView;
-			ID3D11DepthStencilView* DepthStencilView;
+			ID3D11RenderTargetView* DefaultRenderTargetView;
+			ID3D11DepthStencilView* DefaultDepthStencilView;
 			IDXGISwapChain* SwapChain;
 
 			ID3D11RasterizerState* CurrentRasterizerState;
 			ID3D11BlendState* CurrentBlendState;
+			ID3D11RenderTargetView* CurrentRenderTargetViews[8];
+			ID3D11DepthStencilView* CurrentDepthStencilView;
 		};
 #endif
 		struct OpenGlDeviceState
@@ -304,6 +308,9 @@ namespace Nxna
 
 			// default states
 			unsigned int DefaultSamplerState;
+
+			unsigned int CurrentFBO;
+			unsigned int CurrentFBOHeight;
 		};
 
 		enum class SurfaceFormat
@@ -321,6 +328,13 @@ namespace Nxna
 			Pvrtc4
 		};
 
+		enum class TextureCreationFlags
+		{
+			None =                             0,
+			AllowRenderTargetColorAttachment = 1 << 0,
+			AllowRenderTargetDepthAttachment = 1 << 1,
+		};
+
 		struct TextureCreationDesc
 		{
 			unsigned int Width;
@@ -329,6 +343,7 @@ namespace Nxna
 			unsigned int MipLevels;
 			Usage TextureUsage;
 			SurfaceFormat Format;
+			unsigned int Flags;
 
 			void* InitialData;
 			unsigned int InitialDataByteCount;
@@ -397,6 +412,89 @@ namespace Nxna
 			Write,
 			WriteDiscard,
 			WriteNoOverwrite
+		};
+
+		enum class DepthFormat
+		{
+			None = 0,
+			Depth16,
+			Depth24,
+			Depth24Stencil8
+		};
+
+		struct RenderTargetDesc
+		{
+			unsigned int Width;
+			unsigned int Height;
+			DepthFormat DepthFormatType;
+		};
+
+		struct RenderTarget
+		{
+			union
+			{
+				struct
+				{
+					unsigned int FBO;
+					unsigned int Height;
+
+					unsigned int DefaultDepthStencilTexture;
+				} OpenGL;
+#ifdef NXNA_ENABLE_DIRECT3D11
+				struct
+				{
+					ID3D11RenderTargetView* ColorAttachments[8];
+					ID3D11DepthStencilView* DepthAttachment;
+
+					ID3D11Texture2D* DefaultDepthStencilTexture;
+					ID3D11DepthStencilView* DefaultDepthStencilView;
+				} Direct3D11;
+#endif
+			};
+		};
+
+		struct RenderTargetColorAttachmentDesc
+		{
+			Texture2D Texture;
+		};
+
+		struct RenderTargetDepthAttachmentDesc
+		{
+			Texture2D Texture;
+		};
+
+		struct RenderTargetColorAttachment
+		{
+			union
+			{
+#ifdef NXNA_ENABLE_DIRECT3D11
+				struct
+				{
+					ID3D11RenderTargetView* View;
+				} Direct3D11;
+#endif
+				struct
+				{
+					Texture2D Texture;
+				} OpenGL;
+			};
+		};
+
+		struct RenderTargetDepthAttachment
+		{
+			union
+			{
+#ifdef NXNA_ENABLE_DIRECT3D11
+				struct
+				{
+					ID3D11DepthStencilView* View;
+				} Direct3D11;
+#endif
+				struct
+				{
+					Texture2D Texture;
+				} OpenGL;
+			};
 		};
 
 		class GraphicsDevice
@@ -548,6 +646,16 @@ namespace Nxna
 			/// Destroys an existing vertex buffer
 			/// @param[in] buffer A pointer to the constant buffer to delete
 			void DestroyConstantBuffer(ConstantBuffer* buffer);
+
+			NxnaResult CreateRenderTarget(const RenderTargetDesc* desc, RenderTarget* result);
+			NxnaResult BindRenderTarget(RenderTarget* renderTarget);
+			void DestroyRenderTarget(RenderTarget* renderTarget);
+
+			NxnaResult CreateRenderTargetColorAttachment(const RenderTargetColorAttachmentDesc* desc, RenderTargetColorAttachment* result);
+			NxnaResult CreateRenderTargetDepthAttachment(const RenderTargetDepthAttachmentDesc* desc, RenderTargetDepthAttachment* result);
+			NxnaResult SetRenderTargetAttachments(RenderTarget* renderTarget, RenderTargetColorAttachment** colorAttachments, unsigned int numColorAttachments, RenderTargetDepthAttachment* depthAttachment);
+			void DestroyRenderTargetColorAttachment(RenderTargetColorAttachment* attachment);
+			void DestroyRenderTargetDepthAttachment(RenderTargetDepthAttachment* attachment);
 
 			/// Maps an IndexBuffer for writing or reading
 			/// @param[in] buffer An index buffer to map
