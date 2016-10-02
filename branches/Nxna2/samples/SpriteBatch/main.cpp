@@ -11,7 +11,7 @@ extern bool g_quitReceived;
 #ifdef _WIN32
 extern "C"
 {
-	//_declspec(dllexport) unsigned int NvOptimusEnablement = 0x00000001;
+	_declspec(dllexport) unsigned int NvOptimusEnablement = 0x00000001;
 }
 #endif
 
@@ -300,11 +300,14 @@ int main(int argc, char** argv)
 
 	MySpriteBatch sb;
 	MySpriteBatch::Init(device, &sb);
+	
 
 	const float size = 100.0f;
 	const float vel = 0.10f;
 	float x = 0, y = 0;
 	float vx = vel, vy = vel;
+
+	float phase = 0;
 
 	float rotation = 0;
 	while (g_quitReceived == false)
@@ -344,8 +347,8 @@ int main(int argc, char** argv)
 		device->ClearDepthStencil(true, true, 1.0f, 0);
 
 		sb.Begin();
-
-		sb.Draw(&smily, width, height, vp.Width / 2 - 200, vp.Height / 2 - 200, 400, 400, Nxna::Color(255, 255, 255));
+		phase = 0.01f;
+		sb.Draw(&smily, width, height, 128, 54, 400 + phase, 400 + phase, Nxna::Color(255, 255, 255));
 		sb.Draw(&smily, width, height, x, y, 100, 100, Nxna::Color(128, 128, 128, 128));
 
 		sb.End();
@@ -353,6 +356,8 @@ int main(int argc, char** argv)
 		// show the results
 		device->Present();
 		Present(window);
+
+		phase += 0.0001f;
 	}
 
 	device->SetShaderPipeline(nullptr);
