@@ -122,6 +122,8 @@ void main()
 #endif
 #elif defined BasicEffectColor || defined BasicEffectColorTexture
 	finalColor = o_color;
+#else
+	finalColor = vec4(1.0, 1.0, 1.0, 1.0);
 #endif
 	
 #if __VERSION__ < 130
