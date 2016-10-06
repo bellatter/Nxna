@@ -16,6 +16,10 @@ namespace Graphics
 	{
 		m_vertexColorEnabled = false;
 		m_finalTransformDirty = true;
+
+		Matrix::GetIdentity(m_world);
+		Matrix::GetIdentity(m_view);
+		Matrix::GetIdentity(m_projection);
 	}
 
 	void DualTextureEffect::OnApply()
