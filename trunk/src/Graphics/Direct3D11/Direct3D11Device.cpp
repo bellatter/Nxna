@@ -42,7 +42,7 @@ namespace Direct3D11
 	}
 
 	void Direct3D11Device::OnWindowCreated(void* window, const PresentationParameters& pp)
-	{
+	{  
 		m_presentationParameters = pp;
 
 		const char* error = "Unable to initialize Direct3D";
@@ -88,6 +88,12 @@ namespace Direct3D11
 					break;
 				}
 			}
+		}
+
+		DXGI_ADAPTER_DESC desc;
+		if (adapter->GetDesc(&desc) == 0)
+		{
+			wcstombs(m_info.Name, desc.Description, 256);
 		}
 
 		delete[] displayModeList;
@@ -389,6 +395,11 @@ namespace Direct3D11
 	unsigned int Direct3D11Device::CalcShaderHash(const byte* bytecode, int length)
 	{
 		return Utils::CalcHash(bytecode, length);
+	}
+
+	void Direct3D11Device::GetInfo(GraphicsDeviceInfo* info)
+	{
+		memcpy(info, &m_info, sizeof(GraphicsDeviceInfo));
 	}
 
 	void Direct3D11Device::SetSamplers()

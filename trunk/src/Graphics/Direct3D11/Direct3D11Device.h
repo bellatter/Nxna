@@ -58,6 +58,8 @@ namespace Direct3D11
 
 		PresentationParameters m_presentationParameters;
 
+		GraphicsDeviceInfo m_info;
+
 	public:
 		Direct3D11Device();
 		void OnWindowCreated(void* window, const PresentationParameters& pp);
@@ -96,6 +98,7 @@ namespace Direct3D11
 		virtual void GetBackBufferData(void* data) override;
 
 		virtual const char* GetRendererName() override { return "Direct3D 11"; }
+		virtual void GetInfo(GraphicsDeviceInfo* info) override;
 
 		void* GetDevice() { return m_device; }
 		void* GetDeviceContext() { return m_deviceContext; }
