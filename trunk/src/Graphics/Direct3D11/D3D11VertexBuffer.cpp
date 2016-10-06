@@ -39,7 +39,7 @@ namespace Direct3D11
 		if (numBytes > capacity)
 			throw GraphicsException("Too many vertices", __FILE__, __LINE__);
 
-		if (numBytes > 0 && m_buffer == nullptr)
+		if (m_buffer == nullptr)
 		{
 			D3D11_BUFFER_DESC desc;
 			ZeroMemory(&desc, sizeof(desc));
