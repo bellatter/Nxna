@@ -94,6 +94,14 @@ namespace Graphics
 
 			result->m_oglState.CurrentFBO = 0;
 			result->m_oglState.CurrentFBOHeight = result->m_screenHeight;
+
+			// create a default VAO
+			glGenVertexArrays(1, &result->m_oglState.DefaultVAO);
+
+			// mark all the states dirty
+			result->m_oglState.CurrentVertexBuffersDirty = true;
+			result->m_oglState.CurrentIndexBufferDirty = true;
+			result->m_oglState.CurrentInputElementsDirty = true;
 		}
 			break;
 #ifdef NXNA_ENABLE_DIRECT3D11
@@ -575,7 +583,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 					break;
 				}
 
-				iedesc[i].InputSlot = 0;
+				iedesc[i].InputSlot = e[i].InputSlot;
 				iedesc[i].AlignedByteOffset = e[i].Offset;
 				iedesc[i].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 				iedesc[i].InstanceDataStepRate = 0;
@@ -608,6 +616,11 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, desc->PixelShader->OpenGL.Handle);
 
 			result->OpenGL.Pipeline = pipeline;
+
+			int numElements = desc->NumElements;
+			if (numElements > 16) numElements = 16;
+			result->OpenGL.NumElements = numElements;
+			memcpy(result->OpenGL.VertexElements, desc->VertexElements, sizeof(InputElement) * numElements);
 		}
 		}
 
@@ -644,6 +657,11 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				{
 					if (m_shaderPipeline != pipeline)
 						glBindProgramPipeline(pipeline->OpenGL.Pipeline);
+
+					assert(pipeline->OpenGL.NumElements <= 16);
+					m_oglState.CurrentNumInputElements = pipeline->OpenGL.NumElements;
+					memcpy(m_oglState.CurrentInputElements, pipeline->OpenGL.VertexElements, pipeline->OpenGL.NumElements * sizeof(InputElement));
+					m_oglState.CurrentInputElementsDirty = true;
 				}
 				else
 				{
@@ -1679,7 +1697,8 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices.OpenGL.Buffer);
+			m_oglState.CurrentIndexBuffer = indices.OpenGL.Buffer;
+			m_oglState.CurrentIndexBufferDirty = true;
 		}
 			break;
 		default:
@@ -1693,7 +1712,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	{
 #ifndef NXNA_DISABLE_VALIDATION
 		result->BufferUsage = desc->BufferUsage;
-		result->ByteLength = desc->StrideBytes * desc->NumVertices;
+		result->ByteLength = desc->ByteLength;
 		NXNA_VALIDATION_ASSERT(desc->InitialDataByteCount <= result->ByteLength, "Inital data is too long");
 #endif
 
@@ -1705,7 +1724,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			HRESULT r;
 			D3D11_BUFFER_DESC vbdesc;
 			ZeroMemory(&vbdesc, sizeof(D3D11_BUFFER_DESC));
-			vbdesc.ByteWidth = desc->NumVertices * desc->StrideBytes;
+			vbdesc.ByteWidth = desc->ByteLength;
 			vbdesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 			switch(desc->BufferUsage)
 			{
@@ -1750,43 +1769,13 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-			result->OpenGL.ByteLength = desc->StrideBytes * desc->NumVertices;
+			result->OpenGL.ByteLength = desc->ByteLength;
 
 			glGenBuffers(1, &result->OpenGL.Buffer);
 			glBindBuffer(GL_ARRAY_BUFFER, result->OpenGL.Buffer);
 			glBufferData(GL_ARRAY_BUFFER, result->OpenGL.ByteLength, nullptr, GL_STATIC_DRAW);
 			if (desc->InitialData != nullptr)
 				glBufferSubData(GL_ARRAY_BUFFER, 0, desc->InitialDataByteCount, desc->InitialData);
-
-			// setup the VAO
-			{
-				glGenVertexArrays(1, &result->OpenGL.VAO);
-				glBindVertexArray(result->OpenGL.VAO);
-
-				for (int i = 0; i < desc->NumInputElements; i++)
-				{
-					int sizeOfElement = 0;
-					GLenum type;
-					GLboolean normalize;
-
-					auto format = desc->InputElements[i].ElementFormat;
-					if (format == InputElementFormat::Color)
-					{
-						sizeOfElement = 4;
-						type = GL_UNSIGNED_BYTE;
-						normalize = GL_TRUE;
-					}
-					else
-					{
-						sizeOfElement = (int)format;
-						type = GL_FLOAT;
-						normalize = GL_FALSE;
-					}
-
-					glEnableVertexAttribArray(i);
-					glVertexAttribPointer(i, sizeOfElement, type, normalize, desc->StrideBytes, (void*)(intptr_t)desc->InputElements[i].Offset);
-				}
-			}
 
 			return NxnaResult::Success;
 		}
@@ -1811,7 +1800,6 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		case GraphicsDeviceType::OpenGl41:
 		{
 			glDeleteBuffers(1, &buffer.OpenGL.Buffer);
-			glDeleteVertexArrays(1, &buffer.OpenGL.VAO);
 		}
 			break;
 		default:
@@ -1854,27 +1842,56 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		}
 	}
 
-	void GraphicsDevice::SetVertexBuffer(VertexBuffer vertexBuffer, unsigned int offset, unsigned int stride)
+	void GraphicsDevice::SetVertexBuffer(VertexBuffer* vertexBuffer, unsigned int offset, unsigned int stride)
 	{
+		SetVertexBuffers(0, 1, &vertexBuffer, &offset, &stride);
+	}
+
+	void GraphicsDevice::SetVertexBuffers(unsigned int startSlot, unsigned int numBuffers, VertexBuffer** vertexBuffers, unsigned int* offsets, unsigned int* stride)
+	{
+		// TODO: make sure the startSlot and numBuffers are withing valid bounds
+
 		switch (GetType())
 		{
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
 		{
-			m_d3d11State.Context->IASetVertexBuffers(0, 1, &vertexBuffer.Direct3D11.Buffer, &stride, &offset);
+			for (unsigned int i = 0; i < numBuffers; i++)
+				m_d3d11State.Context->IASetVertexBuffers(startSlot + i, 1, &vertexBuffers[i]->Direct3D11.Buffer, &stride[i], &offsets[i]);
 		}
 			break;
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-			glBindVertexArray(vertexBuffer.OpenGL.VAO);
+			for (unsigned int i = 0; i < numBuffers; i++)
+			{
+				if (vertexBuffers[i] == nullptr)
+				{
+					if (m_oglState.CurrentVertexBufferActive[startSlot + i])
+					{
+						m_oglState.CurrentVertexBufferActive[startSlot + i] = false;
+						m_oglState.CurrentVertexBufferDirty[startSlot + i] = true;
+						m_oglState.CurrentVertexBuffersDirty = true;
+					}
+				}
+				else if (m_oglState.CurrentVertexBufferDirty[startSlot + i] == true ||
+					m_oglState.CurrentVertexBufferActive[startSlot + i] == false ||
+					vertexBuffers[i]->OpenGL.Buffer != m_oglState.CurrentVertexBuffers[startSlot + i].Buffer ||
+					offsets[i] != m_oglState.CurrentVertexBuffers[startSlot + i].Offset ||
+					stride[i] != m_oglState.CurrentVertexBuffers[startSlot + i].Stride)
+				{
+					m_oglState.CurrentVertexBuffers[startSlot + i].Buffer = vertexBuffers[i]->OpenGL.Buffer;
+					m_oglState.CurrentVertexBuffers[startSlot + i].Offset = offsets[i];
+					m_oglState.CurrentVertexBuffers[startSlot + i].Stride = stride[i];
+					m_oglState.CurrentVertexBufferDirty[startSlot + i] = true;
+					m_oglState.CurrentVertexBuffersDirty = true;
+				}
+			}
 		}
 			break;
 		default:
 			NXNA_SET_ERROR_DETAILS(0, "Unsupported graphics device type");
 		}
-
-		m_vertices = m_vertices;
 	}
 
 	NxnaResult GraphicsDevice::CreateConstantBuffer(const ConstantBufferDesc* desc, ConstantBuffer* result)
@@ -2905,7 +2922,75 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	void GraphicsDevice::applyDirtyStates()
 	{
-		
+		switch (GetType())
+		{
+		case GraphicsDeviceType::OpenGl41:
+		{
+			// setup the VAO
+			{
+				if (m_oglState.CurrentVertexBuffersDirty ||
+					m_oglState.CurrentIndexBufferDirty ||
+					m_oglState.CurrentInputElementsDirty)
+				{
+					glBindVertexArray(m_oglState.DefaultVAO);
+					
+
+					if (m_oglState.CurrentIndexBufferDirty)
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_oglState.CurrentIndexBuffer);
+
+					
+					if (m_oglState.CurrentVertexBuffersDirty ||
+						m_oglState.CurrentInputElementsDirty)
+					{
+						unsigned int currentBuffer = 0;
+
+						for (int i = 0; i < m_oglState.CurrentNumInputElements; i++)
+						{
+							int sizeOfElement = 0;
+							GLenum type;
+							GLboolean normalize;
+
+							auto format = m_oglState.CurrentInputElements[i].ElementFormat;
+							if (format == InputElementFormat::Color)
+							{
+								sizeOfElement = 4;
+								type = GL_UNSIGNED_BYTE;
+								normalize = GL_TRUE;
+							}
+							else
+							{
+								sizeOfElement = (int)format;
+								type = GL_FLOAT;
+								normalize = GL_FALSE;
+							}
+
+							auto inputSlot = m_oglState.CurrentInputElements[i].InputSlot;
+							if (inputSlot > 32 || m_oglState.CurrentVertexBufferActive[inputSlot] == false)
+							{
+								glDisableVertexAttribArray(i);
+								continue;
+							}
+							
+							if (m_oglState.CurrentVertexBuffers[inputSlot].Buffer != currentBuffer)
+							{
+								glBindBuffer(GL_ARRAY_BUFFER, m_oglState.CurrentVertexBuffers[inputSlot].Buffer);
+								currentBuffer = m_oglState.CurrentVertexBuffers[inputSlot].Buffer;
+							}
+
+							glEnableVertexAttribArray(i);
+							glVertexAttribPointer(i, sizeOfElement, type, normalize, m_oglState.CurrentVertexBuffers[inputSlot].Stride, (void*)(intptr_t)(m_oglState.CurrentVertexBuffers[inputSlot].Offset + m_oglState.CurrentInputElements[i].Offset));
+						}
+					}
+
+					m_oglState.CurrentVertexBuffersDirty = false;
+					m_oglState.CurrentIndexBufferDirty = false;
+					m_oglState.CurrentInputElementsDirty = false;
+					memset(m_oglState.CurrentVertexBufferDirty, 0, sizeof(bool) * 32);
+				}
+			}
+		}
+			break;
+		}
 	}
 }
 }

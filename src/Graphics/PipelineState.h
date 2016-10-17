@@ -156,10 +156,11 @@ namespace Graphics
 
 	struct InputElement
 	{
-		int Offset;
+		unsigned int Offset;
 		InputElementFormat ElementFormat;
 		InputElementUsage ElementUsage;
-		int UsageIndex;
+		unsigned int UsageIndex;
+		unsigned int InputSlot;
 	};
 
 
@@ -202,6 +203,8 @@ namespace Graphics
 			struct
 			{
 				unsigned int Pipeline;
+				InputElement VertexElements[16];
+				int NumElements;
 			} OpenGL;
 #ifdef NXNA_ENABLE_DIRECT3D11
 			struct

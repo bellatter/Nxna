@@ -117,7 +117,6 @@ namespace Nxna
 				{
 					unsigned int ByteLength;
 					unsigned int Buffer;
-					unsigned int VAO;
 				} OpenGL;
 #ifdef NXNA_ENABLE_DIRECT3D11
 				struct
@@ -308,9 +307,28 @@ namespace Nxna
 
 			// default states
 			unsigned int DefaultSamplerState;
+			unsigned int DefaultVAO;
 
 			unsigned int CurrentFBO;
 			unsigned int CurrentFBOHeight;
+
+			struct
+			{
+				unsigned int Buffer;
+				unsigned int Offset;
+				unsigned int Stride;
+			} CurrentVertexBuffers[32];
+
+			unsigned int CurrentNumInputElements;
+			InputElement CurrentInputElements[16];
+
+			unsigned int CurrentIndexBuffer;
+
+			bool CurrentVertexBufferDirty[32];
+			bool CurrentVertexBuffersDirty;
+			bool CurrentVertexBufferActive[32];
+			bool CurrentIndexBufferDirty;
+			bool CurrentInputElementsDirty;
 		};
 
 		enum class SurfaceFormat
@@ -389,11 +407,8 @@ namespace Nxna
 
 		struct VertexBufferDesc
 		{
-			int NumVertices;
+			unsigned int ByteLength;
 			Usage BufferUsage;
-			InputElement* InputElements;
-			int NumInputElements;
-			int StrideBytes;
 
 			void* InitialData;
 			unsigned int InitialDataByteCount;
@@ -504,7 +519,6 @@ namespace Nxna
 			int m_screenWidth, m_screenHeight;
 
 			IndexBuffer m_indices;
-			VertexBuffer m_vertices;
 			ShaderPipeline* m_shaderPipeline;
 
 			NxnaResultDetails m_errorDetails;
@@ -631,7 +645,8 @@ namespace Nxna
 			///
 			/// This is equivalent to glBufferSubData() on OpenGL and ID3D11DeviceContext::UpdateSubresource() on Direct3D 11
 			void UpdateVertexBuffer(VertexBuffer buffer, unsigned int startOffset, void* data, unsigned int dataLengthInBytes);
-			void SetVertexBuffer(VertexBuffer vertexBuffer, unsigned int offset, unsigned int stride);
+			void SetVertexBuffer(VertexBuffer* vertexBuffer, unsigned int offset, unsigned int stride);
+			void SetVertexBuffers(unsigned int startSlot, unsigned int numBuffers, VertexBuffer** vertexBuffers, unsigned int* offsets, unsigned int* stride);
 
 			/// Create a new ConstantBuffer object
 			/// @param[in] desc A pointer to a ConstantBufferDesc object describing the new constant buffer
