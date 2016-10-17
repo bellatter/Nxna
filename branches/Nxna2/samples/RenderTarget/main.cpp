@@ -116,10 +116,7 @@ int main(int argc, char** argv)
 
 	Nxna::Graphics::VertexBuffer vb;
 	Nxna::Graphics::VertexBufferDesc vbDesc = {};
-	vbDesc.NumVertices = 7;
-	vbDesc.StrideBytes = sizeof(vertex);
-	vbDesc.InputElements = inputElements;
-	vbDesc.NumInputElements = 3;
+	vbDesc.ByteLength = 7 * sizeof(vertex);
 	vbDesc.InitialData = verts;
 	vbDesc.InitialDataByteCount = sizeof(verts);
 	if (device->CreateVertexBuffer(&vbDesc, &vb) != Nxna::NxnaResult::Success)
@@ -269,7 +266,7 @@ int main(int argc, char** argv)
 	device->SetShaderPipeline(&sp);
 	device->SetBlendState(&bs);
 	device->SetRasterizerState(&rs);
-	device->SetVertexBuffer(vb, 0, sizeof(vertex));
+	device->SetVertexBuffer(&vb, 0, sizeof(vertex));
 	device->SetIndices(ib);
 
 	float rotation = 0;

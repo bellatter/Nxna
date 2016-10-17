@@ -50,10 +50,7 @@ public:
 		// create the vertex buffer
 		Nxna::Graphics::VertexBufferDesc vbDesc = {};
 		vbDesc.BufferUsage = Nxna::Graphics::Usage::Dynamic;
-		vbDesc.NumVertices = BATCH_SIZE * 4;
-		vbDesc.StrideBytes = m_stride;
-		vbDesc.InputElements = elements;
-		vbDesc.NumInputElements = 3;
+		vbDesc.ByteLength = m_stride * BATCH_SIZE * 4;
 		vbDesc.InitialData = nullptr;
 		vbDesc.InitialDataByteCount = 0;
 		if (device->CreateVertexBuffer(&vbDesc, &result->m_vertexBuffer) != Nxna::NxnaResult::Success)
@@ -190,7 +187,7 @@ public:
 		m_device->SetConstantBuffer(m_constantBuffer, 0);
 		m_device->SetShaderPipeline(&m_shaderPipeline);
 		m_device->SetSamplerState(0, &m_samplerState);
-		m_device->SetVertexBuffer(m_vertexBuffer, 0, m_stride);
+		m_device->SetVertexBuffer(&m_vertexBuffer, 0, m_stride);
 		m_device->SetIndices(m_indexBuffer);
 
 		unsigned int spritesDrawn = 0;
