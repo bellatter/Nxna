@@ -6,13 +6,13 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-extern int NxnaMain(int argc, const char** argv);
+extern int NxnaMain(int argc, char* argv[]);
 
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     PSTR lpCmdLine, INT nCmdShow)
 {
-    return NxnaMain(__argc, (const char**)__argv);
+    return NxnaMain(__argc, (char**)__argv);
 }
 
 #endif
