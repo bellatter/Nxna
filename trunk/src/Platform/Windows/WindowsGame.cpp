@@ -41,6 +41,10 @@ namespace Windows
 
 		m_game->Initialize();
 
+		// see if the client called Exit() during initialization
+		if (m_quitReceived)
+			return;
+
 		if (m_game->m_graphicsDeviceManager != nullptr)
 			m_game->m_graphicsDeviceManager->ShowWindow();
 
