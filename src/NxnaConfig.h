@@ -20,7 +20,7 @@ typedef unsigned char byte;
 #if defined NXNA_PLATFORM_APPLE_IOS
 #define NXNA_PLATFORMENGINE_IOS
 #define NXNA_DISABLE_OGG
-#elseif defined NXNA_PLATFORM_WIN32
+#elif defined NXNA_PLATFORM_WIN32
 #define NXNA_PLATFORMENGINE_WIN32
 #else
 #define NXNA_PLATFORMENGINE_SDL

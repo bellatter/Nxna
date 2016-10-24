@@ -156,10 +156,13 @@ namespace OpenGl
 		else
 			glDisable(GL_SCISSOR_TEST);
 
+		// TODO: figure out how to handle this in OpenGL ES
+#ifndef USING_OPENGLES
 		if (state->TheFillMode == FillMode::Solid)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		else
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+#endif
 	}
 
 	DepthStencilState OpenGlDevice::GetDepthStencilState()
