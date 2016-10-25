@@ -51,7 +51,7 @@ namespace Content
 			CloseHandle(m_mapping);
 			CloseHandle(m_fp);
 #else
-			munmap(m_mapping, m_size);
+			munmap(m_baseAddress, m_size);
 			close(m_fd);
 #endif
 		}
