@@ -10,13 +10,14 @@ namespace Nxna
 	{
 		class FileStream;
 		class MemoryStream;
+		class MappedFileStream;
 	}
 
 namespace Audio
 {
 	class AdpcmDecoder
 	{
-		Content::Stream* m_stream;
+		Content::MappedFileStream* m_stream;
 		bool m_stereo;
 		int m_bitrate;
 		int m_blockSize;
@@ -24,7 +25,7 @@ namespace Audio
 		size_t m_requiredOutputBufferSize;
 
 	public:
-		AdpcmDecoder(Content::Stream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock);
+		AdpcmDecoder(Content::MappedFileStream* stream, bool stereo, int bitrate, int blockSize, int samplesPerBlock);
 
 		size_t GetRequiredBufferSize() { return m_requiredOutputBufferSize; }
 

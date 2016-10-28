@@ -2,6 +2,7 @@
 #include <climits>
 #include <cassert>
 #include "../../Content/FileStream.h"
+#include "../../Content/MappedFileStream.h"
 #include "ADPCMDecoder.h"
 
 namespace Nxna
@@ -16,7 +17,7 @@ namespace Audio
 		768, 614, 512, 409, 307, 230, 230, 230 
 	};
 
-	AdpcmDecoder::AdpcmDecoder(Content::Stream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock)
+	AdpcmDecoder::AdpcmDecoder(Content::MappedFileStream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock)
 	{
 		m_stream = data;
 		m_stereo = stereo;
@@ -69,7 +70,7 @@ namespace Audio
 			header->Delta = 16;
 	}
 
-	inline int decodeFrame(AdpcmInfo* info, AdpcmBlockHeader* headers, Content::Stream* data)
+	inline int decodeFrame(AdpcmInfo* info, AdpcmBlockHeader* headers, byte* data)
 	{
 		int bytesRead = 0;
 		for (int i = 0; i < info->NumChannels; i++)
@@ -82,7 +83,7 @@ namespace Audio
 
 			if (!info->NibbleState)
 			{
-				info->Nibble = data->ReadByte();
+				info->Nibble = *(data + bytesRead);
 				decodeNibble(info->Nibble >> 4, header, predictedSample);
 
 				bytesRead++;
@@ -98,21 +99,31 @@ namespace Audio
 		return bytesRead;
 	}
 
-	int decodeStereoBlock(AdpcmInfo* info, Content::Stream* block, byte* output)
+	int decodeStereoBlock(AdpcmInfo* info, byte* data, byte* output)
 	{
 		// this is based on the info here:
 		// http://wiki.multimedia.cx/index.php?title=Microsoft_ADPCM
 
 		// read the headers
 		AdpcmBlockHeader headers[2];
-		headers[0].Predictor = block->ReadByte();
+		/*headers[0].Predictor = block->ReadByte();
 		headers[1].Predictor = block->ReadByte();
 		headers[0].Delta = block->ReadInt16();
 		headers[1].Delta = block->ReadInt16();
 		headers[0].Sample1 = block->ReadInt16();
 		headers[1].Sample1 = block->ReadInt16();
 		headers[0].Sample2 = block->ReadInt16();
-		headers[1].Sample2 = block->ReadInt16();
+		headers[1].Sample2 = block->ReadInt16();*/
+		
+		memcpy(&headers[0].Predictor, data, 1);
+		memcpy(&headers[1].Predictor, data + 1, 1);
+		memcpy(&headers[0].Delta, data + 2, 2);
+		memcpy(&headers[1].Delta, data + 4, 2);
+		memcpy(&headers[0].Sample1, data + 6, 2);
+		memcpy(&headers[1].Sample1, data + 8, 2);
+		memcpy(&headers[0].Sample2, data + 10, 2);
+		memcpy(&headers[1].Sample2, data + 12, 2);
+		data += 14;
 
 		assert(headers[0].Predictor < 7);
 		assert(headers[1].Predictor < 7);
@@ -128,7 +139,7 @@ namespace Audio
 		int bytesWritten = 8;
 		while(samplesRead < info->SamplesPerBlock)
 		{
-			decodeFrame(info, headers, block);
+			data += decodeFrame(info, headers, data);
 
 			memcpy(output + bytesWritten, &headers[0].Sample1, 2);
 			memcpy(output + bytesWritten + 2, &headers[1].Sample1, 2);
@@ -148,17 +159,22 @@ namespace Audio
 		info.NibbleState = false;
 		info.SamplesPerBlock = (short)m_samplesPerBlock;
 
+		byte* data = (byte*)m_stream->GetData() + m_stream->Position();
 		if (m_stereo)
 		{
-			int bytesWritten = 0;
+			int totalBytesWritten = 0;
 			int blocksDecoded = 0;
 			
-			while(m_stream->Length() - m_stream->Position() >= m_blockSize)
+			while(m_stream->Length() - totalBytesWritten >= m_blockSize)
 			{
-				assert(bytesWritten + m_samplesPerBlock * 4 <= (int)m_requiredOutputBufferSize);
-				bytesWritten += decodeStereoBlock(&info, m_stream, outputBuffer + bytesWritten);
+				assert(totalBytesWritten + m_samplesPerBlock * 4 <= (int)m_requiredOutputBufferSize);
+				auto bytesWritten = decodeStereoBlock(&info, data, outputBuffer);
 
+				totalBytesWritten += bytesWritten;
 				blocksDecoded++;
+
+				outputBuffer += bytesWritten;
+				data += m_blockSize;
 			}
 		}
 	}
