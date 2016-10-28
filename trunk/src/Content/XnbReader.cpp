@@ -47,30 +47,43 @@ namespace Content
 
 	void XnbReader::readHeader()
 	{
-		if (m_stream->ReadByte() != 'X' ||
-			m_stream->ReadByte() != 'N' ||
-			m_stream->ReadByte() != 'B')
+#pragma pack(1)
+		struct
+		{
+			char Magic[3];
+			byte Target;
+			byte Version;
+			byte Flags;
+			int CompressedSize;
+		} header;
+#pragma pack()
+
+		static_assert(sizeof(header) == 10, "XNB header struct is unexpected size");
+
+		if (m_stream->Read((byte*)&header, sizeof(header)) != sizeof(header))
 			throw ContentException("Not a valid XNB file");
 
-		byte target = m_stream->ReadByte();
-		if (target == 'w')
+		if (header.Magic[0] != 'X' ||
+			header.Magic[1] != 'N' ||
+			header.Magic[2] != 'B')
+			throw ContentException("Not a valid XNB file");
+
+		if (header.Target == 'w')
 			m_target = TargetPlatform::Windows;
-		else if (target == 'm')
+		else if (header.Target == 'm')
 			m_target = TargetPlatform::WinPhone;
-		else if (target == 'x')
+		else if (header.Target == 'x')
 			m_target = TargetPlatform::XBox360;
 		else
 			throw ContentException("Not a valid XNB file");
 
-		byte version = m_stream->ReadByte();
-		if (version != 5)
+		if (header.Version != 5)
 			throw ContentException("Not a valid XNB file");
 
-		byte flags = m_stream->ReadByte();
-		m_isHighDef = (flags & 0x01) != 0;
-		m_isCompressed = (flags & 0x80) != 0;
+		m_isHighDef = (header.Flags & 0x01) != 0;
+		m_isCompressed = (header.Flags & 0x80) != 0;
 
-		m_compressedSize = m_stream->ReadInt32();
+		m_compressedSize = header.CompressedSize;
 		if (m_isCompressed)
 			m_uncompressedSize = m_stream->ReadInt32();
 		else
