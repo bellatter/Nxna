@@ -17,7 +17,7 @@ namespace Audio
 		768, 614, 512, 409, 307, 230, 230, 230 
 	};
 
-	AdpcmDecoder::AdpcmDecoder(Content::MappedFileStream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock)
+	AdpcmDecoder::AdpcmDecoder(Content::MemoryStream* data, bool stereo, int bitrate, int blockSize, int samplesPerBlock)
 	{
 		m_stream = data;
 		m_stereo = stereo;
@@ -106,15 +106,6 @@ namespace Audio
 
 		// read the headers
 		AdpcmBlockHeader headers[2];
-		/*headers[0].Predictor = block->ReadByte();
-		headers[1].Predictor = block->ReadByte();
-		headers[0].Delta = block->ReadInt16();
-		headers[1].Delta = block->ReadInt16();
-		headers[0].Sample1 = block->ReadInt16();
-		headers[1].Sample1 = block->ReadInt16();
-		headers[0].Sample2 = block->ReadInt16();
-		headers[1].Sample2 = block->ReadInt16();*/
-		
 		memcpy(&headers[0].Predictor, data, 1);
 		memcpy(&headers[1].Predictor, data + 1, 1);
 		memcpy(&headers[0].Delta, data + 2, 2);
@@ -159,7 +150,7 @@ namespace Audio
 		info.NibbleState = false;
 		info.SamplesPerBlock = (short)m_samplesPerBlock;
 
-		byte* data = (byte*)m_stream->GetData() + m_stream->Position();
+		byte* data = (byte*)m_stream->GetBuffer() + m_stream->Position();
 		if (m_stereo)
 		{
 			int totalBytesWritten = 0;
