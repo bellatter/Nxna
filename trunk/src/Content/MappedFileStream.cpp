@@ -109,7 +109,7 @@ namespace Content
 				return;
 			}
 			
-			m_memory = mmap(nullptr, statInfo.st_size, PROT_READ, MAP_PRIVATE, m_fd, 0);
+			m_memory = (byte*)mmap(nullptr, statInfo.st_size, PROT_READ, MAP_PRIVATE, m_fd, 0);
 			if (m_memory == MAP_FAILED)
 			{
 				close(m_fd);
