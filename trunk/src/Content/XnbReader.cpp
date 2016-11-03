@@ -8,7 +8,7 @@ namespace Nxna
 {
 namespace Content
 {
-	XnbReader::XnbReader(MappedFileStream* stream, const char* name, const char* fullPath, ContentManager* contentManager)
+	XnbReader::XnbReader(MemoryStream* stream, const char* name, const char* fullPath, ContentManager* contentManager)
 	{
 		m_stream = stream;
 		m_name = name;

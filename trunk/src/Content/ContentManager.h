@@ -90,6 +90,38 @@ namespace Content
 			throw ContentException("Don't know how to load this content");
 		}
 
+		template<typename T>
+		T* Load(const char* name, byte* data, unsigned int dataLength)
+		{
+			// is the resource already loaded?
+			ResourceMap::iterator r = m_resources.find(name);
+			if (r != m_resources.end())
+				return static_cast<T*>((*r).second.second);
+
+			// the resource hasn't been loaded yet, so load it
+			const char* typeName = typeid(T).name();
+			LoaderMap::iterator loader = m_loaders.find(typeName);
+
+			if (loader != m_loaders.end())
+			{
+				// load the raw resource data from a file
+				std::string fullName = m_rootDirectory + name + ".xnb";
+				MemoryStream* memstream = new MemoryStream(data, dataLength);
+				XnbReader* stream = new XnbReader(memstream, name, fullName.c_str(), this);
+
+				T* resource = static_cast<T*>((*loader).second->Read(stream));
+				m_resources.insert(ResourceMap::value_type(name, std::pair<IContentReader*, void*>((*loader).second, resource)));
+
+				delete stream;
+
+				return resource;
+			}
+
+			throw ContentException("Don't know how to load this content");
+		}
+
+		
+
 		// Loads an uncompiled (as in non-XNB) resource. Be sure to include the extension in the filename.
 		// Returns nullptr if the resource couldn't be loaded.
 		// This is not part of the XNA API.

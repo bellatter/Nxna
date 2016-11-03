@@ -18,6 +18,7 @@ namespace Nxna
 namespace Content
 {
 	MappedFileStream::MappedFileStream()
+		: MemoryStream(nullptr, 0)
 	{
 #ifdef _WIN32
 		m_fp = nullptr;
@@ -25,19 +26,16 @@ namespace Content
 		m_fd = -1;
 #endif
 		m_mapping = nullptr;
-		m_baseAddress = nullptr;
-		m_size = 0;
-		m_bytesRead = 0;
 	}
 
 	MappedFileStream::MappedFileStream(const char* path)
+		: MemoryStream(nullptr, 0)
 	{
 #ifdef _WIN32
 		m_fp = nullptr;
 #else
 		m_fd = -1;
 #endif
-		m_size = 0;
 
 		Load(path);
 	}
@@ -47,11 +45,11 @@ namespace Content
 		if (IsOpen())
 		{
 #ifdef _WIN32
-			UnmapViewOfFile(m_baseAddress);
+			UnmapViewOfFile(m_memory);
 			CloseHandle(m_mapping);
 			CloseHandle(m_fp);
 #else
-			munmap(m_baseAddress, m_size);
+			munmap(m_memory, m_length);
 			close(m_fd);
 #endif
 		}
@@ -66,9 +64,9 @@ namespace Content
 #else
 			m_fd = -1;
 #endif
+			m_memory = nullptr;
 			m_mapping = nullptr;
-			m_baseAddress = nullptr;
-			m_size = 0;
+			m_length = 0;
 
 #if defined NXNA_PLATFORM_WIN32
 			m_fp = CreateFile(path, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, nullptr);
@@ -86,8 +84,8 @@ namespace Content
 				return;
 			}
 
-			m_baseAddress = MapViewOfFile(m_mapping, FILE_MAP_READ, 0, 0, 0);
-			if (m_baseAddress == nullptr)
+			m_memory = (byte*)MapViewOfFile(m_mapping, FILE_MAP_READ, 0, 0, 0);
+			if (m_memory == nullptr)
 			{
 				CloseHandle(m_mapping);
 				CloseHandle(m_fp);
@@ -96,7 +94,7 @@ namespace Content
 				return;
 			}
 
-			m_size = GetFileSize(m_fp, nullptr);
+			m_length = GetFileSize(m_fp, nullptr);
 #else
 			m_fd = open(path, O_RDONLY);
 			if (m_fd == -1)
@@ -111,18 +109,18 @@ namespace Content
 				return;
 			}
 			
-			m_baseAddress = mmap(nullptr, statInfo.st_size, PROT_READ, MAP_PRIVATE, m_fd, 0);
-			if (m_baseAddress == MAP_FAILED)
+			m_memory = mmap(nullptr, statInfo.st_size, PROT_READ, MAP_PRIVATE, m_fd, 0);
+			if (m_memory == MAP_FAILED)
 			{
 				close(m_fd);
 				m_fd = -1;
-				m_baseAddress = nullptr;
+				m_memory = nullptr;
 				return;
 			}
 			
-			m_size = statInfo.st_size;
+			m_length = statInfo.st_size;
 #endif
-			m_bytesRead = 0;
+			m_position = 0;
 		}
 	}
 
@@ -133,84 +131,6 @@ namespace Content
 #else
 		return m_fd != -1;
 #endif
-	}
-
-	int MappedFileStream::Read(byte* destination, unsigned int length)
-	{
-		if (m_bytesRead + length > m_size)
-			length = m_size - m_bytesRead;
-
-		if (length > 0)
-			memcpy(destination, (char*)m_baseAddress + m_bytesRead, length);
-
-		m_bytesRead += length;
-
-		return length;
-	}
-
-	byte MappedFileStream::ReadByte()
-	{
-		byte r = 0;
-		if (m_bytesRead + 1 < m_size)
-			r = ((char*)m_baseAddress)[m_bytesRead++];
-
-		return r;
-
-		//byte r;
-		//Read(&r, 1);
-
-		return r;
-	}
-
-	short MappedFileStream::ReadInt16()
-	{
-		short r;
-		Read((byte*)&r, sizeof(short));
-
-		swapLE(&r, sizeof(short));
-
-		return r;
-	}
-
-	int MappedFileStream::ReadInt32()
-	{
-		int r;
-		Read((byte*)&r, sizeof(int));
-
-		swapLE(&r, sizeof(int));
-
-		return r;
-	}
-
-	float MappedFileStream::ReadFloat()
-	{
-		float r;
-		Read((byte*)&r, sizeof(float));
-
-		swapLE(&r, sizeof(float));
-
-		return r;
-	}
-
-	void MappedFileStream::Seek(int offset, SeekOrigin origin)
-	{
-		if (origin == SeekOrigin::Begin)
-		{
-			m_bytesRead = Nxna::MathHelper::Clampi(offset, 0, m_size);
-		}
-		else if (origin == SeekOrigin::Current)
-		{
-			m_bytesRead = Nxna::MathHelper::Clampi(m_bytesRead + offset, 0, m_size);
-		}
-		else if (origin == SeekOrigin::End)
-		{
-			m_bytesRead = Nxna::MathHelper::Clampi(m_size + offset, 0, m_size);
-		}
-	}
-
-	void MappedFileStream::swapLE(void* /* data */, int /* length */)
-	{
-		// nothing... for now...
 	}
 }
 }
