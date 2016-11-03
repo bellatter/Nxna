@@ -23,7 +23,7 @@ namespace Graphics
 	}
 
 	SpriteFont::SpriteFont(Texture2D* texture, int numCharacters, Rectangle* glyphs, Rectangle* cropping, unsigned short* charMap,
-		int lineSpacing, float spacing, Vector3* kerning, unsigned short* defaultCharacter)
+		int lineSpacing, float spacing, Vector3* kerning, const unsigned short* defaultCharacter)
 	{
 		m_texture = texture;
 

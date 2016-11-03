@@ -80,7 +80,7 @@ namespace Audio
 		static void SetDistanceScale(float scale);
 		static void SetMasterVolume(float volume);
 
-		static SoundEffect* LoadFrom(Content::MappedFileStream* stream, bool isXNB);
+		static SoundEffect* LoadFrom(Content::MemoryStream* stream, bool isXNB);
 
 	private:
 		SoundEffect() {}

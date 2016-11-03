@@ -75,6 +75,7 @@ namespace Content
 
 	class MemoryStream : public Stream
 	{
+	protected:
 		byte* m_memory;
 		bool m_weOwnBuffer;
 		size_t m_length;

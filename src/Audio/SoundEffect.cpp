@@ -264,7 +264,7 @@ namespace Audio
 #endif
 	}
 
-	SoundEffect* SoundEffect::LoadFrom(Content::MappedFileStream* stream, bool isXNB)
+	SoundEffect* SoundEffect::LoadFrom(Content::MemoryStream* stream, bool isXNB)
 	{
 #ifndef DISABLE_OPENAL
 		SoundEffect* effect = new SoundEffect();
@@ -363,7 +363,7 @@ namespace Audio
 		}
 		else
 		{
-			buffer = (byte*)stream->GetData() + stream->Position();
+			buffer = (byte*)stream->GetBuffer() + stream->Position();
 		}
 
 		alGenBuffers(1, (ALuint*)&effect->m_buffer);
