@@ -17,7 +17,7 @@ namespace Audio
 {
 	class AdpcmDecoder
 	{
-		Content::MappedFileStream* m_stream;
+		Content::MemoryStream* m_stream;
 		bool m_stereo;
 		int m_bitrate;
 		int m_blockSize;
@@ -25,7 +25,7 @@ namespace Audio
 		size_t m_requiredOutputBufferSize;
 
 	public:
-		AdpcmDecoder(Content::MappedFileStream* stream, bool stereo, int bitrate, int blockSize, int samplesPerBlock);
+		AdpcmDecoder(Content::MemoryStream* stream, bool stereo, int bitrate, int blockSize, int samplesPerBlock);
 
 		size_t GetRequiredBufferSize() { return m_requiredOutputBufferSize; }
 
