@@ -108,7 +108,7 @@ namespace SDL
 				needToDraw = true;
 			}
 
-			if (needToDraw)
+			if (needToDraw && m_quitReceived == false)
 			{
 				GameTime time;
 				time.TotalGameTime = m_gameTime.TotalGameTime;
