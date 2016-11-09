@@ -30,8 +30,3 @@ void IOSGame_ShowAchievements()
 {
 	[[ViewController getInstance] showAchievements];
 }
-
-void IOSGame_EnableBannerAds(bool enable)
-{
-	[[ViewController getInstance] enableBannerAds:enable];
-}

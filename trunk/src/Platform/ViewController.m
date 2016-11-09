@@ -14,9 +14,6 @@
 ViewController* g_instance;
 
 @interface ViewController () {
-	ADBannerView* m_adBanner;
-	BOOL m_bannerIsVisible;
-	BOOL m_bannerAdsEnabled;
 }
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) GLKBaseEffect *effect;
@@ -47,9 +44,6 @@ float touchPointScale = 0;
     [super viewDidLoad];
 	
 	g_instance = self;
-	m_adBanner = NULL;
-	m_bannerAdsEnabled = false;
-	m_bannerIsVisible = false;
     
     self.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease];
 	
@@ -140,69 +134,7 @@ float touchPointScale = 0;
     // shutdown
 }
 
--(void)enableBannerAds:(BOOL)enabled
-{
-	if (enabled)
-	{
-		if (m_adBanner == NULL)
-			m_adBanner = [[ADBannerView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, 320, 50)];
-		
-		m_adBanner.delegate = self;
-	}
-	else
-	{
-		[self hideBannerAds];
-		
-		[m_adBanner release];
-		m_adBanner = NULL;
-	}
-	
-	m_bannerAdsEnabled = enabled;
-}
 
--(void)hideBannerAds
-{
-	if (m_bannerIsVisible)
-	{
-		[UIView beginAnimations:NULL context:NULL];
-		
-		// Assumes the banner view is placed at the bottom of the screen.
-		m_adBanner.frame = CGRectOffset(m_adBanner.frame, 0, m_adBanner.frame.size.height);
-		
-		[UIView commitAnimations];
-		
-		m_bannerIsVisible = NO;
-	}
-}
-
-#pragma mark - ADBannerView delegate methods
-- (void)bannerViewDidLoadAd:(ADBannerView *)banner
-{
-	if (!m_bannerIsVisible)
-	{
-		// If banner isn't part of view hierarchy, add it
-		if (m_adBanner.superview == nil)
-		{
-			[self.view addSubview:m_adBanner];
-		}
-		
-		[UIView beginAnimations:NULL context:NULL];
-		
-		// Assumes the banner view is just off the bottom of the screen.
-		banner.frame = CGRectOffset(banner.frame, 0, -banner.frame.size.height);
-		
-		[UIView commitAnimations];
-		
-		m_bannerIsVisible = YES;
-	}
-}
-
-- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
-{
-	NSLog(@"Failed to retrieve ad");
-	
-	[self hideBannerAds];
-}
 
 #pragma mark - GLKView and GLKViewController delegate methods
 
