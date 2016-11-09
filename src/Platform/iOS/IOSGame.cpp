@@ -41,7 +41,7 @@ namespace iOS
 			m_game->m_device = m_game->m_graphicsDeviceManager->CreateDevice();
 		}
 
-		Audio::AudioManager::Init();
+	//	Audio::AudioManager::Init();
 
 		m_game->Initialize();
 

@@ -12,6 +12,7 @@
 		A24321611AF165E40062820A /* MemoryAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A243215E1AF165E40062820A /* MemoryAllocator.cpp */; };
 		A24321621AF165E40062820A /* MemoryAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = A243215F1AF165E40062820A /* MemoryAllocator.h */; };
 		A24321631AF165E40062820A /* MemoryAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = A243215F1AF165E40062820A /* MemoryAllocator.h */; };
+		A24A8B9C1DD2677300366D20 /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = A24A8B9A1DD2673400366D20 /* glew.c */; };
 		A28808E61512E54E005D983A /* Color.h in Headers */ = {isa = PBXBuildFile; fileRef = A28808D11512E54E005D983A /* Color.h */; };
 		A28808E71512E54E005D983A /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808D21512E54E005D983A /* Game.cpp */; };
 		A28808E81512E54E005D983A /* Game.h in Headers */ = {isa = PBXBuildFile; fileRef = A28808D31512E54E005D983A /* Game.h */; };
@@ -273,6 +274,7 @@
 		A228BBF31505B54200045911 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A243215E1AF165E40062820A /* MemoryAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryAllocator.cpp; sourceTree = SOURCE_ROOT; };
 		A243215F1AF165E40062820A /* MemoryAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryAllocator.h; sourceTree = SOURCE_ROOT; };
+		A24A8B9A1DD2673400366D20 /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glew.c; path = Graphics/OpenGL/glew/glew.c; sourceTree = SOURCE_ROOT; };
 		A28808D11512E54E005D983A /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = SOURCE_ROOT; };
 		A28808D21512E54E005D983A /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = SOURCE_ROOT; };
 		A28808D31512E54E005D983A /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = SOURCE_ROOT; };
@@ -639,6 +641,7 @@
 		A228BC7F1505B6A700045911 /* OpenGl */ = {
 			isa = PBXGroup;
 			children = (
+				A24A8B991DD2671500366D20 /* glew */,
 				A2FBA21218CBD6420019B993 /* GlRenderTarget2D.cpp */,
 				A2FBA21318CBD6420019B993 /* GlRenderTarget2D.h */,
 				A2963CAA16B49D2500817CFC /* GlslSource.cpp */,
@@ -706,6 +709,14 @@
 				A28809AB1512E8A7005D983A /* TouchPanel.h */,
 			);
 			name = Touch;
+			sourceTree = "<group>";
+		};
+		A24A8B991DD2671500366D20 /* glew */ = {
+			isa = PBXGroup;
+			children = (
+				A24A8B9A1DD2673400366D20 /* glew.c */,
+			);
+			name = glew;
 			sourceTree = "<group>";
 		};
 		A293FA5C1BE80C1100F41734 /* Utils */ = {
@@ -957,7 +968,7 @@
 		A228BBE71505B54200045911 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0800;
 			};
 			buildConfigurationList = A228BBEA1505B54200045911 /* Build configuration list for PBXProject "Nxna" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1065,6 +1076,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A24A8B9C1DD2677300366D20 /* glew.c in Sources */,
 				A2963B4D16ADF35F00817CFC /* MediaPlayer.cpp in Sources */,
 				A2963B4F16ADF35F00817CFC /* Song.cpp in Sources */,
 				A2963B5216ADF35F00817CFC /* Game.cpp in Sources */,
@@ -1154,13 +1166,17 @@
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1175,7 +1191,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -1191,12 +1207,15 @@
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -1205,7 +1224,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

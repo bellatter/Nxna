@@ -70,11 +70,6 @@ namespace iOS
 	{
 		IOSGame_ShowAchievements();
 	}
-	
-	void IOSOpenGlWindow::EnableBannerAds(bool enabled)
-	{
-		IOSGame_EnableBannerAds(enabled);
-	}
 }
 }
 }

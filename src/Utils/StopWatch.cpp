@@ -17,7 +17,7 @@ namespace Utils
 #ifdef _WIN32
 	uint64_t StopWatch::m_frequency = 0;
 #elif defined NXNA_PLATFORM_APPLE
-	static mach_timebase_info_data_t m_info;
+	static mach_timebase_info_data_t m_info = {};
 #endif
 	
 	uint64_t StopWatch::GetCurrentTicks()
