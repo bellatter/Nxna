@@ -95,6 +95,15 @@ namespace Audio
 		virtual void* Read(Content::XnbReader* stream) override;
 		virtual void* ReadRaw(Content::MappedFileStream* stream) override;
 		virtual void Destroy(void* resource) override;
+
+		struct AudioFormat
+		{
+			unsigned int NumChannels;
+			unsigned int SampleRate;
+			unsigned int BitsPerSample;
+		};
+
+		static bool LoadWAV(const unsigned char* data, unsigned int dataLength, bool isXNB, AudioFormat* format, const unsigned char** pcmData, unsigned int* pcmDataLength);
 	};
 }
 }
