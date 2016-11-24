@@ -167,7 +167,6 @@ namespace Audio
 
 	struct WAVEFORMATADPCM
 	{
-		WAVEFORMATEX wf;
 		short SamplesPerBlock;
 		short NumCoefficients;
 	};
@@ -266,71 +265,23 @@ namespace Audio
 
 	SoundEffect* SoundEffect::LoadFrom(Content::MemoryStream* stream, bool isXNB)
 	{
-#ifndef DISABLE_OPENAL
-		SoundEffect* effect = new SoundEffect();
-
-		int formatSize = stream->ReadInt32();
-		if (isXNB)
+		SoundEffectLoader::AudioFormat format;
+		const unsigned char* pcmData = nullptr;
+		unsigned int pcmDataLength = 0;
+		bool weOwnMemory = false;
+		if (SoundEffectLoader::LoadWAV(stream->GetBuffer() + stream->Position(), stream->Length() - stream->Position(), isXNB, &format, &pcmData, &pcmDataLength))
 		{
-			if (formatSize < 18)
-				throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
-			formatSize = 18;
+			if (pcmData == nullptr)
+			{
+				weOwnMemory = true;
+				pcmData = (unsigned char*)NxnaTempMemoryPool::GetMemory(pcmDataLength);
+				SoundEffectLoader::LoadWAV(stream->GetBuffer() + stream->Position(), stream->Length() - stream->Position(), isXNB, &format, &pcmData, &pcmDataLength);
+			}
 		}
-		else
-		{
-			if (formatSize != 18 && formatSize != 16)
-				throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
-		}
-
-		WAVEFORMATEX format;
-		stream->Read((byte*)&format, formatSize);
-
-		short samplesPerBlock = 0;
-		if (format.FormatTag == WAVE_FORMAT_ADPCM)
-		{
-			WAVEFORMATADPCM format2;
-			stream->Read((byte*)(&format2.SamplesPerBlock), 2);
-			format2.wf = format;
-
-			// skip the # of coefficients
-			stream->Seek(2, Content::SeekOrigin::Current);
-
-			// skip the coefficients
-			stream->Seek(7 * 4, Content::SeekOrigin::Current);
-
-			samplesPerBlock = format2.SamplesPerBlock;
-		}
-
-		// validate the format of the sound
-		if (format.FormatTag != WAVE_FORMAT_PCM && format.FormatTag != WAVE_FORMAT_ADPCM)
-			throw Nxna::Content::ContentException("Sound Effect is in an unrecognized format.");
-
-		if (format.Channels != 1 && format.Channels != 2)
-			throw Nxna::Content::ContentException("Only mono and stereo sound effects are supported.");
-
-		if (format.FormatTag == WAVE_FORMAT_PCM)
-		{
-			if ((format.BitsPerSample != 8 && format.BitsPerSample != 16) ||
-				(format.SamplesPerSec != 22050 && format.SamplesPerSec != 44100 && format.SamplesPerSec != 48000))
-				throw Nxna::Content::ContentException("Sound Effect is not in a supported format.");
-		}
-		else
-		{
-			if (format.BitsPerSample != 4)
-				throw Nxna::Content::ContentException("Sound Effect is not in a supported format.");
-		}
-
-		if (!isXNB)
-		{
-			// read the data section header
-			int dataMagic = stream->ReadInt32();
-		}
-
-		int dataSize = stream->ReadInt32();
 
 #ifdef NXNA_AUDIOENGINE_OPENAL
 		ALenum bformat;
-		if (format.Channels == 1)
+		if (format.NumChannels == 1)
 		{
 			if (format.BitsPerSample == 8)
 			{
@@ -353,34 +304,17 @@ namespace Audio
 			}
 		}
 
-		byte* buffer = nullptr;
-
-		if (format.FormatTag == WAVE_FORMAT_ADPCM)
-		{
-			AdpcmDecoder decoder(stream, format.Channels == 2, format.BitsPerSample, format.BlockAlign, samplesPerBlock);
-			buffer = (byte*)NxnaTempMemoryPool::GetMemory(decoder.GetRequiredBufferSize());
-			decoder.Decode(buffer);
-		}
-		else
-		{
-			buffer = (byte*)stream->GetBuffer() + stream->Position();
-		}
-
+		auto effect = new SoundEffect();
 		alGenBuffers(1, (ALuint*)&effect->m_buffer);
-		alBufferData((ALuint)effect->m_buffer, bformat, buffer, dataSize, format.SamplesPerSec);
+		alBufferData((ALuint)effect->m_buffer, bformat, pcmData, pcmDataLength, format.SampleRate);
 
-		if (format.FormatTag == WAVE_FORMAT_ADPCM)
-			Nxna::NxnaTempMemoryPool::ReleaseMemory();
-
-		effect->m_duration = (float)dataSize / format.SamplesPerSec / (format.BitsPerSample / 8) / format.Channels;
+		effect->m_duration = (float)pcmDataLength / format.SampleRate / (format.BitsPerSample / 8) / format.NumChannels;
 #endif
 
-
+		if (weOwnMemory)
+			NxnaTempMemoryPool::ReleaseMemory();
 
 		return effect;
-#else
-		return new SoundEffect();
-#endif
 	}
 
 	void* SoundEffectLoader::Read(Content::XnbReader* stream)
@@ -406,6 +340,98 @@ namespace Audio
 	void SoundEffectLoader::Destroy(void* resource)
 	{
 		delete static_cast<SoundEffect*>(resource);
+	}
+
+	bool SoundEffectLoader::LoadWAV(const unsigned char* data, unsigned int dataLength, bool isXNB, AudioFormat* format, const unsigned char** pcmData, unsigned int* pcmDataLength)
+	{
+		int formatSize;
+		memcpy(&formatSize, data, sizeof(int));
+		data += sizeof(int);
+
+		if (isXNB)
+		{
+			if (formatSize < 18)
+				return false;
+			formatSize = 18;
+		}
+		else
+		{
+			if (formatSize != 18 && formatSize != 16)
+				return false;
+		}
+
+		WAVEFORMATEX formatHeader;
+		memcpy(&formatHeader, data, formatSize);
+		data += formatSize;
+
+		short samplesPerBlock = 0;
+		if (formatHeader.FormatTag == WAVE_FORMAT_ADPCM)
+		{
+			WAVEFORMATADPCM format2;
+			memcpy(&format2, data, sizeof(WAVEFORMATADPCM));
+			data += sizeof(WAVEFORMATADPCM);
+
+			// skip the coefficients
+			data += 7 * 4;
+
+			samplesPerBlock = format2.SamplesPerBlock;
+		}
+
+		// validate the format of the sound
+		if (formatHeader.FormatTag != WAVE_FORMAT_PCM && formatHeader.FormatTag != WAVE_FORMAT_ADPCM)
+			return false;
+
+		if (formatHeader.Channels != 1 && formatHeader.Channels != 2)
+			return false;
+
+		if (formatHeader.FormatTag == WAVE_FORMAT_PCM)
+		{
+			if ((formatHeader.BitsPerSample != 8 && formatHeader.BitsPerSample != 16) ||
+				(formatHeader.SamplesPerSec != 22050 && formatHeader.SamplesPerSec != 44100 && formatHeader.SamplesPerSec != 48000))
+				return false;
+		}
+		else
+		{
+			if (formatHeader.BitsPerSample != 4)
+				return false;
+		}
+
+		if (!isXNB)
+		{
+			// skip the data section header
+			data += sizeof(int);
+		}
+
+		int dataSize;
+		memcpy(&dataSize, data, sizeof(int));
+		data += sizeof(int);
+
+		if (formatHeader.FormatTag == WAVE_FORMAT_ADPCM)
+		{
+			Content::MemoryStream stream(data, dataSize);
+			AdpcmDecoder decoder(&stream, formatHeader.Channels == 2, formatHeader.BitsPerSample, formatHeader.BlockAlign, samplesPerBlock);
+
+			if (*pcmData != nullptr)
+			{
+				decoder.Decode((byte*)*pcmData);
+				*pcmDataLength = dataSize;
+			}
+			else
+			{
+				*pcmDataLength = decoder.GetRequiredBufferSize();
+			}
+		}
+		else
+		{
+			*pcmData = data;
+			*pcmDataLength = dataSize;
+		}
+
+		format->SampleRate = formatHeader.SamplesPerSec;
+		format->NumChannels = formatHeader.Channels;
+		format->BitsPerSample = formatHeader.BitsPerSample;
+
+		return true;
 	}
 }
 }
