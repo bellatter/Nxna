@@ -65,6 +65,7 @@ namespace Nxna
 		void IsFixedTimeStep(bool isFixedTimeStep) { m_isFixedTimeStep = isFixedTimeStep; }
 
 		Nxna::Content::ContentManager* GetContent() { return m_content; }
+		void SetContent(Nxna::Content::ContentManager* content) { m_content = content; }
 		Nxna::Graphics::GraphicsDevice* GetGraphicsDevice() { return m_device; }
 		
 		// TODO: This doesn't exist in XNA. This should be GetWindow().
