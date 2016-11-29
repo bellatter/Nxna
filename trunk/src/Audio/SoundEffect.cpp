@@ -420,17 +420,20 @@ namespace Audio
 			{
 				*pcmDataLength = decoder.GetRequiredBufferSize();
 			}
+
+			format->BitsPerSample = 16;
 		}
 		else
 		{
 			*pcmData = data;
 			*pcmDataLength = dataSize;
+			
+			format->BitsPerSample = formatHeader.BitsPerSample;
 		}
 
 		format->SampleRate = formatHeader.SamplesPerSec;
 		format->NumChannels = formatHeader.Channels;
-		format->BitsPerSample = formatHeader.BitsPerSample;
-
+		
 		return true;
 	}
 }
