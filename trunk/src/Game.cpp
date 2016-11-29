@@ -58,7 +58,8 @@ namespace Nxna
 		OnExiting();
 
 		UnloadContent();
-		m_content->Unload(); // maybe the user already did this, but we'll make sure.
+		if (m_content != nullptr)
+			m_content->Unload(); // maybe the user already did this, but we'll make sure.
 
 		Graphics::SpriteBatch::Internal_Shutdown();
 
