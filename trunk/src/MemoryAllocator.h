@@ -22,6 +22,8 @@ namespace Nxna
 #else
 		static void ReleaseMemory() {}
 #endif
+
+		static void FreeMemory();
 	};
 }
 
