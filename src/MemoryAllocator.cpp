@@ -21,19 +21,14 @@ namespace Nxna
 		m_aquired = true;
 
 		m_memorySize = amount;
-		m_memory = new char[amount];
+		m_memory = alloc(amount);
 
 		return m_memory;
 #else
 		if (amount > m_memorySize)
 		{
-			if (m_memory != nullptr)
-			{
-				delete[] m_memory;
-			}
-
 			m_memorySize = amount * 2;
-			m_memory = new char[m_memorySize];
+			m_memory = (char*)realloc(m_memory, m_memorySize);
 		}
 
 		return m_memory;
@@ -47,7 +42,18 @@ namespace Nxna
 
 		m_aquired = false;
 
-		delete[] m_memory;
+		free(m_memory);
+		m_memory = nullptr;
 	}
 #endif
+
+	void NxnaTempMemoryPool::FreeMemory()
+	{
+		if (m_memory)
+		{
+			free(m_memory);
+			m_memory = nullptr;
+			m_memorySize = 0;
+		}
+	}
 }
