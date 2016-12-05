@@ -396,23 +396,28 @@ namespace Graphics
 		}
 	}
 
-	NxnaResult GraphicsDevice::CreateTexture2D(const TextureCreationDesc* desc, Texture2D* result)
+	NxnaResult GraphicsDevice::CreateTexture2D(const TextureCreationDesc* desc, const SubresourceData* initialData, Texture2D* result)
 	{
 		NXNA_VALIDATION_ASSERT(desc != nullptr, "desc cannot be null");
 		NXNA_VALIDATION_ASSERT(result != nullptr, "result cannot be null");
 
 		memset(result, 0, sizeof(Texture2D));
 
+		unsigned int arraySize = desc->ArraySize;
+		if (arraySize == 0) arraySize = 1;
+
 		switch (GetType())
 		{
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
 		{
+			static_assert(sizeof(SubresourceData) == sizeof(D3D11_SUBRESOURCE_DATA), "SubresourceData is unexpected size");
+
 			HRESULT r;
 			D3D11_TEXTURE2D_DESC dtdesc;
 			ZeroMemory(&dtdesc, sizeof(D3D11_TEXTURE2D_DESC));
 
-			dtdesc.ArraySize = 1;
+			dtdesc.ArraySize = arraySize;
 			dtdesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			dtdesc.Width = desc->Width;
 			dtdesc.Height = desc->Height;
@@ -428,20 +433,9 @@ namespace Graphics
 			dtdesc.CPUAccessFlags = 0;
 			dtdesc.MiscFlags = 0;
 
-			if (desc->InitialData != nullptr)
+			if (initialData != nullptr)
 			{
-				D3D11_SUBRESOURCE_DATA initData;
-				initData.pSysMem = desc->InitialData;
-				if (desc->Format == SurfaceFormat::Color)
-					initData.SysMemPitch = 4 * desc->Width;
-				else
-				{
-					int numBlocks = desc->Width / 4;
-					if (numBlocks == 0) numBlocks = 1;
-					initData.SysMemPitch = numBlocks * (desc->Format == SurfaceFormat::Dxt1 ? 8 : 16);
-				}
-
-				r = m_d3d11State.Device->CreateTexture2D(&dtdesc, &initData, &result->Direct3D11.m_texture);
+				r = m_d3d11State.Device->CreateTexture2D(&dtdesc, (D3D11_SUBRESOURCE_DATA*)initialData, &result->Direct3D11.m_texture);
 				if (FAILED(r) || result->Direct3D11.m_texture == nullptr)
 				{
 					NXNA_SET_ERROR_DETAILS(r, "CreateTexture2D() failed");
@@ -482,25 +476,58 @@ namespace Graphics
 			}
 
 			glGenTextures(1, &result->OpenGL.Handle);
-			glBindTexture(GL_TEXTURE_2D, result->OpenGL.Handle);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, mipLevels - 1);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-			if (glTexStorage2D)
+			if (arraySize > 1)
 			{
-				glTexStorage2D(GL_TEXTURE_2D, mipLevels, GL_RGBA8, desc->Width, desc->Height);
-				if (desc->InitialData)
-					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, desc->Width, desc->Height, GL_RGBA, GL_UNSIGNED_BYTE, desc->InitialData);
+				result->OpenGL.IsArray = true;
+
+				glBindTexture(GL_TEXTURE_2D_ARRAY, result->OpenGL.Handle);
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, mipLevels - 1);
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+				if (glTexStorage3D)
+				{
+					glTexStorage3D(GL_TEXTURE_2D_ARRAY, mipLevels, GL_RGBA8, desc->Width, desc->Height, arraySize);
+				}
+				else
+				{
+					glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, desc->Width, desc->Height, arraySize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+				}
+
+				if (initialData)
+				{
+					for (unsigned int i = 0; i < arraySize; i++)
+						glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, desc->Width, desc->Height, 1, GL_RGBA, GL_UNSIGNED_BYTE, initialData[i].Data);
+				}
+
+				if (desc->MipLevels == 0)
+					glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
 			}
 			else
 			{
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, desc->InitialData);
-			}
+				result->OpenGL.IsArray = false;
 
-			if (desc->MipLevels == 0)
-				glGenerateMipmap(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, result->OpenGL.Handle);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, mipLevels - 1);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+				if (glTexStorage2D)
+				{
+					glTexStorage2D(GL_TEXTURE_2D, mipLevels, GL_RGBA8, desc->Width, desc->Height);
+					if (initialData)
+						glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, desc->Width, desc->Height, GL_RGBA, GL_UNSIGNED_BYTE, initialData[0].Data);
+				}
+				else
+				{
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, initialData[0].Data);
+				}
+
+				if (desc->MipLevels == 0)
+					glGenerateMipmap(GL_TEXTURE_2D);
+			}
 		}
 			break;
 		}
@@ -521,7 +548,12 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 #endif
 		case GraphicsDeviceType::OpenGl41:
 			glActiveTexture(GL_TEXTURE0 + textureUnit);
-			glBindTexture(GL_TEXTURE_2D, texture->OpenGL.Handle);
+
+			if (texture->OpenGL.IsArray)
+				glBindTexture(GL_TEXTURE_2D_ARRAY, texture->OpenGL.Handle);
+			else
+				glBindTexture(GL_TEXTURE_2D, texture->OpenGL.Handle);
+
 			break;
 		}
 	}
@@ -1883,6 +1915,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 					m_oglState.CurrentVertexBuffers[startSlot + i].Buffer = vertexBuffers[i]->OpenGL.Buffer;
 					m_oglState.CurrentVertexBuffers[startSlot + i].Offset = offsets[i];
 					m_oglState.CurrentVertexBuffers[startSlot + i].Stride = stride[i];
+					m_oglState.CurrentVertexBufferActive[startSlot + i] = true;
 					m_oglState.CurrentVertexBufferDirty[startSlot + i] = true;
 					m_oglState.CurrentVertexBuffersDirty = true;
 				}
