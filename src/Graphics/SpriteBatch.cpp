@@ -302,16 +302,19 @@ namespace Graphics
 		elements[0].ElementFormat = InputElementFormat::Vector3;
 		elements[0].ElementUsage = InputElementUsage::Position;
 		elements[0].UsageIndex = 0;
+		elements[0].InputSlot = 0;
 
 		elements[1].Offset = sizeof(float) * 3;
 		elements[1].ElementFormat = InputElementFormat::Vector2;
 		elements[1].ElementUsage = InputElementUsage::TextureCoordinate;
 		elements[1].UsageIndex = 0;
+		elements[1].InputSlot = 0;
 
 		elements[2].Offset = sizeof(float) * 5;
 		elements[2].ElementFormat = InputElementFormat::Color;
 		elements[2].ElementUsage = InputElementUsage::Color;
 		elements[2].UsageIndex = 0;
+		elements[2].InputSlot = 0;
 
 		if (stride != nullptr)
 			*stride = sizeof(float) * 5 + sizeof(int);
@@ -335,7 +338,6 @@ namespace Graphics
 		case GraphicsDeviceType::OpenGl41:
 		{
 			const char* vertex =
-				"#version 410\n"
 				"uniform dataz { mat4 ModelViewProjection; };\n"
 				"layout(location = 0) in vec3 position;\n"
 				"layout(location = 1) in vec2 texCoords;\n"
@@ -353,8 +355,7 @@ namespace Graphics
 				"	o_color = color;\n"
 				"}\n";
 			const char* pixel =
-				"#version 410\n"
-				"uniform sampler2D Diffuse;\n"
+				"DECLARE_SAMPLER2D(0, Diffuse);"
 				"in VertexOutput\n"
 				"{\n"
 				"	vec2 o_diffuseCoords;\n"

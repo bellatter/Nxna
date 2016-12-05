@@ -359,12 +359,17 @@ namespace Nxna
 			unsigned int Height;
 			/// The number of mip levels. Set this to 0 to automatically generate mipmaps.
 			unsigned int MipLevels;
+			unsigned int ArraySize;
 			Usage TextureUsage;
 			SurfaceFormat Format;
 			unsigned int Flags;
+		};
 
-			void* InitialData;
-			unsigned int InitialDataByteCount;
+		struct SubresourceData
+		{
+			const void* Data;
+			unsigned int DataPitch;
+			unsigned int DataSlicePitch;
 		};
 
 		struct Texture2D
@@ -374,6 +379,7 @@ namespace Nxna
 				struct
 				{
 					unsigned int Handle;
+					bool IsArray;
 				} OpenGL;
 #ifdef NXNA_ENABLE_DIRECT3D11
 				struct
@@ -577,7 +583,7 @@ namespace Nxna
 			/// @param[in] desc A pointer to a TextureCreationDesc object describing the new texture
 			/// @param[out] result A pointer to a Texture2D object
 			/// @return NxnaResult::Success if successful, or an error otherwise
-			NxnaResult CreateTexture2D(const TextureCreationDesc* desc, Texture2D* result);
+			NxnaResult CreateTexture2D(const TextureCreationDesc* desc, const SubresourceData* initialData, Texture2D* result);
 			void BindTexture(Texture2D* texture, int textureUnit);
 
 			/// Destroys an existing texture object
