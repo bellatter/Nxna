@@ -27,7 +27,7 @@ namespace Windows
 		virtual void ShowWindow() override;
 		virtual void DestroyWindow() override;
 
-		virtual void SetScreenSize(const Graphics::PresentationParameters& pp) override;
+		virtual void SetScreenSize(Graphics::PresentationParameters pp) override;
 	};
 
 }

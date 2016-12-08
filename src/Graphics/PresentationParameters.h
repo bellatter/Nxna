@@ -8,6 +8,15 @@ namespace Nxna
 {
 namespace Graphics
 {
+	enum class WindowMode
+	{
+		Windowed,
+		FullscreenDontCare,
+
+		BorderlessFullscreen,
+		ExclusiveFullscreen,
+	};
+
 	class PresentationParameters
 	{
 	public:
@@ -16,7 +25,7 @@ namespace Graphics
 			BackBufferFormat = SurfaceFormat::Color;
 			BackBufferWidth = 0;
 			BackBufferHeight = 0;
-			IsFullScreen = false;
+			GameWindowMode = WindowMode::Windowed;
 			DepthStencilFormat = DepthFormat::Depth16;
 			MultiSampleCount = 0;
 		}
@@ -24,7 +33,7 @@ namespace Graphics
 		SurfaceFormat BackBufferFormat;
 		int BackBufferWidth;
 		int BackBufferHeight;
-		bool IsFullScreen;
+		WindowMode GameWindowMode;
 
 		DepthFormat DepthStencilFormat;
 		int MultiSampleCount;
