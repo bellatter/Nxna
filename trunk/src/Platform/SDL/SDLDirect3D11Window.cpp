@@ -49,7 +49,12 @@ namespace SDL
 		SDL_Quit();
 	}
 
-	void SDLDirect3D11Window::SetScreenSize(const Graphics::PresentationParameters& pp)
+	void SDLDirect3D11Window::EnableMouseCapture(bool enabled)
+	{
+		SDL_SetWindowGrab((SDL_Window*)m_window, enabled ? SDL_TRUE : SDL_FALSE);
+	}
+
+	void SDLDirect3D11Window::SetScreenSize(Graphics::PresentationParameters pp)
 	{
 		assert(m_device != nullptr);
 
@@ -60,20 +65,44 @@ namespace SDL
         
         int flags = SDL_WINDOW_SHOWN;
 
-		if (pp.IsFullScreen)
+		if (pp.GameWindowMode == Nxna::Graphics::WindowMode::ExclusiveFullscreen ||
+			pp.GameWindowMode == Nxna::Graphics::WindowMode::FullscreenDontCare)
 			flags |= SDL_WINDOW_FULLSCREEN;
-        
+		else if (pp.GameWindowMode == Nxna::Graphics::WindowMode::BorderlessFullscreen)
+		{
+			SDL_DisplayMode desktopMode;
+			if (SDL_GetDesktopDisplayMode(0, &desktopMode) == 0)
+			{
+				flags |= SDL_WINDOW_BORDERLESS;
+				PreferredBackBufferWidth(desktopMode.w);
+				PreferredBackBufferHeight(desktopMode.h);
+			}
+			else
+			{
+				flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+			}
+		}
 		m_window = SDL_CreateWindow("CNK", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
 			PreferredBackBufferWidth(), PreferredBackBufferHeight(), flags);
 
 		if (m_window == nullptr)
 			throw Exception(SDL_GetError());
+
+		if (pp.GameWindowMode == Nxna::Graphics::WindowMode::ExclusiveFullscreen ||
+			pp.GameWindowMode == Nxna::Graphics::WindowMode::BorderlessFullscreen ||
+			pp.GameWindowMode == Nxna::Graphics::WindowMode::FullscreenDontCare)
+		{
+			SDL_SetWindowGrab((SDL_Window*)m_window, SDL_TRUE);
+		}
         
 		int width, height;
         SDL_GetWindowSize((SDL_Window*)m_window, &width, &height);
         
         PreferredBackBufferWidth(width);
         PreferredBackBufferHeight(height);
+
+		pp.BackBufferWidth = width;
+		pp.BackBufferHeight = height;
        
 		SDL_SysWMinfo info;
 		SDL_VERSION(&info.version);

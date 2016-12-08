@@ -48,10 +48,12 @@ namespace Nxna
 		virtual void ShowWindow() = 0;
 		virtual void DestroyWindow() = 0;
 
+		virtual void EnableMouseCapture(bool enabled) {}
+
 		// TODO: don't bother with any of the other methods, like ApplyChanges().
 		// Those don't work properly yet. This is the only method currently guaranteed
 		// (more or less) to work, though you can only call it ONCE.
-		virtual void SetScreenSize(const Graphics::PresentationParameters& pp) = 0;
+		virtual void SetScreenSize(Graphics::PresentationParameters pp) = 0;
 	};
 }
 

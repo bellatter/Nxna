@@ -52,11 +52,14 @@ namespace Windows
 	{
 	}
 
-	void WindowsDirect3D11Window::SetScreenSize(const Graphics::PresentationParameters& pp)
+	void WindowsDirect3D11Window::SetScreenSize(Graphics::PresentationParameters pp)
 	{
 		assert(m_device != nullptr);
 
-		m_window = CreateGameWindow(pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
+		bool fullscreen = pp.GameWindowMode == Graphics::WindowMode::BorderlessFullscreen ||
+			pp.GameWindowMode == Graphics::WindowMode::ExclusiveFullscreen ||
+			pp.GameWindowMode == Graphics::WindowMode::FullscreenDontCare;
+		m_window = CreateGameWindow(pp.BackBufferWidth, pp.BackBufferHeight, fullscreen);
 
 		::ShowWindow((HWND)m_window, SW_SHOW);
 		SetForegroundWindow((HWND)m_window);

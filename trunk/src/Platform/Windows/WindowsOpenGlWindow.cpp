@@ -53,11 +53,14 @@ namespace Windows
 	{
 	}
 
-	void WindowsOpenGlWindow::SetScreenSize(const Graphics::PresentationParameters& pp)
+	void WindowsOpenGlWindow::SetScreenSize(Graphics::PresentationParameters pp)
 	{
 		assert(m_device != nullptr);
 
-		m_window = CreateGameWindow(pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
+		bool fullscreen = pp.GameWindowMode == Graphics::WindowMode::BorderlessFullscreen ||
+			pp.GameWindowMode == Graphics::WindowMode::ExclusiveFullscreen ||
+			pp.GameWindowMode == Graphics::WindowMode::FullscreenDontCare;
+		m_window = CreateGameWindow(pp.BackBufferWidth, pp.BackBufferHeight, fullscreen);
 
         PreferredBackBufferWidth(pp.BackBufferWidth);
         PreferredBackBufferHeight(pp.BackBufferHeight);

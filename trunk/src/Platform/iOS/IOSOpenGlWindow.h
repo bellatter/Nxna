@@ -29,7 +29,7 @@ namespace iOS
 		virtual void ShowWindow() override;
 		virtual void DestroyWindow() override;
 
-		virtual void SetScreenSize(const Nxna::Graphics::PresentationParameters& pp) override;
+		virtual void SetScreenSize(Nxna::Graphics::PresentationParameters pp) override;
 		
 		void ShowLeaderboard(const char* category, LeaderboardTimeScope scope);
 		void ShowAchievements();

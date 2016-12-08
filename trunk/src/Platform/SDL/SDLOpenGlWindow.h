@@ -26,7 +26,9 @@ namespace SDL
 		virtual void ShowWindow() override;
 		virtual void DestroyWindow() override;
 
-		virtual void SetScreenSize(const Nxna::Graphics::PresentationParameters& pp) override;
+		virtual void EnableMouseCapture(bool enabled) override;
+
+		virtual void SetScreenSize(Nxna::Graphics::PresentationParameters pp) override;
 	};
 }
 }

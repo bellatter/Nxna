@@ -42,7 +42,7 @@ namespace iOS
 	{
 	}
 
-	void IOSOpenGlWindow::SetScreenSize(const Nxna::Graphics::PresentationParameters& pp)
+	void IOSOpenGlWindow::SetScreenSize(Nxna::Graphics::PresentationParameters pp)
 	{
 		int width, height;
 		IOSGame_GetScreenSize(&width, &height);
@@ -52,7 +52,7 @@ namespace iOS
 		newParams.BackBufferHeight = height;
 		newParams.BackBufferFormat = Graphics::SurfaceFormat::Color;
 		newParams.DepthStencilFormat = Graphics::DepthFormat::Depth24Stencil8;
-		newParams.IsFullScreen = true;
+		newParams.GameWindowMode = Graphics::WindowMode::FullscreenDontCare;
 		newParams.MultiSampleCount = 0;
 		
 		static_cast<Nxna::Graphics::OpenGl::OpenGlDevice*>(m_device)->OnContextCreated();
