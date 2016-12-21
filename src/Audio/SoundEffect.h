@@ -93,7 +93,7 @@ namespace Audio
 	public:
 		virtual const char* GetTypeName() override { return typeid(SoundEffect).name(); }
 		virtual void* Read(Content::XnbReader* stream) override;
-		virtual void* ReadRaw(Content::MappedFileStream* stream) override;
+		virtual void* ReadRaw(Content::MemoryStream* stream, bool* keepStreamOpen) override;
 		virtual void Destroy(void* resource) override;
 
 		struct AudioFormat

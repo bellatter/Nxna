@@ -14,7 +14,7 @@ namespace Nxna
 {
 namespace Content
 {
-	class MappedFileStream;
+	class MemoryStream;
 	class XnbReader;
 	
 	class IContentReader
@@ -23,7 +23,7 @@ namespace Content
 		virtual ~IContentReader() { }
 		virtual const char* GetTypeName() = 0;
 		virtual void* Read(XnbReader* reader) = 0;
-		virtual void* ReadRaw(MappedFileStream* /* stream */) { return nullptr; }
+		virtual void* ReadRaw(MemoryStream* /* stream */, bool* keepStreamOpen) { return nullptr; }
 		virtual void Destroy(void* resource) = 0;
 	};
 
@@ -143,15 +143,47 @@ namespace Content
 				MappedFileStream* stream = loadRaw(name);
 				if (stream == nullptr) return nullptr;
 
-				T* resource = static_cast<T*>((*loader).second->ReadRaw(stream));
+				bool keepStreamOpen = false;
+				T* resource = static_cast<T*>((*loader).second->ReadRaw(stream, &keepStreamOpen));
 				m_resources.insert(ResourceMap::value_type(name, std::pair<IContentReader*, void*>((*loader).second, resource)));
 
-				delete stream;
+				if (keepStreamOpen == false)
+					delete stream;
 
 				return resource;
 			}
 
 			return nullptr;
+		}
+
+		template<typename T>
+		T* TryLoadRaw(const char* name, byte* data, unsigned int dataLength)
+		{
+			// is the resource already loaded?
+			ResourceMap::iterator r = m_resources.find(name);
+			if (r != m_resources.end())
+				return static_cast<T*>((*r).second.second);
+
+			// the resource hasn't been loaded yet, so load it
+			const char* typeName = typeid(T).name();
+			LoaderMap::iterator loader = m_loaders.find(typeName);
+
+			if (loader != m_loaders.end())
+			{
+				// load the raw resource data from a file
+				MemoryStream* stream = new MemoryStream(data, dataLength);
+
+				bool keepStreamOpen = false;
+				T* resource = static_cast<T*>((*loader).second->ReadRaw(stream, &keepStreamOpen));
+				m_resources.insert(ResourceMap::value_type(name, std::pair<IContentReader*, void*>((*loader).second, resource)));
+
+				if (keepStreamOpen == false)
+					delete stream;
+
+				return resource;
+			}
+
+			throw ContentException("Don't know how to load this content");
 		}
 
 		void Unload();

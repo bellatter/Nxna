@@ -324,7 +324,7 @@ namespace Audio
 		return SoundEffect::LoadFrom(stream->GetStream(), true);
 	}
 
-	void* SoundEffectLoader::ReadRaw(Content::MappedFileStream* stream)
+	void* SoundEffectLoader::ReadRaw(Content::MemoryStream* stream, bool* keepStreamOpen)
 	{
 		// read the raw WAV file, which has a RIFF header
 		// TODO: this only handles basic PCM encoded WAV files.
@@ -333,6 +333,8 @@ namespace Audio
 		auto chuckSize = stream->ReadInt32();
 		auto waveID = stream->ReadInt32();
 		auto riffType = stream->ReadInt32();
+
+		*keepStreamOpen = false;
 
 		return SoundEffect::LoadFrom(stream, false);
 	}
