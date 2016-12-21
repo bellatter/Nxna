@@ -6,6 +6,8 @@
 #include "../Audio/OggVorbis/OggVorbisDecoder.h"
 #endif
 
+#include <cstring>
+
 namespace Nxna
 {
 namespace Media
