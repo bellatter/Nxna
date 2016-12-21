@@ -34,7 +34,7 @@ namespace Media
 			decoder->Rewind();
 		else
 		{		
-			Content::FileStream* file = new Content::FileStream(song->m_path.c_str());
+			Content::FileStream* file = new Content::FileStream(song->m_path);
 			if (file->IsOpen() == false)
 			{
 				delete file;

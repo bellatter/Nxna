@@ -9,7 +9,7 @@ namespace Nxna
 {
 namespace Audio
 {
-	OggVorbisDecoder::OggVorbisDecoder(Content::FileStream* file, bool loop)
+	OggVorbisDecoder::OggVorbisDecoder(Content::Stream* file, bool loop)
 	{
 		m_file = file;
 		m_fileStreamStartOffset = file->Position();

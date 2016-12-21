@@ -21,15 +21,15 @@ namespace Media
 		friend class OggMediaPlayer;
 		friend class IOSMediaPlayer;
 
-		std::string m_name;
-		std::string m_path;
+		char* m_name;
+		char* m_path;
 		void* m_handle;
 
-		Song(const char* name, const char* path);
+		Song(const char* name);
 		~Song();
 
 	public:
-		const char* GetName() { return m_name.c_str(); }
+		const char* GetName() { return m_name; }
 	};
 
 	class SongLoader : public Content::IContentReader
@@ -37,6 +37,8 @@ namespace Media
 	public:
 		virtual const char* GetTypeName() override { return typeid(Song).name(); }
 		virtual void* Read(Content::XnbReader* stream) override;
+		virtual void* ReadRaw(Content::MemoryStream* stream, bool* keepStreamOpen) override;
+		Song* Create(const char* name, Content::Stream* stream);
 		virtual void Destroy(void* resource) override;
 	};
 }

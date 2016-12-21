@@ -17,7 +17,7 @@ namespace Nxna
 {
 namespace Content
 {
-	class FileStream;
+	class Stream;
 }
 
 namespace Audio
@@ -27,13 +27,13 @@ namespace Audio
 		int m_numChannels;
 		int m_sampleRate;
 		int m_fileStreamStartOffset;
-		Content::FileStream* m_file;
+		Content::Stream* m_file;
 		OggVorbis_File m_vorbisFile;
 		bool m_loop;
 
 	public:
 
-		OggVorbisDecoder(Content::FileStream* file, bool loop);
+		OggVorbisDecoder(Content::Stream* file, bool loop);
 		~OggVorbisDecoder();
 
 		int Read(byte* buffer, int bufferSize);
