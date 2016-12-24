@@ -1,0 +1,152 @@
+<effect>
+	<techniques>
+		<technique name="BasicEffect" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+			</attributes>
+		</technique>
+		<technique name="BasicEffectTexture" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoord"
+					type="float"
+					numElements="2"
+					semantic="texcoord" />
+			</attributes>
+		</technique>
+		<technique name="BasicEffectColor" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="color"
+					type="float"
+					numElements="4"
+					semantic="color" />
+			</attributes>
+		</technique>
+		<technique name="BasicEffectColorTexture" hidden="true">
+			<attributes>
+				<attribute name="position"
+					type="float"
+					numElements="4"
+					semantic="position" />
+				<attribute name="texCoord"
+					type="float"
+					numElements="2"
+					semantic="texcoord" />
+				<attribute name="color"
+					type="float"
+					numElements="4"
+					semantic="color" />
+			</attributes>
+		</technique>
+		<technique name="default" />
+	</techniques>
+	<cbuffers>
+		<cbuffer>
+			<constant name="DiffuseColor"
+				type="float"
+				numElements="4" />
+			<constant name="ModelViewProjection"
+				type="float"
+				numElements="16" />
+		</cbuffer>
+	</cbuffers>
+	<textures>
+		<texture name="Diffuse" />
+	</textures>
+	<shaders>
+		<shader name="BasicEffect_hlsl" sourceFile="../Direct3D11/ShaderSource/BasicEffect.fx" />
+		<shader name="BasicEffect_vs_glsl">
+<![CDATA[
+uniform HIGHP mat4 ModelViewProjection;
+
+in vec4 position;
+#if defined BasicEffectTexture || defined BasicEffectColorTexture
+in vec2 texCoord;
+out vec2 o_diffuseCoords;
+#endif
+#if defined BasicEffectColor || defined BasicEffectColorTexture
+in vec4 color;
+out vec4 o_color;
+#endif
+		
+void main()
+{
+	gl_Position = ModelViewProjection * position;
+#if defined BasicEffectTexture || defined BasicEffectColorTexture
+	o_diffuseCoords = texCoord;
+#endif
+#if defined BasicEffectColor || defined BasicEffectColorTexture
+	o_color = color;
+#endif
+}
+]]>
+		</shader>
+		<shader name="BasicEffect_ps_glsl">
+<![CDATA[
+#if defined BasicEffectTexture || defined BasicEffectColorTexture
+uniform sampler2D Diffuse;
+in HIGHP vec2 o_diffuseCoords;
+#endif
+
+uniform HIGHP vec4 DiffuseColor;
+
+#if defined BasicEffectColor || defined BasicEffectColorTexture
+in HIGHP vec4 o_color;
+#endif
+
+#if __VERSION__ >= 130
+out HIGHP vec4 outputColor;
+#endif
+void main()
+{
+	HIGHP vec4 finalColor;
+#if defined BasicEffectTexture || defined BasicEffectColorTexture
+
+#if __VERSION__ < 130
+	finalColor = texture2D(Diffuse, o_diffuseCoords);
+#else
+	finalColor = texture(Diffuse, o_diffuseCoords);
+#endif
+#if defined BasicEffectColor || defined BasicEffectColorTexture
+	finalColor *= o_color;
+#endif
+#elif defined BasicEffectColor || defined BasicEffectColorTexture
+	finalColor = o_color;
+#else
+	finalColor = vec4(1.0, 1.0, 1.0, 1.0);
+#endif
+	
+#if __VERSION__ < 130
+	gl_FragColor = finalColor * DiffuseColor;
+#else
+	outputColor = finalColor * DiffuseColor;
+#endif
+
+}
+]]>
+		</shader>
+	</shaders>
+	<shaderMap>
+		<technique name="BasicEffect" profile="glsl_130" vertexShader="BasicEffect_vs_glsl" pixelShader="BasicEffect_ps_glsl"/>
+		<technique name="BasicEffect" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffect_hlsl" vertexShaderEntryPoint="BasicEffectVS" pixelShader="BasicEffect_hlsl" pixelShaderEntryPoint="BasicEffectPS" />
+		
+		<technique name="BasicEffectTexture" profile="glsl_130" vertexShader="BasicEffect_vs_glsl" pixelShader="BasicEffect_ps_glsl"/>
+		<technique name="BasicEffectTexture" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffect_hlsl" vertexShaderEntryPoint="BasicEffectTextureVS" pixelShader="BasicEffect_hlsl" pixelShaderEntryPoint="BasicEffectTexturePS"/>
+		
+		<technique name="BasicEffectColor" profile="glsl_130" vertexShader="BasicEffect_vs_glsl" pixelShader="BasicEffect_ps_glsl"/>
+		<technique name="BasicEffectColor" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffect_hlsl" vertexShaderEntryPoint="BasicEffectColorVS" pixelShader="BasicEffect_hlsl" pixelShaderEntryPoint="BasicEffectColorPS" />
+		
+		<technique name="BasicEffectColorTexture" profile="glsl_130" vertexShader="BasicEffect_vs_glsl" pixelShader="BasicEffect_ps_glsl"/>
+		<technique name="BasicEffectColorTexture" profile="hlsl_4_0_level_9_1" vertexShader="BasicEffect_hlsl" vertexShaderEntryPoint="BasicEffectColorTextureVS" pixelShader="BasicEffect_hlsl" pixelShaderEntryPoint="BasicEffectColorTexturePS" />
+	</shaderMap>
+</effect>
