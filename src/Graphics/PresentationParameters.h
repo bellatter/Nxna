@@ -13,6 +13,7 @@ namespace Graphics
 		Windowed,
 		FullscreenDontCare,
 
+		BorderlessWindowed,
 		BorderlessFullscreen,
 		ExclusiveFullscreen,
 	};
