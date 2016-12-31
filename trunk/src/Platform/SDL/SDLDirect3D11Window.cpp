@@ -82,6 +82,11 @@ namespace SDL
 				flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 			}
 		}
+		else if (pp.GameWindowMode == Nxna::Graphics::WindowMode::BorderlessWindowed)
+		{
+			flags |= SDL_WINDOW_BORDERLESS;
+		}
+
 		m_window = SDL_CreateWindow("CNK", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
 			PreferredBackBufferWidth(), PreferredBackBufferHeight(), flags);
 
@@ -90,7 +95,8 @@ namespace SDL
 
 		if (pp.GameWindowMode == Nxna::Graphics::WindowMode::ExclusiveFullscreen ||
 			pp.GameWindowMode == Nxna::Graphics::WindowMode::BorderlessFullscreen ||
-			pp.GameWindowMode == Nxna::Graphics::WindowMode::FullscreenDontCare)
+			pp.GameWindowMode == Nxna::Graphics::WindowMode::FullscreenDontCare ||
+			pp.GameWindowMode == Nxna::Graphics::WindowMode::BorderlessWindowed)
 		{
 			SDL_SetWindowGrab((SDL_Window*)m_window, SDL_TRUE);
 		}
