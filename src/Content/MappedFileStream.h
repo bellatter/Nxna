@@ -22,7 +22,7 @@ namespace Content
 		virtual ~MappedFileStream();
 
 		virtual bool IsOpen();
-		void Load(const char* path);
+		static bool Load(const char* path, MappedFileStream* result);
 	};
 }
 }
