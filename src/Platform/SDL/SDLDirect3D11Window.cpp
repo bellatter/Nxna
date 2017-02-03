@@ -67,7 +67,12 @@ namespace SDL
 
 		if (pp.GameWindowMode == Nxna::Graphics::WindowMode::ExclusiveFullscreen ||
 			pp.GameWindowMode == Nxna::Graphics::WindowMode::FullscreenDontCare)
-			flags |= SDL_WINDOW_FULLSCREEN;
+		{
+			if (pp.BackBufferWidth == 0 || pp.BackBufferHeight == 0)
+				flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+			else
+				flags |= SDL_WINDOW_FULLSCREEN;
+		}
 		else if (pp.GameWindowMode == Nxna::Graphics::WindowMode::BorderlessFullscreen)
 		{
 			SDL_DisplayMode desktopMode;
