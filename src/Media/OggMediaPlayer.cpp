@@ -1,7 +1,8 @@
 #include "OggMediaPlayer.h"
 #include "Song.h"
-#include "../Content/FileStream.h"
+#include "../Content/MappedFileStream.h"
 #include "../Audio/OggVorbis/OggVorbisDecoder.h"
+#include <cassert>
 
 #ifdef NXNA_AUDIOENGINE_OPENAL
 #ifdef __APPLE__
@@ -33,8 +34,8 @@ namespace Media
 		if (decoder != nullptr)
 			decoder->Rewind();
 		else
-		{		
-			Content::FileStream* file = new Content::FileStream(song->m_path);
+		{	
+			Content::MappedFileStream* file = new Content::MappedFileStream(song->m_path);
 			if (file->IsOpen() == false)
 			{
 				delete file;

@@ -38,7 +38,7 @@ namespace Media
 		virtual const char* GetTypeName() override { return typeid(Song).name(); }
 		virtual void* Read(Content::XnbReader* stream) override;
 		virtual void* ReadRaw(Content::MemoryStream* stream, bool* keepStreamOpen) override;
-		Song* Create(const char* name, Content::Stream* stream);
+		Song* Create(const char* name, Content::MemoryStream* stream);
 		virtual void Destroy(void* resource) override;
 	};
 }

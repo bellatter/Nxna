@@ -542,5 +542,6 @@
       <Filter>Content</Filter>
     </ClCompile>
     <ClCompile Include="NxnaUtils.cpp" />
+    <ClCompile Include="Audio\OggVorbis\VorbisImpl.c" />
   </ItemGroup>
 </Project>

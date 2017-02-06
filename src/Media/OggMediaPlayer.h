@@ -1,6 +1,8 @@
 #ifndef NXNA_MEDIA_OGGMEDIAPLAYER_H
 #define NXNA_MEDIA_OGGMEDIAPLAYER_H
 
+#include "MediaPlayer.h"
+
 namespace Nxna
 {
 namespace Media
