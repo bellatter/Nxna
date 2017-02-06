@@ -66,7 +66,7 @@ namespace Media
 		return Create("unknown", stream);
 	}
 
-	Song* SongLoader::Create(const char* name, Content::Stream* stream)
+	Song* SongLoader::Create(const char* name, Content::MemoryStream* stream)
 	{
 		Song* result = new Song(name);
 

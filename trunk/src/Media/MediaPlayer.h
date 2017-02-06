@@ -1,6 +1,8 @@
 #ifndef NXNA_MEDIA_MEDIAPLAYER_H
 #define NXNA_MEDIA_MEDIAPLAYER_H
 
+#include "../NxnaConfig.h"
+
 namespace Nxna
 {
 namespace Media

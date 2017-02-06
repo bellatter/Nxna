@@ -10,14 +10,17 @@
 #else
 #include <cstdint>
 #endif
-#include "vorbis/vorbisfile.h"
+
+#define STB_VORBIS_HEADER_ONLY
+#include "VorbisImpl.c"
+
 #include "../../NxnaConfig.h"
 
 namespace Nxna
 {
 namespace Content
 {
-	class Stream;
+	class MemoryStream;
 }
 
 namespace Audio
@@ -27,13 +30,13 @@ namespace Audio
 		int m_numChannels;
 		int m_sampleRate;
 		int m_fileStreamStartOffset;
-		Content::Stream* m_file;
-		OggVorbis_File m_vorbisFile;
+		stb_vorbis* m_vorbisFile;
+		Content::MemoryStream* m_file;
 		bool m_loop;
 
 	public:
 
-		OggVorbisDecoder(Content::Stream* file, bool loop);
+		OggVorbisDecoder(Content::MemoryStream* file, bool loop);
 		~OggVorbisDecoder();
 
 		int Read(byte* buffer, int bufferSize);
@@ -41,11 +44,6 @@ namespace Audio
 
 		int NumChannels() { return m_numChannels; }
 		int SampleRate() { return m_sampleRate; }
-
-	private:
-		static size_t read_callback(void* ptr, size_t size, size_t nmemb, void* datasource);
-		static int seek_callback(void* datasource, int64_t offset, int whence);
-		static long tell_callback(void* datasource);
 	};
 }
 }
