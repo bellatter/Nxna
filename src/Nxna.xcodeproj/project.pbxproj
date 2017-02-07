@@ -13,6 +13,8 @@
 		A24321621AF165E40062820A /* MemoryAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = A243215F1AF165E40062820A /* MemoryAllocator.h */; };
 		A24321631AF165E40062820A /* MemoryAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = A243215F1AF165E40062820A /* MemoryAllocator.h */; };
 		A24A8B9C1DD2677300366D20 /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = A24A8B9A1DD2673400366D20 /* glew.c */; };
+		A281EDFA1E4A0D36009A8301 /* VorbisImpl.c in Sources */ = {isa = PBXBuildFile; fileRef = A281EDF91E4A0D36009A8301 /* VorbisImpl.c */; };
+		A281EDFB1E4A0DB5009A8301 /* VorbisImpl.c in Sources */ = {isa = PBXBuildFile; fileRef = A281EDF91E4A0D36009A8301 /* VorbisImpl.c */; };
 		A28808E61512E54E005D983A /* Color.h in Headers */ = {isa = PBXBuildFile; fileRef = A28808D11512E54E005D983A /* Color.h */; };
 		A28808E71512E54E005D983A /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28808D21512E54E005D983A /* Game.cpp */; };
 		A28808E81512E54E005D983A /* Game.h in Headers */ = {isa = PBXBuildFile; fileRef = A28808D31512E54E005D983A /* Game.h */; };
@@ -258,8 +260,6 @@
 		A2FBA21518CBD6420019B993 /* GlRenderTarget2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FBA21218CBD6420019B993 /* GlRenderTarget2D.cpp */; };
 		A2FBA21618CBD6420019B993 /* GlRenderTarget2D.h in Headers */ = {isa = PBXBuildFile; fileRef = A2FBA21318CBD6420019B993 /* GlRenderTarget2D.h */; };
 		A2FBA21718CBD6420019B993 /* GlRenderTarget2D.h in Headers */ = {isa = PBXBuildFile; fileRef = A2FBA21318CBD6420019B993 /* GlRenderTarget2D.h */; };
-		A2FC4B6A185965AF00258812 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FC4B69185965AF00258812 /* Vorbis.framework */; };
-		A2FC4B6C185965D300258812 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FC4B6B185965D300258812 /* Ogg.framework */; };
 		A2FC4B6E1859661400258812 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FC4B6D1859661400258812 /* SDL2.framework */; };
 		A2FC4B9D185973CC00258812 /* GraphicsAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FC4B9A185973CC00258812 /* GraphicsAdapter.cpp */; };
 		A2FC4B9E185973CC00258812 /* GraphicsAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2FC4B9A185973CC00258812 /* GraphicsAdapter.cpp */; };
@@ -275,6 +275,7 @@
 		A243215E1AF165E40062820A /* MemoryAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryAllocator.cpp; sourceTree = SOURCE_ROOT; };
 		A243215F1AF165E40062820A /* MemoryAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryAllocator.h; sourceTree = SOURCE_ROOT; };
 		A24A8B9A1DD2673400366D20 /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glew.c; path = Graphics/OpenGL/glew/glew.c; sourceTree = SOURCE_ROOT; };
+		A281EDF91E4A0D36009A8301 /* VorbisImpl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = VorbisImpl.c; path = Audio/OggVorbis/VorbisImpl.c; sourceTree = SOURCE_ROOT; };
 		A28808D11512E54E005D983A /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = SOURCE_ROOT; };
 		A28808D21512E54E005D983A /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = SOURCE_ROOT; };
 		A28808D31512E54E005D983A /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = SOURCE_ROOT; };
@@ -439,8 +440,6 @@
 		A2FBA20518CBD6090019B993 /* SpriteEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SpriteEffect.cpp; path = Graphics/SpriteEffect.cpp; sourceTree = SOURCE_ROOT; };
 		A2FBA21218CBD6420019B993 /* GlRenderTarget2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GlRenderTarget2D.cpp; path = Graphics/OpenGL/GlRenderTarget2D.cpp; sourceTree = SOURCE_ROOT; };
 		A2FBA21318CBD6420019B993 /* GlRenderTarget2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlRenderTarget2D.h; path = Graphics/OpenGL/GlRenderTarget2D.h; sourceTree = SOURCE_ROOT; };
-		A2FC4B69185965AF00258812 /* Vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Vorbis.framework; sourceTree = "<group>"; };
-		A2FC4B6B185965D300258812 /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ogg.framework; sourceTree = "<group>"; };
 		A2FC4B6D1859661400258812 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDL2.framework; sourceTree = "<group>"; };
 		A2FC4B9A185973CC00258812 /* GraphicsAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicsAdapter.cpp; path = Graphics/GraphicsAdapter.cpp; sourceTree = SOURCE_ROOT; };
 		A2FC4B9B185973CC00258812 /* IndexBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexBuffer.cpp; path = Graphics/IndexBuffer.cpp; sourceTree = SOURCE_ROOT; };
@@ -461,9 +460,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A2FC4B6C185965D300258812 /* Ogg.framework in Frameworks */,
 				A2963BBD16ADF3D000817CFC /* Foundation.framework in Frameworks */,
-				A2FC4B6A185965AF00258812 /* Vorbis.framework in Frameworks */,
 				A2FC4B6E1859661400258812 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -475,8 +472,6 @@
 			isa = PBXGroup;
 			children = (
 				A2FC4B6D1859661400258812 /* SDL2.framework */,
-				A2FC4B6B185965D300258812 /* Ogg.framework */,
-				A2FC4B69185965AF00258812 /* Vorbis.framework */,
 				A2963CB916BE0A2200817CFC /* AVFoundation.framework */,
 				A2963BBC16ADF3D000817CFC /* Foundation.framework */,
 				A228BBF51505B54200045911 /* Nxna */,
@@ -746,6 +741,7 @@
 		A2963C6216AE04F100817CFC /* OggVorbis */ = {
 			isa = PBXGroup;
 			children = (
+				A281EDF91E4A0D36009A8301 /* VorbisImpl.c */,
 				A2963C6316AE050F00817CFC /* OggVorbisDecoder.cpp */,
 				A2963C6416AE050F00817CFC /* OggVorbisDecoder.h */,
 			);
@@ -997,6 +993,7 @@
 				A28808E71512E54E005D983A /* Game.cpp in Sources */,
 				A28808E91512E54E005D983A /* IGraphicsDeviceManager.cpp in Sources */,
 				A28808EB1512E54E005D983A /* MathHelper.cpp in Sources */,
+				A281EDFA1E4A0D36009A8301 /* VorbisImpl.c in Sources */,
 				A2FC4B9D185973CC00258812 /* GraphicsAdapter.cpp in Sources */,
 				A28808ED1512E54E005D983A /* Matrix.cpp in Sources */,
 				A28808F21512E54E005D983A /* Quaternion.cpp in Sources */,
@@ -1076,6 +1073,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A281EDFB1E4A0DB5009A8301 /* VorbisImpl.c in Sources */,
 				A24A8B9C1DD2677300366D20 /* glew.c in Sources */,
 				A2963B4D16ADF35F00817CFC /* MediaPlayer.cpp in Sources */,
 				A2963B4F16ADF35F00817CFC /* Song.cpp in Sources */,
@@ -1273,6 +1271,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -1295,6 +1294,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
