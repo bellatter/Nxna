@@ -12,7 +12,7 @@ namespace Media
 	{
 		if (song->m_handle == nullptr)
 		{
-			NSString* urlStr = [[NSString alloc] initWithUTF8String:song->m_path.c_str()];
+			NSString* urlStr = [[NSString alloc] initWithUTF8String:song->m_path];
 			NSURL* url = [NSURL fileURLWithPath:urlStr];
 	
 			NSError* error;
