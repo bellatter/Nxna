@@ -70,10 +70,11 @@ int main(int argc, char** argv)
 	Nxna::Graphics::TextureCreationDesc tDesc = {};
 	tDesc.Width = 1;
 	tDesc.Height = 1;
-	tDesc.InitialData = pixels;
-	tDesc.InitialDataByteCount = 4;
+	Nxna::Graphics::SubresourceData tdata = {};
+	tdata.Data = pixels;
+	tdata.DataPitch = 4;
 	Nxna::Graphics::Texture2D defaultTexture;
-	if (device->CreateTexture2D(&tDesc, &defaultTexture) != Nxna::NxnaResult::Success)
+	if (device->CreateTexture2D(&tDesc, &tdata, &defaultTexture) != Nxna::NxnaResult::Success)
 	{
 		printf("Unable to create default texture\n");
 		return -1;
@@ -239,7 +240,8 @@ int main(int argc, char** argv)
 	rtTextureDesc.Height = 128;
 	rtTextureDesc.Format = Nxna::Graphics::SurfaceFormat::Color;
 	rtTextureDesc.Flags = (unsigned int)Nxna::Graphics::TextureCreationFlags::AllowRenderTargetColorAttachment;
-	if (device->CreateTexture2D(&rtTextureDesc, &rtTexture) != Nxna::NxnaResult::Success)
+	rtTextureDesc.ArraySize = 1;
+	if (device->CreateTexture2D(&rtTextureDesc, nullptr, &rtTexture) != Nxna::NxnaResult::Success)
 	{
 		printf("Unable to create RenderTarget texture\n");
 		return -1;
