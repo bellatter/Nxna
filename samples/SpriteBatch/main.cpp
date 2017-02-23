@@ -244,18 +244,19 @@ Nxna::NxnaResult createTexture(Nxna::Graphics::GraphicsDevice* device, Nxna::Gra
 	Nxna::Graphics::TextureCreationDesc desc = {};
 	desc.Width = width;
 	desc.Height = height;
-	desc.InitialData = pixels;
-	desc.InitialDataByteCount = width * height * 3;
+	desc.ArraySize = 1;
 	desc.Format = Nxna::Graphics::SurfaceFormat::Color;
 	desc.MipLevels = 1;
-	return device->CreateTexture2D(&desc, texture);
+	Nxna::Graphics::SubresourceData tdata = {};
+	tdata.Data = pixels;
+	tdata.DataPitch = width * 4;
+	return device->CreateTexture2D(&desc, &tdata, texture);
 }
 
 int main(int argc, char** argv)
 {
 	const int screenWidth = 640;
 	const int screenHeight = 480;
-	
 
 	// begin initialization
 	Nxna::Graphics::GraphicsDeviceDesc params;
