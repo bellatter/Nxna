@@ -10,6 +10,9 @@ namespace Media
 
 	bool IOSMediaPlayer::Play(Song* song)
 	{
+		if (song == nullptr)
+			return false;
+		
 		if (song->m_handle == nullptr)
 		{
 			NSString* urlStr = [[NSString alloc] initWithUTF8String:song->m_path];
