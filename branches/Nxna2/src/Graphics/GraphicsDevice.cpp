@@ -2977,7 +2977,7 @@ namespace Graphics
 					{
 						unsigned int currentBuffer = 0;
 
-						for (int i = 0; i < m_oglState.CurrentNumInputElements; i++)
+						for (unsigned int i = 0; i < m_oglState.CurrentNumInputElements; i++)
 						{
 							int sizeOfElement = 0;
 							GLenum type;
