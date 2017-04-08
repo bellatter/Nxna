@@ -643,11 +643,27 @@ namespace Graphics
 			unsigned int pipeline;
 			glGenProgramPipelines(1, &pipeline);
 			if (desc->VertexShader != nullptr)
+			{
 				glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, desc->VertexShader->OpenGL.Handle);
+				result->OpenGL.VertexShader = desc->VertexShader->OpenGL.Handle;
+			}
+			else
+			{
+				result->OpenGL.VertexShader = 0;
+			}
+
 			if (desc->PixelShader != nullptr)
+			{
 				glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, desc->PixelShader->OpenGL.Handle);
+				result->OpenGL.FragmentShader = desc->PixelShader->OpenGL.Handle;
+			}
+			else
+			{
+				result->OpenGL.FragmentShader = 0;
+			}
 
 			result->OpenGL.Pipeline = pipeline;
+			
 
 			int numElements = desc->NumElements;
 			if (numElements > 16) numElements = 16;
@@ -2989,6 +3005,12 @@ namespace Graphics
 								sizeOfElement = 4;
 								type = GL_UNSIGNED_BYTE;
 								normalize = GL_TRUE;
+							}
+							else if (format == InputElementFormat::Byte4)
+							{
+								sizeOfElement = 4;
+								type = GL_UNSIGNED_BYTE;
+								normalize = GL_FALSE;
 							}
 							else
 							{

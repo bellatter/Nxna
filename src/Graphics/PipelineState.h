@@ -143,7 +143,10 @@ namespace Graphics
 		Vector4,
 
 		/// Four bytes of color info, packed as RGBA
-		Color
+		Color,
+
+		/// Four bytes
+		Byte4,
 	};
 
 	enum class InputElementUsage
@@ -203,6 +206,8 @@ namespace Graphics
 			struct
 			{
 				unsigned int Pipeline;
+				unsigned int VertexShader;
+				unsigned int FragmentShader;
 				InputElement VertexElements[16];
 				int NumElements;
 			} OpenGL;
