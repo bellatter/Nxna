@@ -102,6 +102,8 @@ namespace Graphics
 			result->m_oglState.CurrentVertexBuffersDirty = true;
 			result->m_oglState.CurrentIndexBufferDirty = true;
 			result->m_oglState.CurrentInputElementsDirty = true;
+
+			result->m_oglState.CurrentIndexBuffer = 0;
 		}
 			break;
 #ifdef NXNA_ENABLE_DIRECT3D11
