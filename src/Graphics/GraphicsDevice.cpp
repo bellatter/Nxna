@@ -52,6 +52,8 @@ namespace Graphics
 		{
 		case GraphicsDeviceType::OpenGl41:
 		{
+			NXNA_MEMSET(&result->m_oglState, 0, sizeof(OpenGlDeviceState));
+
 			OpenGL::LoadGLExtensions(4, 1);
 
 			int major = 0, minor = 0;

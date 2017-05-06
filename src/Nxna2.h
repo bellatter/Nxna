@@ -179,6 +179,10 @@ namespace Nxna
 
 #ifdef NXNA2_IMPLEMENTATION
 
+#ifndef NXNA_MEMSET
+#define NXNA_MEMSET memset
+#endif
+
 #ifndef _WIN32
 #ifdef NXNA_ENABLE_DIRECT3D11
 #error NXNA_ENABLE_DIRECT3D11 is not valid on any platform other than Windows
