@@ -158,7 +158,7 @@ namespace Nxna
 #endif
 
 #ifdef NXNA_ENABLE_INPUT
-#include "Input/Mouse.h"
+#include "Input/InputState.h"
 #endif
 
 #ifdef NXNA_ENABLE_SPRITEBATCH
@@ -208,9 +208,6 @@ namespace Nxna
 #include "Graphics/PipelineState.cpp"
 #endif
 
-#ifdef NXNA_ENABLE_INPUT
-#include "Input/Mouse.cpp"
-#endif
 
 #endif // NXNA_ERROR_STOP_COMPILATION
 
