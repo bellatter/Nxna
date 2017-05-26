@@ -63,6 +63,18 @@ namespace Input
 			injectEvent(&state->KeyboardKeysData[button], isKeyDown);
 		}
 
+		static bool IsKeyDown(InputState* state, Key key)
+		{
+			return (state->KeyboardKeysData[(int)key] & 0x80) == 0x80;
+		}
+
+		static bool IsMouseButtonDown(InputState* state, int button)
+		{
+			if (button < 0 || button >= 5) return false;
+
+			return (state->MouseButtonData[button] & 0x80) == 0x80;
+		}
+
 	private:
 		static inline void injectEvent(unsigned char* data, bool newState)
 		{

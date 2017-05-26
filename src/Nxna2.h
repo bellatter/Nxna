@@ -108,6 +108,22 @@ Generally you should treat those objects as completely opaque and not mess aroun
 
 
 #ifdef NXNA_ENABLE_MATH
+
+namespace Nxna
+{
+	const float Pi = 3.14159265358979323846f;
+
+	class MathHelper
+	{
+	public:
+		static inline float Clamp(float value, float min, float max)
+		{
+			return value < min ? min : (value > max ? max : value);
+		}
+	};
+}
+
+
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"

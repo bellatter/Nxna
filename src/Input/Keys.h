@@ -1,7 +1,9 @@
-#ifndef NXNA_KEYS_H
-#define NXNA_KEYS_H
+#ifndef NXNA_INPUT_KEYS_H
+#define NXNA_INPUT_KEYS_H
 
 namespace Nxna
+{
+namespace Input
 {
 	enum class Key
 	{
@@ -103,5 +105,6 @@ namespace Nxna
 		OemBackslash = 226
 	};
 }
+}
 
-#endif // NXNA_KEYS_H
+#endif // NXNA_INPUT_KEYS_H
