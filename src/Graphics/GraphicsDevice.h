@@ -72,7 +72,10 @@ namespace Nxna
 			TriangleList,
 
 			/// A triangle strip
-			TriangleStrip
+			TriangleStrip,
+
+			/// A list of lines
+			LineList
 		};
 
 		enum class IndexElementSize
@@ -710,8 +713,8 @@ namespace Nxna
 			/// @param[in] buffer A constant buffer
 			void UnmapBuffer(ConstantBuffer buffer);
 
-			void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount);
-			void DrawPrimitives(PrimitiveType primitiveType, int startVertex, int primitiveCount);
+			void DrawIndexed(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int indexCount);
+			void Draw(PrimitiveType primitiveType, int startVertex, int vertexCount);
 
 			void ClearColor(Color color);
 			void ClearColor(float r, float g, float b, float a);

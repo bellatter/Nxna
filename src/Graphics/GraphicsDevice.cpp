@@ -2752,7 +2752,7 @@ namespace Graphics
 		}
 	}
 
-	void GraphicsDevice::DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount)
+	void GraphicsDevice::DrawIndexed(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int indexCount)
 	{
 		applyDirtyStates();
 
@@ -2761,15 +2761,12 @@ namespace Graphics
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
 		{
-			int indexCount;
 			if (primitiveType == PrimitiveType::TriangleList)
 			{
-				indexCount = primitiveCount * 3;
 				m_d3d11State.Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			}
 			else if (primitiveType == PrimitiveType::TriangleStrip)
 			{
-				indexCount = primitiveCount * 3; // FIXME
 				m_d3d11State.Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 			}
 
@@ -2796,12 +2793,12 @@ namespace Graphics
 			else
 				glPrimitiveType = GL_TRIANGLES;
 
-			glDrawElementsBaseVertex(glPrimitiveType, primitiveCount * 3, size, (void*)(intptr_t)(startIndex * (int)m_indices.ElementSize), baseVertex);
+			glDrawElementsBaseVertex(glPrimitiveType, indexCount, size, (void*)(intptr_t)(startIndex * (int)m_indices.ElementSize), baseVertex);
 		}
 		}
 	}
 
-	void GraphicsDevice::DrawPrimitives(PrimitiveType primitiveType, int startIndex, int primitiveCount)
+	void GraphicsDevice::Draw(PrimitiveType primitiveType, int startIndex, int indexCount)
 	{
 		applyDirtyStates();
 
@@ -2810,16 +2807,17 @@ namespace Graphics
 #ifdef NXNA_ENABLE_DIRECT3D11
 		case GraphicsDeviceType::Direct3D11:
 		{
-			int indexCount;
 			if (primitiveType == PrimitiveType::TriangleList)
 			{
-				indexCount = primitiveCount * 3;
 				m_d3d11State.Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			}
 			else if (primitiveType == PrimitiveType::TriangleStrip)
 			{
-				indexCount = primitiveCount * 3; // FIXME
 				m_d3d11State.Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+			}
+			else if (primitiveType == PrimitiveType::LineList)
+			{
+				m_d3d11State.Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 			}
 
 			// TODO
@@ -2830,12 +2828,20 @@ namespace Graphics
 		case GraphicsDeviceType::OpenGl41:
 		{
 			GLenum glPrimitiveType;
-			if (primitiveType == PrimitiveType::TriangleStrip)
+			switch (primitiveType)
+			{
+			case PrimitiveType::TriangleStrip:
 				glPrimitiveType = GL_TRIANGLE_STRIP;
-			else
+				break;
+			case PrimitiveType::TriangleList:
 				glPrimitiveType = GL_TRIANGLES;
+				break;
+			case PrimitiveType::LineList:
+				glPrimitiveType = GL_LINES;
+				break;
+			}
 
-			glDrawArrays(glPrimitiveType, startIndex, primitiveCount * 3);
+			glDrawArrays(glPrimitiveType, startIndex, indexCount);
 		}
 		}
 	}
