@@ -75,7 +75,10 @@ namespace Nxna
 			TriangleStrip,
 
 			/// A list of lines
-			LineList
+			LineList,
+
+			/// A line strip
+			LineStrip
 		};
 
 		enum class IndexElementSize
