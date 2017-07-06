@@ -112,6 +112,7 @@ Generally you should treat those objects as completely opaque and not mess aroun
 namespace Nxna
 {
 	const float Pi = 3.14159265358979323846f;
+	const float PiOver2 = 1.57079632679489661923f;
 
 	class MathHelper
 	{
