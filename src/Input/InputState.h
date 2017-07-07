@@ -68,6 +68,11 @@ namespace Input
 			return (state->KeyboardKeysData[(int)key] & 0x80) == 0x80;
 		}
 
+		static int GetKeyTransitionCount(InputState* state, Key key)
+		{
+			return (state->KeyboardKeysData[(int)key] & 0x7f);
+		}
+
 		static bool IsMouseButtonDown(InputState* state, int button)
 		{
 			if (button < 0 || button >= 5) return false;
