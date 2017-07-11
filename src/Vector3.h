@@ -115,9 +115,22 @@ namespace Nxna
 			result.Z = v.Z * scaleFactor;
 		}
 
+		static float Dot(const Vector3& v1, const Vector3& v2);
 		static void Dot(const Vector3& v1, const Vector3& v2, float& result);
+		static float Dot(const float* v1, const float* v2)
+		{
+			return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+		}
+		
 		static Vector3 Cross(const Vector3& v1, const Vector3& v2);
 		static void Cross(const Vector3& v1, const Vector3& v2, Vector3& result);
+		static void Cross(const float* v1, const float* v2, float* result)
+		{
+			result[0] = v1[1] * v2[2] - v1[2] * v2[1];
+			result[1] = v1[2] * v2[0] - v1[0] * v2[2];
+			result[2] = v1[0] * v2[1] - v1[1] * v2[0];
+		}
+		
 		static Vector3 Normalize(const Vector3& v);
 		static void Normalize(const Vector3& v, Vector3& result);
 		static Vector3 Transform(const Vector3& v, const Matrix& matrix) { Vector3 result; Transform(v, matrix, result); return result; }
