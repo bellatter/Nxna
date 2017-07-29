@@ -16,6 +16,9 @@ namespace Input
 		Up,
 		Right,
 		Down,
+		
+		Insert,
+		Delete,
 
 		Escape = 27,
 
