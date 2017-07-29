@@ -37,6 +37,8 @@ namespace Input
 
 			state->RelMouseX = 0;
 			state->RelMouseY = 0;
+			
+			state->NumBufferedKeys = 0;
 		}
 
 		static void InjectMouseMove(InputState* state, int mx, int my)
