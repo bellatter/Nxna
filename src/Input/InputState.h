@@ -9,6 +9,8 @@ namespace Input
 {
 #define NXNA_BUTTON_STATE(data) (data & 0x80)
 #define NXNA_BUTTON_TRANSITION_COUNT(data) (data & 0x7F)
+#define NXNA_BUTTON_CLICKED_DOWN(data) (NXNA_BUTTON_STATE(data) > 0 && NXNA_BUTTON_TRANSITION_COUNT(data) > 0)
+#define NXNA_BUTTON_CLICKED_UP(data) (NXNA_BUTTON_STATE(data) == 0 && NXNA_BUTTON_TRANSITION_COUNT(data) > 0)
 
 	constexpr int ButtonStateReleased = 0;
 	constexpr int ButtonStatePressed = 0x80;
@@ -37,7 +39,7 @@ namespace Input
 
 			state->RelMouseX = 0;
 			state->RelMouseY = 0;
-			
+
 			state->NumBufferedKeys = 0;
 		}
 

@@ -12,6 +12,31 @@ namespace Graphics
 	static const int g_numDeviceTypes = 4;
 	GraphicsDeviceMessageCallback g_callbacks[g_numDeviceTypes];
 
+	Nxna::Vector3 Viewport::Unproject(const Nxna::Vector3& source,
+		const Nxna::Matrix& projection,
+		const Nxna::Matrix& view,
+		const Nxna::Matrix& world)
+	{
+		Nxna::Vector4 result;
+		result.X = ((source.X - X) * 2 / Width) - 1;
+		result.Y = 1 - ((source.Y - Y) * 2 / Height);
+		result.Z = source.Z;
+		result.W = 1.0f;
+
+		Nxna::Matrix invProj, invView, invWorld;
+		Nxna::Matrix::Invert(projection, invProj);
+		Nxna::Matrix::Invert(view, invView);
+		Nxna::Matrix::Invert(world, invWorld);
+
+		Nxna::Vector4::Transform(result, invProj, result);
+		Nxna::Vector4::Transform(result, invView, result);
+		Nxna::Vector4::Transform(result, invWorld, result);
+
+		result = result / result.W;
+
+		return Nxna::Vector3(result.X, result.Y, result.Z);
+}
+
 #ifdef _WIN32
 #define NXNA_SET_ERROR_DETAILS(api, desc) { m_errorDetails.Filename = __FILE__; m_errorDetails.LineNumber = __LINE__; m_errorDetails.APIErrorCode = api; \
 	strncpy_s(m_errorDetails.ErrorDescription, desc, 255); m_errorDetails.ErrorDescription[255] = 0; }

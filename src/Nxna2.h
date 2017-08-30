@@ -211,6 +211,7 @@ namespace Nxna
 #ifdef NXNA_ENABLE_MATH
 #include "Vector2.cpp"
 #include "Vector3.cpp"
+#include "Vector4.cpp"
 #include "Matrix.cpp"
 #include "Quaternion.cpp"
 #endif
