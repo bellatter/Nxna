@@ -226,6 +226,9 @@ namespace Nxna
 				const Matrix& project,
 				const Matrix& view,
 				const Matrix& world);
+
+			Vector3 Project(const Vector3& source,
+				const Matrix& transform);
 #endif
 			void Project(const float* source3f, 
 				const float* projectMatrix16f, 

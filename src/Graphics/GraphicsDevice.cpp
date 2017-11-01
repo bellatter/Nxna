@@ -12,6 +12,31 @@ namespace Graphics
 	static const int g_numDeviceTypes = 4;
 	GraphicsDeviceMessageCallback g_callbacks[g_numDeviceTypes];
 
+	Vector3 Viewport::Project(const Vector3& source,
+		const Matrix& transform)
+	{
+		Nxna::Vector4 result;
+		result.X = source.X;
+		result.Y = source.Y;
+		result.Z = source.Z;
+		result.W = 1.0f;
+
+		Nxna::Vector4::Transform(result, transform, result);
+
+		// perspective divide
+		result = result / result.W;
+
+		Nxna::Vector3 result3;
+		result3.X = (result.X + 1.0f) * 0.5f * (float)Width + (float)X;
+		result3.Y = (-result.Y + 1.0f) * 0.5f * (float)Height + (float)Y;
+
+		// TODO: i doubt the Z coords are correct since they're not taking into account
+		// the clipping plains
+		result3.Z = result.Z;
+
+		return result3;
+	}
+
 	Nxna::Vector3 Viewport::Unproject(const Nxna::Vector3& source,
 		const Nxna::Matrix& projection,
 		const Nxna::Matrix& view,
