@@ -130,6 +130,27 @@ namespace Graphics
 		sprite->Effects = SpriteEffects::None;
 	}
 
+	void SpriteBatch::WriteSprite(SpriteBatchSprite* sprite, Texture2D* texture, unsigned int textureWidth, unsigned int textureHeight, float x, float y, float width, float height, unsigned int packedColor)
+	{
+		sprite->Texture = *texture;
+		sprite->TextureWidth = textureWidth;
+		sprite->TextureHeight = textureHeight;
+		sprite->Source[0] = 0;
+		sprite->Source[1] = 0;
+		sprite->Source[2] = (float)textureWidth;
+		sprite->Source[3] = (float)textureHeight;
+		sprite->Destination[0] = x;
+		sprite->Destination[1] = y;
+		sprite->Destination[2] = width;
+		sprite->Destination[3] = height;
+		sprite->Origin[0] = 0;
+		sprite->Origin[1] = 0;
+		sprite->Depth = 0;
+		sprite->Rotation = 0;
+		sprite->SpriteColor = packedColor;
+		sprite->Effects = SpriteEffects::None;
+	}
+
 	void SpriteBatch::SortSprites(SpriteBatchSprite* sprites, unsigned int* indices, unsigned int numSprites, SpriteSortMode mode)
 	{
 		if (indices == nullptr)

@@ -48,6 +48,7 @@ namespace Graphics
 
 		// writes a new sprite
 		static void WriteSprite(SpriteBatchSprite* sprite, Texture2D* texture, unsigned int textureWidth, unsigned int textureHeight, float x, float y, float width, float height, Color color);
+		static void WriteSprite(SpriteBatchSprite* sprite, Texture2D* texture, unsigned int textureWidth, unsigned int textureHeight, float x, float y, float width, float height, unsigned int packedColor);
 
 		// sorts the sprites based on the mode
 		static void SortSprites(SpriteBatchSprite* sprites, unsigned int* indices, unsigned int numSprites, SpriteSortMode mode);
