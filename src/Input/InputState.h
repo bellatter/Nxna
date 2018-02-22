@@ -84,6 +84,13 @@ namespace Input
 			return (state->MouseButtonData[button] & 0x80) == 0x80;
 		}
 
+		static bool GetMouseButtonTransitionCount(InputState* state, int button)
+		{
+			if (button < 0 || button >= 5) return false;
+
+			return (state->MouseButtonData[button] & 0x7f);
+		}
+
 	private:
 		static inline void injectEvent(unsigned char* data, bool newState)
 		{
