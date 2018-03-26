@@ -96,7 +96,7 @@ namespace Graphics
 		result->m_screenWidth = params->ScreenWidth;
 		result->m_screenHeight = params->ScreenHeight;
 
-		result->m_shaderPipeline = nullptr;
+		memset(&result->m_shaderPipeline, 0, sizeof(ShaderPipeline));
 
 		switch (params->Type)
 		{
@@ -228,6 +228,28 @@ namespace Graphics
 #ifndef NDEBUG
 		static_assert((int)GraphicsDeviceType::LAST == g_numDeviceTypes, "m_numDeviceTypes is incorrect");
 #endif
+	}
+
+	void GraphicsDevice::OnScreenSizeChanged(int newWidth, int newHeight)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			// TODO
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			m_screenWidth = newWidth;
+			m_screenHeight = newHeight;
+
+			if (m_oglState.CurrentFBO == 0)
+				m_oglState.CurrentFBOHeight = m_screenHeight;
+		}
+		}
 	}
 
 	void GraphicsDevice::SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth)
@@ -394,7 +416,8 @@ namespace Graphics
 				const GLchar* buffer[] = { 
 					"#version 410\n"
 					"#extension GL_ARB_shading_language_420pack : require\n"
-					"#define DECLARE_SAMPLER2D(b, n) layout(binding=b) uniform sampler2D n\n",
+					"#define DECLARE_SAMPLER2D(b, n) layout(binding=b) uniform sampler2D n\n"
+					"#define DECLARE_SAMPLERCUBE(b, n) layout(binding=b) uniform samplerCube n\n",
 					(char*)bytecode 
 				};
 				s = glCreateShaderProgramv(glType, 2, buffer);
@@ -455,6 +478,12 @@ namespace Graphics
 		NXNA_VALIDATION_ASSERT(desc != nullptr, "desc cannot be null");
 		NXNA_VALIDATION_ASSERT(result != nullptr, "result cannot be null");
 
+		if ((desc->Flags & (int)TextureCreationFlags::TextureCube) && desc->ArraySize != 6)
+		{
+			// when creating a cube map we must have all 6 sides
+			return NxnaResult::InvalidArgument;
+		}
+
 		memset(result, 0, sizeof(Texture2D));
 
 		unsigned int arraySize = desc->ArraySize;
@@ -485,7 +514,7 @@ namespace Graphics
 			if (desc->Flags & (int)TextureCreationFlags::AllowRenderTargetDepthAttachment)
 				dtdesc.BindFlags |= D3D11_BIND_DEPTH_STENCIL;
 			dtdesc.CPUAccessFlags = 0;
-			dtdesc.MiscFlags = 0;
+			dtdesc.MiscFlags = 0; // TODO: support cube maps
 
 			if (initialData != nullptr)
 			{
@@ -532,31 +561,56 @@ namespace Graphics
 			glGenTextures(1, &result->OpenGL.Handle);
 			if (arraySize > 1)
 			{
-				result->OpenGL.IsArray = true;
-
-				glBindTexture(GL_TEXTURE_2D_ARRAY, result->OpenGL.Handle);
-				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
-				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, mipLevels - 1);
-				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-				if (glTexStorage3D)
+				if (desc->Flags & (int)TextureCreationFlags::TextureCube)
 				{
-					glTexStorage3D(GL_TEXTURE_2D_ARRAY, mipLevels, GL_RGBA8, desc->Width, desc->Height, arraySize);
+					result->OpenGL.IsCubeMap = true;
+					
+					glBindTexture(GL_TEXTURE_CUBE_MAP, result->OpenGL.Handle);
+					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
+					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, mipLevels - 1);
+					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+					assert(arraySize == 6);
+					for (unsigned int i = 0; i < arraySize; i++)
+					{
+						if (initialData)
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, initialData[i].Data);
+						else
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+					}
+
+					if (desc->MipLevels == 0)
+						glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 				}
 				else
 				{
-					glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, desc->Width, desc->Height, arraySize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-				}
+					result->OpenGL.IsArray = true;
 
-				if (initialData)
-				{
-					for (unsigned int i = 0; i < arraySize; i++)
-						glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, desc->Width, desc->Height, 1, GL_RGBA, GL_UNSIGNED_BYTE, initialData[i].Data);
-				}
+					glBindTexture(GL_TEXTURE_2D_ARRAY, result->OpenGL.Handle);
+					glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
+					glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, mipLevels - 1);
+					glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-				if (desc->MipLevels == 0)
-					glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+					if (glTexStorage3D)
+					{
+						glTexStorage3D(GL_TEXTURE_2D_ARRAY, mipLevels, GL_RGBA8, desc->Width, desc->Height, arraySize);
+					}
+					else
+					{
+						glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, desc->Width, desc->Height, arraySize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+					}
+
+					if (initialData)
+					{
+						for (unsigned int i = 0; i < arraySize; i++)
+							glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, desc->Width, desc->Height, 1, GL_RGBA, GL_UNSIGNED_BYTE, initialData[i].Data);
+					}
+
+					if (desc->MipLevels == 0)
+						glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+				}
 			}
 			else
 			{
@@ -605,6 +659,8 @@ namespace Graphics
 
 			if (texture->OpenGL.IsArray)
 				glBindTexture(GL_TEXTURE_2D_ARRAY, texture->OpenGL.Handle);
+			else if (texture->OpenGL.IsCubeMap)
+				glBindTexture(GL_TEXTURE_CUBE_MAP, texture->OpenGL.Handle);
 			else
 				glBindTexture(GL_TEXTURE_2D, texture->OpenGL.Handle);
 
@@ -757,12 +813,9 @@ namespace Graphics
 			{
 				if (pipeline != nullptr)
 				{
-					if (m_shaderPipeline != pipeline)
+					if (m_shaderPipeline.OpenGL.Pipeline != pipeline->OpenGL.Pipeline)
 						glBindProgramPipeline(pipeline->OpenGL.Pipeline);
 
-					assert(pipeline->OpenGL.NumElements <= 16);
-					m_oglState.CurrentNumInputElements = pipeline->OpenGL.NumElements;
-					memcpy(m_oglState.CurrentInputElements, pipeline->OpenGL.VertexElements, pipeline->OpenGL.NumElements * sizeof(InputElement));
 					m_oglState.CurrentInputElementsDirty = true;
 				}
 				else
@@ -774,13 +827,13 @@ namespace Graphics
 			}
 		}
 
-		m_shaderPipeline = pipeline;
+		m_shaderPipeline = *pipeline;
 	}
 
 	void GraphicsDevice::DestroyShaderPipeline(ShaderPipeline* pipeline)
 	{
 		NXNA_VALIDATION_ASSERT(pipeline != nullptr, "pipeline cannot be null");
-		NXNA_VALIDATION_ASSERT(m_shaderPipeline != pipeline, "pipeline cannot be the current ShaderPipeline");
+		
 
 		switch (GetType())
 		{
@@ -796,6 +849,8 @@ namespace Graphics
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
+			NXNA_VALIDATION_ASSERT(m_shaderPipeline.OpenGL.Pipeline != pipeline->OpenGL.Pipeline, "pipeline cannot be the current ShaderPipeline");
+
 			glDeleteProgramPipelines(1, &pipeline->OpenGL.Pipeline);
 			pipeline->OpenGL.Pipeline = 0;
 		}
@@ -3077,13 +3132,13 @@ namespace Graphics
 					{
 						unsigned int currentBuffer = 0;
 
-						for (unsigned int i = 0; i < m_oglState.CurrentNumInputElements; i++)
+						for (unsigned int i = 0; i < m_shaderPipeline.OpenGL.NumElements; i++)
 						{
 							int sizeOfElement = 0;
 							GLenum type;
 							GLboolean normalize;
 
-							auto format = m_oglState.CurrentInputElements[i].ElementFormat;
+							auto format = m_shaderPipeline.OpenGL.VertexElements[i].ElementFormat;
 							if (format == InputElementFormat::Color)
 							{
 								sizeOfElement = 4;
@@ -3103,7 +3158,7 @@ namespace Graphics
 								normalize = GL_FALSE;
 							}
 
-							auto inputSlot = m_oglState.CurrentInputElements[i].InputSlot;
+							auto inputSlot = m_shaderPipeline.OpenGL.VertexElements[i].InputSlot;
 							if (inputSlot > 32 || m_oglState.CurrentVertexBufferActive[inputSlot] == false)
 							{
 								glDisableVertexAttribArray(i);
@@ -3117,7 +3172,7 @@ namespace Graphics
 							}
 
 							glEnableVertexAttribArray(i);
-							glVertexAttribPointer(i, sizeOfElement, type, normalize, m_oglState.CurrentVertexBuffers[inputSlot].Stride, (void*)(intptr_t)(m_oglState.CurrentVertexBuffers[inputSlot].Offset + m_oglState.CurrentInputElements[i].Offset));
+							glVertexAttribPointer(i, sizeOfElement, type, normalize, m_oglState.CurrentVertexBuffers[inputSlot].Stride, (void*)(intptr_t)(m_oglState.CurrentVertexBuffers[inputSlot].Offset + m_shaderPipeline.OpenGL.VertexElements[i].Offset));
 						}
 					}
 

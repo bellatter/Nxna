@@ -328,9 +328,6 @@ namespace Nxna
 				unsigned int Stride;
 			} CurrentVertexBuffers[32];
 
-			unsigned int CurrentNumInputElements;
-			InputElement CurrentInputElements[16];
-
 			unsigned int CurrentIndexBuffer;
 
 			bool CurrentVertexBufferDirty[32];
@@ -360,6 +357,7 @@ namespace Nxna
 			None =                             0,
 			AllowRenderTargetColorAttachment = 1 << 0,
 			AllowRenderTargetDepthAttachment = 1 << 1,
+			TextureCube =                      1 << 2
 		};
 
 		struct TextureCreationDesc
@@ -389,6 +387,7 @@ namespace Nxna
 				{
 					unsigned int Handle;
 					bool IsArray;
+					bool IsCubeMap;
 				} OpenGL;
 #ifdef NXNA_ENABLE_DIRECT3D11
 				struct
@@ -534,7 +533,7 @@ namespace Nxna
 			int m_screenWidth, m_screenHeight;
 
 			IndexBuffer m_indices;
-			ShaderPipeline* m_shaderPipeline;
+			ShaderPipeline m_shaderPipeline;
 
 			NxnaResultDetails m_errorDetails;
 
@@ -564,6 +563,9 @@ namespace Nxna
 			const NxnaResultDetails* GetErrorDetails() { return &m_errorDetails; }
 
 			const Capabilities* GetCaps() { return &m_caps; }
+
+			/// Inform the device that the screen size has changed
+			void OnScreenSizeChanged(int newWidth, int newHeight);
 
 			/// Sets the current viewport
 			void SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth);
