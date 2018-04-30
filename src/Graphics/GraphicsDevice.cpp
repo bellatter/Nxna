@@ -417,6 +417,7 @@ namespace Graphics
 					"#version 410\n"
 					"#extension GL_ARB_shading_language_420pack : require\n"
 					"#define DECLARE_SAMPLER2D(b, n) layout(binding=b) uniform sampler2D n\n"
+					"#define DECLARE_SAMPLER2DARRAY(b, n) layout(binding=b) uniform sampler2DArray n\n"
 					"#define DECLARE_SAMPLERCUBE(b, n) layout(binding=b) uniform samplerCube n\n",
 					(char*)bytecode 
 				};
@@ -478,7 +479,7 @@ namespace Graphics
 		NXNA_VALIDATION_ASSERT(desc != nullptr, "desc cannot be null");
 		NXNA_VALIDATION_ASSERT(result != nullptr, "result cannot be null");
 
-		if ((desc->Flags & (int)TextureCreationFlags::TextureCube) && desc->ArraySize != 6)
+		if (desc->Type == TextureType::TextureCube && desc->ArraySize != 6)
 		{
 			// when creating a cube map we must have all 6 sides
 			return NxnaResult::InvalidArgument;
@@ -538,7 +539,7 @@ namespace Graphics
 			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 			ZeroMemory(&srvDesc, sizeof(srvDesc));
 			srvDesc.Format = dtdesc.Format;
-			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D; // TODO: make this based on the texture type
 			srvDesc.Texture2D.MipLevels = -1;
 
 			r = m_d3d11State.Device->CreateShaderResourceView(result->Direct3D11.m_texture, &srvDesc, &result->Direct3D11.m_shaderResourceView);
@@ -559,58 +560,55 @@ namespace Graphics
 			}
 
 			glGenTextures(1, &result->OpenGL.Handle);
-			if (arraySize > 1)
+			if (desc->Type == TextureType::TextureCube)
 			{
-				if (desc->Flags & (int)TextureCreationFlags::TextureCube)
-				{
-					result->OpenGL.IsCubeMap = true;
+				result->OpenGL.IsCubeMap = true;
 					
-					glBindTexture(GL_TEXTURE_CUBE_MAP, result->OpenGL.Handle);
-					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
-					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, mipLevels - 1);
-					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glBindTexture(GL_TEXTURE_CUBE_MAP, result->OpenGL.Handle);
+				glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
+				glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, mipLevels - 1);
+				glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-					assert(arraySize == 6);
-					for (unsigned int i = 0; i < arraySize; i++)
-					{
-						if (initialData)
-							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, initialData[i].Data);
-						else
-							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-					}
+				assert(arraySize == 6);
+				for (unsigned int i = 0; i < arraySize; i++)
+				{
+					if (initialData)
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, initialData[i].Data);
+					else
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+				}
 
-					if (desc->MipLevels == 0)
-						glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+				if (desc->MipLevels == 0)
+					glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+			}
+			else if (desc->Type == TextureType::Texture2DArray)
+			{
+				result->OpenGL.IsArray = true;
+
+				glBindTexture(GL_TEXTURE_2D_ARRAY, result->OpenGL.Handle);
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, mipLevels - 1);
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+				if (glTexStorage3D)
+				{
+					glTexStorage3D(GL_TEXTURE_2D_ARRAY, mipLevels, GL_RGBA8, desc->Width, desc->Height, arraySize);
 				}
 				else
 				{
-					result->OpenGL.IsArray = true;
-
-					glBindTexture(GL_TEXTURE_2D_ARRAY, result->OpenGL.Handle);
-					glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
-					glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, mipLevels - 1);
-					glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-					if (glTexStorage3D)
-					{
-						glTexStorage3D(GL_TEXTURE_2D_ARRAY, mipLevels, GL_RGBA8, desc->Width, desc->Height, arraySize);
-					}
-					else
-					{
-						glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, desc->Width, desc->Height, arraySize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-					}
-
-					if (initialData)
-					{
-						for (unsigned int i = 0; i < arraySize; i++)
-							glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, desc->Width, desc->Height, 1, GL_RGBA, GL_UNSIGNED_BYTE, initialData[i].Data);
-					}
-
-					if (desc->MipLevels == 0)
-						glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+					glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, desc->Width, desc->Height, arraySize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 				}
+
+				if (initialData)
+				{
+					for (unsigned int i = 0; i < arraySize; i++)
+						glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, desc->Width, desc->Height, 1, GL_RGBA, GL_UNSIGNED_BYTE, initialData[i].Data);
+				}
+
+				if (desc->MipLevels == 0)
+					glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
 			}
 			else
 			{

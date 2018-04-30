@@ -356,8 +356,19 @@ namespace Nxna
 		{
 			None =                             0,
 			AllowRenderTargetColorAttachment = 1 << 0,
-			AllowRenderTargetDepthAttachment = 1 << 1,
-			TextureCube =                      1 << 2
+			AllowRenderTargetDepthAttachment = 1 << 1
+		};
+
+		enum class TextureType
+		{
+			Unknown           = 0,
+			Texture1D         = 2,
+			Texture1DArray    = 3,
+			Texture2D         = 4,
+			Texture2DArray    = 5,
+			Texture3D         = 8,
+			TextureCube       = 9,
+			TextureCubeArray  = 10
 		};
 
 		struct TextureCreationDesc
@@ -369,6 +380,7 @@ namespace Nxna
 			unsigned int ArraySize;
 			Usage TextureUsage;
 			SurfaceFormat Format;
+			TextureType Type;
 			unsigned int Flags;
 		};
 
