@@ -11,10 +11,19 @@ namespace Graphics
 	{
 		Zero,
 		One,
+		SourceColor,
+		InverseSourceColor,
+		DestinationColor,
+		InverseDestinationColor,
 		SourceAlpha,
 		InverseSourceAlpha,
 		DestinationAlpha,
-		InverseDestinationAlpha
+		InverseDestinationAlpha,
+
+		Source1Color,
+		InverseSource1Color,
+		Source1Alpha,
+		InverseSource1Alpha
 	};
 
 	enum class BlendFunction : nxna_byte

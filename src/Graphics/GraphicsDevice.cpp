@@ -860,10 +860,18 @@ namespace Graphics
 	switch(blend) { \
 		case Blend::Zero: dest = D3D11_BLEND_ZERO; break;\
 		case Blend::One: dest = D3D11_BLEND_ONE; break; \
+		case Blend::SourceColor: dest = D3D11_BLEND_SRC_COLOR; break; \
+		case Blend::InverseSourceColor: dest = D3D11_BLEND_INV_SRC_COLOR; break; \
+		case Blend::DestinationColor: dest = D3D11_BLEND_DEST_COLOR; break; \
+		case Blend::InverseDestinationColor: dest = D3D11_BLEND_INV_DEST_COLOR; break; \
 		case Blend::SourceAlpha: dest = D3D11_BLEND_SRC_ALPHA; break; \
 		case Blend::DestinationAlpha: dest = D3D11_BLEND_DEST_ALPHA; break; \
 		case Blend::InverseSourceAlpha: dest = D3D11_BLEND_INV_SRC_ALPHA; break; \
 		case Blend::InverseDestinationAlpha: dest = D3D11_BLEND_INV_DEST_ALPHA; break; \
+		case Blend::Source1Color: dest = D3D11_BLEND_SRC1_COLOR; break; \
+		case Blend::InverseSource1Color: dest = D3D11_BLEND_INV_SRC1_COLOR; break; \
+		case Blend::Source1Alpha: dest = D3D11_BLEND_SRC1_ALPHA; break; \
+		case Blend::InverseSource1Alpha: dest = D3D11_BLEND_INV_SRC1_ALPHA; break; \
 		default: dest = D3D11_BLEND_ZERO; break; \
 		};
 
@@ -881,10 +889,18 @@ namespace Graphics
 	switch(blend) { \
 		case Blend::Zero: dest = GL_ZERO; break;\
 		case Blend::One: dest = GL_ONE; break; \
+		case Blend::SourceColor: dest = GL_SRC_COLOR; break; \
+		case Blend::InverseSourceColor: dest = GL_ONE_MINUS_SRC_COLOR; break; \
+		case Blend::DestinationColor: dest =  GL_DST_COLOR; break; \
+		case Blend::InverseDestinationColor: dest = GL_ONE_MINUS_DST_COLOR; break; \
 		case Blend::SourceAlpha: dest = GL_SRC_ALPHA; break; \
 		case Blend::DestinationAlpha: dest = GL_DST_ALPHA; break; \
 		case Blend::InverseSourceAlpha: dest = GL_ONE_MINUS_SRC_ALPHA; break; \
 		case Blend::InverseDestinationAlpha: dest = GL_ONE_MINUS_DST_ALPHA; break; \
+		case Blend::Source1Color: dest = GL_SRC1_COLOR; break; \
+		case Blend::InverseSource1Color: dest =  GL_ONE_MINUS_SRC1_COLOR; break; \
+		case Blend::Source1Alpha: dest =  GL_SRC1_ALPHA; break; \
+		case Blend::InverseSource1Alpha: dest =  GL_ONE_MINUS_SRC1_ALPHA; break; \
 		default: dest = GL_ZERO; break; \
 		};
 
