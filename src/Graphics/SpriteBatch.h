@@ -57,7 +57,11 @@ namespace Graphics
 		static void FillIndexBuffer(unsigned short* indices, unsigned int numIndices);
 
 		// writes as many sprites as it can to the buffer, and returns how many sprites it wrote.
+		[[deprecated]]
 		static unsigned int FillVertexBuffer(SpriteBatchSprite* sprites, unsigned int* indices, unsigned int numSprites, void* buffer, size_t bufferByteLength, unsigned int* spriteTextureChangeIndices, unsigned int* numSpriteTextureChangeIndices); 
+
+		static unsigned int FillVertexBuffer(SpriteBatchSprite* sprites, unsigned int* indices, unsigned int numSprites, void* buffer, size_t bufferByteLength);
+
 
 		static void SetupVertexElements(InputElement* elements, unsigned int* stride);
 		static void GetShaderBytecode(GraphicsDevice* device, ShaderBytecode* vertexShader, ShaderBytecode* pixelShader);

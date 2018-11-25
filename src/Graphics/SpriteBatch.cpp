@@ -179,17 +179,13 @@ namespace Graphics
 
 	unsigned int SpriteBatch::FillVertexBuffer(SpriteBatchSprite* sprites, unsigned int* indices, unsigned int numSprites, void* buffer, size_t bufferByteLength, unsigned int* textureRunLengths, unsigned int* numTextureRunLengths)
 	{
-		if (numSprites == 0) return 0;
+		// NO!
+		return 0;
+	}
 
-		// textureRunLengths and numTextureRunLengths must both be provided or neither provided
-		if ((textureRunLengths == nullptr && numTextureRunLengths != nullptr) ||
-			(textureRunLengths != nullptr && numTextureRunLengths == nullptr))
-			return 0;
-
-		// TODO: for now, ignore the sorting
-		unsigned int texRunCount = 0;
-		unsigned int currentTextureRunLength = 0;
-		auto currentTextureID = sprites[0].Texture.UniqueID;
+	unsigned int SpriteBatch::FillVertexBuffer(SpriteBatchSprite* sprites, unsigned int* indices, unsigned int numSprites, void* buffer, size_t bufferByteLength)
+	{
+		if (numSprites == 0 || bufferByteLength == 0) return 0;
 
 		float* verts = (float*)buffer;
 
@@ -200,28 +196,6 @@ namespace Graphics
 		
 		for (unsigned int i = 0; i < numSprites; i++)
 		{
-			// look for texture changes
-			if (sprites[i].Texture.UniqueID != currentTextureID)
-			{
-				if (textureRunLengths != nullptr)
-				{
-					textureRunLengths[texRunCount] = currentTextureRunLength;
-					texRunCount++;
-
-					if (texRunCount >= *numTextureRunLengths)
-					{
-						return i;
-					}
-				}
-
-				currentTextureRunLength = 1;
-				currentTextureID = sprites[i].Texture.UniqueID;
-			}
-			else
-			{
-				currentTextureRunLength++;
-			}
-
 			float cosine, sine;
 			if (sprites[i].Rotation != 0)
 			{
@@ -305,12 +279,6 @@ namespace Graphics
 			verts[3 * stride + 5] = *(float*)&packedColor;
 
 			verts += stride * 4;
-		}
-
-		if (textureRunLengths)
-		{
-			textureRunLengths[texRunCount] = currentTextureRunLength;
-			*numTextureRunLengths = texRunCount + 1;
 		}
 
 		// return the # of sprites written to the buffer
