@@ -365,6 +365,8 @@ namespace Graphics
 			pixelShader->BytecodeLength = 0;
 		}
 			break;
+		default:
+			;
 		}
 	}
 

@@ -222,7 +222,9 @@ namespace Graphics
 				glDebugMessageCallback(glDebugOutputCallback, nullptr);
 			}
 		}
-		break;
+			break;
+		default:
+			;
 		}
 
 #ifndef NDEBUG
@@ -249,6 +251,8 @@ namespace Graphics
 			if (m_oglState.CurrentFBO == 0)
 				m_oglState.CurrentFBOHeight = m_screenHeight;
 		}
+		default:
+			;
 		}
 	}
 
@@ -283,7 +287,9 @@ namespace Graphics
 			glViewport((int)x, y2, (int)width, (int)height);
 			glDepthRange(minDepth, maxDepth);
 		}
-		break;
+			break;
+		default:
+			;
 		}
 	}
 
@@ -315,6 +321,8 @@ namespace Graphics
 
 			glViewport((int)viewport.X, y2, (int)viewport.Width, (int)viewport.Height);
 		}
+		default:
+			;
 		}
 	}
 
@@ -447,6 +455,8 @@ namespace Graphics
 			result->OpenGL.Handle = s;
 		}
 			break;
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::Success;
@@ -471,6 +481,8 @@ namespace Graphics
 			glDeleteProgram(shader->OpenGL.Handle);
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -636,6 +648,8 @@ namespace Graphics
 			}
 		}
 			break;
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::Success;
@@ -663,6 +677,8 @@ namespace Graphics
 				glBindTexture(GL_TEXTURE_2D, texture->OpenGL.Handle);
 
 			break;
+		default:
+			;
 		}
 	}
 
@@ -778,6 +794,9 @@ namespace Graphics
 			result->OpenGL.NumElements = numElements;
 			memcpy(result->OpenGL.VertexElements, desc->VertexElements, sizeof(InputElement) * numElements);
 		}
+			break;
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::Success;
@@ -822,6 +841,8 @@ namespace Graphics
 				}
 			}
 				break;
+			default:
+				;
 			}
 		}
 
@@ -853,6 +874,8 @@ namespace Graphics
 			pipeline->OpenGL.Pipeline = 0;
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -978,6 +1001,8 @@ namespace Graphics
 			result->OpenGL.Desc = *desc;
 		}
 			break;
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::Success;
@@ -1099,6 +1124,8 @@ namespace Graphics
 			m_oglState.CurrentBlendState = desc;
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -1119,6 +1146,8 @@ namespace Graphics
 			// nothing
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -1168,6 +1197,8 @@ namespace Graphics
 			result->OpenGL.Desc = *desc;
 		}
 			break;
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::Success;
@@ -1236,6 +1267,8 @@ namespace Graphics
 			m_oglState.CurrentRasterizerState = desc;
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -1259,6 +1292,8 @@ namespace Graphics
 			// nothing
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -1356,6 +1391,8 @@ namespace Graphics
 			result->OpenGL.Desc = *desc;
 		}
 			break;
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::Success;
@@ -1437,6 +1474,8 @@ namespace Graphics
 			m_oglState.CurrentDepthStencilState = newState;
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -1457,6 +1496,8 @@ namespace Graphics
 			// nothing
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -1641,6 +1682,8 @@ namespace Graphics
 			}
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -1689,6 +1732,8 @@ namespace Graphics
 			}
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -1709,6 +1754,8 @@ namespace Graphics
 			glDeleteSamplers(1, &state->OpenGL.Handle);
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -2148,6 +2195,9 @@ namespace Graphics
 
 			glBufferData(GL_UNIFORM_BUFFER, desc->ByteCount, desc->InitialData, glUsage);
 		}
+			break;
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::Success;
@@ -2193,6 +2243,9 @@ namespace Graphics
 		{
 			glBindBufferRange(GL_UNIFORM_BUFFER, index, buffer.OpenGL.UniformBuffer, 0, buffer.OpenGL.ByteLength);
 		}
+			break;
+		default:
+			;
 		}
 	}
 
@@ -2209,6 +2262,9 @@ namespace Graphics
 		{
 			glDeleteBuffers(1, &buffer->OpenGL.UniformBuffer);
 		}
+			break;
+		default:
+			;
 		}
 	}
 
@@ -2313,6 +2369,8 @@ namespace Graphics
 			return NxnaResult::Success;
 		}
 			break;
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::NotSupported;
@@ -2363,9 +2421,9 @@ namespace Graphics
 			return NxnaResult::Success;
 		}
 		break;
+		default:
+			return NxnaResult::NotSupported;
 		}
-		
-		return NxnaResult::NotSupported;
 	}
 
 	void GraphicsDevice::DestroyRenderTarget(RenderTarget* renderTarget)
@@ -2390,6 +2448,8 @@ namespace Graphics
 			renderTarget->OpenGL.FBO = 0;
 		}
 		break;
+		default:
+			;
 		}
 	}
 
@@ -2424,6 +2484,8 @@ namespace Graphics
 			return NxnaResult::Success;
 		}
 		break;
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::NotSupported;
@@ -2459,7 +2521,9 @@ namespace Graphics
 
 			return NxnaResult::Success;
 		}
-		break;
+			break;
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::NotSupported;
@@ -2549,6 +2613,8 @@ namespace Graphics
 			return NxnaResult::Success;
 		}
 		break;
+		default:
+			return NxnaResult::NotSupported;
 		}
 
 		return NxnaResult::NotSupported;
@@ -2570,7 +2636,9 @@ namespace Graphics
 		{
 			// nothing
 		}
-		break;
+			break;
+		default:
+			;
 		}
 	}
 
@@ -2591,6 +2659,8 @@ namespace Graphics
 			// nothing
 		}
 		break;
+		default:
+			;
 		}
 	}
 
@@ -2667,9 +2737,9 @@ namespace Graphics
 			return ptr;
 		}
 			break;
+		default:
+			return nullptr;
 		}
-
-		return nullptr;
 	}
 
 	void* GraphicsDevice::MapBuffer(VertexBuffer buffer, MapType type)
@@ -2716,9 +2786,9 @@ namespace Graphics
 			return ptr;
 		}
 			break;
+		default:
+			return nullptr;
 		}
-
-		return nullptr;
 	}
 
 	void* GraphicsDevice::MapBuffer(ConstantBuffer buffer, MapType type)
@@ -2767,9 +2837,9 @@ namespace Graphics
 			return ptr;
 		}
 			break;
+		default:
+			return nullptr;
 		}
-
-		return nullptr;
 	}
 
 	void GraphicsDevice::UnmapBuffer(IndexBuffer buffer)
@@ -2802,6 +2872,9 @@ namespace Graphics
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, currentBuffer);
 			}
 		}
+			break;
+		default:
+			;
 		}
 	}
 
@@ -2835,6 +2908,9 @@ namespace Graphics
 				glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
 			}
 		}
+			break;
+		default:
+			;
 		}
 	}
 
@@ -2868,6 +2944,9 @@ namespace Graphics
 				glBindBuffer(GL_UNIFORM_BUFFER, currentBuffer);
 			}
 		}
+			break;
+		default:
+			;
 		}
 	}
 
@@ -2932,6 +3011,9 @@ namespace Graphics
 
 			glDrawElementsBaseVertex(glPrimitiveType, indexCount, size, (void*)(intptr_t)(startIndex * (int)m_indices.ElementSize), baseVertex);
 		}
+			break;
+		default:
+			;
 		}
 	}
 
@@ -2986,6 +3068,9 @@ namespace Graphics
 
 			glDrawArrays(glPrimitiveType, startIndex, indexCount);
 		}
+			break;
+		default:
+			;
 		}
 	}
 
@@ -3012,6 +3097,8 @@ namespace Graphics
 			glClearBufferfv(GL_COLOR, 0, rgba);
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -3036,6 +3123,8 @@ namespace Graphics
 			glClearBufferfv(GL_COLOR, 0, rgba);
 		}
 			break;
+		default:
+			;
 		}
 	}
 	
@@ -3059,6 +3148,8 @@ namespace Graphics
 			glClearBufferfv(GL_COLOR, 0, colorRGBA4f);
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -3100,6 +3191,8 @@ namespace Graphics
 			}
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -3119,6 +3212,8 @@ namespace Graphics
 			glFlush();
 		}
 			break;
+		default:
+			;
 		}
 	}
 
@@ -3198,6 +3293,8 @@ namespace Graphics
 			}
 		}
 			break;
+		default:
+			;
 		}
 	}
 }
