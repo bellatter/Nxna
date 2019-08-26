@@ -571,6 +571,29 @@ namespace Graphics
 				mipLevels = 1 + (unsigned int)floor(log2(desc->Width > desc->Height ? desc->Width : desc->Height));
 			}
 
+			// convert the format into a component formant and a sized internal component
+			unsigned int format, internalformat, sourceDataType;
+			switch (desc->Format)
+			{
+			case SurfaceFormat::Bgr565: 
+			case SurfaceFormat::Bgra4444:
+			case SurfaceFormat::Bgra5551: return NxnaResult::NotSupported; //TODO
+			case SurfaceFormat::Color: format = GL_RGBA; internalformat = GL_RGBA8; sourceDataType = GL_UNSIGNED_BYTE; break;
+			case SurfaceFormat::Dxt1:
+			case SurfaceFormat::Dxt3:
+			case SurfaceFormat::Dxt5:
+			case SurfaceFormat::Pvrtc4: return Nxna::NxnaResult::NotSupported; // TODO
+			case SurfaceFormat::R16F: format = GL_RED; internalformat = GL_R16F; sourceDataType = GL_SHORT;
+			case SurfaceFormat::RG16F: format = GL_RG; internalformat = GL_RG16F; sourceDataType = GL_SHORT;
+			case SurfaceFormat::RGB16F: format = GL_RGB; internalformat = GL_RGB16F; sourceDataType = GL_SHORT;
+			case SurfaceFormat::RGBA16F: format = GL_RGBA; internalformat = GL_RGBA16F; sourceDataType = GL_SHORT;
+			case SurfaceFormat::R32F: format = GL_RED; internalformat = GL_R32F; sourceDataType = GL_FLOAT;
+			case SurfaceFormat::RG32F: format = GL_RG; internalformat = GL_RG32F; sourceDataType = GL_FLOAT;
+			case SurfaceFormat::RGB32F: format = GL_RGB; internalformat = GL_RGB32F; sourceDataType = GL_FLOAT;
+			case SurfaceFormat::RGBA32F: format = GL_RGBA; internalformat = GL_RGBA32F; sourceDataType = GL_FLOAT;
+			default: return NxnaResult::NotSupported;
+			};
+
 			glGenTextures(1, &result->OpenGL.Handle);
 			if (desc->Type == TextureType::TextureCube)
 			{
@@ -586,9 +609,9 @@ namespace Graphics
 				for (unsigned int i = 0; i < arraySize; i++)
 				{
 					if (initialData)
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, initialData[i].Data);
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, desc->Width, desc->Height, 0, internalformat, sourceDataType, initialData[i].Data);
 					else
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, desc->Width, desc->Height, 0, internalformat, sourceDataType, nullptr);
 				}
 
 				if (desc->MipLevels == 0)
@@ -606,17 +629,17 @@ namespace Graphics
 
 				if (glTexStorage3D)
 				{
-					glTexStorage3D(GL_TEXTURE_2D_ARRAY, mipLevels, GL_RGBA8, desc->Width, desc->Height, arraySize);
+					glTexStorage3D(GL_TEXTURE_2D_ARRAY, mipLevels, internalformat, desc->Width, desc->Height, arraySize);
 				}
 				else
 				{
-					glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, desc->Width, desc->Height, arraySize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+					glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, format, desc->Width, desc->Height, arraySize, 0, internalformat, sourceDataType, nullptr);
 				}
 
 				if (initialData)
 				{
 					for (unsigned int i = 0; i < arraySize; i++)
-						glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, desc->Width, desc->Height, 1, GL_RGBA, GL_UNSIGNED_BYTE, initialData[i].Data);
+						glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, desc->Width, desc->Height, 1, format, sourceDataType, initialData[i].Data);
 				}
 
 				if (desc->MipLevels == 0)
@@ -634,13 +657,13 @@ namespace Graphics
 
 				if (glTexStorage2D)
 				{
-					glTexStorage2D(GL_TEXTURE_2D, mipLevels, GL_RGBA8, desc->Width, desc->Height);
+					glTexStorage2D(GL_TEXTURE_2D, mipLevels, internalformat, desc->Width, desc->Height);
 					if (initialData)
-						glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, desc->Width, desc->Height, GL_RGBA, GL_UNSIGNED_BYTE, initialData[0].Data);
+						glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, desc->Width, desc->Height, format, sourceDataType, initialData[0].Data);
 				}
 				else
 				{
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, desc->Width, desc->Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, initialData[0].Data);
+					glTexImage2D(GL_TEXTURE_2D, 0, format, desc->Width, desc->Height, 0, format, sourceDataType, initialData[0].Data);
 				}
 
 				if (desc->MipLevels == 0)

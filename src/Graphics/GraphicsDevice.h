@@ -349,7 +349,16 @@ namespace Nxna
 
 			// the following are not supported by XNA. These are our own
 			// extensions so that iOS devices can have compressed textures too.
-			Pvrtc4
+			Pvrtc4,
+
+			R16F = 100,
+			RG16F,
+			RGB16F,
+			RGBA16F,
+			R32F,
+			RG32F,
+			RGB32F,
+			RGBA32F
 		};
 
 		enum class TextureCreationFlags
