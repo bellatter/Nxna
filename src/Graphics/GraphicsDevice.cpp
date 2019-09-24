@@ -583,14 +583,14 @@ namespace Graphics
 			case SurfaceFormat::Dxt3:
 			case SurfaceFormat::Dxt5:
 			case SurfaceFormat::Pvrtc4: return Nxna::NxnaResult::NotSupported; // TODO
-			case SurfaceFormat::R16F: format = GL_RED; internalformat = GL_R16F; sourceDataType = GL_SHORT;
-			case SurfaceFormat::RG16F: format = GL_RG; internalformat = GL_RG16F; sourceDataType = GL_SHORT;
-			case SurfaceFormat::RGB16F: format = GL_RGB; internalformat = GL_RGB16F; sourceDataType = GL_SHORT;
-			case SurfaceFormat::RGBA16F: format = GL_RGBA; internalformat = GL_RGBA16F; sourceDataType = GL_SHORT;
-			case SurfaceFormat::R32F: format = GL_RED; internalformat = GL_R32F; sourceDataType = GL_FLOAT;
-			case SurfaceFormat::RG32F: format = GL_RG; internalformat = GL_RG32F; sourceDataType = GL_FLOAT;
-			case SurfaceFormat::RGB32F: format = GL_RGB; internalformat = GL_RGB32F; sourceDataType = GL_FLOAT;
-			case SurfaceFormat::RGBA32F: format = GL_RGBA; internalformat = GL_RGBA32F; sourceDataType = GL_FLOAT;
+			case SurfaceFormat::R16F: format = GL_RED; internalformat = GL_R16F; sourceDataType = GL_SHORT; break;
+			case SurfaceFormat::RG16F: format = GL_RG; internalformat = GL_RG16F; sourceDataType = GL_SHORT; break;
+			case SurfaceFormat::RGB16F: format = GL_RGB; internalformat = GL_RGB16F; sourceDataType = GL_SHORT; break;
+			case SurfaceFormat::RGBA16F: format = GL_RGBA; internalformat = GL_RGBA16F; sourceDataType = GL_SHORT; break;
+			case SurfaceFormat::R32F: format = GL_RED; internalformat = GL_R32F; sourceDataType = GL_FLOAT; break;
+			case SurfaceFormat::RG32F: format = GL_RG; internalformat = GL_RG32F; sourceDataType = GL_FLOAT; break;
+			case SurfaceFormat::RGB32F: format = GL_RGB; internalformat = GL_RGB32F; sourceDataType = GL_FLOAT; break;
+			case SurfaceFormat::RGBA32F: format = GL_RGBA; internalformat = GL_RGBA32F; sourceDataType = GL_FLOAT; break;
 			default: return NxnaResult::NotSupported;
 			};
 
