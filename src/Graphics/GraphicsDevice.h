@@ -247,10 +247,37 @@ namespace Nxna
 			float X, Y, Width, Height, MinDepth, MaxDepth;
 		};
 
+		enum class GraphicsDeviceDebugMessageSeverity
+		{
+			Error,
+			Warning,
+			Info,
+			Message
+		};
+
 		struct GraphicsDeviceDebugMessage
 		{
 			GraphicsDeviceType DeviceType;
+			GraphicsDeviceDebugMessageSeverity Severity;
 			const char* Message;
+
+			union
+			{
+				struct
+				{
+					unsigned int Source;
+					unsigned int Type;
+					unsigned int ID;
+					unsigned int Severity;
+				} OpenGL;
+				#ifdef NXNA_ENABLE_DIRECT3D11
+				struct
+				{
+					// TODO
+				} Direct3D11;
+				#endif
+			};
+			
 		};
 
 		enum class ShaderType

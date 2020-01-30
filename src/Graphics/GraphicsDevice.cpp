@@ -84,7 +84,21 @@ namespace Graphics
 		{
 			GraphicsDeviceDebugMessage msg;
 			msg.DeviceType = GraphicsDeviceType::OpenGl41;
+
+			switch(severity)
+			{
+				case GL_DEBUG_SEVERITY_HIGH: msg.Severity = GraphicsDeviceDebugMessageSeverity::Error; break;
+				case GL_DEBUG_SEVERITY_MEDIUM: msg.Severity = GraphicsDeviceDebugMessageSeverity::Warning; break;
+				case GL_DEBUG_SEVERITY_LOW: msg.Severity = GraphicsDeviceDebugMessageSeverity::Info; break;
+				default: msg.Severity = GraphicsDeviceDebugMessageSeverity::Message; break;
+			}
+
 			msg.Message = message;
+
+			msg.OpenGL.Severity = severity;
+			msg.OpenGL.Source = source;
+			msg.OpenGL.Type = type;
+			msg.OpenGL.ID = id;
 
 			g_callbacks[(int)GraphicsDeviceType::OpenGl41](msg);
 		}
