@@ -44,4 +44,24 @@ namespace Nxna
 
 		result = { q3.X, q3.Y, q3.Z };  
 	}
+
+	Quaternion Quaternion::Inverse(Quaternion q)
+	{
+		Quaternion result;
+		float ilen = 1.0f / (q.X * q.X + q.Y * q.Y + q.Z * q.Z + q.W * q.W);
+		result.X = -q.X * ilen;
+		result.Y = -q.Y * ilen;
+		result.Z = -q.Z * ilen;
+		result.W = q.W * ilen;
+		return result;
+	}
+
+	void Quaternion::Inverse(const Quaternion& q, Quaternion& result)
+	{
+		float ilen = 1.0f / (q.X * q.X + q.Y * q.Y + q.Z * q.Z + q.W * q.W);
+		result.X = -q.X * ilen;
+		result.Y = -q.Y * ilen;
+		result.Z = -q.Z * ilen;
+		result.W = q.W * ilen;
+	}
 }

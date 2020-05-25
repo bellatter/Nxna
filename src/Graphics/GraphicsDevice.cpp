@@ -12,6 +12,20 @@ namespace Graphics
 	static const int g_numDeviceTypes = 4;
 	GraphicsDeviceMessageCallback g_callbacks[g_numDeviceTypes];
 
+#ifdef NXNA_ENABLE_MATH
+
+	Vector3 Viewport::Project(const Vector3& source,
+		const Matrix& project,
+		const Matrix& view,
+		const Matrix& world)
+	{
+		Nxna::Matrix transform;
+		Nxna::Matrix::Multiply(project, view, transform);
+		Nxna::Matrix::Multiply(transform, world, transform);
+
+		return Project(source, transform);
+	}
+
 	Vector3 Viewport::Project(const Vector3& source,
 		const Matrix& transform)
 	{
@@ -36,7 +50,9 @@ namespace Graphics
 
 		return result3;
 	}
+#endif
 
+#ifdef NXNA_ENABLE_MATH
 	Nxna::Vector3 Viewport::Unproject(const Nxna::Vector3& source,
 		const Nxna::Matrix& projection,
 		const Nxna::Matrix& view,
@@ -61,6 +77,7 @@ namespace Graphics
 
 		return Nxna::Vector3(result.X, result.Y, result.Z);
 }
+#endif
 
 #ifdef _WIN32
 #define NXNA_SET_ERROR_DETAILS(api, desc) { m_errorDetails.Filename = __FILE__; m_errorDetails.LineNumber = __LINE__; m_errorDetails.APIErrorCode = api; \
@@ -118,7 +135,8 @@ namespace Graphics
 		{
 			NXNA_MEMSET(&result->m_oglState, 0, sizeof(OpenGlDeviceState));
 
-			OpenGL::LoadGLExtensions(4, 1);
+			if (OpenGL::LoadGLExtensions(4, 1) == false)
+				return NxnaResult::UnknownError;
 
 			int major = 0, minor = 0;
 			glGetIntegerv(GL_MAJOR_VERSION, &major);
@@ -126,7 +144,8 @@ namespace Graphics
 
 			if (major < 4 || (major == 4 && minor < 1))
 			{
-				if (GLEW_ARB_separate_shader_objects == false)
+				if (GLEW_ARB_separate_shader_objects == false ||
+					GLEW_ARB_draw_buffers_blend == false)
 				{
 					// we require a 4.1+ capable context
 					return NxnaResult::NotSupported;
@@ -138,6 +157,7 @@ namespace Graphics
 			glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, (GLint*)&result->m_caps.MaxRenderTargets);
 			if (result->m_caps.MaxRenderTargets > 8) result->m_caps.MaxRenderTargets = 8; // the hardware supports more than Nxna does! :(
 			result->m_caps.TextureOriginUpperLeft = false;
+			glGetIntegerv(GL_MAX_VIEWPORTS, (GLint*)&result->m_caps.MaxViewports);
 
 			// set the states to the defaults
 			result->SetDepthStencilState(nullptr);
@@ -188,6 +208,7 @@ namespace Graphics
 			result->m_caps.MaxSamplerCount = D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT; 
 			result->m_caps.MaxRenderTargets = D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT;
 			result->m_caps.TextureOriginUpperLeft = true;
+			result->m_caps.MaxViewports = D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
 
 			result->m_d3d11State.Device = params->Direct3D11.Device;
 			result->m_d3d11State.Context = params->Direct3D11.DeviceContext;
@@ -232,7 +253,15 @@ namespace Graphics
 			}
 			else
 			{
+				glEnable(GL_DEBUG_OUTPUT);
 				glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+				glDebugMessageControl(
+					GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true
+				);
+				glDebugMessageControl(
+					GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_LOW, 0, NULL, false
+				);
+
 				glDebugMessageCallback(glDebugOutputCallback, nullptr);
 			}
 		}
@@ -370,6 +399,52 @@ namespace Graphics
 		default:
 			// we should never get here!
 			return Viewport();
+		}
+	}
+
+	void GraphicsDevice::SetScissorRects(int count, Nxna::Rectangle* rects)
+	{
+		// TODO: what should the behavior be if count > max # of viewports? OpenGL raises an error, but D3D11 docs don't specify what it does.
+		// TODO: D3D11 says any rects not set are disabled. Does OpenGL do the same? According to the spec
+		// it sounds like it just keeps the old values; the stencil test is not disabled like D3D11. So what should we do?
+		constexpr int maxCount = 32;
+		if (count > maxCount) count = maxCount;
+
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			D3D11_RECT r[maxCount];
+			for (int i = 0; i < count; i++)
+			{
+				r[i].left = rects[i].X;
+				r[i].top = rects[i].Y;
+				r[i].right = rects[i].X + rects[i].Width;
+				r[i].bottom = rects[i].Y + rects[i].Height;
+			}
+
+			m_d3d11State.Context->RSSetScissorRects((UINT)count, r);
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			GLint r[maxCount * 4];
+			
+			for (int i = 0; i < count; i++)
+			{
+				r[i * 4 + 0] = rects[i].X;
+				r[i * 4 + 1] = rects[i].Y + rects[i].Height;
+				r[i * 4 + 2] = rects[i].Width;
+				r[i * 4 + 3] = rects[i].Height;
+			}
+
+			glScissorArrayv(0, count, r);
+		}
+		default:
+			// we should never get here!
+			;
 		}
 	}
 
@@ -670,18 +745,31 @@ namespace Graphics
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 				if (glTexStorage2D)
-				{
 					glTexStorage2D(GL_TEXTURE_2D, mipLevels, internalformat, desc->Width, desc->Height);
-					if (initialData)
-						glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, desc->Width, desc->Height, format, sourceDataType, initialData[0].Data);
-				}
 				else
-				{
-					glTexImage2D(GL_TEXTURE_2D, 0, format, desc->Width, desc->Height, 0, format, sourceDataType, initialData[0].Data);
-				}
+					glTexImage2D(GL_TEXTURE_2D, 0, format, desc->Width, desc->Height, 0, format, sourceDataType, nullptr);
 
-				if (desc->MipLevels == 0)
-					glGenerateMipmap(GL_TEXTURE_2D);
+
+				if (initialData)
+				{
+					if (desc->MipLevels == 0)
+					{
+						glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, desc->Width, desc->Height, format, sourceDataType, initialData[0].Data);
+						glGenerateMipmap(GL_TEXTURE_2D);
+					}
+					else
+					{
+						for (int i = 0; i < desc->MipLevels; i++)
+						{
+							auto mipWidth = desc->Width >> i;
+							auto mipHeight = desc->Height >> i;
+							if (mipWidth == 0) mipWidth = 1;
+							if (mipHeight == 0) mipHeight = 1;
+
+							glTexSubImage2D(GL_TEXTURE_2D, i, 0, 0, mipWidth, mipHeight, format, sourceDataType, initialData[i].Data);
+						}
+					}
+				}
 			}
 		}
 			break;
@@ -717,6 +805,59 @@ namespace Graphics
 		default:
 			;
 		}
+	}
+
+	NxnaResult GraphicsDevice::UpdateTexture2D(const Texture2D* texture, unsigned int mipLevel, unsigned int arrayIndex, int xOffset, int yOffset, int width, int height, void* pixels)
+	{
+		switch(GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			// TODO
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+
+			if (glewIsSupported("GL_ARB_direct_state_access"))
+			{
+				if (texture->OpenGL.IsArray)
+				{
+					glTextureSubImage3D(texture->OpenGL.Handle, mipLevel, xOffset, yOffset, arrayIndex, width, height, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+				}
+				else
+				{
+					glTextureSubImage2D(texture->OpenGL.Handle, mipLevel, xOffset, yOffset, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+				}
+			}
+			else
+			{
+				GLint originalTexture;
+				if (texture->OpenGL.IsArray)
+				{
+					glGetIntegerv(GL_TEXTURE_BINDING_2D_ARRAY, &originalTexture);
+					glBindTexture(GL_TEXTURE_2D_ARRAY, texture->OpenGL.Handle);
+					glTexSubImage3D(GL_TEXTURE_2D_ARRAY, mipLevel, xOffset, yOffset, arrayIndex, width, height, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+					glBindTexture(GL_TEXTURE_2D_ARRAY, originalTexture);
+				}
+				else
+				{
+					glGetIntegerv(GL_TEXTURE_BINDING_2D, &originalTexture);
+					glBindTexture(GL_TEXTURE_2D, texture->OpenGL.Handle);
+					glTexSubImage2D(GL_TEXTURE_2D, mipLevel, xOffset, yOffset, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+					glBindTexture(GL_TEXTURE_2D, originalTexture);
+				}
+			}
+
+			return Nxna::NxnaResult::Success;
+
+			break;
+		default:
+			;
+		}
+
+		return Nxna::NxnaResult::NotSupported;
 	}
 
 	void GraphicsDevice::DestroyTexture2D(Texture2D* texture)
@@ -1069,6 +1210,30 @@ namespace Graphics
 			else
 				desc = state->OpenGL.Desc;
 
+			auto setGlBlendingForRt = [](RenderTargetBlendStateDesc* current, RenderTargetBlendStateDesc* requested, int count) {
+				for (int i = 0; i < count; i++)
+				{
+					if (current[i].BlendingEnabled != requested[i].BlendingEnabled)
+					{
+						if (requested[i].BlendingEnabled)
+							glEnablei(GL_BLEND, i);
+						else
+							glDisablei(GL_BLEND, i);
+					}
+
+					GLenum colorSrc, colorDest, alphaSrc, alphaDest;
+					CONVERT_GL_BLEND(requested[i].ColorSourceBlend, colorSrc);
+					CONVERT_GL_BLEND(requested[i].ColorDestinationBlend, colorDest);
+					CONVERT_GL_BLEND(requested[i].AlphaSourceBlend, alphaSrc);
+					CONVERT_GL_BLEND(requested[i].AlphaDestinationBlend, alphaDest);
+					glBlendFuncSeparatei(i, colorSrc, colorDest, alphaSrc, alphaDest);
+
+					GLenum colorFunc, alphaFunc;
+					CONVERT_GL_BLEND_FUNC(requested[i].ColorBlendFunction, colorFunc);
+					CONVERT_GL_BLEND_FUNC(requested[i].AlphaBlendFunction, alphaFunc);
+					glBlendEquationSeparatei(i, colorFunc, alphaFunc);
+				}
+			};
 #define SET_GL_BLENDING_FOR_RT(rtIndex, state) \
 				{ \
 			if (m_oglState.CurrentBlendState.RenderTarget[rtIndex].BlendingEnabled != desc.RenderTarget[rtIndex].BlendingEnabled) \
@@ -1115,7 +1280,7 @@ namespace Graphics
 				for (int i = 0; i < 8; i++)
 				{
 					if (memcmp(&m_oglState.CurrentBlendState.RenderTarget[i], &desc.RenderTarget[i], sizeof(RenderTargetBlendStateDesc)))
-						SET_GL_BLENDING_FOR_RT(i, state);
+						setGlBlendingForRt(m_oglState.CurrentBlendState.RenderTarget + i, desc.RenderTarget + i, 1);
 				}
 			}
 
@@ -1147,10 +1312,7 @@ namespace Graphics
 
 		allSeparate:
 			{
-				for (int i = 0; i < 8; i++)
-				{
-					SET_GL_BLENDING_FOR_RT(i, state);
-				}
+				setGlBlendingForRt(m_oglState.CurrentBlendState.RenderTarget, desc.RenderTarget, 8);
 
 				goto end;
 			}
@@ -1206,7 +1368,7 @@ namespace Graphics
 
 			switch(desc->FillingMode)
 			{
-			case FillMode::Wireframe: rasterDesc.FillMode = D3D11_FILL_WIREFRAME; break;
+			case FillMode::WireFrame: rasterDesc.FillMode = D3D11_FILL_WIREFRAME; break;
 			default: rasterDesc.FillMode = D3D11_FILL_SOLID; break;
 			}
 
@@ -1259,7 +1421,7 @@ namespace Graphics
 		{
 			RasterizerStateDesc desc;
 			if (state == nullptr)
-				desc = NXNA_RASTERIZERSTATEDESC_DEFAULT;
+				desc = NXNA_RASTERIZERSTATEDESC_CULLNONE;
 			else
 				desc = state->OpenGL.Desc;
 
@@ -1370,6 +1532,18 @@ namespace Graphics
 	case CompareFunction::NotEqual: d = GL_NOTEQUAL; break; \
 	} }
 
+#define NXNA_CONVERT_COMPARISON_OGL_R(s, d) { \
+	switch(s) { \
+	case GL_ALWAYS: d = CompareFunction::Always; break; \
+	case GL_EQUAL: d = CompareFunction::Equal; break; \
+	case GL_GREATER: d = CompareFunction::Greater;  break; \
+	case GL_GEQUAL: d = CompareFunction::GreaterEqual; break; \
+	case GL_LESS: d = CompareFunction::Less; break; \
+	case GL_LEQUAL: d = CompareFunction::LessEqual; break; \
+	case GL_NEVER: d = CompareFunction::Never; break; \
+	case GL_NOTEQUAL: d = CompareFunction::NotEqual; break; \
+} }
+
 #define NXNA_CONVERT_STENCIL_OP_OGL(s, d) { \
 	switch(s) { \
 	case StencilOperation::Decrement: d = GL_DECR_WRAP; break; \
@@ -1380,6 +1554,18 @@ namespace Graphics
 	case StencilOperation::Keep: d = GL_KEEP; break; \
 	case StencilOperation::Replace: d = GL_REPLACE; break; \
 	case StencilOperation::Zero: d = GL_ZERO; break; \
+	} }
+
+#define NXNA_CONVERT_STENCIL_OP_OGL_R(s, d) { \
+	switch(s) { \
+	case GL_DECR_WRAP: d = StencilOperation::Decrement; break; \
+	case GL_DECR: d = StencilOperation::DecrementSaturation; break; \
+	case GL_INCR_WRAP: d = StencilOperation::Increment; break; \
+	case GL_INCR: d = StencilOperation::IncrementSaturation; break; \
+	case GL_INVERT: d = StencilOperation::Invert; break; \
+	case GL_KEEP: d = StencilOperation::Keep; break; \
+	case GL_REPLACE: d = StencilOperation::Replace; break; \
+	case GL_ZERO: d = StencilOperation::Zero; break; \
 	} }
 
 	NxnaResult GraphicsDevice::CreateDepthStencilState(const DepthStencilStateDesc* desc, DepthStencilState* result)
@@ -1394,8 +1580,8 @@ namespace Graphics
 		{
 			D3D11_DEPTH_STENCIL_DESC ddesc;
 			ZeroMemory(&ddesc, sizeof(D3D11_DEPTH_STENCILOP_DESC));
-			ddesc.DepthEnable = desc->DepthBufferEnabled;
-			ddesc.DepthWriteMask = desc->DepthBufferWriteEnabled ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
+			ddesc.DepthEnable = desc->DepthBufferEnable;
+			ddesc.DepthWriteMask = desc->DepthBufferWriteEnable ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
 			NXNA_CONVERT_COMPARISON_D3D11(desc->DepthBufferFunction, ddesc.DepthFunc);
 
 			ddesc.StencilEnable = desc->StencilEnable;
@@ -1458,9 +1644,9 @@ namespace Graphics
 				newState = NXNA_DEPTHSTENCIL_DEFAULT;
 
 			// depth buffer stuff
-			if (state == nullptr || m_oglState.CurrentDepthStencilState.DepthBufferEnabled != newState.DepthBufferEnabled)
+			if (state == nullptr || m_oglState.CurrentDepthStencilState.DepthBufferEnable != newState.DepthBufferEnable)
 			{
-				if (newState.DepthBufferEnabled)
+				if (newState.DepthBufferEnable)
 					glEnable(GL_DEPTH_TEST);
 				else
 					glDisable(GL_DEPTH_TEST);
@@ -1473,9 +1659,9 @@ namespace Graphics
 				glDepthFunc(f);
 			}
 
-			if (state == nullptr || m_oglState.CurrentDepthStencilState.DepthBufferWriteEnabled != newState.DepthBufferWriteEnabled)
+			if (state == nullptr || m_oglState.CurrentDepthStencilState.DepthBufferWriteEnable != newState.DepthBufferWriteEnable)
 			{
-				glDepthMask(newState.DepthBufferWriteEnabled ? GL_TRUE : GL_FALSE);
+				glDepthMask(newState.DepthBufferWriteEnable ? GL_TRUE : GL_FALSE);
 			}
 
 			// stencil buffer stuff
@@ -1538,6 +1724,70 @@ namespace Graphics
 		}
 	}
 
+	void GraphicsDevice::GetDepthStencilState(DepthStencilState* state)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			// TODO
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			// depth buffer stuff
+			state->OpenGL.Desc.DepthBufferEnable = glIsEnabled(GL_DEPTH_TEST);
+
+			int f;
+			glGetIntegerv(GL_DEPTH_FUNC, &f);
+			NXNA_CONVERT_COMPARISON_OGL_R(f, state->OpenGL.Desc.DepthBufferFunction);
+
+			glGetIntegerv(GL_DEPTH_WRITEMASK, &f);
+			state->OpenGL.Desc.DepthBufferWriteEnable = f == GL_TRUE;
+
+
+			// stencil buffer stuff
+			state->OpenGL.Desc.StencilEnable = glIsEnabled(GL_STENCIL_TEST);
+
+			glGetIntegerv(GL_STENCIL_FUNC, &f);
+			NXNA_CONVERT_COMPARISON_OGL_R(f, state->OpenGL.Desc.StencilFunction);
+			glGetIntegerv(GL_STENCIL_REF, &f);
+			state->OpenGL.Desc.ReferenceStencil = f;
+
+			glGetIntegerv(GL_STENCIL_FAIL, &f);
+			NXNA_CONVERT_STENCIL_OP_OGL_R(f, state->OpenGL.Desc.StencilFail);
+			glGetIntegerv(GL_STENCIL_PASS_DEPTH_FAIL, &f);
+			NXNA_CONVERT_STENCIL_OP_OGL_R(f, state->OpenGL.Desc.StencilDepthBufferFail);
+			glGetIntegerv(GL_STENCIL_PASS_DEPTH_PASS, &f);
+			NXNA_CONVERT_STENCIL_OP_OGL_R(f, state->OpenGL.Desc.StencilPass);
+		}
+		break;
+		default:
+			;
+		}
+	}
+
+	void GraphicsDevice::GetDepthStencilStateDesc(const DepthStencilState* state, DepthStencilStateDesc* result)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			// TODO
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			if (state != nullptr && result != nullptr)
+				*result = state->OpenGL.Desc;
+		}
+		}
+	}
+
 #define NXNA_CONVERT_TEXTURE_ADDRESS_OGL(s, d) { \
 	switch(s) { \
 	case TextureAddressMode::Clamp: d = GL_CLAMP_TO_EDGE; break; \
@@ -1545,6 +1795,15 @@ namespace Graphics
 	case TextureAddressMode::Wrap: d = GL_REPEAT; break; \
 	case TextureAddressMode::Border: d = GL_CLAMP_TO_BORDER; break; \
 	case TextureAddressMode::MirrorOnce: d = GL_MIRROR_CLAMP_TO_EDGE; break; \
+		} }
+
+#define NXNA_CONVERT_TEXTURE_ADDRESS_OGL_R(s, d) { \
+	switch(s) { \
+	case GL_CLAMP_TO_EDGE: d = TextureAddressMode::Clamp; break; \
+	case GL_MIRRORED_REPEAT: d = TextureAddressMode::Mirror; break; \
+	case GL_REPEAT: d = TextureAddressMode::Wrap; break; \
+	case GL_CLAMP_TO_BORDER: d = TextureAddressMode::Border; break; \
+	case GL_MIRROR_CLAMP_TO_EDGE: d = TextureAddressMode::MirrorOnce; break; \
 		} }
 
 #define NXNA_CONVERT_TEXTURE_ADDRESS_D3D11(s, d) { \
@@ -1791,6 +2050,92 @@ namespace Graphics
 			glDeleteSamplers(1, &state->OpenGL.Handle);
 		}
 			break;
+		default:
+			;
+		}
+	}
+
+	void GraphicsDevice::GetSamplerStates(unsigned int startSlot, unsigned int numSamplers, SamplerState* result)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			// TODO
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			for (int i = 0; i < numSamplers; i++)
+			{
+				glActiveTexture(GL_TEXTURE0 + startSlot + i);
+
+				int sampler;
+				glGetIntegerv(GL_SAMPLER_BINDING, &sampler);
+
+				result[i].OpenGL.Handle = sampler;
+			}
+		} break;
+		}
+	}
+
+	void GraphicsDevice::GetSamplerStateDesc(const SamplerState* state, SamplerStateDesc* result)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			// TODO
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			GLint minFilter, magFilter;
+			glGetSamplerParameteriv(state->OpenGL.Handle, GL_TEXTURE_MIN_FILTER, &minFilter);
+			glGetSamplerParameteriv(state->OpenGL.Handle, GL_TEXTURE_MAG_FILTER, &magFilter);
+
+			if (magFilter == GL_NEAREST)
+			{
+				if (minFilter == GL_NEAREST_MIPMAP_NEAREST)
+					result->Filter = TextureFilter::Point;
+				else if (minFilter == GL_NEAREST_MIPMAP_LINEAR)
+					result->Filter = TextureFilter::PointMipLinear;
+				else if (minFilter == GL_LINEAR_MIPMAP_LINEAR)
+					result->Filter = TextureFilter::MinLinearMagPointMipLinear;
+				else if (minFilter == GL_LINEAR_MIPMAP_NEAREST)
+					result->Filter = TextureFilter::MinLinearMagPointMipPoint;
+			}
+			else if (magFilter == GL_LINEAR)
+			{
+				if (minFilter == GL_NEAREST_MIPMAP_NEAREST)
+					result->Filter = TextureFilter::MinPointMagLinearMipPoint;
+				else if (minFilter == GL_NEAREST_MIPMAP_LINEAR)
+					result->Filter = TextureFilter::MinPointMagLinearMipLinear;
+				else if (minFilter == GL_LINEAR_MIPMAP_LINEAR)
+					result->Filter = TextureFilter::Linear;
+				else if (minFilter == GL_LINEAR_MIPMAP_NEAREST)
+					result->Filter = TextureFilter::LinearMipPoint;
+			}
+
+			GLint wrapU, wrapV, wrapW;
+
+			glGetSamplerParameteriv(state->OpenGL.Handle, GL_TEXTURE_WRAP_S, &wrapU);
+			glGetSamplerParameteriv(state->OpenGL.Handle, GL_TEXTURE_WRAP_T, &wrapV);
+			glGetSamplerParameteriv(state->OpenGL.Handle, GL_TEXTURE_WRAP_R, &wrapW);
+			glGetSamplerParameterfv(state->OpenGL.Handle, GL_TEXTURE_LOD_BIAS, &result->MipLODBias);
+			glGetSamplerParameteriv(state->OpenGL.Handle, GL_TEXTURE_MAX_ANISOTROPY_EXT, (int*)&result->MaxAnisotropy);
+			glGetSamplerParameterfv(state->OpenGL.Handle, GL_TEXTURE_BORDER_COLOR, result->BorderColor);
+			glGetSamplerParameterfv(state->OpenGL.Handle, GL_TEXTURE_MIN_LOD, &result->MinLOD);
+			glGetSamplerParameterfv(state->OpenGL.Handle, GL_TEXTURE_MAX_LOD, &result->MaxLOD);
+			NXNA_CONVERT_TEXTURE_ADDRESS_OGL_R(wrapU, result->AddressU);
+			NXNA_CONVERT_TEXTURE_ADDRESS_OGL_R(wrapV, result->AddressV);
+			NXNA_CONVERT_TEXTURE_ADDRESS_OGL_R(wrapW, result->AddressW);
+		}
+		break;
 		default:
 			;
 		}
@@ -2099,7 +2444,10 @@ namespace Graphics
 
 	void GraphicsDevice::SetVertexBuffer(VertexBuffer* vertexBuffer, unsigned int offset, unsigned int stride)
 	{
-		SetVertexBuffers(0, 1, &vertexBuffer, &offset, &stride);
+		if (vertexBuffer == nullptr)
+			SetVertexBuffers(0, 1, nullptr, &offset, &stride);
+		else
+			SetVertexBuffers(0, 1, &vertexBuffer, &offset, &stride);
 	}
 
 	void GraphicsDevice::SetVertexBuffers(unsigned int startSlot, unsigned int numBuffers, VertexBuffer** vertexBuffers, unsigned int* offsets, unsigned int* stride)
@@ -2120,7 +2468,7 @@ namespace Graphics
 		{
 			for (unsigned int i = 0; i < numBuffers; i++)
 			{
-				if (vertexBuffers[i] == nullptr)
+				if (vertexBuffers == nullptr || vertexBuffers[i] == nullptr)
 				{
 					if (m_oglState.CurrentVertexBufferActive[startSlot + i])
 					{
@@ -2242,7 +2590,7 @@ namespace Graphics
 
 	void GraphicsDevice::UpdateConstantBuffer(ConstantBuffer buffer, void* data, unsigned int dataLengthInBytes)
 	{
-		NXNA_VALIDATION_ASSERT(dataLengthInBytes == buffer.ByteLength, "Data length is not correct");
+		NXNA_VALIDATION_ASSERT(dataLengthInBytes <= buffer.ByteLength, "Data length is not correct");
 		NXNA_VALIDATION_ASSERT(buffer.BufferUsage != Usage::Dynamic, "Constant buffer cannot be Dynamic");
 
 		switch (GetType())
@@ -2488,6 +2836,34 @@ namespace Graphics
 		default:
 			;
 		}
+	}
+
+	Texture2D GraphicsDevice::GetTextureFromRenderTarget(RenderTarget* renderTarget, int index)
+	{
+		switch (GetType())
+		{
+#ifdef NXNA_ENABLE_DIRECT3D11
+		case GraphicsDeviceType::Direct3D11:
+		{
+			Texture2D result = {};
+			// TODO
+			return result;
+		}
+		break;
+#endif
+		case GraphicsDeviceType::OpenGl41:
+		{
+			Texture2D result = {};
+			result.OpenGL.Handle = renderTarget->OpenGL.FBO;
+			
+			return result;
+		}
+		break;
+		default:
+			;
+		}
+
+		return Texture2D{};
 	}
 
 	NxnaResult GraphicsDevice::CreateRenderTargetColorAttachment(const RenderTargetColorAttachmentDesc* desc, RenderTargetColorAttachment* result)
@@ -3207,7 +3583,7 @@ namespace Graphics
 		case GraphicsDeviceType::OpenGl41:
 		{
 			// force depth writing on, otherwise the clear won't have any effect
-			if (m_oglState.CurrentDepthStencilState.DepthBufferWriteEnabled == false)
+			if (m_oglState.CurrentDepthStencilState.DepthBufferWriteEnable == false)
 			{
 				glDepthMask(GL_TRUE);
 			}
@@ -3222,7 +3598,7 @@ namespace Graphics
 				glClearBufferiv(GL_STENCIL, 0, &stencilValue);
 
 			// restore the depth mask
-			if (m_oglState.CurrentDepthStencilState.DepthBufferWriteEnabled == false)
+			if (m_oglState.CurrentDepthStencilState.DepthBufferWriteEnable == false)
 			{
 				glDepthMask(GL_FALSE);
 			}

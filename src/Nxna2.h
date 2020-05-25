@@ -111,20 +111,13 @@ Generally you should treat those objects as completely opaque and not mess aroun
 
 namespace Nxna
 {
-	const float Pi = 3.14159265358979323846f;
-	const float PiOver2 = 1.57079632679489661923f;
-
-	class MathHelper
+	struct Point
 	{
-	public:
-		static inline float Clamp(float value, float min, float max)
-		{
-			return value < min ? min : (value > max ? max : value);
-		}
+		int X, Y;
 	};
 }
 
-
+#include "MathHelper.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -132,41 +125,7 @@ namespace Nxna
 #include "Quaternion.h"
 #endif
 
-
-// the basics
-namespace Nxna
-{
-	struct Rectangle
-	{
-		int X, Y, Width, Height;
-
-		Rectangle()
-		{
-			X = Y = Width = Height = 0;
-		}
-
-		Rectangle(int x, int y, int width, int height)
-		{
-			X = x;
-			Y = y;
-			Width = width;
-			Height = height;
-		}
-
-#ifdef NXNA_ENABLE_MATH
-		Vector2 GetCenter()
-		{
-			return Vector2(X + Width * 0.5f, Y + Height * 0.5f);
-		}
-#endif
-		void GetCenter(float* centerX, float* centerY)
-		{
-			if (centerX != nullptr) *centerX = X + Width * 0.5f;
-			if (centerY != nullptr) *centerY = Y + Height * 0.5f;
-		}
-	};
-}
-
+#include "Rectangle.h"
 
 #ifdef NXNA_ENABLE_RENDERER
 #include "Color.h"
@@ -200,6 +159,10 @@ namespace Nxna
 #define NXNA_MEMSET memset
 #endif
 
+#ifndef NXNA_MEMCPY
+#define NXNA_MEMCPY memcpy
+#endif
+
 #ifndef _WIN32
 #ifdef NXNA_ENABLE_DIRECT3D11
 #error NXNA_ENABLE_DIRECT3D11 is not valid on any platform other than Windows
@@ -209,6 +172,7 @@ namespace Nxna
 
 #ifndef NXNA_ERROR_STOP_COMPILATION
 #ifdef NXNA_ENABLE_MATH
+#include "MathHelper.cpp"
 #include "Vector2.cpp"
 #include "Vector3.cpp"
 #include "Vector4.cpp"

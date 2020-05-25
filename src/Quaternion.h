@@ -26,6 +26,9 @@ namespace Nxna
 
 		static void Multiply(const Quaternion& q1, const Quaternion& q2, Quaternion& result);
 		static void Multiply(const Quaternion& q, Nxna::Vector3 v, Nxna::Vector3& result);
+
+		static Quaternion Inverse(Quaternion q);
+		static void Inverse(const Quaternion& q, Quaternion& result);
 	};
 }
 

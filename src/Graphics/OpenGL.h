@@ -34,7 +34,7 @@ namespace Graphics
 {
 namespace OpenGL
 {
-	void LoadGLExtensions(int glMajorVersion, int glMinorVersion);
+	bool LoadGLExtensions(int glMajorVersion, int glMinorVersion);
 }
 }
 }

@@ -255,28 +255,28 @@ namespace Graphics
 			verts[0 * stride + 2] = depth;
 			verts[0 * stride + 3] = texTLX;
 			verts[0 * stride + 4] = texTLY;
-			verts[0 * stride + 5] = *(float*)&packedColor;
+			NXNA_MEMCPY(&verts[0 * stride + 5], &packedColor, 4);
 
 			verts[1 * stride + 0] = x + o3 * cosine - o4 * sine;
 			verts[1 * stride + 1] = y + o3 * sine + o4 * cosine;
 			verts[1 * stride + 2] = depth;
 			verts[1 * stride + 3] = texBRX;
 			verts[1 * stride + 4] = texTLY;
-			verts[1 * stride + 5] = *(float*)&packedColor;
+			NXNA_MEMCPY(&verts[1 * stride + 5], &packedColor, 4);
 
 			verts[2 * stride + 0] = x + o5 * cosine - o6 * sine;
 			verts[2 * stride + 1] = y + o5 * sine + o6 * cosine;
 			verts[2 * stride + 2] = depth;
 			verts[2 * stride + 3] = texBRX;
 			verts[2 * stride + 4] = texBRY;
-			verts[2 * stride + 5] = *(float*)&packedColor;
+			NXNA_MEMCPY(&verts[2 * stride + 5], &packedColor, 4);
 
 			verts[3 * stride + 0] = x + o7 * cosine - o8 * sine;
 			verts[3 * stride + 1] = y + o7 * sine + o8 * cosine;
 			verts[3 * stride + 2] = depth;
 			verts[3 * stride + 3] = texTLX;
 			verts[3 * stride + 4] = texBRY;
-			verts[3 * stride + 5] = *(float*)&packedColor;
+			NXNA_MEMCPY(&verts[3 * stride + 5], &packedColor, 4);
 
 			verts += stride * 4;
 		}

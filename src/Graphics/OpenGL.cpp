@@ -15,7 +15,7 @@ namespace Graphics
 {
 namespace OpenGL
 {
-	void LoadGLExtensions(int glMajorVersion, int glMinorVersion)
+	bool LoadGLExtensions(int glMajorVersion, int glMinorVersion)
 	{
 #if 0
 #define GL_LOAD_PROC(t, p) p = (t)wglGetProcAddress(#p)
@@ -77,7 +77,8 @@ namespace OpenGL
 		// always attempt to load these functions, no matter the context version
 		GL_LOAD_PROC(PFNGLDEBUGMESSAGECALLBACKPROC, glDebugMessageCallback);
 #else
-		glewInit();
+		glewExperimental = true;
+		return glewInit() == GLEW_OK;
 #endif
 	}
 }

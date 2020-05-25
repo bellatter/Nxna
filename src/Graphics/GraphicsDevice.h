@@ -51,6 +51,7 @@ namespace Nxna
 
 			unsigned int MaxSamplerCount;
 			unsigned int MaxRenderTargets;
+			unsigned int MaxViewports;
 			bool TextureOriginUpperLeft;
 		};
 
@@ -220,6 +221,7 @@ namespace Nxna
 			}
 
 			float GetAspectRatio() const { return Width / (float)Height; }
+			Rectangle GetBounds() const { return Rectangle(X, Y, Width, Height); }
 
 #ifdef NXNA_ENABLE_MATH
 			Vector3 Project(const Vector3& source,
@@ -276,8 +278,8 @@ namespace Nxna
 					// TODO
 				} Direct3D11;
 				#endif
-			};
-			
+		};
+
 		};
 
 		enum class ShaderType
@@ -623,6 +625,8 @@ namespace Nxna
 			/// Gets the current viewport
 			Viewport GetViewport();
 
+			void SetScissorRects(int count, Rectangle* rects);
+
 			/// Creates a new shader object
 			/// @param[in] type The type of shader to create
 			/// @param[in] bytecode A pointer to the bytecode of the shader. This can be Direct3D bytecode, or GLSL source code.
@@ -644,6 +648,9 @@ namespace Nxna
 			/// @return NxnaResult::Success if successful, or an error otherwise
 			NxnaResult CreateTexture2D(const TextureCreationDesc* desc, const SubresourceData* initialData, Texture2D* result);
 			void BindTexture(Texture2D* texture, int textureUnit);
+
+			// the following few methods are experimental, and particularly unstable
+			NxnaResult UpdateTexture2D(const Texture2D*, unsigned int mipLevel, unsigned int arrayIndex, int xOffset, int yOffset, int width, int height, void* pixels);
 
 			/// Destroys an existing texture object
 			/// @param[in] texture A pointer to the texture to delete
@@ -678,11 +685,15 @@ namespace Nxna
 			NxnaResult CreateDepthStencilState(const DepthStencilStateDesc* desc, DepthStencilState* result);
 			void SetDepthStencilState(DepthStencilState* state);
 			void DestroyDepthStencilState(DepthStencilState* state);
+			void GetDepthStencilState(DepthStencilState* state);
+			void GetDepthStencilStateDesc(const DepthStencilState* state, DepthStencilStateDesc* result);
 
 			NxnaResult CreateSamplerState(const SamplerStateDesc* desc, SamplerState* result);
 			void SetSamplerState(unsigned int slot, SamplerState* sampler);
 			void SetSamplerStates(unsigned int startSlot, unsigned int numSamplers, SamplerState* const* samplers);
 			void DestroySamplerState(SamplerState* state);
+			void GetSamplerStates(unsigned int startSlot, unsigned int numSamplers, SamplerState* result);
+			void GetSamplerStateDesc(const SamplerState* state, SamplerStateDesc* result);
 
 			/// Create a new IndexBuffer object
 			/// @param[in] desc A pointer to a IndexBufferDesc object describing the new index buffer
@@ -730,6 +741,7 @@ namespace Nxna
 			NxnaResult CreateRenderTarget(const RenderTargetDesc* desc, RenderTarget* result);
 			NxnaResult BindRenderTarget(RenderTarget* renderTarget);
 			void DestroyRenderTarget(RenderTarget* renderTarget);
+			Texture2D GetTextureFromRenderTarget(RenderTarget* renderTarget, int index);
 
 			NxnaResult CreateRenderTargetColorAttachment(const RenderTargetColorAttachmentDesc* desc, RenderTargetColorAttachment* result);
 			NxnaResult CreateRenderTargetDepthAttachment(const RenderTargetDepthAttachmentDesc* desc, RenderTargetDepthAttachment* result);

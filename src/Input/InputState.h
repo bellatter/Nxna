@@ -25,10 +25,6 @@ namespace Input
 
 		unsigned char KeyboardKeysData[256];
 
-		static const int KeyboardBufferLength = 8;
-		unsigned int BufferedKeys[KeyboardBufferLength];
-		unsigned char NumBufferedKeys;
-
 		static void FrameReset(InputState* state)
 		{
 			for (int i = 0; i < 5; i++)
@@ -39,8 +35,7 @@ namespace Input
 
 			state->RelMouseX = 0;
 			state->RelMouseY = 0;
-
-			state->NumBufferedKeys = 0;
+			state->RelWheel = 0;
 		}
 
 		static void InjectMouseMove(InputState* state, int mx, int my)
@@ -52,6 +47,12 @@ namespace Input
 			state->MouseY = my;
 			state->RelMouseX = relX;
 			state->RelMouseY = relY;
+		}
+
+		static void InjectMouseWheel(InputState* state, int relWheel)
+		{
+			state->RelWheel = relWheel;
+			state->Wheel += relWheel;
 		}
 
 		static void InjectMouseButtonEvent(InputState* state, bool isButtonDown, int button)
@@ -67,24 +68,24 @@ namespace Input
 			injectEvent(&state->KeyboardKeysData[button], isKeyDown);
 		}
 
-		static bool IsKeyDown(InputState* state, Key key)
+		static bool IsKeyDown(const InputState* state, Key key)
 		{
 			return (state->KeyboardKeysData[(int)key] & 0x80) == 0x80;
 		}
 
-		static int GetKeyTransitionCount(InputState* state, Key key)
+		static int GetKeyTransitionCount(const InputState* state, Key key)
 		{
 			return (state->KeyboardKeysData[(int)key] & 0x7f);
 		}
 
-		static bool IsMouseButtonDown(InputState* state, int button)
+		static bool IsMouseButtonDown(const InputState* state, int button)
 		{
 			if (button < 0 || button >= 5) return false;
 
 			return (state->MouseButtonData[button] & 0x80) == 0x80;
 		}
 
-		static bool GetMouseButtonTransitionCount(InputState* state, int button)
+		static bool GetMouseButtonTransitionCount(const InputState* state, int button)
 		{
 			if (button < 0 || button >= 5) return false;
 

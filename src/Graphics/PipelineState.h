@@ -108,8 +108,8 @@ namespace Graphics
 	struct DepthStencilStateDesc
 	{
 		CompareFunction DepthBufferFunction;
-		bool DepthBufferEnabled;
-		bool DepthBufferWriteEnabled;
+		bool DepthBufferEnable;
+		bool DepthBufferWriteEnable;
 
 		bool StencilEnable;
 		int ReferenceStencil;
@@ -250,7 +250,7 @@ namespace Graphics
 	enum class FillMode : nxna_byte
 	{
 		Solid,
-		Wireframe
+		WireFrame
 	};
 
 	struct RasterizerStateDesc
@@ -384,9 +384,16 @@ namespace Graphics
 		false \
 		}
 
-#define NXNA_RASTERIZERSTATEDESC_DEFAULT { \
+#define NXNA_RASTERIZERSTATEDESC_CULLCOUNTERCLOCKWISE { \
 		Nxna::Graphics::CullMode::CullBackFaces, \
 		false, \
+		Nxna::Graphics::FillMode::Solid, \
+		false \
+		}
+
+#define NXNA_RASTERIZERSTATEDESC_CULLCLOCKWISE { \
+		Nxna::Graphics::CullMode::CullBackFaces, \
+		true, \
 		Nxna::Graphics::FillMode::Solid, \
 		false \
 		}
@@ -395,6 +402,18 @@ namespace Graphics
 		Nxna::Graphics::CompareFunction::Less, \
 		true, \
 		true, \
+		false, \
+		0, \
+		Nxna::Graphics::CompareFunction::Always, \
+		Nxna::Graphics::StencilOperation::Keep, \
+		Nxna::Graphics::StencilOperation::Keep, \
+		Nxna::Graphics::StencilOperation::Keep \
+		}
+
+#define NXNA_DEPTHSTENCIL_NONE { \
+		Nxna::Graphics::CompareFunction::Less, \
+		false, \
+		false, \
 		false, \
 		0, \
 		Nxna::Graphics::CompareFunction::Always, \
@@ -463,6 +482,33 @@ namespace Graphics
 		Nxna::Graphics::Blend::One, \
 	} \
 	}
+
+#define NXNA_BLENDSTATEDESC_NONPREMULTIPLIED { \
+	true, \
+	{ \
+		true, \
+		Nxna::Graphics::BlendFunction::Add, \
+		Nxna::Graphics::Blend::InverseSourceAlpha, \
+		Nxna::Graphics::Blend::SourceAlpha, \
+		Nxna::Graphics::BlendFunction::Add, \
+		Nxna::Graphics::Blend::InverseSourceAlpha, \
+		Nxna::Graphics::Blend::SourceAlpha, \
+	} \
+	}
+
+#define NXNA_BLENDSTATEDESC_ADDITIVE { \
+	true, \
+	{ \
+		true, \
+		Nxna::Graphics::BlendFunction::Add, \
+		Nxna::Graphics::Blend::One, \
+		Nxna::Graphics::Blend::SourceAlpha, \
+		Nxna::Graphics::BlendFunction::Add, \
+		Nxna::Graphics::Blend::One, \
+		Nxna::Graphics::Blend::SourceAlpha, \
+	} \
+	}
+	// TODO: should this enable blending on all render targets, not just the first one?
 }
 }
 
