@@ -221,7 +221,7 @@ namespace Nxna
 			}
 
 			float GetAspectRatio() const { return Width / (float)Height; }
-			Rectangle GetBounds() const { return Rectangle(X, Y, Width, Height); }
+			Rectangle GetBounds() const { return Rectangle((int)X, (int)Y, (int)Width, (int)Height); }
 
 #ifdef NXNA_ENABLE_MATH
 			Vector3 Project(const Vector3& source,

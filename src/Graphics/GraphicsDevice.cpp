@@ -81,10 +81,10 @@ namespace Graphics
 
 #ifdef _WIN32
 #define NXNA_SET_ERROR_DETAILS(api, desc) { m_errorDetails.Filename = __FILE__; m_errorDetails.LineNumber = __LINE__; m_errorDetails.APIErrorCode = api; \
-	strncpy_s(m_errorDetails.ErrorDescription, desc, 255); m_errorDetails.ErrorDescription[255] = 0; }
+	strncpy_s(m_errorDetails.ErrorDescription, desc, 127); m_errorDetails.ErrorDescription[127] = 0; }
 #else
 #define NXNA_SET_ERROR_DETAILS(api, desc) { m_errorDetails.Filename = __FILE__; m_errorDetails.LineNumber = __LINE__; m_errorDetails.APIErrorCode = api; \
-	strncpy(m_errorDetails.ErrorDescription, desc, 255); m_errorDetails.ErrorDescription[255] = 0; }
+	strncpy(m_errorDetails.ErrorDescription, desc, 127); m_errorDetails.ErrorDescription[127] = 0; }
 #endif
 
 	void GLEWAPIENTRY glDebugOutputCallback(GLenum source,
@@ -435,7 +435,7 @@ namespace Graphics
 			for (int i = 0; i < count; i++)
 			{
 				r[i * 4 + 0] = rects[i].X;
-				r[i * 4 + 1] = rects[i].Y + rects[i].Height;
+				r[i * 4 + 1] = m_oglState.CurrentFBOHeight - (rects[i].Y + rects[i].Height);
 				r[i * 4 + 2] = rects[i].Width;
 				r[i * 4 + 3] = rects[i].Height;
 			}
@@ -759,7 +759,7 @@ namespace Graphics
 					}
 					else
 					{
-						for (int i = 0; i < desc->MipLevels; i++)
+						for (unsigned int i = 0; i < desc->MipLevels; i++)
 						{
 							auto mipWidth = desc->Width >> i;
 							auto mipHeight = desc->Height >> i;
@@ -2068,7 +2068,7 @@ namespace Graphics
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-			for (int i = 0; i < numSamplers; i++)
+			for (unsigned int i = 0; i < numSamplers; i++)
 			{
 				glActiveTexture(GL_TEXTURE0 + startSlot + i);
 
@@ -2203,9 +2203,14 @@ namespace Graphics
 		{
 			result->OpenGL.ByteLength = (int)desc->ElementSize * desc->NumElements;
 
+			GLint currentBuffer;
+			glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &currentBuffer);
+
 			glGenBuffers(1, &result->OpenGL.Buffer);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, result->OpenGL.Buffer);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, desc->InitialDataByteCount, desc->InitialData, GL_STATIC_DRAW);
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, currentBuffer);
 
 			return NxnaResult::Success;
 		}
@@ -2227,6 +2232,12 @@ namespace Graphics
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
+			if (buffer.OpenGL.Buffer == m_oglState.CurrentIndexBuffer)
+			{
+				m_oglState.CurrentIndexBuffer = 0;
+				m_oglState.CurrentIndexBufferDirty = true;
+			}
+
 			glDeleteBuffers(1, &buffer.OpenGL.Buffer);
 		}
 			break;
@@ -2261,11 +2272,18 @@ namespace Graphics
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.OpenGL.Buffer);
-			if (startOffset == 0)
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, dataLengthInBytes, data, GL_STATIC_DRAW);
+			if (GLEW_ARB_direct_state_access)
+			{
+				glNamedBufferSubData(buffer.OpenGL.Buffer, startOffset, dataLengthInBytes, data);
+			}
 			else
-				glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, startOffset, dataLengthInBytes, data);
+			{
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.OpenGL.Buffer);
+				if (startOffset == 0)
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, dataLengthInBytes, data, GL_STATIC_DRAW);
+				else
+					glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, startOffset, dataLengthInBytes, data);
+			}
 		}
 			break;
 		default:
@@ -2371,11 +2389,18 @@ namespace Graphics
 		{
 			result->OpenGL.ByteLength = desc->ByteLength;
 
+			GLint currentBuffer;
+			glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &currentBuffer);
+
 			glGenBuffers(1, &result->OpenGL.Buffer);
 			glBindBuffer(GL_ARRAY_BUFFER, result->OpenGL.Buffer);
 			glBufferData(GL_ARRAY_BUFFER, result->OpenGL.ByteLength, nullptr, GL_STATIC_DRAW);
 			if (desc->InitialData != nullptr)
 				glBufferSubData(GL_ARRAY_BUFFER, 0, desc->InitialDataByteCount, desc->InitialData);
+
+			glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
+
+			printf("Created VB %u size: %u\n", result->OpenGL.Buffer, desc->ByteLength);
 
 			return NxnaResult::Success;
 		}
@@ -2430,11 +2455,24 @@ namespace Graphics
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-			glBindBuffer(GL_ARRAY_BUFFER, buffer.OpenGL.Buffer);
-			if (startOffset == 0)
-				glBufferData(GL_ARRAY_BUFFER, dataLengthInBytes, data, GL_STATIC_DRAW);
+			if (GLEW_ARB_direct_state_access)
+			{
+				glNamedBufferSubData(buffer.OpenGL.Buffer, startOffset, dataLengthInBytes, data);
+			}
 			else
-				glBufferSubData(GL_ARRAY_BUFFER, startOffset, dataLengthInBytes, data);
+			{
+				GLint currentBuffer;
+				glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &currentBuffer);
+
+				glBindBuffer(GL_ARRAY_BUFFER, buffer.OpenGL.Buffer);
+				if (startOffset == 0)
+					glBufferData(GL_ARRAY_BUFFER, dataLengthInBytes, data, GL_STATIC_DRAW);
+				else
+					glBufferSubData(GL_ARRAY_BUFFER, startOffset, dataLengthInBytes, data);
+				
+				// restore the old buffer
+				glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
+			}
 		}
 			break;
 		default:
@@ -2563,6 +2601,9 @@ namespace Graphics
 		case GraphicsDeviceType::OpenGl41:
 		{
 			result->OpenGL.ByteLength = desc->ByteCount;
+			
+			GLint currentBuffer;
+			glGetIntegerv(GL_UNIFORM_BUFFER_BINDING, &currentBuffer);
 
 			glGenBuffers(1, &result->OpenGL.UniformBuffer);
 			glBindBuffer(GL_UNIFORM_BUFFER, result->OpenGL.UniformBuffer);
@@ -2579,6 +2620,8 @@ namespace Graphics
 			}
 
 			glBufferData(GL_UNIFORM_BUFFER, desc->ByteCount, desc->InitialData, glUsage);
+
+			glBindBuffer(GL_UNIFORM_BUFFER, currentBuffer);
 		}
 			break;
 		default:
@@ -2604,8 +2647,20 @@ namespace Graphics
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-			glBindBuffer(GL_ARRAY_BUFFER, buffer.OpenGL.UniformBuffer);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, dataLengthInBytes, data);
+			if (GLEW_ARB_direct_state_access)
+			{
+				glNamedBufferSubData(buffer.OpenGL.UniformBuffer, 0, dataLengthInBytes, data);
+			}
+			else
+			{
+				GLint currentBuffer;
+				glGetIntegerv(GL_UNIFORM_BUFFER_BINDING, &currentBuffer);
+
+				glBindBuffer(GL_UNIFORM_BUFFER, buffer.OpenGL.UniformBuffer);
+				glBufferSubData(GL_UNIFORM_BUFFER, 0, dataLengthInBytes, data);
+
+				glBindBuffer(GL_UNIFORM_BUFFER, currentBuffer);
+			}
 		}
 			break;
 		default:
@@ -2703,53 +2758,67 @@ namespace Graphics
 #endif
 		case GraphicsDeviceType::OpenGl41:
 		{
-			glGenFramebuffers(1, &result->OpenGL.FBO);
-			result->OpenGL.Height = desc->Height;
-
-			if (desc->DepthFormatType != DepthFormat::None)
+			if (GLEW_ARB_direct_state_access)
 			{
-				glGenRenderbuffers(1, &result->OpenGL.DefaultDepthStencilTexture);
-				glBindRenderbuffer(GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+				glCreateFramebuffers(1, &result->OpenGL.FBO);
 
-				if (desc->DepthFormatType == DepthFormat::Depth16)
-					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, desc->Width, desc->Height);
-				else if (desc->DepthFormatType == DepthFormat::Depth24)
-					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, desc->Width, desc->Height);
-				else if (desc->DepthFormatType == DepthFormat::Depth24Stencil8)
-					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, desc->Width, desc->Height);
+				if (desc->DepthFormatType != DepthFormat::None)
+				{
+					glCreateRenderbuffers(1, &result->OpenGL.DefaultDepthStencilTexture);
 
-				if (glNamedFramebufferRenderbuffer)
+					if (desc->DepthFormatType == DepthFormat::Depth16)
+						glNamedRenderbufferStorage(result->OpenGL.DefaultDepthStencilTexture, GL_DEPTH_COMPONENT16, desc->Width, desc->Height);
+					else if (desc->DepthFormatType == DepthFormat::Depth24)
+						glNamedRenderbufferStorage(result->OpenGL.DefaultDepthStencilTexture, GL_DEPTH_COMPONENT24, desc->Width, desc->Height);
+					else if (desc->DepthFormatType == DepthFormat::Depth24Stencil8)
+						glNamedRenderbufferStorage(result->OpenGL.DefaultDepthStencilTexture, GL_DEPTH24_STENCIL8, desc->Width, desc->Height);
+
 					glNamedFramebufferRenderbuffer(result->OpenGL.FBO, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
-				else
-				{
-					glBindFramebuffer(GL_FRAMEBUFFER, result->OpenGL.FBO);
-					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
-				}
 
-				if (desc->DepthFormatType == DepthFormat::Depth24Stencil8)
-				{
-					if (glNamedFramebufferRenderbuffer)
-						glFramebufferRenderbuffer(result->OpenGL.FBO, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+					if (desc->DepthFormatType == DepthFormat::Depth24Stencil8)
+					{
+						glNamedFramebufferRenderbuffer(result->OpenGL.FBO, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+					}
 					else
+					{
+						glNamedFramebufferRenderbuffer(result->OpenGL.FBO, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+					}
+				}
+			}
+			else
+			{
+				glGenFramebuffers(1, &result->OpenGL.FBO);
+
+				if (desc->DepthFormatType != DepthFormat::None)
+				{
+					glGenRenderbuffers(1, &result->OpenGL.DefaultDepthStencilTexture);
+					glBindRenderbuffer(GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+
+					if (desc->DepthFormatType == DepthFormat::Depth16)
+						glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, desc->Width, desc->Height);
+					else if (desc->DepthFormatType == DepthFormat::Depth24)
+						glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, desc->Width, desc->Height);
+					else if (desc->DepthFormatType == DepthFormat::Depth24Stencil8)
+						glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, desc->Width, desc->Height);
+
+					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
+
+					if (desc->DepthFormatType == DepthFormat::Depth24Stencil8)
 					{
 						glBindFramebuffer(GL_FRAMEBUFFER, result->OpenGL.FBO);
 						glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
 					}
-				}
-				else
-				{
-					if (glNamedFramebufferRenderbuffer)
-						glNamedFramebufferRenderbuffer(result->OpenGL.FBO, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
 					else
 					{
 						glBindFramebuffer(GL_FRAMEBUFFER, result->OpenGL.FBO);
 						glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, result->OpenGL.DefaultDepthStencilTexture);
 					}
-				}
 
-				if (!glNamedFramebufferRenderbuffer)
 					glBindFramebuffer(GL_FRAMEBUFFER, m_oglState.CurrentFBO);
+				}
 			}
+
+			result->OpenGL.Height = desc->Height;
 
 			return NxnaResult::Success;
 		}
@@ -3654,7 +3723,7 @@ namespace Graphics
 					{
 						unsigned int currentBuffer = 0;
 
-						for (unsigned int i = 0; i < m_shaderPipeline.OpenGL.NumElements; i++)
+						for (int i = 0; i < m_shaderPipeline.OpenGL.NumElements; i++)
 						{
 							int sizeOfElement = 0;
 							GLenum type;
@@ -3681,7 +3750,7 @@ namespace Graphics
 							}
 
 							auto inputSlot = m_shaderPipeline.OpenGL.VertexElements[i].InputSlot;
-							if (inputSlot > 32 || m_oglState.CurrentVertexBufferActive[inputSlot] == false)
+							if (inputSlot >= 32 || m_oglState.CurrentVertexBufferActive[inputSlot] == false)
 							{
 								glDisableVertexAttribArray(i);
 								continue;
