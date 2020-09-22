@@ -1213,7 +1213,7 @@ namespace Graphics
 			auto setGlBlendingForRt = [](RenderTargetBlendStateDesc* current, RenderTargetBlendStateDesc* requested, int count) {
 				for (int i = 0; i < count; i++)
 				{
-					if (current[i].BlendingEnabled != requested[i].BlendingEnabled)
+					if (current == nullptr || current[i].BlendingEnabled != requested[i].BlendingEnabled)
 					{
 						if (requested[i].BlendingEnabled)
 							glEnablei(GL_BLEND, i);
@@ -1236,7 +1236,7 @@ namespace Graphics
 			};
 #define SET_GL_BLENDING_FOR_RT(rtIndex, state) \
 				{ \
-			if (m_oglState.CurrentBlendState.RenderTarget[rtIndex].BlendingEnabled != desc.RenderTarget[rtIndex].BlendingEnabled) \
+			if (m_oglState.BlendStateDirty || m_oglState.CurrentBlendState.RenderTarget[rtIndex].BlendingEnabled != desc.RenderTarget[rtIndex].BlendingEnabled) \
 											{ \
 				if (desc.RenderTarget[rtIndex].BlendingEnabled) \
 					glEnablei(GL_BLEND, rtIndex); \
@@ -1259,7 +1259,7 @@ namespace Graphics
 
 			if (state == nullptr)
 				goto allBuffers;			
-			else if (m_oglState.CurrentBlendState.IndependentBlendEnabled != desc.IndependentBlendEnabled)
+			else if (m_oglState.BlendStateDirty || m_oglState.CurrentBlendState.IndependentBlendEnabled != desc.IndependentBlendEnabled)
 			{
 				if (desc.IndependentBlendEnabled == true)
 					goto allSeparate;
@@ -1268,7 +1268,7 @@ namespace Graphics
 			}
 			else if (desc.IndependentBlendEnabled == false)
 			{
-				if (memcmp(&m_oglState.CurrentBlendState.RenderTarget[0], &desc.RenderTarget[0], sizeof(RenderTargetBlendStateDesc)) != 0)
+				if (m_oglState.BlendStateDirty || memcmp(&m_oglState.CurrentBlendState.RenderTarget[0], &desc.RenderTarget[0], sizeof(RenderTargetBlendStateDesc)) != 0)
 					goto allBuffers;
 				else
 				{
@@ -1279,15 +1279,15 @@ namespace Graphics
 			{
 				for (int i = 0; i < 8; i++)
 				{
-					if (memcmp(&m_oglState.CurrentBlendState.RenderTarget[i], &desc.RenderTarget[i], sizeof(RenderTargetBlendStateDesc)))
-						setGlBlendingForRt(m_oglState.CurrentBlendState.RenderTarget + i, desc.RenderTarget + i, 1);
+					if (m_oglState.BlendStateDirty || memcmp(&m_oglState.CurrentBlendState.RenderTarget[i], &desc.RenderTarget[i], sizeof(RenderTargetBlendStateDesc)))
+						setGlBlendingForRt(m_oglState.BlendStateDirty ? nullptr : m_oglState.CurrentBlendState.RenderTarget + i, desc.RenderTarget + i, 1);
 				}
 			}
 
 
 		allBuffers:
 			{
-				if (state == nullptr || m_oglState.CurrentBlendState.RenderTarget[0].BlendingEnabled != desc.RenderTarget[0].BlendingEnabled)
+				if (state == nullptr || m_oglState.BlendStateDirty || m_oglState.CurrentBlendState.RenderTarget[0].BlendingEnabled != desc.RenderTarget[0].BlendingEnabled)
 				{
 					if (desc.RenderTarget[0].BlendingEnabled)
 						glEnable(GL_BLEND);
@@ -1312,7 +1312,7 @@ namespace Graphics
 
 		allSeparate:
 			{
-				setGlBlendingForRt(m_oglState.CurrentBlendState.RenderTarget, desc.RenderTarget, 8);
+				setGlBlendingForRt(m_oglState.BlendStateDirty ? nullptr : m_oglState.CurrentBlendState.RenderTarget, desc.RenderTarget, 8);
 
 				goto end;
 			}
@@ -1321,6 +1321,7 @@ namespace Graphics
 			;
 
 			m_oglState.CurrentBlendState = desc;
+			m_oglState.BlendStateDirty = false;
 		}
 			break;
 		default:
@@ -1426,6 +1427,7 @@ namespace Graphics
 				desc = state->OpenGL.Desc;
 
 			if (state == nullptr ||
+				m_oglState.RasterizerStateDirty ||
 				m_oglState.CurrentRasterizerState.CullingMode != desc.CullingMode ||
 				m_oglState.CurrentRasterizerState.FrontCounterClockwise != desc.FrontCounterClockwise)
 			{
@@ -1446,6 +1448,7 @@ namespace Graphics
 			}
 
 			if (state == nullptr || 
+				m_oglState.RasterizerStateDirty ||
 				desc.ScissorTestEnabled != m_oglState.CurrentRasterizerState.ScissorTestEnabled)
 			{
 				if (desc.ScissorTestEnabled)
@@ -1455,6 +1458,7 @@ namespace Graphics
 			}
 
 			if (state == nullptr ||
+				m_oglState.RasterizerStateDirty ||
 				desc.FillingMode != m_oglState.CurrentRasterizerState.FillingMode)
 			{
 				if (desc.FillingMode == FillMode::Solid)
@@ -1464,6 +1468,7 @@ namespace Graphics
 			}
 
 			m_oglState.CurrentRasterizerState = desc;
+			m_oglState.RasterizerStateDirty = false;
 		}
 			break;
 		default:
@@ -1644,7 +1649,7 @@ namespace Graphics
 				newState = NXNA_DEPTHSTENCIL_DEFAULT;
 
 			// depth buffer stuff
-			if (state == nullptr || m_oglState.CurrentDepthStencilState.DepthBufferEnable != newState.DepthBufferEnable)
+			if (state == nullptr || m_oglState.DepthStencilStateDirty || m_oglState.CurrentDepthStencilState.DepthBufferEnable != newState.DepthBufferEnable)
 			{
 				if (newState.DepthBufferEnable)
 					glEnable(GL_DEPTH_TEST);
@@ -1652,20 +1657,20 @@ namespace Graphics
 					glDisable(GL_DEPTH_TEST);
 			}
 
-			if (state == nullptr || m_oglState.CurrentDepthStencilState.DepthBufferFunction != newState.DepthBufferFunction)
+			if (state == nullptr || m_oglState.DepthStencilStateDirty || m_oglState.CurrentDepthStencilState.DepthBufferFunction != newState.DepthBufferFunction)
 			{
 				GLenum f;
 				NXNA_CONVERT_COMPARISON_OGL(newState.DepthBufferFunction, f);
 				glDepthFunc(f);
 			}
 
-			if (state == nullptr || m_oglState.CurrentDepthStencilState.DepthBufferWriteEnable != newState.DepthBufferWriteEnable)
+			if (state == nullptr || m_oglState.DepthStencilStateDirty || m_oglState.CurrentDepthStencilState.DepthBufferWriteEnable != newState.DepthBufferWriteEnable)
 			{
 				glDepthMask(newState.DepthBufferWriteEnable ? GL_TRUE : GL_FALSE);
 			}
 
 			// stencil buffer stuff
-			if (state == nullptr || m_oglState.CurrentDepthStencilState.StencilEnable != newState.StencilEnable)
+			if (state == nullptr || m_oglState.DepthStencilStateDirty || m_oglState.CurrentDepthStencilState.StencilEnable != newState.StencilEnable)
 			{
 				if (newState.StencilEnable)
 					glEnable(GL_STENCIL_TEST);
@@ -1674,6 +1679,7 @@ namespace Graphics
 			}
 
 			if (state == nullptr ||
+				m_oglState.DepthStencilStateDirty ||
 				m_oglState.CurrentDepthStencilState.StencilFunction != newState.StencilFunction ||
 				m_oglState.CurrentDepthStencilState.ReferenceStencil != newState.ReferenceStencil)
 			{
@@ -1683,6 +1689,7 @@ namespace Graphics
 			}
 
 			if (state == nullptr ||
+				m_oglState.DepthStencilStateDirty ||
 				m_oglState.CurrentDepthStencilState.StencilFail != newState.StencilFail ||
 				m_oglState.CurrentDepthStencilState.StencilDepthBufferFail != newState.StencilDepthBufferFail ||
 				m_oglState.CurrentDepthStencilState.StencilPass != newState.StencilPass)
@@ -1695,6 +1702,7 @@ namespace Graphics
 			}
 
 			m_oglState.CurrentDepthStencilState = newState;
+			m_oglState.DepthStencilStateDirty = true;
 		}
 			break;
 		default:
@@ -3756,7 +3764,7 @@ namespace Graphics
 								continue;
 							}
 							
-							if (m_oglState.CurrentVertexBuffers[inputSlot].Buffer != currentBuffer)
+							if (m_oglState.CurrentVertexBuffersDirty || m_oglState.CurrentVertexBuffers[inputSlot].Buffer != currentBuffer)
 							{
 								glBindBuffer(GL_ARRAY_BUFFER, m_oglState.CurrentVertexBuffers[inputSlot].Buffer);
 								currentBuffer = m_oglState.CurrentVertexBuffers[inputSlot].Buffer;

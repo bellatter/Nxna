@@ -359,6 +359,9 @@ namespace Nxna
 
 			unsigned int CurrentIndexBuffer;
 
+			bool DepthStencilStateDirty;
+			bool RasterizerStateDirty;
+			bool BlendStateDirty;
 			bool CurrentVertexBufferDirty[32];
 			bool CurrentVertexBuffersDirty;
 			bool CurrentVertexBufferActive[32];
@@ -798,6 +801,7 @@ namespace Nxna
 			/// Don't call this method if the GraphicsDevice is not a Direct3D 11 device. Bad things may or may not happen.
 			const D3D11DeviceState* GetD3D11DeviceState() { return &m_d3d11State; }
 #endif
+			const OpenGlDeviceState* GetOpenGLDeviceState() { return &m_oglState; }
 
 		private:
 			void applyDirtyStates();
