@@ -23,6 +23,7 @@ namespace Nxna
 		float X, Y, Z, W;
 
 		static Quaternion CreateFromYawPitchRoll(float yaw, float pitch, float roll);
+		static Quaternion CreateFromAxisAngle(float x, float y, float z, float angle);
 
 		static void Multiply(const Quaternion& q1, const Quaternion& q2, Quaternion& result);
 		static void Multiply(const Quaternion& q, Nxna::Vector3 v, Nxna::Vector3& result);
