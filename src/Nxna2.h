@@ -131,6 +131,10 @@ namespace Nxna
 #include "Color.h"
 #include "Graphics/GraphicsDevice.h"
 #include "Graphics/PipelineState.h"
+#else
+#ifdef NXNA_ENABLE_VIEWPORT
+#include "Graphics/Viewport.h"
+#endif
 #endif
 
 #ifdef NXNA_ENABLE_INPUT
@@ -188,6 +192,11 @@ namespace Nxna
 #include "Graphics/GraphicsDevice.cpp"
 #include "Graphics/OpenGL.cpp"
 #include "Graphics/PipelineState.cpp"
+#include "Graphics/Viewport.cpp"
+#else
+#ifdef NXNA_ENABLE_VIEWPORT
+#include "Graphics/Viewport.cpp"
+#endif
 #endif
 
 
