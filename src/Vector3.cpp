@@ -68,6 +68,16 @@ namespace Nxna
 		result.Z = v.Z / len;
 	}
 
+	void Vector3::Normalize(float* vector3)
+	{
+		if (vector3 == nullptr) return;
+		
+		float invlen = 1.0f / sqrtf(vector3[0] * vector3[0] + vector3[1] * vector3[1] + vector3[2] * vector3[2]);
+		vector3[0] *= invlen;
+		vector3[1] *= invlen;
+		vector3[2] *= invlen;
+	}
+
 	void Vector3::Transform(const Vector3& v, const Matrix& matrix, Vector3& result)
 	{
 		float x = v.X * matrix.M11 + v.Y * matrix.M21 + v.Z * matrix.M31 + matrix.M41;
@@ -77,6 +87,17 @@ namespace Nxna
 		result.X = x;
 		result.Y = y;
 		result.Z = z;
+	}
+
+	void Vector3::Transform(const float* vector3, const Matrix& matrix, float* result3f)
+	{
+		float x = vector3[0] * matrix.M11 + vector3[1] * matrix.M21 + vector3[2] * matrix.M31 + matrix.M41;
+		float y = vector3[0] * matrix.M12 + vector3[1] * matrix.M22 + vector3[2] * matrix.M32 + matrix.M42;
+		float z = vector3[0] * matrix.M13 + vector3[1] * matrix.M23 + vector3[2] * matrix.M33 + matrix.M43;
+
+		result3f[0] = x;
+		result3f[1] = y;
+		result3f[2] = z;
 	}
 
 	void Vector3::Transform(const Vector3& v, const Quaternion& quat, Vector3& result)

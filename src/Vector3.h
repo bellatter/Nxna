@@ -133,8 +133,11 @@ namespace Nxna
 		
 		static Vector3 Normalize(const Vector3& v);
 		static void Normalize(const Vector3& v, Vector3& result);
+		static void Normalize(float* vector3);
+
 		static Vector3 Transform(const Vector3& v, const Matrix& matrix) { Vector3 result; Transform(v, matrix, result); return result; }
 		static void Transform(const Vector3& v, const Matrix& matrix, Vector3& result);
+		static void Transform(const float* vector3, const Matrix& matrix, float* result3f);
 		static void Transform(const Vector3& v, const Quaternion& quat, Vector3& result);
 		static Vector3 TransformNormal(const Vector3& normal, const Matrix& matrix) { Vector3 v; TransformNormal(normal, matrix, v); return v; }
 		static void TransformNormal(const Vector3& normal, const Matrix& matrix, Vector3& result);
