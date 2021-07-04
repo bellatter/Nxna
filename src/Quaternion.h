@@ -20,6 +20,14 @@ namespace Nxna
 			W = w;
 		}
 
+		Quaternion(float xyzw[])
+		{
+			X = xyzw[0];
+			Y = xyzw[1];
+			Z = xyzw[2];
+			W = xyzw[3];
+		}
+
 		float X, Y, Z, W;
 
 		static Quaternion CreateFromYawPitchRoll(float yaw, float pitch, float roll);
@@ -30,6 +38,9 @@ namespace Nxna
 
 		static Quaternion Inverse(Quaternion q);
 		static void Inverse(const Quaternion& q, Quaternion& result);
+
+		static Quaternion Normalize(Quaternion q);
+		static void Normalize(const Quaternion& q, Quaternion& result);
 	};
 }
 

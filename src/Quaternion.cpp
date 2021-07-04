@@ -77,4 +77,19 @@ namespace Nxna
 		result.Z = -q.Z * ilen;
 		result.W = q.W * ilen;
 	}
+
+	Quaternion Quaternion::Normalize(Quaternion q)
+	{
+		float len = 1.0f / sqrtf(q.X * q.X + q.Y * q.Y + q.Z * q.Z + q.W * q.W);
+		return Quaternion { q.X * len, q.Y * len, q.Z * len, q.W * len };
+	}
+
+	void Quaternion::Normalize(const Quaternion& q, Quaternion& result)
+	{
+		float len = 1.0f / sqrtf(q.X * q.X + q.Y * q.Y + q.Z * q.Z + q.W * q.W);
+		result.X = q.X * len;
+		result.Y = q.Y * len;
+		result.Z = q.Z * len;
+		result.W = q.W * len;
+	}
 }
